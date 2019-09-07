@@ -11,8 +11,10 @@
 		"bcryptjs": "^2.4.3",
 		"config": "^3.2.2",
 		"express": "^4.17.1",
+		"gravatar": "^1.8.0",
 		"jsonwebtoken": "^8.5.1",
-		"mongoose": "^5.6.12"
+		"mongoose": "^5.6.12",
+		"request": "^2.88.0"
 	},
 	"devDependencies": {
 		"concurrently": "^4.1.2",
