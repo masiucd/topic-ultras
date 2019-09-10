@@ -11,16 +11,17 @@ const router = express.Router();
  * @desc get current users profile
  * @route Private
  */
-
 router.get('/me', auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user._id }).populate(
+    const profile = await Profile.findOne({ user: req.user.id }).populate(
       'user',
       ['name', 'avatar']
     );
+
     if (!profile) {
       return res.status(400).json({ msg: 'There is no profile for this user' });
     }
+
     res.json(profile);
   } catch (err) {
     console.error(err.message);
@@ -39,10 +40,10 @@ router.post(
   [
     auth,
     [
-      check('status', 'status is requires')
+      check('status', 'Status is required')
         .not()
         .isEmpty(),
-      check('skills', ' skills are required')
+      check('skills', 'Skills is required')
         .not()
         .isEmpty(),
     ],
@@ -50,8 +51,9 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(404).json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array() });
     }
+
     const {
       company,
       website,
@@ -67,6 +69,7 @@ router.post(
       linkedin,
     } = req.body;
 
+    // Build profile object
     const profileFields = {};
     profileFields.user = req.user.id;
     if (company) profileFields.company = company;
@@ -79,33 +82,43 @@ router.post(
       profileFields.skills = skills.map(skill => skill.trim());
     }
 
+    // Build social object
     profileFields.social = {};
     if (youtube) profileFields.social.youtube = youtube;
-    if (facebook) profileFields.social.facebook = facebook;
     if (twitter) profileFields.social.twitter = twitter;
-    if (instagram) profileFields.social.instagram = instagram;
+    if (facebook) profileFields.social.facebook = facebook;
     if (linkedin) profileFields.social.linkedin = linkedin;
+    if (instagram) profileFields.social.instagram = instagram;
 
     try {
-      let profile = await Profile.findOne({ user: req.user._id });
-      if (profile) {
-        profile = await Profile.findByIdAndUpdate(
-          { user: req.user._id },
-          { $set: profileFields },
-          { new: true }
-        );
-        return res.json(profile);
-      }
-      // else Create
-
-      profile = new Profile(profileFields);
-      await profile.save();
-      return res.json(profile);
+      // Using upsert option (creates new doc if no match is found):
+      const profile = await Profile.findOneAndUpdate(
+        { user: req.user.id },
+        { $set: profileFields },
+        { new: true, upsert: true }
+      );
+      res.json(profile);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
     }
   }
 );
+
+/**
+ * @route GET api/profile
+ * @desc get all profiles
+ * @route Public
+ */
+
+router.get('/', async (req, res) => {
+  try {
+    const profiles = await Profile.find().populate('user', ['name', 'avatar']);
+    res.json(profiles);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 module.exports = router;
