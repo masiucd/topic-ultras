@@ -169,7 +169,7 @@ router.delete('/', auth, async (req, res) => {
  * @route Private
  */
 
-router.put(
+router.post(
   '/experience',
   [
     auth,
@@ -191,14 +191,23 @@ router.put(
     const newExp = { ...req.body };
 
     try {
-      const profile = await Profile.findOne({ user: req.user.id });
+      let profile = await Profile.findOne({ user: req.user.id });
       if (!profile)
         return res.status(400).json({ msg: 'Authentication denied' });
-      profile.experience.push(newExp);
+      if (profile.experience.length === 0) {
+        profile.experience.push(newExp);
+      } else {
+        profile = await Profile.findOneAndUpdate(
+          { user: req.user.id },
+          { $set: req.body },
+          { new: true }
+        );
+      }
       res.json(profile);
     } catch (err) {
       console.error(err.message);
     }
   }
 );
+
 module.exports = router;
