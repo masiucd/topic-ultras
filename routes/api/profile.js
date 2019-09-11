@@ -137,11 +137,68 @@ router.get('/user/:user_id', async (req, res) => {
     res.json(profile);
   } catch (err) {
     console.error(err.message);
-    if (err.kind == 'ObjectId') {
+    if (err.kind === 'ObjectId') {
       return res.status(500).json({ msg: 'Profile not found' });
     }
     res.status(500).send('Server Error');
   }
 });
 
+/**
+ * @route DELETE api/profile
+ * @desc Delete profile, user & posts
+ * @route Private
+ */
+
+router.delete('/', auth, async (req, res) => {
+  try {
+    // remove profile
+    await Profile.findOneAndRemove({ user: req.user.id });
+    // remove user
+    await User.findOneAndRemove({ _id: req.user.id });
+    res.json({ msg: 'user removed !' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+/**
+ * @route Put api/profile/experience
+ * @desc add profile experience
+ * @route Private
+ */
+
+router.put(
+  '/experience',
+  [
+    auth,
+    [
+      check('company', 'company is reacquired')
+        .not()
+        .isEmpty(),
+      check('from', 'from date reacquired')
+        .not()
+        .isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(404).json({ errors: errors.array() });
+    }
+
+    const newExp = { ...req.body };
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+      if (!profile)
+        return res.status(400).json({ msg: 'Authentication denied' });
+      profile.experience.push(newExp);
+      res.json(profile);
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+);
 module.exports = router;
