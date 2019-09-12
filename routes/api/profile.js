@@ -164,7 +164,7 @@ router.delete('/', auth, async (req, res) => {
 });
 
 /**
- * @route Put api/profile/experience
+ * @route POST api/profile/experience
  * @desc add profile experience
  * @route Private
  */
@@ -240,18 +240,117 @@ router.post(
 
 router.delete('/experience/:exp_id', auth, async (req, res) => {
   try {
+    const foundProfile = await Profile.findOne({ user: req.user.id });
+    const expIds = foundProfile.experience.map(exp => exp._id.toString());
+    // if i dont add .toString() it returns this weird mongoose coreArray and the ids are somehow objects and it still deletes anyway even if you put /experience/5
+    const removeIndex = expIds.indexOf(req.params.exp_id);
+    if (removeIndex === -1) {
+      return res.status(500).json({ msg: 'Server error' });
+    }
+
+    console.log('expIds', expIds);
+    console.log('typeof expIds', typeof expIds);
+    console.log('req.params', req.params);
+    console.log('removed', expIds.indexOf(req.params.exp_id));
+    foundProfile.experience.splice(removeIndex, 1);
+    await foundProfile.save();
+    return res.status(200).json(foundProfile);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+/**
+ * @route POST api/profile/education
+ * @desc add profile education
+ * @route Private
+ */
+
+router.post(
+  '/education',
+  [
+    auth,
+    [
+      check('school', 'school is required')
+        .not()
+        .isEmpty(),
+      check('degree', 'please fill in a degree')
+        .not()
+        .isEmpty(),
+      check('fieldofstudy', 'please fill in a fieldofstudy')
+        .not()
+        .isEmpty(),
+      check('from', 'from is required')
+        .not()
+        .isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description,
+      teachers,
+    } = req.body;
+
+    const newEdu = {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description,
+      teachers,
+    };
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+      profile.education.push(newEdu);
+      await profile.save();
+      res.json(profile);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+/**
+ * @route PUT api/profile/education
+ * @desc update profile education
+ * @route Private
+ */
+
+/**
+ * @route DELETE api/profile/education/:edu_id
+ * @desc update profile education
+ * @route Private
+ */
+
+router.delete('/education/:edu_id', auth, async (req, res) => {
+  try {
     const profile = await Profile.findOne({ user: req.user.id });
-    const removedIndex = profile.experience
-      .map(exp => exp.id)
-      .indexOf(req.params.exp_id);
-    console.log(removedIndex);
-    profile.experience.splice(removedIndex, 1);
+    const educationIndex = profile.education.map(edu => edu._id.toString());
+    const removedIndex = educationIndex.indexOf(req.params.edu_id);
+    if (removedIndex === -1) {
+      return res.status(500).json({ msg: 'server error!' });
+    }
+    profile.education.splice(removedIndex, 1);
     await profile.save();
-    res.json(profile);
+    return res.status(200).json(profile);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
-
 module.exports = router;
