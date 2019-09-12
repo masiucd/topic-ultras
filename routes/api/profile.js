@@ -174,10 +174,13 @@ router.post(
   [
     auth,
     [
-      check('company', 'company is reacquired')
+      check('title', 'Title is required')
         .not()
         .isEmpty(),
-      check('from', 'from date reacquired')
+      check('company', 'Company is required')
+        .not()
+        .isEmpty(),
+      check('from', 'From date is required')
         .not()
         .isEmpty(),
     ],
@@ -185,29 +188,70 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(404).json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array() });
     }
 
-    const newExp = { ...req.body };
+    const {
+      title,
+      company,
+      location,
+      from,
+      to,
+      current,
+      description,
+    } = req.body;
+
+    const newExp = {
+      title,
+      company,
+      location,
+      from,
+      to,
+      current,
+      description,
+    };
 
     try {
-      let profile = await Profile.findOne({ user: req.user.id });
-      if (!profile)
-        return res.status(400).json({ msg: 'Authentication denied' });
-      if (profile.experience.length === 0) {
-        profile.experience.push(newExp);
-      } else {
-        profile = await Profile.findOneAndUpdate(
-          { user: req.user.id },
-          { $set: req.body },
-          { new: true }
-        );
-      }
+      const profile = await Profile.findOne({ user: req.user.id });
+
+      profile.experience.push(newExp);
+
+      await profile.save();
+
       res.json(profile);
     } catch (err) {
       console.error(err.message);
+      res.status(500).send('Server Error');
     }
   }
 );
+
+/**
+ * @route PUT api/profile/experience
+ * @desc update profile experience
+ * @route Private
+ */
+
+/**
+ * @route DELETE api/profile/experience/:exp_id
+ * @desc Delete profile experience
+ * @route Private
+ */
+
+router.delete('/experience/:exp_id', auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    const removedIndex = profile.experience
+      .map(exp => exp.id)
+      .indexOf(req.params.exp_id);
+    console.log(removedIndex);
+    profile.experience.splice(removedIndex, 1);
+    await profile.save();
+    res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 module.exports = router;
