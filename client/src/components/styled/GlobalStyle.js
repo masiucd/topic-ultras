@@ -1,7 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const cl = {
-  primary: '#2F52E0',
+  primary: '#2196F3',
   secondary: '#BCED09',
   warning: '#FF715B',
   danger: '#FF715B',
@@ -44,4 +44,5 @@ html{
     letter-spacing:.18rem;
     line-height: 2.5rem;
   }
+
 `;

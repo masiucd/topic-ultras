@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import media from 'styled-media-query';
+import { Link } from 'react-router-dom';
 import { cl } from './GlobalStyle';
+import { BtnPrimary } from './Button';
 
 const Hero = ({ heroText }) => {
   let a;
@@ -17,6 +19,14 @@ const Hero = ({ heroText }) => {
           placeat porro dolorem animi quaerat minus! Maxime fuga officia
           excepturi quis corporis minus dolorum vitae. Minima.
         </p>
+        <div className="btn-group">
+          <Link to="/register">
+            <BtnPrimary>Sign up</BtnPrimary>
+          </Link>
+          <Link to="/login">
+            <BtnPrimary>Login</BtnPrimary>
+          </Link>
+        </div>
       </div>
     </StyledHero>
   );
@@ -37,6 +47,7 @@ const StyledHero = styled.div`
   color: ${cl.white};
   display: flex;
   align-items: center;
+  z-index: 5;
 
   &::after {
     content: '';
@@ -52,16 +63,24 @@ const StyledHero = styled.div`
     .hero-wrapper {
     width: 60%;
     padding: 1.2rem;
+
     h1,p{
       margin: 0.5rem;
+      z-index: 5;
+      position: relative;
     }
     h1 {
     z-index: 2;
     font-size: 5rem;
+    z-index: 5;
   }
   p{
     font-size: 1.5rem;
   }
+    }
+
+    button,h1,p{
+      margin: .5rem;
     }
   `}
 `;
