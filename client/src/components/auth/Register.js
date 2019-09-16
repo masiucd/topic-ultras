@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
 
 const Register = () => {
-  let a;
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    password2: '',
+  });
+  const { name, email, password, password2 } = formData;
   return (
-    <div>
-      <h1>REgister</h1>
-    </div>
+    <>
+      <h1>Sign Up</h1>
+    </>
   );
 };
 
