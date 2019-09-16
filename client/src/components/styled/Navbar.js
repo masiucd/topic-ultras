@@ -8,7 +8,7 @@ import media from 'styled-media-query';
 import { cl } from './GlobalStyle';
 
 const Navbar = props => {
-  let a;
+  const apple = 's';
   return (
     <Nav>
       <h1>
