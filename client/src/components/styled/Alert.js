@@ -4,20 +4,17 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { cl } from './GlobalStyle';
 
-const Alert = ({ alert }) => {
-  let a;
-  return (
-    <>
-      {alert !== null &&
-        alert.length > 0 &&
-        alert.map(a => (
-          <AlertWrapper className={`alert alert-${a.type}`} key={a.id}>
-            <h3>{a.msg}</h3>
-          </AlertWrapper>
-        ))}
-    </>
-  );
-};
+const Alert = ({ alert }) => (
+  <>
+    {alert !== null &&
+      alert.length > 0 &&
+      alert.map(a => (
+        <AlertWrapper className={`alert alert-${a.type}`} key={a.id}>
+          <h3>{a.msg}</h3>
+        </AlertWrapper>
+      ))}
+  </>
+);
 
 Alert.propTypes = {
   alert: PropTypes.array.isRequired,

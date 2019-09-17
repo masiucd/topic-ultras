@@ -7,8 +7,9 @@ import { Wrapper } from '../styled/Wrapper';
 import { Form } from '../styled/Form';
 import { BtnPrimary } from '../styled/Button';
 import { setAlert } from '../../actions/alert';
+import { register } from '../../actions/auth';
 
-const Register = ({ setAlert }) => {
+const Register = ({ setAlert, register }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -26,7 +27,11 @@ const Register = ({ setAlert }) => {
     if (password !== password2) {
       setAlert('Please fill in the fields', 'danger');
     } else {
-      console.log(formData);
+      register({
+        name,
+        email,
+        password,
+      });
     }
   };
 
@@ -47,7 +52,7 @@ const Register = ({ setAlert }) => {
               placeholder="Name"
               name="name"
               value={name}
-              required
+              // required
               onChange={e => handleChange(e)}
             />
           </div>
@@ -58,7 +63,7 @@ const Register = ({ setAlert }) => {
               placeholder="Email Address"
               name="email"
               value={email}
-              required
+              // required
               onChange={e => handleChange(e)}
             />
           </div>
@@ -69,7 +74,7 @@ const Register = ({ setAlert }) => {
               placeholder="Password"
               name="password"
               value={password}
-              required
+              // required
               onChange={e => handleChange(e)}
             />
           </div>
@@ -79,7 +84,7 @@ const Register = ({ setAlert }) => {
               placeholder="Confirm Password"
               name="password2"
               value={password2}
-              required
+              // required
               onChange={e => handleChange(e)}
             />
           </div>
@@ -95,9 +100,10 @@ const Register = ({ setAlert }) => {
 
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
 };
 
 export default connect(
   null,
-  { setAlert }
+  { setAlert, register }
 )(Register);
