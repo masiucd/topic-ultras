@@ -2,8 +2,8 @@ import { createGlobalStyle } from 'styled-components';
 
 export const cl = {
   primary: '#2196F3',
-  secondary: '#BCED09',
-  warning: '#FF715B',
+  secondary: '#22a7f0',
+  warning: '#f7ca18',
   danger: '#FF715B',
   white: '#fff',
   dark: '#4C5B5C',
@@ -43,6 +43,15 @@ html{
   p{
     letter-spacing:.18rem;
     line-height: 2.5rem;
+  }
+
+  .alert-danger{
+    padding: 1.5em;
+    background:${cl.danger};
+  }
+  .alert-success{
+    background: ${cl.warning};
+
   }
 
 `;

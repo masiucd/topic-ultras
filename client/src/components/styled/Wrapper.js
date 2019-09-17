@@ -8,10 +8,11 @@ export const Wrapper = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 2px solid red;
   width: 87%;
+  min-height: 50rem;
   margin: 0 auto;
   margin-top: 12rem;
+  box-shadow: 1px 2px 1px 1px #ccc;
   h1 {
     border-bottom: 2px solid ${cl.dark};
     font-size: 3.4rem;

@@ -6,8 +6,9 @@ import { DeveloperBoard } from 'styled-icons/material';
 import { Wrapper } from '../styled/Wrapper';
 import { Form } from '../styled/Form';
 import { BtnPrimary } from '../styled/Button';
+import { setAlert } from '../../actions/alert';
 
-const Register = () => {
+const Register = ({ setAlert }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,11 +24,10 @@ const Register = () => {
   const handleSubmit = e => {
     e.preventDefault();
     if (password !== password2) {
-      alert('No match');
+      setAlert('Please fill in the fields', 'danger');
     } else {
       console.log(formData);
     }
-
   };
 
   return (
@@ -93,6 +93,11 @@ const Register = () => {
   );
 };
 
-Register.propTypes = {};
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+};
 
-export default Register;
+export default connect(
+  null,
+  { setAlert }
+)(Register);

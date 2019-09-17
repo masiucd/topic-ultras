@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import { Container } from './components/styled/Grid';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
+import Alert from './components/styled/Alert';
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
         <Route path="/" exact component={Home} />
         <Switch>
           <Container>
+            <Alert />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
           </Container>
