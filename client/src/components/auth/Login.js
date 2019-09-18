@@ -7,8 +7,9 @@ import { Wrapper } from '../styled/Wrapper';
 import { Form } from '../styled/Form';
 import { BtnPrimary } from '../styled/Button';
 import { setAlert } from '../../actions/alert';
+import { login } from '../../actions/auth';
 
-const Login = ({ setAlert }) => {
+const Login = ({ setAlert, login, auth: { isAuth } }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -24,9 +25,14 @@ const Login = ({ setAlert }) => {
     if (email.length === '' || password.length === '') {
       setAlert('please fill in the fields!', 'danger');
     } else {
+      login(email, password);
       setAlert('Welcome Master!', 'success');
     }
   };
+
+  if (isAuth) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <>
@@ -72,9 +78,13 @@ const Login = ({ setAlert }) => {
 
 Login.propTypes = {
   setAlert: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
 };
 
+const mapStateToProps = state => ({ auth: state.auth });
+
 export default connect(
-  null,
-  { setAlert }
+  mapStateToProps,
+  { setAlert, login }
 )(Login);
