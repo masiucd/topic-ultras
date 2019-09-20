@@ -3,17 +3,36 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { getCurrentProfile } from '../../actions/profile';
+import Spinner from '../styled/Spinner';
 
 const Dashboard = ({ getCurrentProfile, profile, auth }) => {
+  const { loading } = profile;
+  const { user } = auth;
   useEffect(() => {
     getCurrentProfile();
   }, []);
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-    </div>
+    <>
+      {loading && profile === null ? (
+        <Spinner />
+      ) : (
+        <>
+          <h1>Dashboard</h1>
+          <p>Welcome {user && user.name}</p>
+          {profile !== null ? (
+            <>Has </>
+          ) : (
+            <>
+              <p>Look like you don't have a profile, let's set up one</p>{' '}
+              <Link to="/create-profile">Create Profile</Link>
+            </>
+          )}
+        </>
+      )}
+    </>
   );
 };
 

@@ -9,8 +9,11 @@ import media from 'styled-media-query';
 import { connect } from 'react-redux';
 import { cl } from './GlobalStyle';
 import { logout } from '../../actions/auth';
+import MobileMenu from './MobileMenu';
+import useToggle from '../../hooks/useToggle';
 
-const Navbar = ({ auth, logout, history }) => {
+const Navbar = ({ auth, logout }) => {
+  const [on, toggle] = useToggle(false);
   const { loading, isAuth } = auth;
   const authLinks = (
     <>
@@ -22,13 +25,12 @@ const Navbar = ({ auth, logout, history }) => {
       </li>
       <li>
         <Link to="/dashboard">
-          <i className="fas fa-user" />{' '}
-          <span className="hide-sm">Dashboard</span>
+          <i className="fas fa-user" /> <span>Dashboard</span>
         </Link>
       </li>
       <li>
         <a onClick={logout} href="#!">
-          <span className="hide-sm">Logout</span>
+          <span>Logout</span>
         </a>
       </li>
     </>
@@ -58,7 +60,8 @@ const Navbar = ({ auth, logout, history }) => {
       <ul className="nav__list">
         {!loading && isAuth ? authLinks : guestLinks}
       </ul>
-      <Menu size="35" id="hamburger" />
+      {on ? <MobileMenu /> : null}
+      <Menu size="35" id="hamburger" onClick={toggle} />
     </Nav>
   );
 };
@@ -91,6 +94,7 @@ const Nav = styled.nav`
   #hamburger {
     margin-left: auto;
     cursor: pointer;
+    position: relative;
   }
   @media (max-width: 450px) {
     .nav__list {
@@ -111,37 +115,3 @@ export default connect(
   mapStateToProps,
   { logout }
 )(Navbar);
-
-// <li className="nav__item">
-// <Link to="/developers" className="nav__link">
-//   Developers
-// </Link>
-// </li>
-// {auth.isAuth ? (
-// <>
-//   <li className="nav__item">
-//     {' '}
-//     <Link to="/profile">Profile</Link>{' '}
-//   </li>
-//   <li className="nav__item">
-//     {' '}
-//     <Link to="/profile" onClick={handleLogout}>
-//       Logout
-//     </Link>{' '}
-//   </li>
-// </>
-// ) : (
-// <>
-//   {' '}
-//   <li className="nav__item">
-//     <Link to="/register" className="nav__link">
-//       Register
-//     </Link>
-//   </li>
-//   <li className="nav__item">
-//     <Link to="/login" className="nav__link">
-//       Login
-//     </Link>
-//   </li>{' '}
-// </>
-// )}

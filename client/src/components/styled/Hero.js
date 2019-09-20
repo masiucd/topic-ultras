@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import media from 'styled-media-query';
 import { Link } from 'react-router-dom';
+
 import { cl } from './GlobalStyle';
 import { BtnPrimary } from './Button';
 
 const Hero = ({ heroText }) => {
-  let a;
   return (
     <StyledHero>
       <div className="hero-wrapper">
@@ -36,6 +36,7 @@ Hero.propTypes = {
   heroText: PropTypes.string,
 };
 
+export default Hero;
 const StyledHero = styled.div`
   min-height: 60vh;
   background: url('https://images.pexels.com/photos/2899726/pexels-photo-2899726.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')
@@ -96,4 +97,3 @@ const StyledHero = styled.div`
     }
   `}
 `;
-export default Hero;
