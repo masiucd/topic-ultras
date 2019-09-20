@@ -9,6 +9,8 @@ import Login from './components/auth/Login';
 import Alert from './components/styled/Alert';
 import setAuthToken from './utils/setAuthToken';
 import { loadUser } from './actions/auth';
+import Dashboard from './components/dashboard/Dashboard';
+import PrivateRoute from './components/hoc/PrivateRoute';
 
 import store from './store';
 
@@ -33,6 +35,7 @@ export default function App() {
                 <Alert />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />
+                <PrivateRoute exact path="/dashboard" component={Dashboard} />
               </Container>
             </Switch>
           </AppLayout>

@@ -32,7 +32,7 @@ const Login = ({ setAlert, login, auth: { isAuth } }) => {
   };
 
   if (isAuth) {
-    return <Redirect to="/" />;
+    return <Redirect to="/dashboard" />;
   }
 
   return (
