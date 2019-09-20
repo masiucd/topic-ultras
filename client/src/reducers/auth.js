@@ -18,7 +18,6 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case USER_LOADED:
-    case LOGIN_SUCCESS:
       return {
         ...state,
         isAuth: true,
@@ -26,6 +25,7 @@ export default (state = initialState, { type, payload }) => {
         user: payload,
       };
     case REGISTER_SUCCESS:
+    case LOGIN_SUCCESS:
       // setting the token if success and sending it to the state
       localStorage.setItem('token', payload.token);
       return {

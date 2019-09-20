@@ -5,10 +5,12 @@ import { Link } from 'react-router-dom';
 import { Devices } from 'styled-icons/material/Devices';
 import { Menu } from 'styled-icons/material';
 import media from 'styled-media-query';
+import { connect } from 'react-redux';
 import { cl } from './GlobalStyle';
 
-const Navbar = props => {
+const Navbar = ({ auth }) => {
   const apple = 's';
+
   return (
     <Nav>
       <h1>
@@ -22,23 +24,35 @@ const Navbar = props => {
             Developers
           </Link>
         </li>
-        <li className="nav__item">
-          <Link to="/register" className="nav__link">
-            Register
-          </Link>
-        </li>
-        <li className="nav__item">
-          <Link to="/login" className="nav__link">
-            Login
-          </Link>
-        </li>
+        {auth.isAuth ? (
+          <li className="nav__item">
+            {' '}
+            <Link to="/profile">Profile</Link>{' '}
+          </li>
+        ) : (
+          <>
+            {' '}
+            <li className="nav__item">
+              <Link to="/register" className="nav__link">
+                Register
+              </Link>
+            </li>
+            <li className="nav__item">
+              <Link to="/login" className="nav__link">
+                Login
+              </Link>
+            </li>{' '}
+          </>
+        )}
       </ul>
       <Menu size="35" id="hamburger" />
     </Nav>
   );
 };
 
-Navbar.propTypes = {};
+Navbar.propTypes = {
+  auth: PropTypes.object.isRequired,
+};
 
 const Nav = styled.nav`
   padding: 1em;
@@ -78,5 +92,5 @@ const Nav = styled.nav`
       }
   `}
 `;
-
-export default Navbar;
+const mapStateToProps = state => ({ auth: state.auth });
+export default connect(mapStateToProps)(Navbar);

@@ -9,7 +9,7 @@ import { BtnPrimary } from '../styled/Button';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
 
-const Register = ({ setAlert, register }) => {
+const Register = ({ setAlert, register, auth: { isAuth } }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -34,6 +34,10 @@ const Register = ({ setAlert, register }) => {
       });
     }
   };
+
+  if (isAuth) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <>
@@ -102,8 +106,8 @@ Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
 };
-
+const mapStateToProps = state => ({ auth: state.auth });
 export default connect(
-  null,
+  mapStateToProps,
   { setAlert, register }
 )(Register);
