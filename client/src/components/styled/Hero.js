@@ -83,5 +83,17 @@ const StyledHero = styled.div`
       margin: .5rem;
     }
   `}
+  ${media.lessThan('small')`
+  h1,p{
+      margin: 0.5rem;
+      z-index: 5;
+      position: relative;
+    }
+    .btn-group{
+      button{
+        margin: 1rem .5rem;
+      }
+    }
+  `}
 `;
 export default Hero;

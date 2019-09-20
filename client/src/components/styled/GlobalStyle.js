@@ -50,7 +50,7 @@ html{
     background:${cl.danger};
   }
   .alert-success{
-    background: ${cl.warning};
+    background: ${cl.secondary};
 
   }
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -7,9 +8,45 @@ import { Menu } from 'styled-icons/material';
 import media from 'styled-media-query';
 import { connect } from 'react-redux';
 import { cl } from './GlobalStyle';
+import { logout } from '../../actions/auth';
 
-const Navbar = ({ auth }) => {
-  const apple = 's';
+const Navbar = ({ auth, logout, history }) => {
+  const { loading, isAuth } = auth;
+  const authLinks = (
+    <>
+      <li>
+        <Link to="/profiles">Developers</Link>
+      </li>
+      <li>
+        <Link to="/posts">Posts</Link>
+      </li>
+      <li>
+        <Link to="/dashboard">
+          <i className="fas fa-user" />{' '}
+          <span className="hide-sm">Dashboard</span>
+        </Link>
+      </li>
+      <li>
+        <a onClick={logout} href="#!">
+          <span className="hide-sm">Logout</span>
+        </a>
+      </li>
+    </>
+  );
+
+  const guestLinks = (
+    <>
+      <li>
+        <Link to="/profiles">Developers</Link>
+      </li>
+      <li>
+        <Link to="/register">Register</Link>
+      </li>
+      <li>
+        <Link to="/login">Login</Link>
+      </li>
+    </>
+  );
 
   return (
     <Nav>
@@ -19,31 +56,7 @@ const Navbar = ({ auth }) => {
         </Link>
       </h1>
       <ul className="nav__list">
-        <li className="nav__item">
-          <Link to="/developers" className="nav__link">
-            Developers
-          </Link>
-        </li>
-        {auth.isAuth ? (
-          <li className="nav__item">
-            {' '}
-            <Link to="/profile">Profile</Link>{' '}
-          </li>
-        ) : (
-          <>
-            {' '}
-            <li className="nav__item">
-              <Link to="/register" className="nav__link">
-                Register
-              </Link>
-            </li>
-            <li className="nav__item">
-              <Link to="/login" className="nav__link">
-                Login
-              </Link>
-            </li>{' '}
-          </>
-        )}
+        {!loading && isAuth ? authLinks : guestLinks}
       </ul>
       <Menu size="35" id="hamburger" />
     </Nav>
@@ -52,6 +65,7 @@ const Navbar = ({ auth }) => {
 
 Navbar.propTypes = {
   auth: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired,
 };
 
 const Nav = styled.nav`
@@ -93,4 +107,41 @@ const Nav = styled.nav`
   `}
 `;
 const mapStateToProps = state => ({ auth: state.auth });
-export default connect(mapStateToProps)(Navbar);
+export default connect(
+  mapStateToProps,
+  { logout }
+)(Navbar);
+
+// <li className="nav__item">
+// <Link to="/developers" className="nav__link">
+//   Developers
+// </Link>
+// </li>
+// {auth.isAuth ? (
+// <>
+//   <li className="nav__item">
+//     {' '}
+//     <Link to="/profile">Profile</Link>{' '}
+//   </li>
+//   <li className="nav__item">
+//     {' '}
+//     <Link to="/profile" onClick={handleLogout}>
+//       Logout
+//     </Link>{' '}
+//   </li>
+// </>
+// ) : (
+// <>
+//   {' '}
+//   <li className="nav__item">
+//     <Link to="/register" className="nav__link">
+//       Register
+//     </Link>
+//   </li>
+//   <li className="nav__item">
+//     <Link to="/login" className="nav__link">
+//       Login
+//     </Link>
+//   </li>{' '}
+// </>
+// )}
