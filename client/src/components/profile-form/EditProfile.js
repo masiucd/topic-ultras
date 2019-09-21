@@ -160,7 +160,8 @@ const EditProfile = ({
                 onChange={e => handleChange(e)}
               />
               <small className="form-text">
-                Please use comma separated values (eg. HTML,CSS,JavaScript,PHP)
+                Please use comma separated values (eg.
+                HTML,CSS,JavaScript,Haskell)
               </small>
             </div>
             <div className="form-group">

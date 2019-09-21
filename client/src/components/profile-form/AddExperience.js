@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -126,10 +127,16 @@ const AddExperience = ({ history, addExperience }) => {
 
 AddExperience.propTypes = {
   addExperience: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
-const StyledExp = styled.div`
+export const StyledExp = styled.div`
   padding: 2rem;
+  h1 {
+    strong {
+      text-transform: capitalize;
+    }
+  }
 `;
 export default connect(
   null,
