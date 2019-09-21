@@ -39,7 +39,7 @@ const Login = ({ setAlert, login, auth: { isAuth } }) => {
     <>
       <Wrapper>
         <h1>
-          Sign Up{' '}
+          Log in{' '}
           <span>
             {' '}
             <DeveloperBoard size="35" />{' '}
@@ -70,7 +70,10 @@ const Login = ({ setAlert, login, auth: { isAuth } }) => {
           <BtnPrimary>Login 🏄🏻‍♀️ </BtnPrimary>
         </Form>
         <p>
-          Dont' have a account? <Link to="/register">Register</Link>{' '}
+          Dont' have a account?{' '}
+          <Link to="/register" className="cta-link">
+            Register
+          </Link>{' '}
         </p>
       </Wrapper>
     </>

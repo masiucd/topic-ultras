@@ -62,7 +62,7 @@ router.post(
       location,
       bio,
       status,
-      github,
+      githubusername,
       skills,
       youtube,
       facebook,
@@ -79,9 +79,9 @@ router.post(
     if (location) profileFields.location = location;
     if (bio) profileFields.bio = bio;
     if (status) profileFields.status = status;
-    if (github) profileFields.github = github;
+    if (githubusername) profileFields.githubusername = githubusername;
     if (skills) {
-      profileFields.skills = skills.map(skill => skill.trim());
+      profileFields.skills = skills.split(',').map(skill => skill.trim());
     }
 
     // Build social object

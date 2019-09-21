@@ -20,7 +20,8 @@ export const Wrapper = styled.section`
   p {
     font-size: 1.8rem;
   }
-  a {
+  a,
+  .cta-link {
     border-bottom: 2px solid ${cl.dark};
     font-weight: 800;
     transition: all 300ms ease-in-out;
@@ -30,4 +31,25 @@ export const Wrapper = styled.section`
     }
   }
   ${media.greaterThan('small')``};
+`;
+
+export const WrapperSecondary = styled(Wrapper)`
+  padding: 1rem;
+  justify-content: left;
+  align-items: flex-start;
+  width: 70%;
+  border: 2px solid ${cl.dark};
+  padding: 1.5rem;
+  h1,
+  p {
+    margin: 1rem 0;
+  }
+  p {
+    font-size: 2rem;
+    text-transform: capitalize;
+  }
+  .cta-link {
+    font-size: 1.6rem;
+    letter-spacing: 0.3rem;
+  }
 `;

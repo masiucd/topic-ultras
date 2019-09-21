@@ -95,7 +95,10 @@ const Register = ({ setAlert, register, auth: { isAuth } }) => {
           <BtnPrimary>Register 🏄🏻‍♀️ </BtnPrimary>
         </Form>
         <p>
-          Already have a account? <Link to="/login">Sign in</Link>{' '}
+          Already have a account?{' '}
+          <Link to="/login" className="cta-link">
+            Sign in
+          </Link>{' '}
         </p>
       </Wrapper>
     </>

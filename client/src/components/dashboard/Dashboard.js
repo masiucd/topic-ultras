@@ -6,9 +6,11 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getCurrentProfile } from '../../actions/profile';
 import Spinner from '../styled/Spinner';
+import { Container } from '../styled/Grid';
+import { WrapperSecondary } from '../styled/Wrapper';
 
-const Dashboard = ({ getCurrentProfile, profile, auth }) => {
-  const { loading } = profile;
+const Dashboard = ({ getCurrentProfile, profileState, auth }) => {
+  const { loading, profile } = profileState;
   const { user } = auth;
   useEffect(() => {
     getCurrentProfile();
@@ -16,22 +18,28 @@ const Dashboard = ({ getCurrentProfile, profile, auth }) => {
 
   return (
     <>
-      {loading && profile === null ? (
-        <Spinner />
-      ) : (
-        <>
-          <h1>Dashboard</h1>
-          <p>Welcome {user && user.name}</p>
-          {profile !== null ? (
-            <>Has </>
+      <Container>
+        <WrapperSecondary>
+          {loading && profile === null ? (
+            <Spinner />
           ) : (
             <>
-              <p>Look like you don't have a profile, let's set up one</p>{' '}
-              <Link to="/create-profile">Create Profile</Link>
+              <h1>Dashboard</h1>
+              <p>Welcome {user && user.name}</p>
+              {profile !== null ? (
+                <>Has </>
+              ) : (
+                <>
+                  <p>Look like you don't have a profile, let's set up one</p>{' '}
+                  <Link to="/create-profile" className="cta-link">
+                    Create Profile
+                  </Link>
+                </>
+              )}
             </>
           )}
-        </>
-      )}
+        </WrapperSecondary>
+      </Container>
     </>
   );
 };
@@ -42,7 +50,10 @@ Dashboard.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({ profile: state.profile, auth: state.auth });
+const mapStateToProps = state => ({
+  profileState: state.profile,
+  auth: state.auth,
+});
 
 export default connect(
   mapStateToProps,

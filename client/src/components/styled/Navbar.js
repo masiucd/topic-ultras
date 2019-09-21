@@ -14,9 +14,12 @@ import useToggle from '../../hooks/useToggle';
 
 const Navbar = ({ auth, logout }) => {
   const [on, toggle] = useToggle(false);
-  const { loading, isAuth } = auth;
+  const { loading, isAuth, user } = auth;
   const authLinks = (
     <>
+      <li>
+        <Link to="/dashboard">{user && user.name}</Link>
+      </li>
       <li>
         <Link to="/profiles">Developers</Link>
       </li>
@@ -78,12 +81,17 @@ const Nav = styled.nav`
   .nav__list {
     display: flex;
     align-items: center;
+    color: ${cl.danger};
     li {
       padding: 0 0.7rem;
       transition: all 300ms ease-in-out;
+      color: ${cl.danger};
       a {
         transition: all 300ms ease-in-out;
         font-size: 1.6rem;
+        text-transform: capitalize;
+        color: ${cl.dark}
+
         &:hover {
           color: ${cl.primary};
           border-bottom: 2px solid ${cl.primary};
