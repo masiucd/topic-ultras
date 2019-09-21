@@ -8,6 +8,7 @@ import { getCurrentProfile } from '../../actions/profile';
 import Spinner from '../styled/Spinner';
 import { Container } from '../styled/Grid';
 import { WrapperSecondary } from '../styled/Wrapper';
+import DashboardActions from './DashboardActions';
 
 const Dashboard = ({ getCurrentProfile, profileState, auth }) => {
   const { loading, profile } = profileState;
@@ -25,9 +26,12 @@ const Dashboard = ({ getCurrentProfile, profileState, auth }) => {
           ) : (
             <>
               <h1>Dashboard</h1>
-              <p>Welcome {user && user.name}</p>
+              <p> Welcome {user && user.name}</p>
               {profile !== null ? (
-                <>Has </>
+                <>
+                  {' '}
+                  <DashboardActions />{' '}
+                </>
               ) : (
                 <>
                   <p>Look like you don't have a profile, let's set up one</p>{' '}

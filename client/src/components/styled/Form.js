@@ -109,4 +109,9 @@ export const ProfileForm = styled(Form)`
       background-size: 0.65em auto, 100%;
     }
   }
+  button[type='submit'] {
+    margin-top: 1rem;
+    width: 30%;
+    margin-left: calc(10% - 10%);
+  }
 `;

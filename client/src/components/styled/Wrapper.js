@@ -30,6 +30,9 @@ export const Wrapper = styled.section`
       border-bottom: 2px solid ${cl.primary};
     }
   }
+  strong {
+    text-transform: capitalize;
+  }
   ${media.greaterThan('small')``};
 `;
 

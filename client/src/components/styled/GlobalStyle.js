@@ -53,5 +53,17 @@ html{
     background: ${cl.secondary};
 
   }
-
+.cta-link {
+    border-bottom: 2px solid ${cl.dark};
+    font-weight: 800;
+    transition: all 300ms ease-in-out;
+    &:hover {
+      color: ${cl.primary};
+      border-bottom: 2px solid ${cl.primary};
+    }
+  }
+  .go-back-link{
+    width: 20%;
+    font-size: 1.5rem;
+  }
 `;

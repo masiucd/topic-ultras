@@ -14,6 +14,7 @@ import PrivateRoute from './components/hoc/PrivateRoute';
 
 import store from './store';
 import CreateProfile from './components/profile-form/CreateProfile';
+import EditProfile from './components/profile-form/EditProfile';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -41,6 +42,11 @@ export default function App() {
                   exact
                   path="/create-profile"
                   component={CreateProfile}
+                />
+                <PrivateRoute
+                  exact
+                  path="/edit-profile"
+                  component={EditProfile}
                 />
               </Container>
             </Switch>

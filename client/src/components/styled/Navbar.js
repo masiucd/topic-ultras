@@ -90,7 +90,7 @@ const Nav = styled.nav`
         transition: all 300ms ease-in-out;
         font-size: 1.6rem;
         text-transform: capitalize;
-        color: ${cl.dark}
+        color: ${cl.dark};
 
         &:hover {
           color: ${cl.primary};
