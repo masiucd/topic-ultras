@@ -171,7 +171,7 @@ router.delete('/', auth, async (req, res) => {
  * @route Private
  */
 
-router.post(
+router.put(
   '/experience',
   [
     auth,
@@ -269,7 +269,7 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
  * @route Private
  */
 
-router.post(
+router.put(
   '/education',
   [
     auth,

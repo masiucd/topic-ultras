@@ -40,6 +40,7 @@ export const Form = styled.form`
 export const ProfileForm = styled(Form)`
   min-width: 100%;
   margin-right: auto;
+  border: none;
   .form-group {
     padding: 1rem 0;
   }
@@ -112,6 +113,18 @@ export const ProfileForm = styled(Form)`
   button[type='submit'] {
     margin-top: 1rem;
     width: 30%;
-    margin-left: calc(10% - 10%);
+    /* margin-left: calc(10% - 10%); */
+  }
+  .current-job {
+    display: flex;
+
+    width: 80%;
+    margin: 0 auto;
+    position: relative;
+    label {
+      margin-right: auto;
+    }
+    input[type='checkbox'] {
+    }
   }
 `;

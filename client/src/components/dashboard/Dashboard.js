@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+
 import { getCurrentProfile } from '../../actions/profile';
 import Spinner from '../styled/Spinner';
 import { Container } from '../styled/Grid';

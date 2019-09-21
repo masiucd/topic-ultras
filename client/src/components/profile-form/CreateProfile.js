@@ -225,7 +225,7 @@ const CreateProfile = ({ auth, createOrUpdateProfile, history }) => {
               </>
             ) : null}
             <BtnPrimary type="submit">Submit</BtnPrimary>
-            <Link className="" to="/dashboard">
+            <Link className="go-back-link" to="/dashboard">
               Go Back
             </Link>
           </ProfileForm>
