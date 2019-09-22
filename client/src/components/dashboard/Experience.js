@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -6,9 +7,12 @@ import moment from 'moment';
 import styled from 'styled-components';
 import media from 'styled-media-query';
 import { cl } from '../styled/GlobalStyle';
-import { BtnPrimary } from '../styled/Button';
+import { deleteExperience } from '../../actions/profile';
 
-const Experience = ({ experience }) => {
+const Experience = ({ experience, deleteExperience }) => {
+  if (experience.length === 0) {
+    return <div></div>;
+  }
   const exps = experience.map(exp => (
     <tr key={exp._id}>
       <td>{exp.company}</td>
@@ -22,7 +26,7 @@ const Experience = ({ experience }) => {
         )}
       </td>
       <td>
-        <BtnPrimary>Delete</BtnPrimary>
+        <span onClick={() => deleteExperience(exp._id)}>Delete</span>
       </td>
     </tr>
   ));
@@ -45,6 +49,7 @@ const Experience = ({ experience }) => {
 
 Experience.propTypes = {
   experience: PropTypes.array.isRequired,
+  deleteExperience: PropTypes.func.isRequired,
 };
 // TODO fix the responsivness
 export const Table = styled.table`
@@ -83,5 +88,17 @@ export const Table = styled.table`
         display: none;
       }
   `}
+  span{
+    cursor: pointer;
+    border-bottom: 1px solid ${cl.primary};
+    transition: all 300ms ease-in-out;
+    &:hover{
+      color: ${cl.danger};
+    }
+  }
 `;
-export default Experience;
+
+export default connect(
+  null,
+  { deleteExperience }
+)(Experience);

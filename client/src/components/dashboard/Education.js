@@ -1,15 +1,17 @@
+/* eslint-disable no-shadow */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
 import moment from 'moment';
-import styled from 'styled-components';
-import media from 'styled-media-query';
-import { cl } from '../styled/GlobalStyle';
-import { BtnPrimary } from '../styled/Button';
-import { Table } from './Experience';
 
-const Education = ({ education }) => {
+import { Table } from './Experience';
+import { deleteEducation } from '../../actions/profile';
+
+const Education = ({ education, deleteEducation }) => {
+  if (education.length === 0) {
+    return <div></div>;
+  }
   const exps = education.map(edu => (
     <tr key={edu._id}>
       <td>{edu.school}</td>
@@ -23,7 +25,7 @@ const Education = ({ education }) => {
         )}
       </td>
       <td>
-        <BtnPrimary>Delete</BtnPrimary>
+        <span onClick={() => deleteEducation(edu._id)}>Delete</span>
       </td>
     </tr>
   ));
@@ -44,6 +46,12 @@ const Education = ({ education }) => {
   );
 };
 
-Education.propTypes = {};
+Education.propTypes = {
+  education: PropTypes.array.isRequired,
+  deleteEducation: PropTypes.func.isRequired,
+};
 
-export default Education;
+export default connect(
+  null,
+  { deleteEducation }
+)(Education);
