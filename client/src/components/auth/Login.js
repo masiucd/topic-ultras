@@ -10,7 +10,7 @@ import { BtnPrimary } from '../styled/Button';
 import { setAlert } from '../../actions/alert';
 import { login } from '../../actions/auth';
 
-const Login = ({ setAlert, login, auth: { isAuth } }) => {
+const Login = ({ setAlert, login, auth: { isAuth, user } }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -27,7 +27,7 @@ const Login = ({ setAlert, login, auth: { isAuth } }) => {
       setAlert('please fill in the fields!', 'danger');
     } else {
       login(email, password);
-      setAlert('Welcome Master!', 'success');
+      setAlert(`Welcome Master ${user && user.name}!`, 'success');
     }
   };
 

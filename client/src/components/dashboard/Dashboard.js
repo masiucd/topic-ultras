@@ -10,6 +10,8 @@ import Spinner from '../styled/Spinner';
 import { Container } from '../styled/Grid';
 import { WrapperSecondary } from '../styled/Wrapper';
 import DashboardActions from './DashboardActions';
+import Experience from './Experience';
+import Education from './Education';
 
 const Dashboard = ({ getCurrentProfile, profileState, auth }) => {
   const { loading, profile } = profileState;
@@ -32,6 +34,8 @@ const Dashboard = ({ getCurrentProfile, profileState, auth }) => {
                 <>
                   {' '}
                   <DashboardActions />{' '}
+                  <Experience experience={profile.experience} />
+                  <Education education={profile.education} />
                 </>
               ) : (
                 <>
@@ -50,7 +54,7 @@ const Dashboard = ({ getCurrentProfile, profileState, auth }) => {
 };
 
 Dashboard.propTypes = {
-  profile: PropTypes.object.isRequired,
+  profileState: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
 };

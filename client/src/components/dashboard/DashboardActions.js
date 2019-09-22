@@ -22,13 +22,17 @@ function DashboardActions(props) {
 
 DashboardActions.propTypes = {};
 const StyledActions = styled.div`
-  padding: 2rem 0;
+  padding: 3rem 0;
+
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
   a {
     margin: 1rem 0.3rem;
     background: ${cl.dark};
     color: ${cl.white};
     font-size: 1.3rem;
-    padding: 1rem;
+    padding: 0.4rem 0.8rem;
     font-weight: normal;
   }
 `;

@@ -37,10 +37,10 @@ export const Wrapper = styled.section`
 `;
 
 export const WrapperSecondary = styled(Wrapper)`
-  padding: 1rem;
+  padding: 2.5rem 1rem;
   justify-content: left;
   align-items: flex-start;
-  width: 70%;
+  width: 90%;
   border: 2px solid ${cl.dark};
   padding: 1.5rem;
   h1,
