@@ -56,3 +56,25 @@ export const WrapperSecondary = styled(Wrapper)`
     letter-spacing: 0.3rem;
   }
 `;
+
+export const ProfileWrapper = styled.div`
+  box-shadow: 3px 2px 1px 2px #ccc;
+  width: 70%;
+  display: flex;
+  margin: 3rem auto;
+  flex-direction: column;
+  h1,
+  p {
+    margin: 1rem 0.5rem;
+  }
+  h1 {
+    font-size: 3rem;
+  }
+  p {
+    font-size: 1.6rem;
+  }
+  ${media.lessThan('small')`
+
+width: 100%;
+`}
+`;
