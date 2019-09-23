@@ -41,8 +41,7 @@ export const WrapperSecondary = styled(Wrapper)`
   justify-content: left;
   align-items: flex-start;
   width: 90%;
-  border: 2px solid ${cl.dark};
-  padding: 1.5rem;
+  padding: 2.5rem 2rem;
   h1,
   p {
     margin: 1rem 0;
@@ -53,8 +52,12 @@ export const WrapperSecondary = styled(Wrapper)`
   }
   .cta-link {
     font-size: 1.6rem;
-    letter-spacing: 0.3rem;
+    letter-spacing: 0.33rem;
   }
+  ${media.lessThan('small')`
+    width: 90%;
+
+  `}
 `;
 
 export const ProfileWrapper = styled.div`

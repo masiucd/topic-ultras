@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getCurrentProfile, deleteAccount } from '../../actions/profile';
 import Spinner from '../styled/Spinner';
-import { Container } from '../styled/Grid';
 import { WrapperSecondary } from '../styled/Wrapper';
 import DashboardActions from './DashboardActions';
 import Experience from './Experience';
@@ -27,38 +26,36 @@ const Dashboard = ({
 
   return (
     <>
-      <Container>
-        <WrapperSecondary>
-          {loading && profile === null ? (
-            <Spinner />
-          ) : (
-            <>
-              <h1>Dashboard</h1>
-              <p> Welcome {user && user.name}</p>
-              {profile !== null ? (
-                <>
-                  {' '}
-                  <DashboardActions />{' '}
-                  <Experience experience={profile.experience} />
-                  <Education education={profile.education} />
-                  <div className="delete-account">
-                    <BtnPrimary onClick={() => deleteAccount()}>
-                      Delete My account ❌
-                    </BtnPrimary>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <p>Look like you don't have a profile, let's set up one</p>{' '}
-                  <Link to="/create-profile" className="cta-link">
-                    Create Profile
-                  </Link>
-                </>
-              )}
-            </>
-          )}
-        </WrapperSecondary>
-      </Container>
+      <WrapperSecondary>
+        {loading && profile === null ? (
+          <Spinner />
+        ) : (
+          <>
+            <h1>Dashboard</h1>
+            <p> Welcome {user && user.name}</p>
+            {profile !== null ? (
+              <>
+                {' '}
+                <DashboardActions />{' '}
+                <Experience experience={profile.experience} />
+                <Education education={profile.education} />
+                <div className="delete-account">
+                  <BtnPrimary onClick={() => deleteAccount()}>
+                    Delete My account ❌
+                  </BtnPrimary>
+                </div>
+              </>
+            ) : (
+              <>
+                <p>Look like you don't have a profile, let's set up one</p>{' '}
+                <Link to="/create-profile" className="cta-link">
+                  Create Profile
+                </Link>
+              </>
+            )}
+          </>
+        )}
+      </WrapperSecondary>
     </>
   );
 };

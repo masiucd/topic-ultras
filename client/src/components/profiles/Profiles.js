@@ -9,7 +9,7 @@ import { Container } from '../styled/Grid';
 import ProfileItem from './ProfileItem';
 import { ProfileWrapper } from '../styled/Wrapper';
 
-const Profile = ({ getProfiles, profile }) => {
+const Profiles = ({ getProfiles, profile }) => {
   const { profiles, loading } = profile;
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const Profile = ({ getProfiles, profile }) => {
   );
 };
 
-Profile.propTypes = {
+Profiles.propTypes = {
   getProfiles: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
 };
@@ -42,4 +42,4 @@ const mapStateToProps = state => ({ profile: state.profile });
 export default connect(
   mapStateToProps,
   { getProfiles }
-)(Profile);
+)(Profiles);

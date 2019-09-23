@@ -66,4 +66,5 @@ html{
     width: 20%;
     font-size: 1.5rem;
   }
+
 `;
