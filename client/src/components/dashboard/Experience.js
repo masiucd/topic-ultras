@@ -10,9 +10,6 @@ import { cl } from '../styled/GlobalStyle';
 import { deleteExperience } from '../../actions/profile';
 
 const Experience = ({ experience, deleteExperience }) => {
-  if (experience.length === 0 || experience === null) {
-    return <div></div>;
-  }
   const exps = experience.map(exp => (
     <tr key={exp._id}>
       <td>{exp.company}</td>

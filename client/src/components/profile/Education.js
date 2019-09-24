@@ -8,7 +8,7 @@ import { cl } from '../styled/GlobalStyle';
 const Education = ({ profile }) => {
   const { education } = profile[0];
   const { school, degree, fieldofstudy, current, to, from } = education[0];
-  console.log(current);
+
   return (
     <StyledEducation>
       <h2>Dev Education</h2>
