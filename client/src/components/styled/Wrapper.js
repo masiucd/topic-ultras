@@ -54,6 +54,18 @@ export const WrapperSecondary = styled(Wrapper)`
     font-size: 1.6rem;
     letter-spacing: 0.33rem;
   }
+  .profile-experience {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-rows: auto;
+    width: 100%;
+  }
+  .no-msg {
+    font-size: 3rem;
+    color: ${cl.primary};
+    margin: 0.6rem 0;
+  }
   ${media.lessThan('small')`
     width: 90%;
 

@@ -5,7 +5,7 @@ import { cl } from '../styled/GlobalStyle';
 
 const About = ({ profile }) => {
   const { bio, location, website, skills, user } = profile[0];
-  console.log(skills);
+
   return (
     <StyledAbout>
       <section className="col-1 col">
@@ -45,7 +45,9 @@ const StyledAbout = styled.div`
     padding: 2rem 1rem;
     background: ${cl.dark2};
     color: ${cl.white};
-    box-shadow: 1px 1px 2px 1px #ccc;
+    box-shadow: 2px 2px 2px 1px #ccc;
+    display: flex;
+    justify-content: center;
   }
   .col-3 {
     p {
