@@ -7,6 +7,7 @@ export const cl = {
   danger: '#FF715B',
   white: '#fff',
   dark: '#4C5B5C',
+  dark2: 'rgba(5,10,1,0.7)',
 };
 export default createGlobalStyle`
 @import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i&display=swap');

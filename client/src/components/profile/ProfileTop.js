@@ -9,7 +9,7 @@ import { Linkedin2 } from 'styled-icons/icomoon';
 import { cl } from '../styled/GlobalStyle';
 
 const ProfileTop = ({ profile }) => {
-  const {  social, user, location, status } = profile[0];
+  const { social, user, location, status } = profile[0];
 
   return (
     <ProfileIntro>

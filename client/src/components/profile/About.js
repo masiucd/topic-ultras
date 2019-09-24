@@ -16,10 +16,12 @@ const About = ({ profile }) => {
       </section>
       <section className="col-3 col">
         <p>
-          {user.name.split(' ')[0]}'s Bio: {bio}
+          <span>{user.name.split(' ')[0]}'s Bio: </span> <small>{bio}</small>
         </p>
       </section>
-      <section className="col-4 col skills">skills</section>
+      <section className="col-4 col skills">
+        {skills && skills.map(skill => <p>{skill}</p>)}
+      </section>
     </StyledAbout>
   );
 };
@@ -40,9 +42,26 @@ const StyledAbout = styled.div`
   color: ${cl.dark};
   section {
     margin: 1rem;
-    padding: 1rem;
+    padding: 2rem 1rem;
+    background: ${cl.dark2};
+    color: ${cl.white};
+    box-shadow: 1px 1px 2px 1px #ccc;
   }
   .col-3 {
+    p {
+      span {
+        font-weight: 600;
+        display: block;
+      }
+      small {
+        letter-spacing: 2px;
+      }
+    }
+  }
+  .skills {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
   }
 `;
 
