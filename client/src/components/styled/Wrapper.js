@@ -70,6 +70,9 @@ export const WrapperSecondary = styled(Wrapper)`
     width: 90%;
 
   `}
+  .posts {
+    width: 100%;
+  }
 `;
 
 export const ProfileWrapper = styled.div`
