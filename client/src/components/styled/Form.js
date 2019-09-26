@@ -128,3 +128,44 @@ export const ProfileForm = styled(Form)`
     }
   }
 `;
+
+export const FormSecondary = styled(Form)`
+  border: none;
+  width: 100%;
+  background-image: linear-gradient(
+    to right top,
+    #c6c6c6,
+    #aeaeae,
+    #969696,
+    #7f7f7f,
+    #696969
+  );
+  .title {
+    h3 {
+      text-transform: capitalize;
+      color: ${cl.white};
+      font-size: 2.9rem;
+    }
+  }
+  .form-group {
+    padding: 1rem 0.6rem;
+
+    position: relative;
+    button {
+      ${media.lessThan('small')`
+      min-width: 60%;
+      `}
+      width: 30%;
+      margin: right auto;
+      position: absolute;
+      left: 0;
+      bottom: -30px;
+    }
+  }
+
+  input {
+    height: 14rem;
+    width: 100%;
+    font-size: 1.6rem;
+  }
+`;

@@ -19,7 +19,9 @@ const PostItem = ({
   return (
     <StyledPost>
       <div className="img">
-        <img src={avatar} alt={name} />
+        <Link to={`/profile/${user}`}>
+          <img src={avatar} alt={name} />
+        </Link>
         <h3>{name}</h3>
       </div>
       <div className="body">
@@ -31,14 +33,16 @@ const PostItem = ({
         </p>
       </div>
       <div className="cta">
-        <BtnPrimary onClick={e => addLike(_id)}>
+        <BtnPrimary onClick={() => addLike(_id)}>
           👍🏻 {likes.length > 0 && <span>{likes.length}</span>}{' '}
         </BtnPrimary>
         <BtnPrimary onClick={() => removeLike(_id)}>👎🏻</BtnPrimary>
-        <BtnPrimary>
-          {' '}
-          {comments.length > 0 && comments.length} Discussion
-        </BtnPrimary>
+        <Link to={`/posts/${_id}`}>
+          <BtnPrimary>
+            {' '}
+            {comments.length > 0 && comments.length} Discussion
+          </BtnPrimary>
+        </Link>
         <BtnPrimary onClick={() => deletePost(_id)}>❌</BtnPrimary>
       </div>
     </StyledPost>
