@@ -14,6 +14,7 @@ const PostItem = ({
   addLike,
   removeLike,
   deletePost,
+  showActions,
 }) => {
   let a;
   return (
@@ -32,21 +33,29 @@ const PostItem = ({
           </span>
         </p>
       </div>
-      <div className="cta">
-        <BtnPrimary onClick={() => addLike(_id)}>
-          👍🏻 {likes.length > 0 && <span>{likes.length}</span>}{' '}
-        </BtnPrimary>
-        <BtnPrimary onClick={() => removeLike(_id)}>👎🏻</BtnPrimary>
-        <Link to={`/posts/${_id}`}>
-          <BtnPrimary>
-            {' '}
-            {comments.length > 0 && comments.length} Discussion
-          </BtnPrimary>
-        </Link>
-        <BtnPrimary onClick={() => deletePost(_id)}>❌</BtnPrimary>
-      </div>
+      {showActions && (
+        <>
+          <div className="cta">
+            <BtnPrimary onClick={() => addLike(_id)}>
+              👍🏻 {likes.length > 0 && <span>{likes.length}</span>}{' '}
+            </BtnPrimary>
+            <BtnPrimary onClick={() => removeLike(_id)}>👎🏻</BtnPrimary>
+            <Link to={`/posts/${_id}`}>
+              <BtnPrimary>
+                {' '}
+                {comments.length > 0 && comments.length} Discussion
+              </BtnPrimary>
+            </Link>
+            <BtnPrimary onClick={() => deletePost(_id)}>❌</BtnPrimary>
+          </div>
+        </>
+      )}
     </StyledPost>
   );
+};
+
+PostItem.defaultProps = {
+  showActions: true,
 };
 
 PostItem.propTypes = {
@@ -55,6 +64,7 @@ PostItem.propTypes = {
   deletePost: PropTypes.func.isRequired,
   addLike: PropTypes.func.isRequired,
   removeLike: PropTypes.func.isRequired,
+  showActions: PropTypes.bool.isRequired,
 };
 const mapStateToProps = state => ({ auth: state.auth });
 
