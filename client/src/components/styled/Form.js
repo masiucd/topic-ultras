@@ -3,7 +3,7 @@ import media from 'styled-media-query';
 import { cl } from './GlobalStyle';
 
 export const Form = styled.form`
-  padding: 5rem 2rem;
+  padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

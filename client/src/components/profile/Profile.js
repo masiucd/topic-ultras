@@ -41,25 +41,29 @@ const Profile = ({
                   Edit Profile
                 </Link>
               )}
-            <ProfileTop profile={profile} />
-            <About profile={profile} />
+            {!profile ? null : (
+              <>
+                <ProfileTop profile={profile} />
+                <About profile={profile} />
 
-            <div className="profile-experience">
-              {profile && profile[0].experience.length > 0 ? (
-                profile[0].experience.map(x => (
-                  <Experience key={x._id} profile={profile} />
-                ))
-              ) : (
-                <h3 className="no-msg">No Experience</h3>
-              )}
-              {profile && profile[0].education.length > 0 ? (
-                profile[0].education.map(edu => (
-                  <Education key={edu._id} profile={edu} />
-                ))
-              ) : (
-                <h3 className="no-msg">No education</h3>
-              )}
-            </div>
+                <div className="profile-experience">
+                  {profile && profile[0].experience.length > 0 ? (
+                    profile[0].experience.map(x => (
+                      <Experience key={x._id} profile={profile} />
+                    ))
+                  ) : (
+                    <h3 className="no-msg">No Experience</h3>
+                  )}
+                  {profile && profile[0].education.length > 0 ? (
+                    profile[0].education.map(edu => (
+                      <Education key={edu._id} profile={edu} />
+                    ))
+                  ) : (
+                    <h3 className="no-msg">No education</h3>
+                  )}
+                </div>
+              </>
+            )}
           </WrapperSecondary>
         </>
       )}
