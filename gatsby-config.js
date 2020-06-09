@@ -1,13 +1,18 @@
 module.exports = {
   siteMetadata: {
-    title: 'GIANNI-E-PINOTTO',
-    description: 'Itialns place to eat',
+    title: 'Gianni-e-pinotto',
+    titleTemplate: '%s · The Real Deal',
+    description: "Itialn's place to eat",
     keywords: 'pasta,italy,pizza,wine,family,football',
     siteUrl: 'https://marcelable.com',
+    image: '/images/italy.jpg',
     author: {
       name: 'Marcell Ciszek',
-      url: 'https://twitter.com/CiszekMarcell',
+      url: 'https://marcellable.com',
       email: 'ciszekmarcell@gmail.com',
+    },
+    social: {
+      twitterUsername: 'CiszekMarcell',
     },
   },
   plugins: [
@@ -16,6 +21,13 @@ module.exports = {
       options: {
         name: 'content',
         path: `${__dirname}/src/content`,
+      },
+    },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'images',
+        path: `${__dirname}/src/images`,
       },
     },
     {

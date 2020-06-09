@@ -11,20 +11,21 @@ interface Props {
 }
 
 interface TitleStylesProps {
-  onBgShadow?: boolean
+  bgShadow?: boolean
 }
 
 const StyledTitle = styled.section<TitleStylesProps>`
   ${handleFlex('column', 'center', 'center')}
   padding: 2rem 1rem;
-  background: ${({ theme, onBgShadow }) =>
-    onBgShadow && theme.colors.primaryShadow};
-  color: ${({ theme, onBgShadow }) => onBgShadow && theme.colors.white};
+  background: ${({ theme, bgShadow }) =>
+    bgShadow ? theme.colors.primaryShadow : 'none'};
+  color: ${({ theme, bgShadow }) =>
+    bgShadow ? theme.colors.white : theme.colors.black};
 `
 
 const Title: React.FC<Props> = ({ bgShadow, title, subTitle, cta }) => {
   return (
-    <StyledTitle onBgShadow={bgShadow}>
+    <StyledTitle bgShadow={bgShadow}>
       <h1>{title}</h1>
       {subTitle && <h3>{subTitle}</h3>}
       {cta && (

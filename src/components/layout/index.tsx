@@ -6,9 +6,14 @@ import styled, {
 } from 'styled-components'
 import Footer from '../page_elements/Footer'
 import Nav from '../page_elements/Nav'
+import Seo from '../SEO'
 
 interface Props {
   children: React.ReactNode
+  onTitle?: string
+  onDescription?: string
+  onImage?: string
+  onArticle?: boolean
 }
 
 export const Page = styled.div`
@@ -65,10 +70,22 @@ const theme: DefaultTheme = {
   },
 }
 
-const Layout: React.FC<Props> = ({ children }) => {
+const Layout: React.FC<Props> = ({
+  children,
+  onArticle,
+  onDescription,
+  onImage,
+  onTitle,
+}) => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
+      <Seo
+        onArticle={onArticle}
+        onDescription={onDescription}
+        onTitle={onTitle}
+        onImage={onImage}
+      />
       <Nav className="nav" />
       <Main>{children}</Main>
       <Footer />

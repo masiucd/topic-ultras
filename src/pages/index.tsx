@@ -1,12 +1,13 @@
 import * as React from 'react'
 
+import { PageProps } from 'gatsby'
 import Layout, { Page } from '../components/layout'
 import Title from '../components/Title'
 
-const IndexPage = () => (
+const IndexPage: React.FC<PageProps> = () => (
   <Layout>
     <Page>
-      <Title title="GIANNI E PINOTTO" subTitle="Great food" cta />
+      <Title title="Giannu e Pinotto" subTitle="Teh best from Italy🇮🇹" cta />
     </Page>
   </Layout>
 )

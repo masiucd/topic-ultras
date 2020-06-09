@@ -1,15 +1,20 @@
 import * as React from 'react'
 import styled from 'styled-components'
+import NavList from './NavList'
 
 interface Props {
   className: string
 }
 
+const NavTitle = styled.div``
+
 const Nav: React.FC<Props> = ({ className }) => {
   return (
     <nav className={className}>
-      {' '}
-      <h1> Legia CWSKS </h1>{' '}
+      <NavTitle>
+        <h3>title</h3>
+      </NavTitle>
+      <NavList />
     </nav>
   )
 }
