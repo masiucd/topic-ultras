@@ -1,8 +1,11 @@
 import * as React from 'react'
+import Layout from '../components/layout'
 
 const NotFoundPage = () => (
   <>
-    <h1>apa</h1>
+    <Layout>
+      <h1>apa</h1>
+    </Layout>
   </>
 )
 

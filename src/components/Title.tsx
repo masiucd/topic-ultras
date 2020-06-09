@@ -21,6 +21,20 @@ const StyledTitle = styled.section<TitleStylesProps>`
     bgShadow ? theme.colors.primaryShadow : 'none'};
   color: ${({ theme, bgShadow }) =>
     bgShadow ? theme.colors.white : theme.colors.black};
+  width: 52vw;
+  h1 {
+    font-size: 4rem;
+  }
+  h3 {
+    font-size: 2.6rem;
+  }
+
+  @media (max-width: 900px) {
+    width: 62vw;
+  }
+  @media (max-width: 500px) {
+    width: 82vw;
+  }
 `
 
 const Title: React.FC<Props> = ({ bgShadow, title, subTitle, cta }) => {

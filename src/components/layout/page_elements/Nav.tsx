@@ -21,6 +21,6 @@ const Nav: React.FC<Props> = ({ className }) => {
 
 export default styled(Nav)`
   padding: 1.5rem 2rem;
-  background: ${({ theme }) => theme.colors.dark};
+  background: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.white};
 `

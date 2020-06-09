@@ -85,6 +85,11 @@ const Seo: React.FC<Props> = ({
         <meta name="twitter:description" content={seo.description} />
       )}
       {seo.image && <meta name="twitter:image" content={seo.image} />}
+
+      <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Open+Sans+Condensed:ital,wght@0,300;0,700;1,300&display=swap"
+        rel="stylesheet"
+      />
     </Helmet>
   )
 }

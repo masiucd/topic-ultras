@@ -4,8 +4,8 @@ import styled, {
   ThemeProvider,
   DefaultTheme,
 } from 'styled-components'
-import Footer from '../page_elements/Footer'
-import Nav from '../page_elements/Nav'
+import Footer from './page_elements/Footer'
+import Nav from './page_elements/Nav'
 import Seo from '../SEO'
 
 interface Props {
@@ -41,16 +41,16 @@ const theme: DefaultTheme = {
     ],
   },
   colors: {
-    primary: '#f55d2d',
+    primary: '#2c73d2',
     primaryShadow: 'rgba(42, 43, 49,.3)',
-    common: '#FFDC00',
-    majo: '#724CF9',
-    nice: '#CA7DF9',
+    common: '#0081cf',
+    majo: '#0089ba',
+    nice: '#008e9b',
     black: '#252525',
-    secondary: '#F896D8',
+    secondary: '#008e9b',
     secondaryShadow: 'rgba(13, 71, 161, .9)',
     danger: '#F9627D',
-    dark: '#564592',
+    dark: '#845ec2',
     white: '#fff',
     offWhite: '#fefefe',
   },
@@ -95,6 +95,9 @@ const Layout: React.FC<Props> = ({
 
 const GlobalStyles = createGlobalStyle`
 
+
+
+
 *::before,*::after,* {
       margin: 0;
       padding: 0;
@@ -102,11 +105,11 @@ const GlobalStyles = createGlobalStyle`
     }
     html {
       font-size: ${props => props.theme.appSize};
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Open Sans Condensed', sans-serif;
     }
     body {
       box-sizing: border-box;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Open Sans Condensed', sans-serif;
       padding: 0;
       margin: 0;
       font-size: 1.5rem;
@@ -120,7 +123,11 @@ const GlobalStyles = createGlobalStyle`
     a {
     text-decoration: none;
     color: ${props => props.theme.colors.white};
-  }
+    }
+
+    h1{
+      font-family: 'Caveat', cursive;
+    }
 `
 
 export default Layout
