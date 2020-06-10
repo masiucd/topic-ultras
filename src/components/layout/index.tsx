@@ -21,7 +21,6 @@ export const Page = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  border: 3px solid blue;
   margin: 0 auto;
 `
 
