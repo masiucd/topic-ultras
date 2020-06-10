@@ -14,6 +14,24 @@ module.exports = {
     social: {
       twitterUsername: 'CiszekMarcell',
     },
+    links: [
+      {
+        name: 'home',
+        path: '/',
+      },
+      {
+        name: 'about',
+        path: '/about',
+      },
+      {
+        name: 'blog',
+        path: '/blog',
+      },
+      {
+        name: 'contact',
+        path: '/contact',
+      },
+    ],
   },
   plugins: [
     {
@@ -67,5 +85,6 @@ module.exports = {
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
     'gatsby-plugin-react-helmet',
+    `gatsby-plugin-transition-link`,
   ],
 }

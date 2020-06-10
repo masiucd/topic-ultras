@@ -59,7 +59,9 @@ const Title: React.FC<Props> = ({
       {cta && (
         <div className="btnWrapper">
           {' '}
-          <StyledBtn to={`/${page || 'about'}`}>{ctaText || 'About'}</StyledBtn>
+          <StyledBtn fade to={`/${page || 'about'}`}>
+            {ctaText || 'About'}
+          </StyledBtn>
         </div>
       )}
     </StyledTitle>

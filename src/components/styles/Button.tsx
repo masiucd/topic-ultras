@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 import { Link } from 'gatsby'
+import AniLink from 'gatsby-plugin-transition-link/AniLink'
 
-export const StyledBtn = styled(Link)`
+export const StyledBtn = styled(AniLink)`
   padding: 0.6rem 0.9rem;
   font-size: 1.8rem;
   border: ${props => props.theme.colors.white} 2px solid;
