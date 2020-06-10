@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'Gianni-e-pinotto',
+    title: 'On the Go Tours',
     titleTemplate: '%s · The Real Deal',
     description: "Itialn's place to eat",
     keywords: 'pasta,italy,pizza,wine,family,football',

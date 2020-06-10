@@ -1,14 +1,14 @@
-# Gianni-e-pinotto
+#  On the Go Tours
 
-**The Italian Deal**
+**To explore the world**
 
-### Italian Food blog
+### Travel Blog
 
 ### Tools
 
-- React
-- Typescript
-- StyledComponents
-- Gatsby
-- Graphql
-- ContentFul
+* React
+* Typescript
+* StyledComponents
+* Gatsby
+* Graphql
+* ContentFul
