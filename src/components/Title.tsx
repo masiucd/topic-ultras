@@ -8,10 +8,14 @@ interface Props {
   subTitle?: string
   bgShadow?: boolean
   cta?: boolean
+  left?: boolean
+  ctaText?: string
+  page?: string
 }
 
 interface TitleStylesProps {
   bgShadow?: boolean
+  left?: boolean
 }
 
 const StyledTitle = styled.section<TitleStylesProps>`
@@ -28,6 +32,8 @@ const StyledTitle = styled.section<TitleStylesProps>`
   h3 {
     font-size: 2.6rem;
   }
+  position: ${({ left }) => left && 'absolute'};
+  left: ${({ left }) => left && '0'};
 
   @media (max-width: 900px) {
     width: 62vw;
@@ -37,15 +43,23 @@ const StyledTitle = styled.section<TitleStylesProps>`
   }
 `
 
-const Title: React.FC<Props> = ({ bgShadow, title, subTitle, cta }) => {
+const Title: React.FC<Props> = ({
+  bgShadow,
+  title,
+  subTitle,
+  cta,
+  left,
+  ctaText,
+  page,
+}) => {
   return (
-    <StyledTitle bgShadow={bgShadow}>
+    <StyledTitle bgShadow={bgShadow} left={left}>
       <h1>{title}</h1>
       {subTitle && <h3>{subTitle}</h3>}
       {cta && (
         <div className="btnWrapper">
           {' '}
-          <StyledBtn>Cta</StyledBtn>
+          <StyledBtn to={`/${page || 'about'}`}>{ctaText || 'About'}</StyledBtn>
         </div>
       )}
     </StyledTitle>

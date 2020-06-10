@@ -27,7 +27,6 @@ export const Page = styled.div`
 
 const Main = styled.main`
   flex-grow: 1 auto;
-  border: 3px solid red;
 `
 
 const theme: DefaultTheme = {

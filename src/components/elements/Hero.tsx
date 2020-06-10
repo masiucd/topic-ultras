@@ -14,7 +14,7 @@ interface Props {
 
 const query = graphql`
   {
-    hero: file(relativePath: { eq: "italy.jpg" }) {
+    hero: file(relativePath: { eq: "hong1.jpeg" }) {
       childImageSharp {
         fluid(quality: 90, maxWidth: 1290) {
           ...GatsbyImageSharpFluid_withWebp
@@ -46,7 +46,7 @@ const Hero: React.FC<Props> = ({ className, children, heroBg, home }) => {
 
 export default styled(Hero)`
   ${handleFlex('column', 'center', 'center')};
-  min-height: ${props => (props.home ? 'calc(90vh - 322px)' : '50vh')};
+  min-height: ${props => (props.home ? 'calc(90vh - 22px)' : '50vh')};
   background-position: bottom center;
   background-size: cover;
   opacity: 1 !important;

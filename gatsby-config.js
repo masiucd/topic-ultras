@@ -2,7 +2,7 @@ module.exports = {
   siteMetadata: {
     title: 'On the Go Tours',
     titleTemplate: '%s · The Real Deal',
-    description: "Itialn's place to eat",
+    description: 'Explore the world',
     keywords: 'pasta,italy,pizza,wine,family,football',
     siteUrl: 'https://marcelable.com',
     image: '/images/italy.jpg',

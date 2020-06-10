@@ -1,10 +1,12 @@
 import styled from 'styled-components'
+import { Link } from 'gatsby'
 
-export const StyledBtn = styled.button`
+export const StyledBtn = styled(Link)`
   padding: 0.6rem 0.9rem;
   font-size: 1.8rem;
   border: ${props => props.theme.colors.white} 2px solid;
   width: 14rem;
+  text-align: center;
   ${props => props.theme.shadows.elevations[1]};
   background-image: -webkit-gradient(
     linear,
