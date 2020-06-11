@@ -24,13 +24,18 @@ interface BlogPostProps {
 const StyledBlogPost = styled.section`
   max-width: 1000px;
   margin: 2rem auto;
+  height: 100%;
   #blog-post-title {
+    padding: 1rem;
     font-size: 5rem;
   }
 `
 
 const Content = styled.div`
-  padding: 1rem 0;
+  padding: 1rem;
+  p {
+    font-size: 1.8rem;
+  }
 `
 
 const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {

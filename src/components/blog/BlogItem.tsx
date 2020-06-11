@@ -13,6 +13,7 @@ interface Props {
       path: string
       date: string
     }
+    excerpt: string
   }
 }
 
@@ -38,6 +39,10 @@ const StyledBlogItem = styled(AniLink)`
       margin-left: 1rem;
       width: 40%;
     }
+    small {
+      display: block;
+      font-size: 1.5rem;
+    }
   }
 
   @media (max-width: 960px) {
@@ -52,7 +57,10 @@ const BlogItem: React.FC<Props> = ({ data }) => {
   const p = '/blog'
   return (
     <StyledBlogItem fade to={`${p}${data.frontmatter.path}`}>
-      <p>{data.frontmatter.title}</p>
+      <p>
+        {data.frontmatter.title}
+        <small>{data.excerpt}</small>
+      </p>
       <p>{data.frontmatter.date}</p>
     </StyledBlogItem>
   )

@@ -2,6 +2,8 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
 import AniLink from 'gatsby-plugin-transition-link/AniLink'
+import Img from 'gatsby-image'
+import { IFixedObject } from 'gatsby-background-image'
 import NavList from './NavList'
 import { handleFlex } from '../../styles/utils/helpers'
 import NavSearch from './NavSearch'
@@ -28,11 +30,20 @@ interface NavQuery {
       links: Array<Link>
     }
   }
+  file: {
+    name: string
+    childImageSharp: {
+      fixed: IFixedObject
+    }
+  }
 }
 
 const Nav: React.FC<Props> = ({ className }) => {
   const {
-    site: { siteMetadata },
+    file,
+    site: {
+      siteMetadata: { links, title },
+    },
   } = useStaticQuery<NavQuery>(graphql`
     {
       site {
@@ -44,6 +55,14 @@ const Nav: React.FC<Props> = ({ className }) => {
           }
         }
       }
+      file(absolutePath: { regex: "/png/", ne: "menu" }) {
+        name
+        childImageSharp {
+          fixed(width: 40, height: 45) {
+            ...GatsbyImageSharpFixed
+          }
+        }
+      }
     }
   `)
 
@@ -51,13 +70,13 @@ const Nav: React.FC<Props> = ({ className }) => {
     <nav className={className}>
       <NavTitle>
         <AniLink fade to="/">
-          <h3>{siteMetadata.title}</h3>
+          <h3>{title}</h3>
         </AniLink>
       </NavTitle>
       <NavSearch />
-      <NavList onLinks={siteMetadata.links} />
+      <NavList onLinks={links} />
       <div id="navIcon">
-        <span>Menu</span>
+        <Img fixed={file.childImageSharp.fixed} alt={file.name} />
       </div>
     </nav>
   )
@@ -70,7 +89,7 @@ export default styled(Nav)`
   ${handleFlex('row', 'space-between', 'center')};
   #navIcon {
     position: absolute;
-    top: 0.2rem;
+    top: 0;
     right: 1rem;
     cursor: pointer;
     font-size: 1.8rem;

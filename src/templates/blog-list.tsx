@@ -23,6 +23,7 @@ interface Node {
       path: string
       date: string
     }
+    excerpt: string
   }
 }
 

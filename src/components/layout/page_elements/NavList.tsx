@@ -26,6 +26,9 @@ const StyledNavList = styled.ul`
     text-transform: capitalize;
     transition: ${props => props.theme.transition.quickTransition};
     font-weight: 700;
+    &:hover {
+      border-bottom: 2px solid ${({ theme }) => theme.colors.black};
+    }
   }
   display: none;
 `
