@@ -34,7 +34,6 @@ const Content = styled.div`
 `
 
 const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {
-  console.log(pageContext.pathSlug)
   const { markdownRemark } = data
   return (
     <Layout>
