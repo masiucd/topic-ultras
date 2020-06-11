@@ -25,7 +25,7 @@ module.exports = {
       },
       {
         name: 'blog',
-        path: '/blog',
+        path: '/blog-list',
       },
       {
         name: 'contact',

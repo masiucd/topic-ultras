@@ -12,8 +12,13 @@ interface DataProps {
   }
 }
 
+interface PageContext {
+  pathSlug: string
+}
+
 interface BlogPostProps {
   data: DataProps
+  pageContext: PageContext
 }
 
 const StyledBlogPost = styled.section`
@@ -28,7 +33,8 @@ const Content = styled.div`
   padding: 1rem 0;
 `
 
-const BlogPost: React.FC<BlogPostProps> = ({ data }) => {
+const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {
+  console.log(pageContext.pathSlug)
   const { markdownRemark } = data
   return (
     <Layout>

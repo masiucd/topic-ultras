@@ -1,6 +1,6 @@
 ---
 title: 'Sweden'
-path: '/hong-kong'
+path: '/sweden'
 tags: ['travel', 'europe', 'scandinavia']
 date: '2017-12-17'
 spoiler: 'Sweden is the king'

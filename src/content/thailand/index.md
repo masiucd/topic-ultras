@@ -1,6 +1,6 @@
 ---
 title: 'Thailand'
-path: '/hong-kong'
+path: '/thailand'
 tags: ['travel', 'asia']
 date: '2017-11-12'
 spoiler: 'Thailand is the king'

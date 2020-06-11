@@ -1,7 +1,8 @@
 import * as React from 'react'
-import { graphql, Link } from 'gatsby'
-import AniLink from 'gatsby-plugin-transition-link/AniLink'
-import Layout from '../components/layout'
+import { graphql } from 'gatsby'
+import styled from 'styled-components'
+import BlogItem from '../components/blog/BlogItem'
+import Layout, { Page } from '../components/layout'
 
 interface PageContext<T> {
   currentPage: T
@@ -12,9 +13,13 @@ interface PageContext<T> {
 
 interface Node {
   node: {
+    fields: {
+      slug: string
+    }
     frontmatter: {
       title: string
       path: string
+      date: string
     }
   }
 }
@@ -30,20 +35,29 @@ interface BlogListProps {
   data: Data
 }
 
+const BlogListStyles = styled.div`
+  padding: 1.5rem 1rem;
+  #title {
+    font-size: 6.5rem;
+    text-align: center;
+    padding: 1.5rem;
+  }
+`
+
 const BlogList: React.FC<BlogListProps> = ({ pageContext, data }) => {
   const { edges } = data.allMarkdownRemark
   const { currentPage, numPages } = pageContext
 
   return (
     <Layout>
-      <h1>blog list</h1>
-      {edges.map(({ node }) => (
-        <div key={node.frontmatter.title}>
-          <Link to={`blog${node.frontmatter.path}`} style={{ color: '#000' }}>
-            <h3>{node.frontmatter.title}</h3>
-          </Link>
-        </div>
-      ))}
+      <BlogListStyles>
+        <h1 id="title">blog Posts</h1>
+        <Page>
+          {edges.map(({ node }) => (
+            <BlogItem key={node.fields.slug} data={node} />
+          ))}
+        </Page>
+      </BlogListStyles>
     </Layout>
   )
 }
@@ -57,9 +71,13 @@ export const blogListQuery = graphql`
     ) {
       edges {
         node {
+          fields {
+            slug
+          }
           frontmatter {
             title
             path
+            date(formatString: "dd MMMM YYYY")
           }
           excerpt
         }
