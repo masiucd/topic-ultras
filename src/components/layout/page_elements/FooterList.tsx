@@ -1,9 +1,8 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { link } from 'fs'
 import { Link } from 'gatsby'
 import { handleFlex } from '../../styles/utils/helpers'
-
+// s
 interface Link<T> {
   name: T
   path: T
