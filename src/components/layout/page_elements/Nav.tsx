@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import * as React from 'react'
 import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
@@ -7,6 +9,8 @@ import { IFixedObject } from 'gatsby-background-image'
 import NavList from './NavList'
 import { handleFlex } from '../../styles/utils/helpers'
 import NavSearch from './NavSearch'
+import useToggle from '../../hooks/useToggle'
+import MobileMenu from './MobileMenu'
 
 interface Props {
   className: string
@@ -39,6 +43,7 @@ interface NavQuery {
 }
 
 const Nav: React.FC<Props> = ({ className }) => {
+  const [on, toggle] = useToggle(false)
   const {
     file,
     site: {
@@ -75,9 +80,16 @@ const Nav: React.FC<Props> = ({ className }) => {
       </NavTitle>
       <NavSearch />
       <NavList onLinks={links} />
-      <div id="navIcon">
-        <Img fixed={file.childImageSharp.fixed} alt={file.name} />
+      <div id="navIcon" onClick={toggle}>
+        <Img
+          fixed={file.childImageSharp.fixed}
+          alt={file.name}
+          style={{
+            color: on ? '#fff' : '',
+          }}
+        />
       </div>
+      <MobileMenu on={on} onLinks={links} />
     </nav>
   )
 }
@@ -93,6 +105,7 @@ export default styled(Nav)`
     right: 1rem;
     cursor: pointer;
     font-size: 1.8rem;
+    z-index: 6;
     @media (min-width: 960px) {
       display: none;
     }

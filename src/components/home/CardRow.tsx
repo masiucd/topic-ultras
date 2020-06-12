@@ -8,6 +8,19 @@ import TripItem from './TripItem'
 
 interface Props {}
 
+const Wrapper = styled.section`
+  text-align: center;
+  #rowTitle {
+    text-align: center;
+
+    display: block;
+    margin: 1rem auto;
+    font-size: 3.5rem;
+    padding: 1rem;
+    border-bottom: 2px solid ${props => props.theme.colors.black};
+    width: 40%;
+  }
+`
 const CardRowStyles = styled.section`
   padding: 3rem 1rem;
   width: 100%;
@@ -67,11 +80,14 @@ const CardRow: React.FC<Props> = () => {
   )
 
   return (
-    <CardRowStyles>
-      {edges.map(({ node }) => (
-        <TripItem key={node.id} card={node} />
-      ))}
-    </CardRowStyles>
+    <Wrapper>
+      <h3 id="rowTitle">Lovely Trips</h3>
+      <CardRowStyles>
+        {edges.map(({ node }) => (
+          <TripItem key={node.id} card={node} />
+        ))}
+      </CardRowStyles>
+    </Wrapper>
   )
 }
 export default CardRow

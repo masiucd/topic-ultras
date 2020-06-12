@@ -2,14 +2,14 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { handleFlex } from '../../styles/utils/helpers'
-// s
-interface Link<T> {
+
+interface LinkItem<T> {
   name: T
   path: T
 }
 
 interface Props {
-  onLinks: Link<string>[]
+  onLinks: LinkItem<string>[]
 }
 
 const StyledList = styled.ul`
@@ -24,7 +24,7 @@ const StyledList = styled.ul`
     padding: 1rem;
     &:hover {
       color: ${({ theme }) => theme.colors.primary};
-      background: ${({ theme }) => theme.colors.white};
+      border-bottom: 2px solid ${({ theme }) => theme.colors.primary};
     }
   }
 `
