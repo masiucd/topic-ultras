@@ -14,9 +14,9 @@ interface Props {
 
 const query = graphql`
   {
-    hero: file(relativePath: { eq: "hong1.jpeg" }) {
+    hero: file(relativePath: { eq: "hong2.jpeg" }) {
       childImageSharp {
-        fluid(quality: 90, maxWidth: 1290) {
+        fluid(quality: 90, maxWidth: 1290, grayscale: true) {
           ...GatsbyImageSharpFluid_withWebp
         }
       }

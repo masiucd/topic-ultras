@@ -2,9 +2,9 @@ import * as React from 'react'
 import styled from 'styled-components'
 import Img from 'gatsby-image'
 import { useStaticQuery, graphql } from 'gatsby'
-import { IFixedObject } from 'gatsby-background-image'
+import { IFixedObject, IFluidObject } from 'gatsby-background-image'
 import { handleFlex } from '../styles/utils/helpers'
-import CardSmall from '../elements/Card.s'
+import TripItem from './TripItem'
 
 interface Props {}
 
@@ -20,30 +20,43 @@ const CardRowStyles = styled.section`
 
 interface Node {
   node: {
-    name: string
-    childImageSharp: {
-      fixed: IFixedObject
+    id: string
+    price: number
+    title: string
+    desc: string
+    slug: string
+    image: {
+      fluid: IFluidObject
     }
   }
 }
 
 interface CartRowQuery {
-  allFile: {
+  featureTrips: {
     edges: Array<Node>
   }
 }
 
 const CardRow: React.FC<Props> = () => {
-  const { allFile } = useStaticQuery<CartRowQuery>(
+  const {
+    featureTrips: { edges },
+  } = useStaticQuery<CartRowQuery>(
     graphql`
       {
-        allFile(filter: { extension: { eq: "jpeg" } }) {
+        featureTrips: allContentfulTrips(
+          limit: 3
+          sort: { fields: [createdAt], order: DESC }
+        ) {
           edges {
             node {
-              name
-              childImageSharp {
-                fixed(width: 260, height: 240) {
-                  ...GatsbyImageSharpFixed
+              id
+              price
+              title
+              desc
+              slug
+              image {
+                fluid {
+                  ...GatsbyContentfulFluid
                 }
               }
             }
@@ -55,8 +68,8 @@ const CardRow: React.FC<Props> = () => {
 
   return (
     <CardRowStyles>
-      {allFile.edges.slice(0, 3).map(card => (
-        <CardSmall key={card.node.name} card={card.node} />
+      {edges.map(({ node }) => (
+        <TripItem key={node.id} card={node} />
       ))}
     </CardRowStyles>
   )
