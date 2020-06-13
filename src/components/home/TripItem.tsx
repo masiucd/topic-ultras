@@ -1,25 +1,27 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { IFixedObject, IFluidObject } from 'gatsby-background-image'
+import { IFluidObject } from 'gatsby-background-image'
 import AniLink from 'gatsby-plugin-transition-link/AniLink'
 import Image from 'gatsby-image'
 import { graphql, useStaticQuery } from 'gatsby'
 import { handleFlex } from '../styles/utils/helpers'
 
-interface Props {
-  card: {
-    id: string
-    price: number
-    title: string
-    desc: string
-    slug: string
-    image: {
-      fluid: IFluidObject | IFluidObject[] | undefined
-    }
+type Card = {
+  id: string
+  price?: number
+  title: string
+  desc: string
+  slug?: string
+  image: {
+    fluid: IFluidObject | IFluidObject[] | undefined
   }
 }
+interface Props {
+  card: Card
+}
 
-const StyledCardSmall = styled.article`
+const StyledCard = styled.article`
+  border: 3px solid ${({ theme }) => theme.colors.black};
   margin: 1.5rem;
   position: relative;
   transition: ${props => props.theme.transition.mainTransition};
@@ -113,19 +115,19 @@ const TripItem: React.FC<Props> = ({ card }) => {
   const mainImg = card.image.fluid || img
 
   return (
-    <StyledCardSmall>
+    <StyledCard>
       <Image fluid={mainImg} alt={card.title} />
-      <AniLink fade to={`trip/${card.slug}`}>
+      <AniLink fade to={card.slug ? `trip/${card.slug}` : '/tours'}>
         <div className="content">
           <h3>{card.title.match(/[a-z]/gi)}</h3>
           <p>{card.desc}</p>
-          <small>Price: ${card.price}</small>
+          {card.price && <small>Price: ${card.price}</small>}
         </div>
       </AniLink>
       <CardFooter>
         <h3>Lovely {card.title}</h3>
       </CardFooter>
-    </StyledCardSmall>
+    </StyledCard>
   )
 }
 export default TripItem

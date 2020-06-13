@@ -81,13 +81,7 @@ const Nav: React.FC<Props> = ({ className }) => {
       <NavSearch />
       <NavList onLinks={links} />
       <div id="navIcon" onClick={toggle}>
-        <Img
-          fixed={file.childImageSharp.fixed}
-          alt={file.name}
-          style={{
-            color: on ? '#fff' : '',
-          }}
-        />
+        <Img fixed={file.childImageSharp.fixed} alt={file.name} />
       </div>
       <MobileMenu on={on} onLinks={links} />
     </nav>

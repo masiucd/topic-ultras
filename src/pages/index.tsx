@@ -5,6 +5,7 @@ import Layout, { Page } from '../components/layout'
 import Title from '../components/Title'
 import Hero from '../components/elements/Hero'
 import CardRow from '../components/home/CardRow'
+import Capture from '../components/home/Capture'
 
 interface IndexQuery {
   site: {
@@ -26,12 +27,13 @@ const IndexPage: React.FC<PageProps<IndexQuery>> = ({ data }) => {
           cta
           bgShadow
           left
-          ctaText="About"
-          page="about"
+          ctaText="Tours"
+          page="tours"
         />
       </Hero>
       <Page>
         <CardRow />
+        <Capture />
       </Page>
     </Layout>
   )

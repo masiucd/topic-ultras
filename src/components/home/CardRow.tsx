@@ -12,13 +12,16 @@ const Wrapper = styled.section`
   text-align: center;
   #rowTitle {
     text-align: center;
-
+    text-transform: capitalize;
     display: block;
     margin: 1rem auto;
     font-size: 3.5rem;
     padding: 1rem;
     border-bottom: 2px solid ${props => props.theme.colors.black};
     width: 40%;
+    span {
+      color: ${({ theme }) => theme.colors.primary};
+    }
   }
 `
 const CardRowStyles = styled.section`
@@ -81,7 +84,9 @@ const CardRow: React.FC<Props> = () => {
 
   return (
     <Wrapper>
-      <h3 id="rowTitle">Lovely Trips</h3>
+      <h3 id="rowTitle">
+        Lovely <span>famous</span> Trips
+      </h3>
       <CardRowStyles>
         {edges.map(({ node }) => (
           <TripItem key={node.id} card={node} />

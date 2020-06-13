@@ -26,6 +26,8 @@ const StyledMenu = styled(animated.ul)`
 
   li {
     padding: 1.5rem;
+    width: 60vw;
+    text-align: center;
     &:first-child {
       margin-top: 20rem;
     }
@@ -36,10 +38,14 @@ const StyledMenu = styled(animated.ul)`
     text-transform: capitalize;
     transition: ${props => props.theme.transition.mainTransition};
     padding: 0.5rem 1rem;
+    display: block;
     &:hover {
       border-bottom: 2px solid ${({ theme }) => theme.colors.white};
       background: rgba(0, 0, 0, 0.6);
     }
+  }
+  @media (min-width: 960px) {
+    display: none;
   }
 `
 
