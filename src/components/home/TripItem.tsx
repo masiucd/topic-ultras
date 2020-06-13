@@ -117,7 +117,7 @@ const TripItem: React.FC<Props> = ({ card }) => {
   return (
     <StyledCard>
       <Image fluid={mainImg} alt={card.title} />
-      <AniLink fade to={card.slug ? `trip/${card.slug}` : '/tours'}>
+      <AniLink fade to={card.slug ? `tours${card.slug}` : '/tours'}>
         <div className="content">
           <h3>{card.title.match(/[a-z]/gi)}</h3>
           <p>{card.desc}</p>

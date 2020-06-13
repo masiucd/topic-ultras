@@ -74,7 +74,7 @@ const NavigationWrapper = styled.div`
 
 const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {
   const { markdownRemark } = data
-  console.log(pageContext.next)
+
   return (
     <Layout>
       <StyledBlogPost>

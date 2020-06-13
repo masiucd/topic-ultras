@@ -6,6 +6,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions
   const blogListTemplate = path.resolve(`src/templates/blog-list.tsx`)
   const blogPostTemplate = path.resolve(`src/templates/blog-post.tsx`)
+  const singleTourTemplate = path.resolve(`src/templates/single-tour.tsx`)
 
   const result = await graphql(`
     query {
@@ -30,10 +31,23 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           }
         }
       }
+      allContentfulTrips {
+        edges {
+          node {
+            id
+            title
+            desc
+            slug
+            price
+          }
+        }
+      }
     }
   `)
 
   const posts = result.data.allMarkdownRemark.edges
+  const trips = result.data.allContentfulTrips.edges
+
   const postsPerPage = 6
   const numPages = Math.ceil(posts.length / postsPerPage)
   Array.from({ length: numPages }).forEach((_, i) => {
@@ -58,6 +72,17 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         pathSlug: path,
         prev: index === 0 ? null : posts[index - 1].node,
         next: index === posts.length - 1 ? null : posts[index + 1].node,
+      },
+    })
+  })
+
+  trips.forEach(({ node }, index) => {
+    const { slug } = node
+    createPage({
+      path: `/tours${slug}`,
+      component: singleTourTemplate,
+      context: {
+        pathSlug: slug,
       },
     })
   })
