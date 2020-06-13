@@ -11,6 +11,7 @@ interface Props {
   left?: boolean
   ctaText?: string
   page?: string
+  color?: string
 }
 
 interface TitleStylesProps {
@@ -23,8 +24,8 @@ const StyledTitle = styled.section<TitleStylesProps>`
   padding: 2rem 1rem;
   background: ${({ theme, bgShadow }) =>
     bgShadow ? theme.colors.primaryShadow : 'none'};
-  color: ${({ theme, bgShadow }) =>
-    bgShadow ? theme.colors.white : theme.colors.black};
+  color: ${({ theme, bgShadow, color }) =>
+    bgShadow ? color : theme.colors.white};
   width: 52vw;
   h1 {
     font-size: 4rem;
@@ -51,9 +52,10 @@ const Title: React.FC<Props> = ({
   left,
   ctaText,
   page,
+  color,
 }) => {
   return (
-    <StyledTitle bgShadow={bgShadow} left={left}>
+    <StyledTitle bgShadow={bgShadow} left={left} color={color}>
       <h1>{title}</h1>
       {subTitle && <h3>{subTitle}</h3>}
       {cta && (

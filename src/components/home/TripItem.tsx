@@ -125,7 +125,7 @@ const TripItem: React.FC<Props> = ({ card }) => {
         </div>
       </AniLink>
       <CardFooter>
-        <h3>Lovely {card.title}</h3>
+        <h3>{card.title}</h3>
       </CardFooter>
     </StyledCard>
   )

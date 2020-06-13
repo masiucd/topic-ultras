@@ -29,6 +29,7 @@ const IndexPage: React.FC<PageProps<IndexQuery>> = ({ data }) => {
           left
           ctaText="Tours"
           page="tours"
+          color="#fff"
         />
       </Hero>
       <Page>
