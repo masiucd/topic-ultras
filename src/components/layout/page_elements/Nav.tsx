@@ -60,7 +60,7 @@ const Nav: React.FC<Props> = ({ className }) => {
           }
         }
       }
-      file(absolutePath: { regex: "/png/", ne: "menu" }) {
+      file(relativePath: { eq: "menu.png" }) {
         name
         childImageSharp {
           fixed(width: 40, height: 45) {

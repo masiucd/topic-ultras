@@ -49,13 +49,15 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     })
   })
 
-  posts.forEach(({ node }) => {
+  posts.forEach(({ node }, index) => {
     const { path } = node.frontmatter
     createPage({
       path: `/blog${node.frontmatter.path}`,
       component: blogPostTemplate,
       context: {
         pathSlug: path,
+        prev: index === 0 ? null : posts[index - 1].node,
+        next: index === posts.length - 1 ? null : posts[index + 1].node,
       },
     })
   })
