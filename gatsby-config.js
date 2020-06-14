@@ -28,12 +28,8 @@ module.exports = {
         path: '/tours',
       },
       {
-        name: 'blog',
-        path: '/blog-list',
-      },
-      {
-        name: 'contact',
-        path: '/contact',
+        name: 'about',
+        path: '/about',
       },
     ],
   },

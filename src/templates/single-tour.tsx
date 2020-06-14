@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { graphql } from 'gatsby'
+import { graphql, Link } from 'gatsby'
 import { IFluidObject } from 'gatsby-background-image'
 import styled from 'styled-components'
 import Layout, { Page } from '../components/layout'
@@ -26,8 +26,17 @@ interface Content {
   contentfulTrips: ContentFulData
 }
 
+interface PrevNext<T> {
+  id: T
+  title: T
+  desc: T
+  price: number
+  slug: T
+}
 interface PageContext {
   tripSlug: string
+  prev: PrevNext<string>
+  next: PrevNext<string>
 }
 interface Props {
   pageContext: PageContext
@@ -51,6 +60,24 @@ const StyledTour = styled.div`
   }
 `
 
+const NavigationFooter = styled.div`
+  ${handleFlex('row', 'space-around', 'center')};
+  padding: 2rem 0;
+  a {
+    font-size: 3rem;
+    color: ${({ theme }) => theme.colors.black};
+    transition: ${({ theme }) => theme.transition.quickTransition};
+    padding: 0.3rem 1rem;
+    width: 12rem;
+    display: block;
+    text-align: center;
+    &:hover {
+      color: ${({ theme }) => theme.colors.white};
+      background: ${({ theme }) => theme.colors.black};
+    }
+  }
+`
+
 const SingleTour: React.FC<Props> = ({ pageContext, data }) => {
   const {
     contentfulTrips: {
@@ -62,7 +89,7 @@ const SingleTour: React.FC<Props> = ({ pageContext, data }) => {
       story: { story },
     },
   } = data
-
+  const { prev, next } = pageContext
   return (
     <Layout>
       <Hero heroBg={image.fluid} className="singleTour">
@@ -75,6 +102,11 @@ const SingleTour: React.FC<Props> = ({ pageContext, data }) => {
             <h3>From: ${price}</h3>
           </div>
           <p>{story}</p>
+          <NavigationFooter>
+            {prev && <Link to={`/tours${prev.slug}`}>← Prev</Link>}
+
+            {next && <Link to={`/tours${next.slug}`}>Next →</Link>}
+          </NavigationFooter>
         </StyledTour>
       </Page>
     </Layout>

@@ -4,8 +4,8 @@ const path = require('path')
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
   const blogListTemplate = path.resolve(`src/templates/blog-list.tsx`)
-  const blogPostTemplate = path.resolve(`src/templates/blog-post.tsx`)
   const singleTourTemplate = path.resolve(`src/templates/single-tour.tsx`)
+  // const blogPostTemplate = path.resolve(`src/templates/blog-post.tsx`)
 
   const result = await graphql(`
     query {
@@ -48,7 +48,7 @@ exports.createPages = async ({ graphql, actions }) => {
   const numPages = Math.ceil(posts.length / postsPerPage)
   Array.from({ length: numPages }).forEach((_, i) => {
     createPage({
-      path: i === 0 ? 'blog-list' : `/blog-list/${i + 1}`,
+      path: i === 0 ? 'blog' : `/blog/${i + 1}`,
       component: blogListTemplate,
       context: {
         limit: postsPerPage,
@@ -59,25 +59,12 @@ exports.createPages = async ({ graphql, actions }) => {
     })
   })
 
-  posts.forEach(({ node }, index) => {
-    createPage({
-      path: `/blog${node.frontmatter.path}`,
-      component: blogPostTemplate,
-      context: {
-        postSlug: node.frontmatter.path,
-        prev: index === 0 ? null : posts[index - 1].node,
-        next: index === posts.length - 1 ? null : posts[index + 1].node,
-      },
-    })
-  })
-
   // posts.forEach(({ node }, index) => {
-  //   const { path } = node.frontmatter
   //   createPage({
   //     path: `/blog${node.frontmatter.path}`,
   //     component: blogPostTemplate,
   //     context: {
-  //       pathSlug: path,
+  //       postSlug: node.frontmatter.path,
   //       prev: index === 0 ? null : posts[index - 1].node,
   //       next: index === posts.length - 1 ? null : posts[index + 1].node,
   //     },
