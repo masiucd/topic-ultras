@@ -124,6 +124,7 @@ export const blogListQuery = graphql`
       sort: { fields: [frontmatter___date], order: DESC }
       limit: $limit
       skip: $skip
+      filter: { fileAbsolutePath: { regex: "/.md/" } }
     ) {
       edges {
         node {

@@ -4,7 +4,7 @@ const path = require('path')
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
   const blogListTemplate = path.resolve(`src/templates/blog-list.tsx`)
-  // const blogPostTemplate = path.resolve(`src/templates/blog-post.tsx`)
+  const blogPostTemplate = path.resolve(`src/templates/blog-post.tsx`)
   const singleTourTemplate = path.resolve(`src/templates/single-tour.tsx`)
 
   const result = await graphql(`
@@ -55,6 +55,18 @@ exports.createPages = async ({ graphql, actions }) => {
         skip: i * postsPerPage,
         numPages,
         currentPage: i + 1,
+      },
+    })
+  })
+
+  posts.forEach(({ node }, index) => {
+    createPage({
+      path: `/blog${node.frontmatter.path}`,
+      component: blogPostTemplate,
+      context: {
+        postSlug: node.frontmatter.path,
+        prev: index === 0 ? null : posts[index - 1].node,
+        next: index === posts.length - 1 ? null : posts[index + 1].node,
       },
     })
   })
