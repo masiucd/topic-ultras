@@ -5,9 +5,6 @@ import { handleFlex } from '../styles/utils/helpers'
 
 interface Props {
   data: {
-    fields: {
-      slug: string
-    }
     frontmatter: {
       title: string
       path: string

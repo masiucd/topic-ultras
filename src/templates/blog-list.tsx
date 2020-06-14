@@ -15,9 +15,6 @@ interface PageContext<T> {
 
 interface Node {
   node: {
-    fields: {
-      slug: string
-    }
     frontmatter: {
       title: string
       path: string
@@ -84,7 +81,7 @@ const BlogList: React.FC<BlogListProps> = ({ pageContext, data }) => {
         <h1 id="title">Travel Posts</h1>
         <Page>
           {edges.map(({ node }) => (
-            <BlogItem key={node.fields.slug} data={node} />
+            <BlogItem key={node.frontmatter.title} data={node} />
           ))}
 
           <LinkWrapper>
@@ -130,9 +127,6 @@ export const blogListQuery = graphql`
     ) {
       edges {
         node {
-          fields {
-            slug
-          }
           frontmatter {
             title
             path
