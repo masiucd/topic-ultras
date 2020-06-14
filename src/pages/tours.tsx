@@ -50,7 +50,7 @@ const Tours: React.FC<PageProps<Props>> = ({ data }) => {
   return (
     <Layout onTitle="Tours">
       <Hero className="Tours" heroBg={hero.childImageSharp.fluid}>
-        <Title title="Out top 10 Tours" cta ctaText="Blog" page="blog" />
+        <Title title="Out top 10 Tours" cta ctaText="About" page="about" />
       </Hero>
       <Page>
         <h1
