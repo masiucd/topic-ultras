@@ -77,7 +77,7 @@ const BlogList: React.FC<BlogListProps> = ({ pageContext, data }) => {
   const nextPage = (currentPage + 1).toString()
   return (
     <Layout>
-      <BlogListStyles>
+      {/* <BlogListStyles>
         <h1 id="title">Travel Posts</h1>
         <Page>
           {edges.map(({ node }) => (
@@ -113,7 +113,7 @@ const BlogList: React.FC<BlogListProps> = ({ pageContext, data }) => {
             )}
           </LinkWrapper>
         </Page>
-      </BlogListStyles>
+      </BlogListStyles> */}
     </Layout>
   )
 }

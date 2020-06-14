@@ -1,11 +1,10 @@
 /* eslint-disable no-shadow */
 const path = require('path')
-const { createFilePath } = require('gatsby-source-filesystem')
 
-exports.createPages = async ({ graphql, actions, reporter }) => {
+exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
   const blogListTemplate = path.resolve(`src/templates/blog-list.tsx`)
-  const blogPostTemplate = path.resolve(`src/templates/blog-post.tsx`)
+  // const blogPostTemplate = path.resolve(`src/templates/blog-post.tsx`)
   const singleTourTemplate = path.resolve(`src/templates/single-tour.tsx`)
 
   const result = await graphql(`
@@ -60,18 +59,18 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     })
   })
 
-  posts.forEach(({ node }, index) => {
-    const { path } = node.frontmatter
-    createPage({
-      path: `/blog${node.frontmatter.path}`,
-      component: blogPostTemplate,
-      context: {
-        pathSlug: path,
-        prev: index === 0 ? null : posts[index - 1].node,
-        next: index === posts.length - 1 ? null : posts[index + 1].node,
-      },
-    })
-  })
+  // posts.forEach(({ node }, index) => {
+  //   const { path } = node.frontmatter
+  //   createPage({
+  //     path: `/blog${node.frontmatter.path}`,
+  //     component: blogPostTemplate,
+  //     context: {
+  //       pathSlug: path,
+  //       prev: index === 0 ? null : posts[index - 1].node,
+  //       next: index === posts.length - 1 ? null : posts[index + 1].node,
+  //     },
+  //   })
+  // })
 
   trips.forEach(({ node }, index) => {
     const { slug } = node
@@ -79,7 +78,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       path: `/tours${slug}`,
       component: singleTourTemplate,
       context: {
-        pathSlug: slug,
+        tripSlug: slug,
+        prev: index === 0 ? null : trips[index - 1].node,
+        next: index === trips.length - 1 ? null : trips[index + 1].node,
       },
     })
   })

@@ -78,7 +78,6 @@ const Nav: React.FC<Props> = ({ className }) => {
           <h3>{title}</h3>
         </AniLink>
       </NavTitle>
-      <NavSearch />
       <NavList onLinks={links} />
       <div id="navIcon" onClick={toggle}>
         <Img fixed={file.childImageSharp.fixed} alt={file.name} />
