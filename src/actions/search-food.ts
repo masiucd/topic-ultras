@@ -88,7 +88,8 @@ WHERE
 let resultSchema = z.object({
   food_name: z.string(),
   nutrient_name: z.string(),
-  amount_in_grams: z.number(),
+  amount_in_grams: z.number().nullable(),
+  amount_in_ounces: z.number().nullable(),
   unit: z.string(),
 });
 

@@ -17,7 +17,23 @@ export function SearchFood() {
     <div>
       <div>SearchFood</div>
       <FoodForm action={action} />
-      {foodResult !== null ? <p></p> : <p>Search for a food item</p>}
+      {foodResult !== null ? (
+        <div>
+          {foodResult.result ? (
+            <div>
+              <p>{foodResult.result.food_name}</p>
+              <p>{foodResult.result.nutrient_name}</p>
+              <p>{foodResult.result.amount_in_grams}</p>
+              <p>{foodResult.result.amount_in_ounces}</p>
+              <p>{foodResult.result.unit}</p>
+            </div>
+          ) : (
+            <p>Food not found</p>
+          )}
+        </div>
+      ) : (
+        <p>Search for a food item</p>
+      )}
     </div>
   );
 }

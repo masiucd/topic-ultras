@@ -9,52 +9,66 @@ import {
 import {createInsertSchema, createSelectSchema} from "drizzle-zod";
 import {z} from "zod";
 
-// food_id INTEGER PRIMARY KEY AUTOINCREMENT,
-//                        name VARCHAR(100) NOT NULL,
-//                        description TEXT
-
-export let foods = sqliteTable("foods", {
-  foodId: integer("food_id").primaryKey({autoIncrement: true}).notNull(),
-  name: text("name").notNull(),
-  description: text("description").notNull(),
-});
-
-export let nutrients = sqliteTable("nutrients", {
-  nutrientId: integer("nutrient_id")
-    .primaryKey({autoIncrement: true})
-    .notNull(),
-  name: text("name").notNull(),
-});
-
-export let units = sqliteTable("units", {
-  unitId: integer("unit_id").primaryKey({autoIncrement: true}).notNull(),
-  name: text("name").notNull(),
-  conversionFactor: text("conversion_factor").notNull(),
-});
-
-export let foodNutrients = sqliteTable(
-  "food_nutrients",
+export let foods = sqliteTable(
+  "foods",
   {
-    id: integer("id").primaryKey({autoIncrement: true}).notNull(),
-    foodId: integer("food_id")
-      .notNull()
-      .references(() => foods.foodId),
-    nutrientId: integer("nutrient_id")
-      .notNull()
-      .references(() => nutrients.nutrientId),
-    unitId: integer("unit_id")
-      .notNull()
-      .references(() => units.unitId),
-    amount: numeric("amount").notNull(),
+    foodId: integer("food_id").primaryKey({autoIncrement: true}).notNull(),
+    name: text("name").notNull(),
+    description: text("description").notNull(),
   },
-  (table) => {
-    return {
-      foodIdx: index("food_idx").on(table.foodId),
-      nutrientIdx: index("nutrient_idx").on(table.nutrientId),
-      unitIdx: index("unit_idx").on(table.unitId),
-    };
-  },
+  (table) => ({
+    foodNameIdx: index("food_name_idx").on(table.name),
+  }),
 );
+
+// -- Everything is in grams per 100 grams of food
+export let foodNutations = sqliteTable("food_nutrition", {
+  id: integer("id").primaryKey({autoIncrement: true}).notNull(),
+  calories: numeric("calories").notNull(),
+  protein: numeric("protein").notNull(),
+  fat: numeric("fat").notNull(),
+  carbohydrates: numeric("carbohydrates").notNull(),
+  foodId: integer("food_id")
+    .notNull()
+    .references(() => foods.foodId),
+});
+
+// export let nutrients = sqliteTable("nutrients", {
+//   nutrientId: integer("nutrient_id")
+//     .primaryKey({autoIncrement: true})
+//     .notNull(),
+//   name: text("name").notNull(),
+// });
+
+// export let units = sqliteTable("units", {
+//   unitId: integer("unit_id").primaryKey({autoIncrement: true}).notNull(),
+//   name: text("name").notNull(),
+//   conversionFactor: text("conversion_factor").notNull(),
+// });
+
+// export let foodNutrients = sqliteTable(
+//   "food_nutrients",
+//   {
+//     id: integer("id").primaryKey({autoIncrement: true}).notNull(),
+//     foodId: integer("food_id")
+//       .notNull()
+//       .references(() => foods.foodId),
+//     nutrientId: integer("nutrient_id")
+//       .notNull()
+//       .references(() => nutrients.nutrientId),
+//     unitId: integer("unit_id")
+//       .notNull()
+//       .references(() => units.unitId),
+//     amount: numeric("amount").notNull(),
+//   },
+//   (table) => {
+//     return {
+//       foodIdx: index("food_idx").on(table.foodId),
+//       nutrientIdx: index("nutrient_idx").on(table.nutrientId),
+//       unitIdx: index("unit_idx").on(table.unitId),
+//     };
+//   },
+// );
 
 // export let foods = sqliteTable("foods", {
 //   id: integer("id").primaryKey().notNull(),
