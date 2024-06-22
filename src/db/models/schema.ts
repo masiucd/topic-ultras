@@ -1,4 +1,11 @@
-import {index, integer, sqliteTable, text} from "drizzle-orm/sqlite-core";
+import {
+  index,
+  integer,
+  sqliteTable,
+  text,
+  real,
+  numeric,
+} from "drizzle-orm/sqlite-core";
 import {createInsertSchema, createSelectSchema} from "drizzle-zod";
 import {z} from "zod";
 
@@ -25,15 +32,6 @@ export let units = sqliteTable("units", {
   conversionFactor: text("conversion_factor").notNull(),
 });
 
-// food_id INT,
-// nutrient_id INT,
-// unit_id INT,
-// amount DECIMAL(10, 2) NOT NULL,
-// PRIMARY KEY (food_id, nutrient_id, unit_id),
-// FOREIGN KEY (food_id) REFERENCES foods(food_id),
-// FOREIGN KEY (nutrient_id) REFERENCES nutrients(nutrient_id),
-// FOREIGN KEY (unit_id) REFERENCES units(unit_id)
-
 export let foodNutrients = sqliteTable(
   "food_nutrients",
   {
@@ -47,7 +45,7 @@ export let foodNutrients = sqliteTable(
     unitId: integer("unit_id")
       .notNull()
       .references(() => units.unitId),
-    amount: text("amount").notNull(),
+    amount: numeric("amount").notNull(),
   },
   (table) => {
     return {

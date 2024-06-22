@@ -12,42 +12,12 @@ import {Button} from "@/shared/components/ui/button";
 // TODO save state in url params
 export function SearchFood() {
   let [foodResult, action] = useFormState(searchFood, null);
+  console.log("🚀 ~ SearchFood ~ foodResult:", foodResult);
   return (
     <div>
       <div>SearchFood</div>
       <FoodForm action={action} />
-      {foodResult !== null ? (
-        <SearchFootItem foodResult={foodResult} />
-      ) : (
-        <p>Search for a food item</p>
-      )}
-    </div>
-  );
-}
-
-function SearchFootItem({
-  foodResult,
-}: {
-  foodResult: Awaited<ReturnTypeOfFetchFoodNutrition>;
-}) {
-  if (foodResult.result) {
-    return (
-      <div>
-        <p>{foodResult.result.foods.name}</p>
-        <p>{foodResult.result.foods.description}</p>
-        <p>{foodResult.result.nutrients.name}</p>
-        <p>{foodResult.result.units.conversionFactor}</p>
-        <p>{foodResult.result.units.name}</p>
-        <p>{foodResult.result.units.conversionFactor}</p>
-        <p>{foodResult.result.foodNutrients.amount}</p>
-      </div>
-    );
-  }
-  return (
-    <div>
-      <p>
-        There was no result for <strong>{foodResult.search}</strong>.
-      </p>
+      {foodResult !== null ? <p></p> : <p>Search for a food item</p>}
     </div>
   );
 }
@@ -72,7 +42,7 @@ function FoodForm({
       />
       <div>
         <label htmlFor="g">g</label>
-        <input type="radio" name="unit" value="g" id="g" />
+        <input type="radio" name="unit" value="g" id="g" defaultChecked />
 
         <label htmlFor="oz">oz</label>
         <input type="radio" name="unit" value="oz" id="oz" />
@@ -82,7 +52,14 @@ function FoodForm({
         <label htmlFor="amount">
           <span>amount</span>
         </label>
-        <input type="number" name="amount" id="amount" />
+        <input
+          type="number"
+          name="amount"
+          id="amount"
+          defaultValue={100}
+          min={0}
+          max={10000}
+        />
       </div>
       <SubmitButton>
         <span>search</span>
