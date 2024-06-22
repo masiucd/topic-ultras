@@ -9,17 +9,29 @@ import {Button} from "@/shared/components/ui/button";
 // TODO save state in url params
 export function SearchFood() {
   let [foodResult, action] = useFormState(searchFood, null);
-
   return (
     <div>
       <div>SearchFood</div>
       <FoodForm action={action} />
-      {foodResult !== null && (
-        <div>
-          <h3>{foodResult.foods.name}</h3>
-          <p>{foodResult.foods.servingSize}</p>
-          <p>{foodResult.nutritions.calories}</p>
-        </div>
+      {foodResult !== null ? (
+        <>
+          {foodResult.success ? (
+            <>
+              <div>
+                <p>{foodResult.result?.name}</p>
+                <p>{foodResult.result?.description}</p>
+              </div>
+            </>
+          ) : (
+            <div>
+              <p>
+                There was no result for <strong>{foodResult.search}</strong>.
+              </p>
+            </div>
+          )}
+        </>
+      ) : (
+        <p>Search for a food</p>
       )}
     </div>
   );
