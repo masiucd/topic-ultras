@@ -23,10 +23,29 @@ create table nutrition_facts (
   FOREIGN KEY (food_id) REFERENCES foods(id) ON DELETE CASCADE
 );
 
+create table sizes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  food_id integer references foods(id),
+  unit varchar(100)
+);
+
 create table food_categories (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL
 );
+
+insert into
+  sizes (food_id, unit)
+values
+  (1, 'g'),
+  (1, 'medium'),
+  (1, 'large'),
+  (1, 'small'),
+  (1, 'extra large'),
+  (1, 'cup'),
+  (1, 'slice'),
+  (1, 'oz'),
+  (1, 'fruit');
 
 insert into
   food_categories (name)

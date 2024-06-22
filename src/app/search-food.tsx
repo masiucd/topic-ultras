@@ -16,8 +16,9 @@ export function SearchFood() {
       <FoodForm action={action} />
       {foodResult !== null && (
         <div>
-          <h3>{foodResult.name}</h3>
-          <p>{foodResult.servingSize}</p>
+          <h3>{foodResult.foods.name}</h3>
+          <p>{foodResult.foods.servingSize}</p>
+          <p>{foodResult.nutritions.calories}</p>
         </div>
       )}
     </div>
