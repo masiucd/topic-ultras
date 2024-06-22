@@ -2,7 +2,10 @@
 import type {PropsWithChildren} from "react";
 import {useFormState, useFormStatus} from "react-dom";
 
-import {searchFood} from "@/actions/search-food";
+import {
+  type ReturnTypeOfFetchFoodNutrition,
+  searchFood,
+} from "@/actions/search-food";
 import {cn} from "@/lib/cn";
 import {Button} from "@/shared/components/ui/button";
 
@@ -14,25 +17,37 @@ export function SearchFood() {
       <div>SearchFood</div>
       <FoodForm action={action} />
       {foodResult !== null ? (
-        <>
-          {foodResult.success ? (
-            <>
-              <div>
-                <p>{foodResult.result?.name}</p>
-                <p>{foodResult.result?.description}</p>
-              </div>
-            </>
-          ) : (
-            <div>
-              <p>
-                There was no result for <strong>{foodResult.search}</strong>.
-              </p>
-            </div>
-          )}
-        </>
+        <SearchFootItem foodResult={foodResult} />
       ) : (
-        <p>Search for a food</p>
+        <p>Search for a food item</p>
       )}
+    </div>
+  );
+}
+
+function SearchFootItem({
+  foodResult,
+}: {
+  foodResult: Awaited<ReturnTypeOfFetchFoodNutrition>;
+}) {
+  if (foodResult.result) {
+    return (
+      <div>
+        <p>{foodResult.result.foods.name}</p>
+        <p>{foodResult.result.foods.description}</p>
+        <p>{foodResult.result.nutrients.name}</p>
+        <p>{foodResult.result.units.conversionFactor}</p>
+        <p>{foodResult.result.units.name}</p>
+        <p>{foodResult.result.units.conversionFactor}</p>
+        <p>{foodResult.result.foodNutrients.amount}</p>
+      </div>
+    );
+  }
+  return (
+    <div>
+      <p>
+        There was no result for <strong>{foodResult.search}</strong>.
+      </p>
     </div>
   );
 }
@@ -55,6 +70,20 @@ function FoodForm({
         name="food"
         required
       />
+      <div>
+        <label htmlFor="g">g</label>
+        <input type="radio" name="unit" value="g" id="g" />
+
+        <label htmlFor="oz">oz</label>
+        <input type="radio" name="unit" value="oz" id="oz" />
+      </div>
+
+      <div>
+        <label htmlFor="amount">
+          <span>amount</span>
+        </label>
+        <input type="number" name="amount" id="amount" />
+      </div>
       <SubmitButton>
         <span>search</span>
       </SubmitButton>

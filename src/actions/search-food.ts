@@ -5,7 +5,7 @@ import {eq, sql} from "drizzle-orm";
 import {alias} from "drizzle-orm/sqlite-core";
 
 import {db} from "@/db/db";
-import {foods} from "@/db/models/schema";
+import {foodNutrients, foods, nutrients, units} from "@/db/models/schema";
 
 export async function searchFood(
   prevState: null | Awaited<ReturnTypeOfFetchFoodNutrition>,
@@ -21,23 +21,23 @@ export async function searchFood(
 export type SearchFood = typeof searchFood;
 
 async function fetchFoodNutrition(food: string) {
+  let foodNutrientsAlias = alias(foodNutrients, "foodNutrients");
   let result = await db
     .select()
     .from(foods)
+    .innerJoin(foodNutrientsAlias, eq(foods.foodId, foodNutrientsAlias.foodId))
+    .innerJoin(
+      nutrients,
+      eq(foodNutrientsAlias.nutrientId, nutrients.nutrientId),
+    )
+    .innerJoin(units, eq(foodNutrientsAlias.unitId, units.unitId))
     .where(sql`lower(${foods.name}) = lower(${food})`)
     .get();
-  if (result) return {result, success: true, search: food};
-  return {success: false, result: null, search: food};
-
-  // let nutri = alias(nutritionFacts, "nutritions");
-  // let result = await db
-  //   .select()
-  //   .from(foods)
-  //   .innerJoin(nutri, eq(foods.id, nutri.foodId))
-  //   .where(sql`lower(${foods.name}) = lower(${food})`)
-  //   .get();
-  // if (result) return result;
-  // return null;
+  console.log("result", result);
+  if (result) return {result, search: food};
+  return {result: null, search: food};
 }
 
-type ReturnTypeOfFetchFoodNutrition = ReturnType<typeof fetchFoodNutrition>;
+export type ReturnTypeOfFetchFoodNutrition = ReturnType<
+  typeof fetchFoodNutrition
+>;
