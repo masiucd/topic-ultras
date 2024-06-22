@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "node ./scripts/seed-data.ts"
+    "seed": "node ./scripts/seed-data.ts",
+    "db:studio": "drizzle-kit studio --port 6000"
   },
   "dependencies": {
     "@libsql/client": "^0.6.2",
