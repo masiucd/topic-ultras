@@ -1,18 +1,19 @@
 "use server";
 import "server-only";
 
-import {and, eq, sql} from "drizzle-orm";
+import {eq, like, sql} from "drizzle-orm";
 import {alias} from "drizzle-orm/sqlite-core";
 
 import {db} from "@/db/db";
-import {foodNutrients, foods, nutrients, units} from "@/db/models/schema";
+
 import {z} from "zod";
+import {foodNutations, foods} from "@/db/models/schema";
 
 let unitSchema = z.union([z.literal("g"), z.literal("oz")]);
 
 type Unit = z.infer<typeof unitSchema>;
 
-export async function searchFood(
+export async function getFoodResults(
   prevState: null | Awaited<ReturnTypeOfFetchFoodNutrition>,
   formData: FormData,
 ) {
@@ -29,72 +30,84 @@ export async function searchFood(
     throw new Error("Expected amount to be a string.");
   }
 
-  return await fetchFoodNutrition(
-    food,
-    unitSchema.parse(unit),
-    parseInt(amount, 10),
-  );
+  return await getFoodData(food, unitSchema.parse(unit), parseInt(amount, 10));
 }
 
-export type SearchFood = typeof searchFood;
+export type GetFood = typeof getFoodResults;
 
-async function fetchFoodNutrition(food: string, unit: Unit, amount: number) {
-  if (unit === "oz") {
-    let statement = sql`
-  SELECT
-    f.name AS food_name,
-    n.name AS nutrient_name,
-    fn.amount * u.conversion_factor / (SELECT conversion_factor FROM units WHERE name = 'oz') AS amount_in_ounces,
-    'oz' AS unit
-FROM
-    foods f
-        JOIN
-    food_nutrients fn ON f.food_id = fn.food_id
-        JOIN
-    nutrients n ON fn.nutrient_id = n.nutrient_id
-        JOIN
-    units u ON fn.unit_id = u.unit_id
-WHERE
-        lower(f.name) = lower(${food});
-`;
+async function getFoodData(food: string, unit: Unit, amount: number) {
+  let f = alias(foods, "food");
+  let fn = alias(foodNutations, "foodNutation");
+  let foodRecordsStatement = await db
+    .selectDistinct({
+      foodId: f.foodId,
+      foodName: f.name,
+      lowerName: sql`lower(${f.name})`,
+      description: f.description,
+      calories: fn.calories,
+      carbs: fn.carbohydrates,
+      totalFat: fn.fat,
+      protein: fn.protein,
+    })
+    .from(f)
+    .leftJoin(fn, eq(f.foodId, fn.foodId))
+    .where(like(f.name, `%${food}%`))
+    .groupBy(f.foodId);
 
-    let result = resultSchema.safeParse(db.get(statement));
-    if (result.success) return {result: result.data, search: food, error: null};
-    return {result: null, search: food, error: result.error};
+  let result = foodResultSchema.array().safeParse(foodRecordsStatement);
+  if (result.success) {
+    return {
+      result: result.data,
+      searchTerm: food,
+      error: null,
+    };
   }
-  let statement = sql`
-    SELECT
-    f.name AS food_name,
-    n.name AS nutrient_name,
-    fn.amount * u.conversion_factor AS amount_in_grams,
-    'g' AS unit
-FROM
-    foods f
-        JOIN
-    food_nutrients fn ON f.food_id = fn.food_id
-        JOIN
-    nutrients n ON fn.nutrient_id = n.nutrient_id
-        JOIN
-    units u ON fn.unit_id = u.unit_id
-WHERE
-        lower(f.name) = lower(${food});
-  `;
-
-  let result = resultSchema.safeParse(db.get(statement));
-  if (result.success) return {result: result.data, search: food, error: null};
-  return {result: null, search: food, error: result.error};
+  return {
+    result: [],
+    searchTerm: food,
+    error: result.error,
+  };
 }
 
-let resultSchema = z.object({
-  food_name: z.string(),
-  nutrient_name: z.string(),
-  amount_in_grams: z.number().nullable(),
-  amount_in_ounces: z.number().nullable(),
-  unit: z.string(),
+let foodResultSchema = z.object({
+  foodId: z.number(),
+  calories: z.number(),
+  carbs: z.number(),
+  description: z.string(),
+  foodName: z.string(),
+  lowerName: z.string(),
+  protein: z.number(),
+  totalFat: z.number(),
 });
 
-type Result = z.infer<typeof resultSchema>;
+type FoodResult = z.infer<typeof foodResultSchema>;
 
-export type ReturnTypeOfFetchFoodNutrition = ReturnType<
-  typeof fetchFoodNutrition
->;
+export type ReturnTypeOfFetchFoodNutrition = ReturnType<typeof getFoodData>;
+
+const GRAMS_TO_OUNCES = 3.5274;
+const GRAMS_IN_100G = 100;
+// in DB everything is defaulting to 100 grams
+// so we need to calculate the nutrition based on the amount and unit
+function calculateNutrionBasedOnAmountAndUnit(
+  foodNutrition: FoodResult,
+  amount: number,
+  unit: Unit,
+) {
+  let {calories, carbs, protein, totalFat} = foodNutrition;
+  if (unit === "g") {
+    return {
+      calories: calories * (amount / GRAMS_IN_100G),
+      carbs: carbs * (amount / GRAMS_IN_100G),
+      protein: protein * (amount / GRAMS_IN_100G),
+      totalFat: totalFat * (amount / GRAMS_IN_100G),
+    };
+  }
+  if (unit === "oz") {
+    return {
+      calories: calories * (amount / GRAMS_TO_OUNCES),
+      carbs: carbs * (amount / GRAMS_TO_OUNCES),
+      protein: protein * (amount / GRAMS_TO_OUNCES),
+      totalFat: totalFat * (amount / GRAMS_TO_OUNCES),
+    };
+  }
+}

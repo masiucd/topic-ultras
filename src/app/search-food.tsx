@@ -2,22 +2,19 @@
 import type {PropsWithChildren} from "react";
 import {useFormState, useFormStatus} from "react-dom";
 
-import {
-  type ReturnTypeOfFetchFoodNutrition,
-  searchFood,
-} from "@/actions/search-food";
 import {cn} from "@/lib/cn";
 import {Button} from "@/shared/components/ui/button";
+import {getFoodResults} from "@/actions/search-food";
 
 // TODO save state in url params
-export function SearchFood() {
-  let [foodResult, action] = useFormState(searchFood, null);
-  console.log("🚀 ~ SearchFood ~ foodResult:", foodResult);
+export function GetFood() {
+  let [foodResult, action] = useFormState(getFoodResults, null);
+  console.log("🚀 ~ GetFood ~ foodResult:", foodResult);
   return (
     <div>
-      <div>SearchFood</div>
+      <div>GetFood</div>
       <FoodForm action={action} />
-      {foodResult !== null ? (
+      {/* {foodResult !== null ? (
         <div>
           {foodResult.result ? (
             <div>
@@ -33,7 +30,7 @@ export function SearchFood() {
         </div>
       ) : (
         <p>Search for a food item</p>
-      )}
+      )} */}
     </div>
   );
 }

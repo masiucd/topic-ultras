@@ -3,7 +3,6 @@ import {
   integer,
   sqliteTable,
   text,
-  real,
   numeric,
 } from "drizzle-orm/sqlite-core";
 import {createInsertSchema, createSelectSchema} from "drizzle-zod";
@@ -32,6 +31,18 @@ export let foodNutations = sqliteTable("food_nutrition", {
     .notNull()
     .references(() => foods.foodId),
 });
+
+let insertFoodSchema = createInsertSchema(foods);
+let selectFoodSchema = createSelectSchema(foods);
+
+export type Food = z.infer<typeof insertFoodSchema>;
+export type SelectFood = z.infer<typeof selectFoodSchema>;
+
+let insertFoodNutritionSchema = createInsertSchema(foodNutations);
+let selectFoodNutritionSchema = createSelectSchema(foodNutations);
+
+export type FoodNutrition = z.infer<typeof insertFoodNutritionSchema>;
+export type SelectFoodNutrition = z.infer<typeof selectFoodNutritionSchema>;
 
 // export let nutrients = sqliteTable("nutrients", {
 //   nutrientId: integer("nutrient_id")
