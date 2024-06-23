@@ -1,37 +1,80 @@
 "use client";
 import type {PropsWithChildren} from "react";
 import {useFormState, useFormStatus} from "react-dom";
-
-import {cn} from "@/lib/cn";
+import {cn} from "@/shared/lib/cn";
 import {Button} from "@/shared/components/ui/button";
-import {getFoodResults} from "@/actions/search-food";
+import {
+  getFoodResults,
+  type FoodResult,
+  type Unit,
+} from "@/actions/search-food-records";
+import {Icons} from "@/shared/components/icons";
 
 // TODO save state in url params
-export function GetFood() {
+export function SearchFoodRecords() {
   let [foodResult, action] = useFormState(getFoodResults, null);
-  console.log("🚀 ~ GetFood ~ foodResult:", foodResult);
+  console.log("🚀 ~ SearchFoodRecords ~ foodResult:", foodResult);
   return (
     <div>
-      <div>GetFood</div>
+      <div>SearchFoodRecords</div>
       <FoodForm action={action} />
-      {/* {foodResult !== null ? (
+      {foodResult !== null ? (
         <div>
-          {foodResult.result ? (
+          {foodResult.result.length > 0 ? (
             <div>
-              <p>{foodResult.result.food_name}</p>
-              <p>{foodResult.result.nutrient_name}</p>
-              <p>{foodResult.result.amount_in_grams}</p>
-              <p>{foodResult.result.amount_in_ounces}</p>
-              <p>{foodResult.result.unit}</p>
+              <ul>
+                {foodResult.result.map((food) => (
+                  <FoodItem
+                    key={food.foodId}
+                    food={food}
+                    unit={foodResult.unit}
+                  />
+                ))}
+              </ul>
             </div>
           ) : (
-            <p>Food not found</p>
+            <p>Food {foodResult.searchTerm} not found</p>
           )}
         </div>
       ) : (
         <p>Search for a food item</p>
-      )} */}
+      )}
     </div>
+  );
+}
+
+function FoodItem({food, unit}: {food: FoodResult; unit: Unit}) {
+  let {foodName, description, calories, carbs, totalFat, protein} = food;
+  return (
+    <li>
+      <p>{unit}</p>
+      <p>{foodName}</p>
+      <p>{description}</p>
+      <p>
+        <span>
+          <Icons.Calorie />
+        </span>
+        <span>{calories}</span>
+      </p>
+      <p>
+        <span>
+          <Icons.Carbs />
+        </span>
+        <span>{carbs}</span>
+      </p>
+      <p>
+        <span>
+          <Icons.Fat />
+        </span>
+        <span> {totalFat}</span>
+      </p>
+      <p>
+        <span>
+          <Icons.Protein />
+        </span>
+        <span>{protein}</span>
+      </p>
+    </li>
   );
 }
 

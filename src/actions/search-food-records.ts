@@ -11,7 +11,7 @@ import {foodNutations, foods} from "@/db/models/schema";
 
 let unitSchema = z.union([z.literal("g"), z.literal("oz")]);
 
-type Unit = z.infer<typeof unitSchema>;
+export type Unit = z.infer<typeof unitSchema>;
 
 export async function getFoodResults(
   prevState: null | Awaited<ReturnTypeOfFetchFoodNutrition>,
@@ -60,12 +60,14 @@ async function getFoodData(food: string, unit: Unit, amount: number) {
       result: result.data,
       searchTerm: food,
       error: null,
+      unit,
     };
   }
   return {
     result: [],
     searchTerm: food,
     error: result.error,
+    unit,
   };
 }
 
@@ -80,8 +82,7 @@ let foodResultSchema = z.object({
   totalFat: z.number(),
 });
 
-type FoodResult = z.infer<typeof foodResultSchema>;
-
+export type FoodResult = z.infer<typeof foodResultSchema>;
 export type ReturnTypeOfFetchFoodNutrition = ReturnType<typeof getFoodData>;
 
 const GRAMS_TO_OUNCES = 3.5274;
