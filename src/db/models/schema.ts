@@ -20,9 +20,10 @@ export let foods = sqliteTable(
   }),
 );
 
+
 // -- Everything is in grams per 100 grams of food
-export let foodNutations = sqliteTable("food_nutrition", {
-  id: integer("id").primaryKey({autoIncrement: true}).notNull(),
+export let foodNutations = sqliteTable("food_nutrition_facts", {
+  id: integer("id").primaryKey({autoIncrement: true}).notNull(), // -- the primary key should always be the id in the foods table
   calories: numeric("calories").notNull(),
   protein: numeric("protein").notNull(),
   fat: numeric("fat").notNull(),

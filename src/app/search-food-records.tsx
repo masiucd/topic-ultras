@@ -22,8 +22,10 @@ export function SearchFoodRecords() {
       {foodResult !== null ? (
         <div>
           {foodResult.result.length > 0 ? (
-            <div>
-              <ul>
+          
+              <ul 
+                className="flex flex-col gap-3 mt-3"
+              >
                 {foodResult.result.map((food) => (
                   <FoodItem
                     key={food.foodId}
@@ -32,7 +34,7 @@ export function SearchFoodRecords() {
                   />
                 ))}
               </ul>
-            </div>
+            
           ) : (
             <p>Food {foodResult.searchTerm} not found</p>
           )}
@@ -47,29 +49,35 @@ export function SearchFoodRecords() {
 function FoodItem({food, unit}: {food: FoodResult; unit: Unit}) {
   let {foodName, description, calories, carbs, totalFat, protein} = food;
   return (
-    <li>
-      <p>{unit}</p>
-      <p>{foodName}</p>
+    <li className="flex flex-col gap-2 border rounded-md border-gray-900 px-2 py-3 shadow-md">
+      
+      <strong className="flex gap-2">
+        <span>
+          Nutrition Facts for <span>{foodName}</span> <span>{unit}</span>
+        </span>
+        </strong>
+        
+        
       <p>{description}</p>
-      <p>
+      <p className="flex gap-3">
         <span>
           <Icons.Calorie />
         </span>
         <span>{calories}</span>
       </p>
-      <p>
+      <p className="flex gap-3">
         <span>
           <Icons.Carbs />
         </span>
         <span>{carbs}</span>
       </p>
-      <p>
+      <p className="flex gap-3">
         <span>
           <Icons.Fat />
         </span>
         <span> {totalFat}</span>
       </p>
-      <p>
+      <p className="flex gap-3">
         <span>
           <Icons.Protein />
         </span>
