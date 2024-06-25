@@ -1,5 +1,5 @@
 import type {Config} from "tailwindcss";
-import reactAriaComponents from "tailwindcss-react-aria-components";
+import colors from "tailwindcss/colors";
 
 const config: Config = {
   darkMode: "class",
@@ -9,8 +9,13 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        gray: colors.stone,
+        main: colors.indigo,
+      },
+    },
   },
-  plugins: [reactAriaComponents],
+  plugins: [require("tailwindcss-react-aria-components")],
 };
 export default config;

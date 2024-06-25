@@ -1,8 +1,9 @@
 "use client";
+
 import type {PropsWithChildren} from "react";
 import {useFormState, useFormStatus} from "react-dom";
 import {cn} from "@/shared/lib/cn";
-import {Button} from "@/shared/components/ui/button";
+
 import {
   getFoodResults,
   type FoodResult,
@@ -133,12 +134,13 @@ function SubmitButton({
 }: PropsWithChildren<SubmitButtonProps>) {
   let {pending} = useFormStatus();
   return (
-    <Button
-      isDisabled={pending}
+    <button
+      // isDisabled={pending}
+      disabled={pending}
       className={cn("font-semibold capitalize", className)}
       type="submit"
     >
       {children}
-    </Button>
+    </button>
   );
 }
