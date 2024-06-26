@@ -3,10 +3,9 @@ import "server-only";
 
 import {eq, like, sql} from "drizzle-orm";
 import {alias} from "drizzle-orm/sqlite-core";
+import {z} from "zod";
 
 import {db} from "@/db/db";
-
-import {z} from "zod";
 import {foodNutations, foods} from "@/db/models/schema";
 
 let unitSchema = z.union([z.literal("g"), z.literal("oz")]);
@@ -14,11 +13,12 @@ let unitSchema = z.union([z.literal("g"), z.literal("oz")]);
 export type Unit = z.infer<typeof unitSchema>;
 
 export async function getFoodResults(
-  prevState: null | Awaited<ReturnTypeOfFetchFoodNutrition>,
+  _prevState: null | Awaited<ReturnTypeOfFetchFoodNutrition>,
   formData: FormData,
 ) {
   let food = formData.get("food");
   let unit = formData.get("unit");
+  // TODO not used. use it
   let amount = formData.get("amount");
   if (typeof food !== "string") {
     throw new Error("Expected food to be a string.");
@@ -30,12 +30,12 @@ export async function getFoodResults(
     throw new Error("Expected amount to be a string.");
   }
 
-  return await getFoodData(food, unitSchema.parse(unit), parseInt(amount, 10));
+  return await getFoodData(food, unitSchema.parse(unit));
 }
 
 export type GetFood = typeof getFoodResults;
 
-async function getFoodData(food: string, unit: Unit, amount: number) {
+async function getFoodData(food: string, unit: Unit) {
   let f = alias(foods, "food");
   let fn = alias(foodNutations, "foodNutation");
   let foodRecordsStatement = await db
