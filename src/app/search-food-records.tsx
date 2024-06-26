@@ -1,44 +1,41 @@
 "use client";
 
+import Link from "next/link";
 import type {PropsWithChildren} from "react";
 import {useFormState, useFormStatus} from "react-dom";
-import {cn} from "@/shared/lib/cn";
 
 import {
-  getFoodResults,
   type FoodResult,
+  getFoodResults,
   type Unit,
 } from "@/actions/search-food-records";
 import {Icons} from "@/shared/components/icons";
+import {cn} from "@/shared/lib/cn";
 
 // TODO save state in url params
 export function SearchFoodRecords() {
   let [foodResult, action] = useFormState(getFoodResults, null);
   console.log("🚀 ~ SearchFoodRecords ~ foodResult:", foodResult);
   return (
-    <div>
+    <div className="w-full max-w-3xl border-4">
       <div>SearchFoodRecords</div>
       <FoodForm action={action} />
       {foodResult !== null ? (
-        <div>
+        <>
           {foodResult.result.length > 0 ? (
-          
-              <ul 
-                className="flex flex-col gap-3 mt-3"
-              >
-                {foodResult.result.map((food) => (
-                  <FoodItem
-                    key={food.foodId}
-                    food={food}
-                    unit={foodResult.unit}
-                  />
-                ))}
-              </ul>
-            
+            <ul className="mt-3 flex max-w-2xl flex-wrap gap-5">
+              {foodResult.result.map((food) => (
+                <FoodItem
+                  key={food.foodId}
+                  food={food}
+                  unit={foodResult.unit}
+                />
+              ))}
+            </ul>
           ) : (
             <p>Food {foodResult.searchTerm} not found</p>
           )}
-        </div>
+        </>
       ) : (
         <p>Search for a food item</p>
       )}
@@ -49,15 +46,15 @@ export function SearchFoodRecords() {
 function FoodItem({food, unit}: {food: FoodResult; unit: Unit}) {
   let {foodName, description, calories, carbs, totalFat, protein} = food;
   return (
-    <li className="flex flex-col gap-2 border rounded-md border-gray-900 px-2 py-3 shadow-md">
-      
+    <li className="flex flex-col gap-2 rounded-md border border-gray-900 px-2 py-3 shadow-md">
       <strong className="flex gap-2">
         <span>
-          Nutrition Facts for <span>{foodName}</span> <span>{unit}</span>
+          Nutrition Facts for{" "}
+          <Link href={`/foods/${foodName}`}>{foodName}</Link> in{" "}
+          <span className="font-semibold uppercase">{unit}</span>
         </span>
-        </strong>
-        
-        
+      </strong>
+
       <p>{description}</p>
       <p className="flex gap-3">
         <span>
