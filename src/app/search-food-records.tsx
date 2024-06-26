@@ -1,5 +1,6 @@
 "use client";
 
+import {Button} from "@radix-ui/themes";
 import Link from "next/link";
 import type {PropsWithChildren} from "react";
 import {useFormState, useFormStatus} from "react-dom";
@@ -10,7 +11,6 @@ import {
   type Unit,
 } from "@/actions/search-food-records";
 import {Icons} from "@/shared/components/icons";
-import {cn} from "@/shared/lib/cn";
 
 // TODO save state in url params
 export function SearchFoodRecords() {
@@ -18,7 +18,6 @@ export function SearchFoodRecords() {
   console.log("🚀 ~ SearchFoodRecords ~ foodResult:", foodResult);
   return (
     <div className="w-full max-w-3xl border-4">
-      <div>SearchFoodRecords</div>
       <FoodForm action={action} />
       {foodResult !== null ? (
         <>
@@ -124,28 +123,26 @@ function FoodForm({
         />
       </div>
       <SubmitButton>
-        <span>search</span>
+        <span className="font-semibold capitalize">Search</span>
       </SubmitButton>
     </form>
   );
 }
 
-type SubmitButtonProps = {
-  className?: string;
-};
-function SubmitButton({
-  className,
-  children,
-}: PropsWithChildren<SubmitButtonProps>) {
+function SubmitButton({children}: PropsWithChildren) {
   let {pending} = useFormStatus();
   return (
-    <button
-      // isDisabled={pending}
-      disabled={pending}
-      className={cn("font-semibold capitalize", className)}
-      type="submit"
-    >
+    <Button disabled={pending} type="submit" variant="solid">
       {children}
-    </button>
+    </Button>
+    // <button
+    //   // isDisabled={pending}
+    //   disabled={pending}
+    //   className={cn("font-semibold capitalize", className)}
+    //   type="submit"
+    // >
+    //   {children}
+
+    // </button>
   );
 }
