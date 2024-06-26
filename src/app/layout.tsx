@@ -22,9 +22,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Theme
-          accentColor="crimson"
+          accentColor="mint"
           grayColor="sand"
-          radius="large"
+          radius="medium"
           scaling="95%"
         >
           {children}

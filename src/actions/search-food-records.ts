@@ -24,7 +24,7 @@ export async function getFoodResults(
     throw new Error("Expected food to be a string.");
   }
   if (typeof unit !== "string") {
-    throw new Error("Expected unit to be a string.");
+  throw new Error("Expected unit to be a string.");
   }
   if (typeof amount !== "string") {
     throw new Error("Expected amount to be a string.");
