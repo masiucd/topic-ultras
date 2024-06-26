@@ -1,4 +1,14 @@
-import {Heading, type HeadingProps} from "@radix-ui/themes";
+import {
+  Heading,
+  type HeadingProps,
+  Link as RadixLink,
+  type LinkProps,
+  Text,
+  type TextProps,
+} from "@radix-ui/themes";
+import NextLink from "next/link";
+
+import {cn} from "@/shared/lib/cn";
 
 export function H1(props: HeadingProps) {
   return <Heading weight="bold" size="9" as="h1" {...props} />;
@@ -22,4 +32,34 @@ export function H5(props: HeadingProps) {
 
 export function H6(props: HeadingProps) {
   return <Heading weight="bold" size="4" as="h6" {...props} />;
+}
+
+export function P(props: TextProps) {
+  return <Text size="4" as="p" {...props} />;
+}
+
+export function Span(props: TextProps) {
+  return <Text as="span" {...props} />;
+}
+
+export function Label(props: TextProps) {
+  return (
+    <Text
+      className={cn("block text-sm font-medium", props.className)}
+      as="label"
+      {...props}
+    />
+  );
+}
+
+export function Link(
+  props: LinkProps & {
+    url: string;
+  },
+) {
+  return (
+    <RadixLink asChild {...props}>
+      <NextLink href={props.url}>{props.children}</NextLink>
+    </RadixLink>
+  );
 }
