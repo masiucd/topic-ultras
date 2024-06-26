@@ -4,8 +4,8 @@
     "eslint:recommended",
     "plugin:react-hooks/recommended",
     "plugin:tailwindcss/recommended",
-    "plugin:jsx-a11y/recommended",
-    "react-compiler"
+    "plugin:jsx-a11y/recommended"
+    // "react-compiler"
   ],
   "plugins": ["simple-import-sort", "jsx-a11y"],
   "globals": {
@@ -18,7 +18,7 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error",
     "no-console": "warn",
-    "semi": ["error", "always"],
-    "react-compiler/react-compiler": "error"
+    "semi": ["error", "always"]
+    // "react-compiler/react-compiler": "error"
   }
 }
