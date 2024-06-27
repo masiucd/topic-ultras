@@ -2,7 +2,6 @@
 
 import {Box, Button, Flex, RadioGroup, TextField} from "@radix-ui/themes";
 import Link from "next/link";
-import {useRouter} from "next/navigation";
 import type {PropsWithChildren} from "react";
 import {useFormState, useFormStatus} from "react-dom";
 
@@ -14,10 +13,8 @@ import {
 import {Icons} from "@/shared/components/icons";
 import {Label, P, Span} from "@/shared/components/ui/typography";
 
-// TODO save state in url params
 export function SearchFoodRecords() {
   let [foodResult, action] = useFormState(getFoodResults, null);
-  let router = useRouter();
 
   return (
     <div className="w-full max-w-3xl border-4">
