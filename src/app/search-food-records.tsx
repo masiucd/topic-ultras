@@ -2,6 +2,7 @@
 
 import {Box, Button, Flex, RadioGroup, TextField} from "@radix-ui/themes";
 import Link from "next/link";
+import {useRouter} from "next/navigation";
 import type {PropsWithChildren} from "react";
 import {useFormState, useFormStatus} from "react-dom";
 
@@ -11,12 +12,13 @@ import {
   type Unit,
 } from "@/actions/search-food-records";
 import {Icons} from "@/shared/components/icons";
-import {H2, Label, P, Span} from "@/shared/components/ui/typography";
+import {Label, P, Span} from "@/shared/components/ui/typography";
 
 // TODO save state in url params
 export function SearchFoodRecords() {
   let [foodResult, action] = useFormState(getFoodResults, null);
-  console.log("🚀 ~ SearchFoodRecords ~ foodResult:", foodResult);
+  let router = useRouter();
+
   return (
     <div className="w-full max-w-3xl border-4">
       <FoodForm action={action} />
@@ -92,7 +94,7 @@ function FoodForm({
 }) {
   return (
     <form action={action}>
-      <fieldset className="flex flex-col gap-3 border border-gray-900 px-2 py-3 md:w-full md:max-w-xl">
+      <fieldset className="flex flex-col gap-3 rounded-md border border-gray-900 px-2 py-3 md:w-full md:max-w-xl">
         <legend>
           <Span size="4" weight="bold">
             Search for food
@@ -113,26 +115,18 @@ function FoodForm({
         <Box>
           <RadioGroup.Root defaultValue="g" name="unit" size="2">
             <Flex direction="row" gap="3">
-              <RadioGroup.Item value="g">
-                <Label>Grams</Label>
+              <RadioGroup.Item value="g" id="g">
+                <Label weight="medium" htmlFor="g">
+                  Grams
+                </Label>
               </RadioGroup.Item>
-              <RadioGroup.Item value="oz">
-                <Label>Ounces</Label>
+              <RadioGroup.Item value="oz" id="oz">
+                <Label weight="medium" htmlFor="oz">
+                  Ounces
+                </Label>
               </RadioGroup.Item>
             </Flex>
           </RadioGroup.Root>
-        </Box>
-
-        <Box>
-          <Label htmlFor="amount">Amount</Label>
-          <TextField.Root
-            type="number"
-            name="amount"
-            id="amount"
-            defaultValue={100}
-            min={0}
-            max={10000}
-          />
         </Box>
 
         {/* <Flex
@@ -156,7 +150,7 @@ function SubmitButton({children}: PropsWithChildren) {
   let {pending} = useFormStatus();
   return (
     // TODO make facade for Button
-    <Button disabled={pending} type="submit" variant="solid" size="3">
+    <Button disabled={pending} type="submit" variant="soft" size="3">
       {children}
     </Button>
   );
