@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Theme
           accentColor="iris"
-          grayColor="sand"
+          grayColor="slate"
           radius="medium"
           scaling="95%"
         >

@@ -1,6 +1,13 @@
 "use client";
 
-import {Box, Button, Flex, RadioGroup, TextField} from "@radix-ui/themes";
+import {
+  Box,
+  Button,
+  Flex,
+  RadioGroup,
+  Strong,
+  TextField,
+} from "@radix-ui/themes";
 import Link from "next/link";
 import type {PropsWithChildren} from "react";
 import {useFormState, useFormStatus} from "react-dom";
@@ -11,6 +18,7 @@ import {
   type Unit,
 } from "@/actions/search-food-records";
 import {Icons} from "@/shared/components/icons";
+import {Tooltip} from "@/shared/components/ui/tooltip";
 import {Label, P, Span} from "@/shared/components/ui/typography";
 
 export function SearchFoodRecords() {
@@ -36,7 +44,14 @@ export function SearchFoodRecords() {
           )}
         </>
       ) : (
-        <p>Search for a food item</p>
+        <Box
+          my="5"
+          className="flex flex-col gap-2 rounded-md border-2 border-gray-900 bg-gray-200 px-2 py-3 shadow-md md:w-96"
+        >
+          <P weight="medium">
+            Please search for a food to get nutrition facts.
+          </P>
+        </Box>
       )}
     </div>
   );
@@ -46,37 +61,45 @@ function FoodItem({food, unit}: {food: FoodResult; unit: Unit}) {
   let {foodName, description, calories, carbs, totalFat, protein} = food;
   return (
     <li className="flex flex-col gap-2 rounded-md border border-gray-900 px-2 py-3 shadow-md">
-      <strong className="flex gap-2">
+      <Strong className="flex gap-2">
         <span>
           Nutrition Facts for{" "}
           <Link href={`/foods/${foodName}`}>{foodName}</Link> in{" "}
           <span className="font-semibold uppercase">{unit}</span>
         </span>
-      </strong>
+      </Strong>
 
-      <p>{description}</p>
-      <p className="flex gap-3">
-        <span>
-          <Icons.Calorie />
-        </span>
+      <P>{description}</P>
+      <P className="flex gap-3">
+        <Tooltip content="Calories">
+          <span>
+            <Icons.Calorie />
+          </span>
+        </Tooltip>
         <span>{calories}</span>
-      </p>
+      </P>
       <p className="flex gap-3">
-        <span>
-          <Icons.Carbs />
-        </span>
+        <Tooltip content="Carbohydrates">
+          <span>
+            <Icons.Carbs />
+          </span>
+        </Tooltip>
         <span>{carbs}</span>
       </p>
       <p className="flex gap-3">
-        <span>
-          <Icons.Fat />
-        </span>
+        <Tooltip content="Total Fat">
+          <span>
+            <Icons.Fat />
+          </span>
+        </Tooltip>
         <span> {totalFat}</span>
       </p>
       <p className="flex gap-3">
-        <span>
-          <Icons.Protein />
-        </span>
+        <Tooltip content="Protein">
+          <span>
+            <Icons.Protein />
+          </span>
+        </Tooltip>
         <span>{protein}</span>
       </p>
     </li>
@@ -99,7 +122,9 @@ function FoodForm({
         </legend>
 
         <Box>
-          <Label htmlFor="food">Food</Label>
+          <Label weight="medium" htmlFor="food">
+            Food
+          </Label>
           <TextField.Root
             type="text"
             placeholder="Search for food"
@@ -126,18 +151,9 @@ function FoodForm({
           </RadioGroup.Root>
         </Box>
 
-        {/* <Flex
-          className="w-[22rem] border-4"
-          align="center"
-          justify="center"
-          direction="row"
-        > */}
-
         <SubmitButton>
           <span className="font-semibold capitalize">Search</span>
         </SubmitButton>
-
-        {/* </Flex> */}
       </fieldset>
     </form>
   );

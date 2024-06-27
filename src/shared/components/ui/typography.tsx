@@ -3,6 +3,8 @@ import {
   type HeadingProps,
   Link as RadixLink,
   type LinkProps,
+  Strong as RadixStrong,
+  type StrongProps,
   Text,
   type TextProps,
 } from "@radix-ui/themes";
@@ -62,4 +64,8 @@ export function Link(
       <NextLink href={props.url}>{props.children}</NextLink>
     </RadixLink>
   );
+}
+
+export function Strong(props: StrongProps) {
+  return <RadixStrong {...props} />;
 }
