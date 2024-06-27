@@ -11,7 +11,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        gray: colors.stone,
+        gray: colors.slate,
         main: colors.indigo,
       },
     },
