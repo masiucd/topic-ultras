@@ -1,6 +1,6 @@
 "use client";
 
-import {Button} from "@radix-ui/themes";
+import {Box, Button, Flex, RadioGroup, TextField} from "@radix-ui/themes";
 import Link from "next/link";
 import type {PropsWithChildren} from "react";
 import {useFormState, useFormStatus} from "react-dom";
@@ -11,6 +11,7 @@ import {
   type Unit,
 } from "@/actions/search-food-records";
 import {Icons} from "@/shared/components/icons";
+import {H2, Label, P, Span} from "@/shared/components/ui/typography";
 
 // TODO save state in url params
 export function SearchFoodRecords() {
@@ -32,7 +33,7 @@ export function SearchFoodRecords() {
               ))}
             </ul>
           ) : (
-            <p>Food {foodResult.searchTerm} not found</p>
+            <P>Food {foodResult.searchTerm} not found</P>
           )}
         </>
       ) : (
@@ -90,41 +91,63 @@ function FoodForm({
   action: (formData: FormData) => void;
 }) {
   return (
-    <form
-      action={action}
-      className="flex flex-col border border-blue-400 md:w-full md:max-w-xl"
-    >
-      <input
-        type="text"
-        datatype="text"
-        placeholder="Search for food"
-        name="food"
-        required
-      />
-      <div>
-        <label htmlFor="g">g</label>
-        <input type="radio" name="unit" value="g" id="g" defaultChecked />
+    <form action={action}>
+      <fieldset className="flex flex-col gap-3 border border-gray-900 px-2 py-3 md:w-full md:max-w-xl">
+        <legend>
+          <Span size="4" weight="bold">
+            Search for food
+          </Span>
+        </legend>
 
-        <label htmlFor="oz">oz</label>
-        <input type="radio" name="unit" value="oz" id="oz" />
-      </div>
+        <Box>
+          <Label htmlFor="food">Food</Label>
+          <TextField.Root
+            type="text"
+            placeholder="Search for food"
+            name="food"
+            id="food"
+            required
+          />
+        </Box>
 
-      <div>
-        <label htmlFor="amount">
-          <span>amount</span>
-        </label>
-        <input
-          type="number"
-          name="amount"
-          id="amount"
-          defaultValue={100}
-          min={0}
-          max={10000}
-        />
-      </div>
-      <SubmitButton>
-        <span className="font-semibold capitalize">Search</span>
-      </SubmitButton>
+        <Box>
+          <RadioGroup.Root defaultValue="g" name="unit" size="2">
+            <Flex direction="row" gap="3">
+              <RadioGroup.Item value="g">
+                <Label>Grams</Label>
+              </RadioGroup.Item>
+              <RadioGroup.Item value="oz">
+                <Label>Ounces</Label>
+              </RadioGroup.Item>
+            </Flex>
+          </RadioGroup.Root>
+        </Box>
+
+        <Box>
+          <Label htmlFor="amount">Amount</Label>
+          <TextField.Root
+            type="number"
+            name="amount"
+            id="amount"
+            defaultValue={100}
+            min={0}
+            max={10000}
+          />
+        </Box>
+
+        {/* <Flex
+          className="w-[22rem] border-4"
+          align="center"
+          justify="center"
+          direction="row"
+        > */}
+
+        <SubmitButton>
+          <span className="font-semibold capitalize">Search</span>
+        </SubmitButton>
+
+        {/* </Flex> */}
+      </fieldset>
     </form>
   );
 }
@@ -132,17 +155,9 @@ function FoodForm({
 function SubmitButton({children}: PropsWithChildren) {
   let {pending} = useFormStatus();
   return (
-    <Button disabled={pending} type="submit" variant="solid">
+    // TODO make facade for Button
+    <Button disabled={pending} type="submit" variant="solid" size="3">
       {children}
     </Button>
-    // <button
-    //   // isDisabled={pending}
-    //   disabled={pending}
-    //   className={cn("font-semibold capitalize", className)}
-    //   type="submit"
-    // >
-    //   {children}
-
-    // </button>
   );
 }
