@@ -7,6 +7,7 @@ import {z} from "zod";
 
 import {db} from "@/db/db";
 import {foodNutations, foods} from "@/db/models/schema";
+import {foodResultSchema} from "@/db/quereies/food";
 
 let unitSchema = z.union([z.literal("g"), z.literal("oz")]);
 
@@ -35,6 +36,7 @@ export type GetFood = typeof getFoodResults;
 async function getFoodData(food: string, unit: Unit) {
   let f = alias(foods, "food");
   let fn = alias(foodNutations, "foodNutation");
+
   let foodRecordsStatement = await db
     .selectDistinct({
       foodId: f.foodId,
@@ -50,8 +52,8 @@ async function getFoodData(food: string, unit: Unit) {
     .leftJoin(fn, eq(f.foodId, fn.foodId))
     .where(like(f.name, `%${food}%`))
     .groupBy(f.foodId);
-
   let result = foodResultSchema.array().safeParse(foodRecordsStatement);
+
   if (result.success) {
     return {
       result: result.data,
@@ -68,18 +70,6 @@ async function getFoodData(food: string, unit: Unit) {
   };
 }
 
-let foodResultSchema = z.object({
-  foodId: z.number(),
-  calories: z.number(),
-  carbs: z.number(),
-  description: z.string(),
-  foodName: z.string(),
-  lowerName: z.string(),
-  protein: z.number(),
-  totalFat: z.number(),
-});
-
-export type FoodResult = z.infer<typeof foodResultSchema>;
 export type ReturnTypeOfFetchFoodNutrition = ReturnType<typeof getFoodData>;
 
 // const GRAMS_TO_OUNCES = 3.5274;
