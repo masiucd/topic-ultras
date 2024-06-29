@@ -1,7 +1,7 @@
 "use server";
 import "server-only";
 
-import {getRelatedFoodList} from "@/persistence/food/dao";
+import {getFoodDetailsByName} from "@/persistence/food/dao";
 import {type Unit, unitSchema} from "@/shared/schemas/unit";
 
 export async function getFoodResults(
@@ -25,7 +25,7 @@ export async function getFoodResults(
 export type GetFood = typeof getFoodResults;
 
 async function getFoodData(food: string, unit: Unit) {
-  let result = await getRelatedFoodList(food);
+  let result = await getFoodDetailsByName(food);
 
   if (result.success) {
     return {

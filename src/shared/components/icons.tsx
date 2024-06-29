@@ -1,5 +1,6 @@
 import {
   Beef as Protein,
+  CopyIcon as Copy,
   Droplet as Fat,
   Flame as Calorie,
   Scale as Weight,
@@ -12,4 +13,5 @@ export let Icons = Object.freeze({
   Fat,
   Calorie,
   Weight,
+  Copy,
 });

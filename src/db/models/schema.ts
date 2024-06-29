@@ -47,13 +47,13 @@ let selectFoodNutritionSchema = createSelectSchema(foodNutations);
 export type FoodNutrition = z.infer<typeof insertFoodNutritionSchema>;
 export type SelectFoodNutrition = z.infer<typeof selectFoodNutritionSchema>;
 
-export let food_types = sqliteTable("food_types", {
+export let foodTypes = sqliteTable("food_types", {
   id: integer("id").primaryKey({autoIncrement: true}).notNull(),
   name: text("name").notNull(),
 });
 
-let insertFoodTypeSchema = createInsertSchema(food_types);
-let selectFoodTypeSchema = createSelectSchema(food_types);
+let insertFoodTypeSchema = createInsertSchema(foodTypes);
+let selectFoodTypeSchema = createSelectSchema(foodTypes);
 
 export type FoodType = z.infer<typeof insertFoodTypeSchema>;
 export type SelectFoodType = z.infer<typeof selectFoodTypeSchema>;

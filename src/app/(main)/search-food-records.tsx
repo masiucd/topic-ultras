@@ -1,25 +1,27 @@
 "use client";
 
 import {
+  Badge,
+  type BadgeProps,
   Box,
   Button,
+  Code,
+  DataList,
   Flex,
+  IconButton,
   RadioGroup,
-  Strong,
   TextField,
 } from "@radix-ui/themes";
 import Link from "next/link";
 import type {PropsWithChildren} from "react";
 import {useFormState, useFormStatus} from "react-dom";
 
-import {
-  type FoodResult,
-  getFoodResults,
-  type Unit,
-} from "@/actions/search-food-records";
+import {getFoodResults} from "@/actions/search-food-records";
+import {type FoodResult, type FoodType} from "@/persistence/food/types";
 import {Icons} from "@/shared/components/icons";
 import {Tooltip} from "@/shared/components/ui/tooltip";
 import {Label, P, Span} from "@/shared/components/ui/typography";
+import type {Unit} from "@/shared/schemas/unit";
 
 export function SearchFoodRecords() {
   let [foodResult, action] = useFormState(getFoodResults, null);
@@ -57,11 +59,112 @@ export function SearchFoodRecords() {
   );
 }
 
+type Color = Pick<BadgeProps, "color">["color"];
+function getBadgeColor(foodType?: FoodType): Color {
+  switch (foodType?.toLowerCase()) {
+    case "fruit":
+      return "orange";
+    case "vegetable":
+      return "green";
+    case "grain":
+      return "yellow";
+    case "protein":
+      return "blue";
+    case "dairy":
+      return "purple";
+    case "fat":
+      return "red";
+    case "sweets":
+      return "pink";
+    case "beverage":
+      return "cyan";
+    case "other":
+      return "gray";
+    case "fish":
+      return "blue";
+    default:
+      return "gray";
+  }
+}
+
+function FoodTypeBadge({foodType}: {foodType?: FoodType}) {
+  let color = getBadgeColor(foodType);
+
+  return (
+    <Badge variant="soft" color={color}>
+      <Tooltip content="Food Type">
+        <Span className="uppercase">{foodType ?? "N/A"}</Span>
+      </Tooltip>
+    </Badge>
+  );
+}
+
 function FoodItem({food, unit}: {food: FoodResult; unit: Unit}) {
-  let {foodName, description, calories, carbs, totalFat, protein} = food;
+  let {
+    foodName,
+    description,
+    calories,
+    carbs,
+    totalFat,
+    protein,
+    foodType,
+    foodTypeId,
+  } = food;
+
   return (
     <li className="flex flex-col gap-2 rounded-md border border-gray-900 px-2 py-3 shadow-md">
-      <Strong className="flex gap-2">
+      <DataList.Root>
+        <DataList.Item align="center">
+          <DataList.Label minWidth="88px">
+            <Tooltip content="Food Type">
+              <span>Food Type</span>
+            </Tooltip>
+          </DataList.Label>
+          <DataList.Value>
+            <FoodTypeBadge foodType={foodType} />
+          </DataList.Value>
+        </DataList.Item>
+        <DataList.Item>
+          <DataList.Label minWidth="88px">ID</DataList.Label>
+          <DataList.Value>
+            <Flex align="center" gap="2">
+              <Code variant="ghost">u_2J89JSA4GJ</Code>
+              <IconButton
+                size="1"
+                aria-label="Copy value"
+                color="gray"
+                variant="ghost"
+              >
+                <Icons.Copy size={16} />
+              </IconButton>
+            </Flex>
+          </DataList.Value>
+        </DataList.Item>
+        <DataList.Item>
+          <DataList.Label minWidth="88px">
+            <Tooltip content="Calories">
+              <Icons.Calorie size={16} />
+            </Tooltip>
+          </DataList.Label>
+          <DataList.Value>{calories}</DataList.Value>
+        </DataList.Item>
+        <DataList.Item>
+          <DataList.Label minWidth="88px">Email</DataList.Label>
+          <DataList.Value>
+            <Link href="mailto:vlad@workos.com">vlad@workos.com</Link>
+          </DataList.Value>
+        </DataList.Item>
+        <DataList.Item>
+          <DataList.Label minWidth="88px">Company</DataList.Label>
+          <DataList.Value>
+            <Link target="_blank" href="https://workos.com">
+              WorkOS
+            </Link>
+          </DataList.Value>
+        </DataList.Item>
+      </DataList.Root>
+
+      {/* <Strong className="flex gap-2">
         <span>
           Nutrition Facts for{" "}
           <Link href={`/foods/${foodName}`}>{foodName}</Link> in{" "}
@@ -101,7 +204,7 @@ function FoodItem({food, unit}: {food: FoodResult; unit: Unit}) {
           </span>
         </Tooltip>
         <span>{protein}</span>
-      </p>
+      </p> */}
     </li>
   );
 }
