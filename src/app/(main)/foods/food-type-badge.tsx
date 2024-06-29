@@ -1,11 +1,11 @@
 import {Badge, type BadgeProps} from "@radix-ui/themes";
 
-import type {FoodType} from "@/persistence/food/types";
+import type {FoodTypeCategory} from "@/persistence/food/types";
 import {Tooltip} from "@/shared/components/ui/tooltip";
 import {Span} from "@/shared/components/ui/typography";
 
 type Color = Pick<BadgeProps, "color">["color"];
-function getBadgeColor(foodType?: FoodType): Color {
+function getBadgeColor(foodType?: FoodTypeCategory): Color {
   switch (foodType) {
     case "Fruit":
       return "orange";
@@ -36,7 +36,7 @@ export function FoodTypeBadge({
   foodType,
   className,
 }: {
-  foodType?: FoodType;
+  foodType?: FoodTypeCategory;
   className?: string;
 }) {
   let color = getBadgeColor(foodType);
