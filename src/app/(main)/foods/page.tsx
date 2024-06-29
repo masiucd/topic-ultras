@@ -1,6 +1,6 @@
 import {Flex, Table} from "@radix-ui/themes";
 
-import {getFoodData} from "@/db/quereies/food";
+import {getFoodData} from "@/persistence/food/dao";
 import {Icons} from "@/shared/components/icons";
 import {PageWrapper} from "@/shared/components/page-wrapper";
 import {Tooltip} from "@/shared/components/ui/tooltip";

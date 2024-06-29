@@ -1,14 +1,11 @@
 import {
   Heading,
   type HeadingProps,
-  Link as RadixLink,
-  type LinkProps,
   Strong as RadixStrong,
   type StrongProps,
   Text,
   type TextProps,
 } from "@radix-ui/themes";
-import NextLink from "next/link";
 
 import {cn} from "@/shared/lib/cn";
 
@@ -51,18 +48,6 @@ export function Label(props: TextProps) {
       as="label"
       {...props}
     />
-  );
-}
-
-export function Link(
-  props: LinkProps & {
-    url: string;
-  },
-) {
-  return (
-    <RadixLink asChild {...props}>
-      <NextLink href={props.url}>{props.children}</NextLink>
-    </RadixLink>
   );
 }
 

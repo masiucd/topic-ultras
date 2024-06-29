@@ -1,17 +1,8 @@
 "use server";
 import "server-only";
 
-import {eq, like, sql} from "drizzle-orm";
-import {alias} from "drizzle-orm/sqlite-core";
-import {z} from "zod";
-
-import {db} from "@/db/db";
-import {foodNutations, foods} from "@/db/models/schema";
-import {foodResultSchema} from "@/db/quereies/food";
-
-let unitSchema = z.union([z.literal("g"), z.literal("oz")]);
-
-export type Unit = z.infer<typeof unitSchema>;
+import {getRelatedFoodList} from "@/persistence/food/dao";
+import {type Unit, unitSchema} from "@/shared/schemas/unit";
 
 export async function getFoodResults(
   _prevState: null | Awaited<ReturnTypeOfFetchFoodNutrition>,
@@ -19,7 +10,7 @@ export async function getFoodResults(
 ) {
   let food = formData.get("food");
   let unit = formData.get("unit");
-  let amount = formData.get("amount");
+  // let amount = formData.get("amount");
 
   if (typeof food !== "string") {
     throw new Error("Expected food to be a string.");
@@ -34,25 +25,7 @@ export async function getFoodResults(
 export type GetFood = typeof getFoodResults;
 
 async function getFoodData(food: string, unit: Unit) {
-  let f = alias(foods, "food");
-  let fn = alias(foodNutations, "foodNutation");
-
-  let foodRecordsStatement = await db
-    .selectDistinct({
-      foodId: f.foodId,
-      foodName: f.name,
-      lowerName: sql`lower(${f.name})`,
-      description: f.description,
-      calories: fn.calories,
-      carbs: fn.carbohydrates,
-      totalFat: fn.fat,
-      protein: fn.protein,
-    })
-    .from(f)
-    .leftJoin(fn, eq(f.foodId, fn.foodId))
-    .where(like(f.name, `%${food}%`))
-    .groupBy(f.foodId);
-  let result = foodResultSchema.array().safeParse(foodRecordsStatement);
+  let result = await getRelatedFoodList(food);
 
   if (result.success) {
     return {
