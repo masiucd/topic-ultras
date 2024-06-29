@@ -1,5 +1,5 @@
 export let siteData = Object.freeze({
-  title: "Nutrition Check",
+  title: "Nutri Check",
   description: "Nutrition facts for your favorite foods.",
   keywords: ["nutrition, food, health, tracking"],
 

@@ -20,8 +20,11 @@ export default function RootLayout({
           justify="between"
           className="mx-auto h-20 w-full max-w-6xl border-4"
         >
-          <Link href="/" color="gray">
-            <H3 className="uppercase" size="5">
+          <Link href="/" color="gray" underline="none">
+            <H3
+              className="uppercase transition-opacity duration-150 hover:opacity-50"
+              size="5"
+            >
               {siteData.title}
             </H3>
           </Link>
