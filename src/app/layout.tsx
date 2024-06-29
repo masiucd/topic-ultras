@@ -6,11 +6,13 @@ import type {Metadata} from "next";
 import {Inter} from "next/font/google";
 import type {ReactNode} from "react";
 
+import {siteData} from "@/site-data";
+
 const inter = Inter({subsets: ["latin"]});
 
 export let metadata: Metadata = {
-  title: "Nutri Check",
-  description: "Nutrition facts for your favorite foods.",
+  title: siteData.title,
+  description: siteData.description,
 };
 
 export default function RootLayout({

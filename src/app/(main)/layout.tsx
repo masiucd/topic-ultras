@@ -1,7 +1,11 @@
 import {Flex} from "@radix-ui/themes";
 import type {ReactNode} from "react";
 
-import {Span, Strong} from "@/shared/components/ui/typography";
+import {Link} from "@/shared/components/ui/link";
+import {H3} from "@/shared/components/ui/typography";
+import {siteData} from "@/site-data";
+
+const CURRENT_YEAR = new Date().getFullYear();
 
 export default function RootLayout({
   children,
@@ -11,8 +15,27 @@ export default function RootLayout({
   return (
     <>
       <header>
-        <Flex className="mx-auto h-20 w-full max-w-6xl border-4">
-          <Strong>Nutri Check</Strong>
+        <Flex
+          align="center"
+          justify="between"
+          className="mx-auto h-20 w-full max-w-6xl border-4"
+        >
+          <Link href="/" color="gray">
+            <H3 className="uppercase" size="5">
+              {siteData.title}
+            </H3>
+          </Link>
+          <nav>
+            <ul className="flex gap-2">
+              {siteData.navLinks.map((l) => (
+                <li key={l.href}>
+                  <Link color="gray" href={l.href} weight="medium">
+                    {l.text}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </Flex>
       </header>
       <main className="flex min-h-[calc(100dvh-10rem)] flex-col border border-red-600">
@@ -20,7 +43,9 @@ export default function RootLayout({
       </main>
       <footer>
         <Flex className="mx-auto h-20 w-full max-w-6xl border-4">
-          <Span>© 2021 Nutricheck</Span>
+          <small>
+            © {CURRENT_YEAR} {siteData.title}
+          </small>
         </Flex>
       </footer>
     </>
