@@ -2,7 +2,8 @@ import "server-only";
 
 import {z} from "zod";
 
-let foodTypeEnum = z.enum([
+// Enum for food types
+let foodTypeCategory = z.enum([
   "Fruit",
   "Vegetable",
   "Grain",
@@ -15,7 +16,7 @@ let foodTypeEnum = z.enum([
   "fish",
 ]);
 
-export type FoodType = z.infer<typeof foodTypeEnum>;
+export type FoodTypeCategory = z.infer<typeof foodTypeCategory>;
 
 export let foodResultSchema = z.object({
   foodId: z.number(),
@@ -26,7 +27,7 @@ export let foodResultSchema = z.object({
   lowerName: z.string(),
   protein: z.number(),
   totalFat: z.number(),
-  foodType: foodTypeEnum.optional(), // since type_id is nullable
+  foodType: foodTypeCategory.optional(), // since type_id is nullable
   foodTypeId: z.number().optional(), // since type_id is nullable
 });
 

@@ -3,10 +3,8 @@
 import {
   Box,
   Button,
-  Code,
   DataList,
   Flex,
-  IconButton,
   RadioGroup,
   TextField,
 } from "@radix-ui/themes";
@@ -24,7 +22,6 @@ import {FoodTypeBadge} from "./foods/food-type-badge";
 
 export function SearchFoodRecords() {
   let [foodResult, action] = useFormState(getFoodResults, null);
-
   return (
     <div className="w-full max-w-3xl border-4">
       <FoodForm action={action} />
@@ -70,22 +67,6 @@ function FoodItem({food, unit}: {food: FoodResult; unit: Unit}) {
         <P wrap="pretty">{description}</P>
       </Flex>
       <DataList.Root>
-        <DataList.Item>
-          <DataList.Label minWidth="88px">ID</DataList.Label>
-          <DataList.Value>
-            <Flex align="center" gap="2">
-              <Code variant="ghost">u_2J89JSA4GJ</Code>
-              <IconButton
-                size="1"
-                aria-label="Copy value"
-                color="gray"
-                variant="ghost"
-              >
-                <Icons.Copy size={16} />
-              </IconButton>
-            </Flex>
-          </DataList.Value>
-        </DataList.Item>
         <DataList.Item>
           <DataList.Label minWidth="88px">
             <Tooltip content="Calories">
