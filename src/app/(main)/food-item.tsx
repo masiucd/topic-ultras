@@ -1,23 +1,40 @@
-import {DataList, Flex} from "@radix-ui/themes";
+import {DataList, Flex, Separator, Strong} from "@radix-ui/themes";
 
 import type {FoodResult} from "@/persistence/food/types";
 import {Icons} from "@/shared/components/icons";
 import {Tooltip} from "@/shared/components/ui/tooltip";
 import {P, Span} from "@/shared/components/ui/typography";
-import type {Unit} from "@/shared/schemas/unit";
+import {cn} from "@/shared/lib/cn";
 
 import {FoodTypeBadge} from "./foods/food-type-badge";
 
-export function FoodItem({food, unit}: {food: FoodResult; unit: Unit}) {
+export function FoodItem({
+  food,
+  className,
+}: {
+  food: FoodResult;
+  className?: string;
+}) {
   let {foodName, description, calories, carbs, totalFat, protein, foodType} =
     food;
   return (
-    <li className="relative flex flex-col gap-2 rounded-md border border-gray-900 px-2 py-3 shadow-md">
+    <li
+      className={cn(
+        "relative flex flex-col gap-2 rounded-md border border-gray-900 px-2 py-3 shadow-md",
+        className,
+      )}
+    >
       <FoodTypeBadge className="absolute right-2 top-2" foodType={foodType} />
       <Flex direction="column" gap="1">
-        <P>{foodName}</P>
-        <P wrap="pretty">{description}</P>
+        <Strong>{foodName}</Strong>
+        <Tooltip content="asd">
+          <P size="2" truncate>
+            {description}
+          </P>
+        </Tooltip>
       </Flex>
+      <Separator my="1" size="4" />
+
       <DataList.Root>
         <DataList.Item>
           <DataList.Label minWidth="88px">
