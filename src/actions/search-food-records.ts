@@ -2,29 +2,28 @@
 import "server-only";
 
 import {getFoodDetailsByName} from "@/persistence/food/dao";
-import {type Unit, unitSchema} from "@/shared/schemas/unit";
 
 export async function getFoodResults(
   _prevState: null | Awaited<ReturnTypeOfFetchFoodNutrition>,
   formData: FormData,
 ) {
   let food = formData.get("food");
-  let unit = formData.get("unit");
+  // let unit = formData.get("unit");
   // let amount = formData.get("amount");
 
   if (typeof food !== "string") {
     throw new Error("Expected food to be a string.");
   }
-  if (typeof unit !== "string") {
-    throw new Error("Expected unit to be a string.");
-  }
+  // if (typeof unit !== "string") {
+  //   throw new Error("Expected unit to be a string.");
+  // }
 
-  return await getFoodData(food, unitSchema.parse(unit));
+  return await getFoodData(food);
 }
 
 export type GetFood = typeof getFoodResults;
 
-async function getFoodData(food: string, unit: Unit) {
+async function getFoodData(food: string) {
   let result = await getFoodDetailsByName(food);
 
   if (result.success) {
@@ -32,14 +31,14 @@ async function getFoodData(food: string, unit: Unit) {
       result: result.data,
       searchTerm: food,
       error: null,
-      unit,
+      // unit,
     };
   }
   return {
     result: [],
     searchTerm: food,
     error: result.error,
-    unit,
+    // unit,
   };
 }
 
