@@ -8,6 +8,8 @@ import {cn} from "@/shared/lib/cn";
 
 import {FoodTypeBadge} from "./foods/food-type-badge";
 
+const ICON_SIZE = 18;
+
 export function FoodItem({
   food,
   className,

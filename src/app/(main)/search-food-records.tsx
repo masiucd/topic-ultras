@@ -6,30 +6,36 @@ import {useFormState, useFormStatus} from "react-dom";
 
 import {getFoodResults} from "@/actions/search-food-records";
 import Button from "@/shared/components/ui/button";
-import {H3, P} from "@/shared/components/ui/typography";
+import {Callout} from "@/shared/components/ui/callout";
+import {P, Span} from "@/shared/components/ui/typography";
 
 import {FoodItem} from "./food-item";
 
-export function SearchFoodRecords({children}: PropsWithChildren) {
+export function SearchFoodRecords() {
   let [foodResult, action] = useFormState(getFoodResults, null);
   return (
-    <Box className="w-full max-w-4xl border-4">
-      <H3>Search for a food item</H3>
+    <Box p="1">
       <FoodForm action={action} />
-      {foodResult !== null ? (
+      {foodResult !== null && (
         <>
           {foodResult.result.length > 0 ? (
-            <ul className="mt-3 flex flex-wrap gap-5">
+            <ul className="mt-3 grid grid-cols-1 gap-1 p-3 sm:grid-cols-2 md:grid-cols-3">
               {foodResult.result.map((food) => (
                 <FoodItem key={food.foodId} food={food} className="w-56" />
               ))}
             </ul>
           ) : (
-            <P>Food {foodResult.searchTerm} not found</P>
+            <Flex maxWidth="500px" my="3">
+              <Callout variant="soft" type="info" size="1">
+                <P wrap="pretty">
+                  Food <Span weight="bold">{foodResult.searchTerm}</Span> not
+                  found
+                </P>
+                <P wrap="pretty">Try searching for something else</P>
+              </Callout>
+            </Flex>
           )}
         </>
-      ) : (
-        children
       )}
     </Box>
   );
