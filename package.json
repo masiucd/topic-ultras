@@ -12,7 +12,6 @@
     "db:studio": "drizzle-kit studio --port 6000"
   },
   "dependencies": {
-    "@adobe/react-spectrum": "^3.35.1",
     "@libsql/client": "^0.6.2",
     "@radix-ui/themes": "^3.1.1",
     "better-sqlite3": "^11.0.0",
