@@ -1,7 +1,7 @@
 "use server";
 import "server-only";
 
-import {getFoodDetailsByName} from "@/persistence/food/dao";
+import {getFoodsDetailsByName} from "@/persistence/food/dao";
 
 export async function getFoodResults(
   _prevState: null | Awaited<ReturnTypeOfFetchFoodNutrition>,
@@ -24,7 +24,7 @@ export async function getFoodResults(
 export type GetFood = typeof getFoodResults;
 
 async function getFoodData(food: string) {
-  let result = await getFoodDetailsByName(food);
+  let result = await getFoodsDetailsByName(food);
 
   if (result.success) {
     return {
