@@ -4,7 +4,7 @@ export let siteData = Object.freeze({
   keywords: ["nutrition, food, health, tracking"],
 
   navLinks: [
-    {href: "/", text: "Home"},
+    {href: "/foods", text: "Food List"},
     {href: "/about", text: "About"},
     {href: "/contact", text: "Contact"},
   ],
