@@ -3,8 +3,10 @@ import {Flex, Table} from "@radix-ui/themes";
 import {getFoodData} from "@/persistence/food/dao";
 import {Icons} from "@/shared/components/icons";
 import {PageWrapper} from "@/shared/components/page-wrapper";
+import {Link} from "@/shared/components/ui/link";
 import {Tooltip} from "@/shared/components/ui/tooltip";
 import {H1, Label} from "@/shared/components/ui/typography";
+import {slugify} from "@/shared/lib/strings";
 
 // Display table of food items with pagination and save the search state in the URL
 export default async function FoodItemsPage({
@@ -33,6 +35,7 @@ export default async function FoodItemsPage({
               <Table.ColumnHeaderCell>Carbohydrates</Table.ColumnHeaderCell>
               <Table.ColumnHeaderCell>Fat</Table.ColumnHeaderCell>
               <Table.ColumnHeaderCell>Protein</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
             </Table.Row>
           </Table.Header>
 
@@ -76,6 +79,14 @@ export default async function FoodItemsPage({
                       <Flex align="center" gap="1">
                         <Icons.Protein size={16} />
                         <Label as="span">{f.protein}</Label>
+                      </Flex>
+                    </Table.Cell>
+
+                    <Table.Cell>
+                      <Flex align="center" gap="1">
+                        <Link href={`/foods/${slugify(f.foodId.toString())}`}>
+                          View
+                        </Link>
                       </Flex>
                     </Table.Cell>
                   </Table.Row>
