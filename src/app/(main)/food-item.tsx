@@ -62,7 +62,7 @@ export function FoodItemDataList({
       <DataList.Item>
         <DataList.Label minWidth="88px">
           <Tooltip content="Calories">
-            <Icons.Calorie size={16} />
+            <Icons.Calorie size={ICON_SIZE} />
           </Tooltip>
         </DataList.Label>
         <DataList.Value>
@@ -74,7 +74,7 @@ export function FoodItemDataList({
       <DataList.Item>
         <DataList.Label minWidth="88px">
           <Tooltip content="Carbohydrates">
-            <Icons.Carbs size={16} />
+            <Icons.Carbs size={ICON_SIZE} />
           </Tooltip>
         </DataList.Label>
         <DataList.Value>
@@ -86,7 +86,7 @@ export function FoodItemDataList({
       <DataList.Item>
         <DataList.Label minWidth="88px">
           <Tooltip content="Total Fat">
-            <Icons.Fat size={16} />
+            <Icons.Fat size={ICON_SIZE} />
           </Tooltip>
         </DataList.Label>
         <DataList.Value>
@@ -98,7 +98,7 @@ export function FoodItemDataList({
       <DataList.Item>
         <DataList.Label minWidth="88px">
           <Tooltip content="Protein">
-            <Icons.Protein size={16} />
+            <Icons.Protein size={ICON_SIZE} />
           </Tooltip>
         </DataList.Label>
         <DataList.Value>
