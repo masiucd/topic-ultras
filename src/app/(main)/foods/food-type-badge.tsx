@@ -8,7 +8,7 @@ type Color = Pick<BadgeProps, "color">["color"];
 function getBadgeColor(foodType?: FoodTypeCategory): Color {
   switch (foodType) {
     case "Fruit":
-      return "orange";
+      return "grass";
     case "Vegetable":
       return "green";
     case "Grain":
@@ -35,13 +35,15 @@ function getBadgeColor(foodType?: FoodTypeCategory): Color {
 export function FoodTypeBadge({
   foodType,
   className,
+  size,
 }: {
   foodType?: FoodTypeCategory;
   className?: string;
+  size?: "1" | "2" | "3";
 }) {
   let color = getBadgeColor(foodType);
   return (
-    <Badge variant="soft" color={color} className={className}>
+    <Badge variant="soft" color={color} className={className} size={size}>
       <Tooltip content="Food Type">
         <Span className="uppercase">{foodType ?? "N/A"}</Span>
       </Tooltip>
