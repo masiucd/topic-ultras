@@ -11,6 +11,7 @@ import {foodResultSchema} from "./types";
 export async function getFoodData(limit: number = 10, offset: number = 0) {
   let f = alias(foods, "food");
   let fn = alias(foodNutations, "foodNutation");
+  let ft = alias(foodTypes, "foodType");
   let foodRecordsStatement = await db
     .selectDistinct({
       foodId: f.foodId,
@@ -21,9 +22,12 @@ export async function getFoodData(limit: number = 10, offset: number = 0) {
       carbs: fn.carbohydrates,
       totalFat: fn.fat,
       protein: fn.protein,
+      foodType: ft.name,
+      foodTypeId: ft.id,
     })
     .from(f)
     .leftJoin(fn, eq(f.foodId, fn.foodId))
+    .leftJoin(ft, eq(f.type_id, ft.id))
     .limit(limit)
     .offset(offset)
     .groupBy(f.foodId);
