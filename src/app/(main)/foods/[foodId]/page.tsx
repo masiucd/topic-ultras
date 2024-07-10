@@ -32,15 +32,16 @@ export default async function FoodSlugPage({
               <H1>{foodItem.data.foodName}</H1>
               <P>{foodItem.data.description}</P>
             </Flex>
-            {foodItem.data.foodType && (
-              <Link href={`/food-types/${slugify(foodItem.data.foodType)}`}>
-                <FoodTypeBadge
-                  foodType={foodItem.data.foodType}
-                  className="absolute right-2 top-2"
-                  size="3"
-                />
-              </Link>
-            )}
+            <Link
+              href={`/food-types/${slugify(foodItem.data.foodType ?? "Other")}`}
+            >
+              <FoodTypeBadge
+                foodType={foodItem.data.foodType ?? "Other"}
+                className="absolute right-2 top-2"
+                disableTooltip
+                size="3"
+              />
+            </Link>
           </Flex>
           <FoodItemTable foodItem={foodItem.data} />
         </Card>
