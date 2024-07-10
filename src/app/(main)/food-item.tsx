@@ -2,6 +2,7 @@ import {DataList, Flex, Separator, Strong} from "@radix-ui/themes";
 
 import type {FoodResult} from "@/persistence/food/types";
 import {Icons} from "@/shared/components/icons";
+import {Link} from "@/shared/components/ui/link";
 import {Tooltip} from "@/shared/components/ui/tooltip";
 import {P} from "@/shared/components/ui/typography";
 import {cn} from "@/shared/lib/cn";
@@ -28,7 +29,9 @@ export function FoodItem({
     >
       <FoodTypeBadge className="absolute right-2 top-2" foodType={foodType} />
       <Flex direction="column" gap="1">
-        <Strong>{foodName}</Strong>
+        <Strong>
+          <Link href={`/foods/${food.foodId}`}>{foodName}</Link>
+        </Strong>
         <Tooltip content="asd">
           <P size="2" truncate>
             {description}
