@@ -32,21 +32,44 @@ function getBadgeColor(foodType?: FoodTypeCategory): Color {
   }
 }
 
+type Props = {
+  foodType: FoodTypeCategory;
+  className?: string;
+  size?: "1" | "2" | "3";
+  tooltipContent?: string; // Add tooltipContent property
+};
+
+// Base type without `disableTooltip` or with `disableTooltip` set to false
+type WithTooltip = {
+  disableTooltip?: false;
+  tooltipContent: string;
+};
+
+// Type for when `disableTooltip` is true, excluding `tooltipContent`
+type WithoutTooltip = {
+  disableTooltip: true;
+};
+
+// Conditional type that combines both cases
+type TooltipConditional = WithTooltip | WithoutTooltip;
+
 export function FoodTypeBadge({
   foodType,
   className,
   size,
-}: {
-  foodType?: FoodTypeCategory;
-  className?: string;
-  size?: "1" | "2" | "3";
-}) {
+  disableTooltip = false,
+  tooltipContent,
+}: Props & TooltipConditional) {
   let color = getBadgeColor(foodType);
   return (
     <Badge variant="soft" color={color} className={className} size={size}>
-      <Tooltip content="Food Type">
+      {disableTooltip ? (
         <Span className="uppercase">{foodType ?? "N/A"}</Span>
-      </Tooltip>
+      ) : (
+        <Tooltip content={tooltipContent}>
+          <Span className="uppercase">{foodType ?? "N/A"}</Span>
+        </Tooltip>
+      )}
     </Badge>
   );
 }
