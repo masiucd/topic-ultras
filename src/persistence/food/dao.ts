@@ -6,7 +6,11 @@ import {alias} from "drizzle-orm/sqlite-core";
 import {db} from "@/db/db";
 import {foodNutations, foods, foodTypes} from "@/db/models/schema";
 
-import {foodResultSchema} from "./types";
+import {
+  foodResultSchema,
+  foodsByCategorySchema,
+  type FoodTypeCategory,
+} from "./types";
 
 export async function getFoodData(limit: number = 10, offset: number = 0) {
   let f = alias(foods, "food");
@@ -85,6 +89,21 @@ export async function getFoodRecordById(foodID: number) {
     .where(eq(f.foodId, foodID))
     .get();
   // Using .get() instead of .all() because we are only expecting one record
-
   return foodResultSchema.safeParse(foodRecordsStatement);
+}
+
+export async function foodsBasedOnFoodType(foodType: FoodTypeCategory) {
+  let ft = alias(foodTypes, "foodTypeCategory");
+  let f = alias(foods, "food");
+  let xs = await db
+    .select({
+      foodId: f.foodId,
+      foodName: f.name,
+      description: f.description,
+    })
+    .from(ft)
+    .innerJoin(f, eq(ft.id, f.type_id))
+    .where(eq(ft.name, foodType))
+    .all();
+  return foodsByCategorySchema.array().safeParse(xs);
 }

@@ -16,7 +16,7 @@ export let foods = sqliteTable(
     description: text("description").notNull(),
     type_id: integer("type_id")
       .notNull()
-      .references(() => food_types.id),
+      .references(() => foodTypes.id),
   },
   (table) => ({
     foodNameIdx: index("food_name_idx").on(table.name),
