@@ -1,4 +1,4 @@
-import {Box, Flex, Table} from "@radix-ui/themes";
+import {Flex, Table} from "@radix-ui/themes";
 
 import {getFoodData} from "@/persistence/food/dao";
 import {Icons} from "@/shared/components/icons";
@@ -23,7 +23,6 @@ export default async function FoodItemsPage({
 
   return (
     <PageWrapper>
-<<<<<<< HEAD
       <H1>Food items</H1>
       {/* TODO ass dearch input */}
       <Flex direction="column" gap="5" maxWidth="900px">
@@ -96,78 +95,6 @@ export default async function FoodItemsPage({
           </Table.Body>
         </Table.Root>
       </Flex>
-=======
-      <Box className="border border-red-300" maxWidth="900px">
-        <Flex>
-          <H1 mb="3">Food items</H1>
-          {/* TODO ass dearch input */}
-        </Flex>
-        <Flex direction="column" gap="5" maxWidth="900px">
-          <Table.Root variant="surface">
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeaderCell>Food</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Description</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Calories</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Carbohydrates</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Fat</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Protein</Table.ColumnHeaderCell>
-                {/* TODO  more columns? */}
-              </Table.Row>
-            </Table.Header>
-
-            <Table.Body>
-              {foods.success &&
-                foods.data.map((f) => {
-                  return (
-                    <Table.Row key={f.foodId}>
-                      <Table.Cell>
-                        <Link href={`/foods/${f.foodName}`}>{f.foodName}</Link>
-                      </Table.Cell>
-                      <Table.Cell maxWidth="300px">
-                        <Tooltip content={f.description}>
-                          <Label
-                            className="block"
-                            as="label"
-                            truncate
-                            wrap="pretty"
-                          >
-                            {f.description}
-                          </Label>
-                        </Tooltip>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Flex align="center" gap="1">
-                          <Icons.Calorie size={16} />
-                          <Label as="span">{f.calories}</Label>
-                        </Flex>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Flex align="center" gap="1">
-                          <Icons.Carbs size={16} />
-                          <Label as="span">{f.carbs}</Label>
-                        </Flex>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Flex align="center" gap="1">
-                          <Icons.Fat size={16} />
-                          <Label as="span">{f.totalFat}</Label>
-                        </Flex>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Flex align="center" gap="1">
-                          <Icons.Protein size={16} />
-                          <Label as="span">{f.protein}</Label>
-                        </Flex>
-                      </Table.Cell>
-                    </Table.Row>
-                  );
-                })}
-            </Table.Body>
-          </Table.Root>
-        </Flex>
-      </Box>
->>>>>>> e599504 (Refactor food-items page to improve UI and add food item links)
     </PageWrapper>
   );
 }

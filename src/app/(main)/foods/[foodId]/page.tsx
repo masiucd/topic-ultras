@@ -1,13 +1,17 @@
-import {Box, Card, Flex, Separator} from "@radix-ui/themes";
+import {Card, Flex, Table} from "@radix-ui/themes";
 import {redirect} from "next/navigation";
 
 import {getFoodRecordById} from "@/persistence/food/dao";
 import type {FoodResult} from "@/persistence/food/types";
+import {Icons} from "@/shared/components/icons";
 import {PageWrapper} from "@/shared/components/page-wrapper";
-import {H1, P} from "@/shared/components/ui/typography";
+import {Link} from "@/shared/components/ui/link";
+import {H1, P, Span} from "@/shared/components/ui/typography";
+import {slugify} from "@/shared/lib/strings";
 
-import {FoodItemDataList} from "../../food-item";
 import {FoodTypeBadge} from "../food-type-badge";
+
+const ICON_SIZE = 18;
 
 export default async function FoodSlugPage({
   params,
@@ -21,51 +25,75 @@ export default async function FoodSlugPage({
   }
   return (
     <PageWrapper>
-      <Flex direction="column" maxWidth="400px">
-        <Flex
-          my="5"
-          className="border border-red-400"
-          align="center"
-          justify="between"
-          pr="4"
-        >
-          <Flex direction="column" gap="1">
-            <H1>{foodItem.data.foodName}</H1>
-            <P>{foodItem.data.description}</P>
+      <Flex direction="column" my="5" className="md:max-w-[40rem]">
+        <Card size="2">
+          <Flex my="5" align="center" position="relative">
+            <Flex direction="column" gap="1">
+              <H1>{foodItem.data.foodName}</H1>
+              <P>{foodItem.data.description}</P>
+            </Flex>
+            {foodItem.data.foodType && (
+              <Link href={`/food-types/${slugify(foodItem.data.foodType)}`}>
+                <FoodTypeBadge
+                  foodType={foodItem.data.foodType}
+                  className="absolute right-2 top-2"
+                  size="3"
+                />
+              </Link>
+            )}
           </Flex>
-          <FoodTypeBadge foodType={foodItem.data.foodType} />
-        </Flex>
+          <FoodItemTable foodItem={foodItem.data} />
+        </Card>
       </Flex>
 
-      <Box maxWidth="240px">
+      {/* <Box maxWidth="240px">
         <FoodCard foodItem={foodItem.data} />
-      </Box>
+      </Box> */}
     </PageWrapper>
   );
 }
 
-function FoodCard({foodItem}: {foodItem: FoodResult}) {
-  let {foodName, description, foodType} = foodItem;
+function FoodItemTable({foodItem}: {foodItem: FoodResult}) {
+  let {calories, carbs, totalFat, protein} = foodItem;
   return (
-    <Card className="relative">
-      <Flex gap="3" align="center">
-        <FoodTypeBadge className="absolute right-2 top-2" foodType={foodType} />
-        <Flex direction="column" gap="1">
-          <P weight="medium" size="7">
-            {foodName}
-          </P>
-          <P as="p" size="2" color="gray">
-            {description}
-          </P>
-        </Flex>
-      </Flex>
-      <Separator my="3" size="4" />
-      <FoodItemDataList
-        calories={foodItem.calories}
-        carbs={foodItem.carbs}
-        totalFat={foodItem.totalFat}
-        protein={foodItem.protein}
-      />
-    </Card>
+    <Table.Root>
+      <Table.Header>
+        <Table.Row>
+          <Table.ColumnHeaderCell>
+            <Flex align="center" gap="1">
+              <Span>Calories</Span>
+              <Icons.Calorie size={ICON_SIZE} />
+            </Flex>
+          </Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>
+            <Flex align="center" gap="1">
+              <Span>Carbohydrates</Span>
+              <Icons.Carbs size={ICON_SIZE} />
+            </Flex>
+          </Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>
+            <Flex align="center" gap="1">
+              <Span>Fat</Span>
+              <Icons.Fat size={ICON_SIZE} />
+            </Flex>
+          </Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>
+            <Flex align="center" gap="1">
+              <Span>Protein</Span>
+              <Icons.Protein size={ICON_SIZE} />
+            </Flex>
+          </Table.ColumnHeaderCell>
+        </Table.Row>
+      </Table.Header>
+
+      <Table.Body>
+        <Table.Row>
+          <Table.Cell>{calories}</Table.Cell>
+          <Table.Cell>{carbs}</Table.Cell>
+          <Table.Cell>{totalFat}</Table.Cell>
+          <Table.Cell>{protein}</Table.Cell>
+        </Table.Row>
+      </Table.Body>
+    </Table.Root>
   );
 }
