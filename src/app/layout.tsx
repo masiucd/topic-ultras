@@ -4,6 +4,7 @@ import "@radix-ui/themes/styles.css";
 import {Theme} from "@radix-ui/themes";
 import type {Metadata} from "next";
 import {Inter} from "next/font/google";
+import {cookies} from "next/headers";
 import type {ReactNode} from "react";
 
 import {siteData} from "@/site-data";
@@ -20,8 +21,10 @@ export default function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
+  let cookieStore = cookies();
+  let storedTheme = cookieStore.get("theme");
   return (
-    <html lang="en">
+    <html lang="en" className={storedTheme?.value === "light" ? "dark" : ""}>
       <body className={inter.className}>
         <Theme
           appearance="inherit"
