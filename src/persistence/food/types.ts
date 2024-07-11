@@ -33,14 +33,6 @@ export let foodResultSchema = z.object({
 
 export type FoodResult = z.infer<typeof foodResultSchema>;
 
-// foodTypeCategory: { id: 1, name: 'Fruit' },
-// food: {
-//   foodId: 1,
-//   name: 'Apple',
-//   description: 'A delicious apple that will make good for you ',
-//   type_id: 1
-// }
-
 export let foodTypeCategorySchema = z.object({
   id: z.number(),
   name: foodTypeCategory,
