@@ -33,7 +33,7 @@ export default async function FoodSlugPage({
               <P>{foodItem.data.description}</P>
             </Flex>
             <Link
-              href={`/food-types/${slugify(foodItem.data.foodType ?? "Other")}`}
+              href={`/food-types-categories/${slugify(foodItem.data.foodType ?? "Other")}`}
             >
               <FoodTypeBadge
                 foodType={foodItem.data.foodType ?? "Other"}
@@ -46,10 +46,6 @@ export default async function FoodSlugPage({
           <FoodItemTable foodItem={foodItem.data} />
         </Card>
       </Flex>
-
-      {/* <Box maxWidth="240px">
-        <FoodCard foodItem={foodItem.data} />
-      </Box> */}
     </PageWrapper>
   );
 }

@@ -32,7 +32,7 @@ export default async function FoodTypeSlugPage({
 }
 
 function fromSlugToFoodTypeCategory(foodtype: string): FoodTypeCategory {
-  switch (foodtype) {
+  switch (foodtype.toLowerCase()) {
     case "fruit":
       return "Fruit" as FoodTypeCategory;
     default:

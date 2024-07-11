@@ -27,7 +27,14 @@ export function FoodItem({
         className,
       )}
     >
-      <FoodTypeBadge className="absolute right-2 top-2" foodType={foodType} />
+      <Link href={`/food-types-categories/${food.foodType ?? "Other"}`}>
+        <FoodTypeBadge
+          className="absolute right-2 top-2 hover:opacity-70"
+          foodType={foodType ?? "Other"}
+          disableTooltip
+          highContrast
+        />
+      </Link>
       <Flex direction="column" gap="1">
         <Strong>
           <Link href={`/foods/${food.foodId}`}>{foodName}</Link>

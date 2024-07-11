@@ -37,6 +37,7 @@ type Props = {
   className?: string;
   size?: "1" | "2" | "3";
   tooltipContent?: string; // Add tooltipContent property
+  highContrast?: boolean;
 };
 
 // Base type without `disableTooltip` or with `disableTooltip` set to false
@@ -59,10 +60,17 @@ export function FoodTypeBadge({
   size,
   disableTooltip = false,
   tooltipContent,
+  highContrast,
 }: Props & TooltipConditional) {
   let color = getBadgeColor(foodType);
   return (
-    <Badge variant="soft" color={color} className={className} size={size}>
+    <Badge
+      highContrast={highContrast}
+      variant="soft"
+      color={color}
+      className={className}
+      size={size}
+    >
       {disableTooltip ? (
         <Span className="uppercase">{foodType ?? "N/A"}</Span>
       ) : (

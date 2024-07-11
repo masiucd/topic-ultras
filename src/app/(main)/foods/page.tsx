@@ -91,7 +91,7 @@ export default async function FoodItemsPage({
                   <Table.Cell>
                     <Flex align="center" gap="1">
                       <Link
-                        href={`/food-types/${slugify(f.foodType ?? "Other")}  `}
+                        href={`/food-types-categories/${slugify(f.foodType ?? "Other")}  `}
                       >
                         <FoodTypeBadge
                           disableTooltip
