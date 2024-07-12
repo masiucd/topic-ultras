@@ -1,7 +1,7 @@
 import {alias} from "drizzle-orm/sqlite-core";
 
-import {db} from "@/db/db";
-import {foodTypes} from "@/db/models/schema";
+import {db} from "@/_db/db";
+import {foodTypes} from "@/_db/models/schema";
 
 export async function getAllFoodTypes() {
   let ft = alias(foodTypes, "ft");

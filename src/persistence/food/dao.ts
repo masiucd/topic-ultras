@@ -3,8 +3,8 @@ import "server-only";
 import {eq, like, sql} from "drizzle-orm";
 import {alias} from "drizzle-orm/sqlite-core";
 
-import {db} from "@/db/db";
-import {foodNutations, foods, foodTypes} from "@/db/models/schema";
+import {db} from "@/_db/db";
+import {foodNutations, foods, foodTypes} from "@/_db/models/schema";
 
 import {
   foodResultSchema,
