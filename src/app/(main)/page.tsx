@@ -1,7 +1,7 @@
 import {Box, Flex} from "@radix-ui/themes";
 
 import {PageWrapper} from "@/shared/components/page-wrapper";
-import {H1, P} from "@/shared/components/ui/typography";
+import {H1, P} from "@/shared/components/typography";
 
 import {SearchFoodRecords} from "./search-food-records";
 

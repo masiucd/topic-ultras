@@ -7,7 +7,7 @@ import {Inter} from "next/font/google";
 import {cookies} from "next/headers";
 import type {ReactNode} from "react";
 
-import {siteData} from "@/site-data";
+import {siteData, themeData} from "@/site-data";
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -28,10 +28,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <Theme
           appearance="inherit"
-          accentColor="iris"
-          grayColor="slate"
-          radius="medium"
-          scaling="95%"
+          accentColor={themeData.accentColor}
+          grayColor={themeData.grayColor}
+          radius={themeData.radius}
+          scaling={themeData.scaling}
+          panelBackground={themeData.panelBackground}
         >
           {children}
         </Theme>

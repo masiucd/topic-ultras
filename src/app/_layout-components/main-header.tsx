@@ -1,8 +1,9 @@
 import {Flex} from "@radix-ui/themes";
 import {cookies} from "next/headers";
 
-import {Link} from "@/shared/components/ui/link";
-import {H3} from "@/shared/components/ui/typography";
+import {ActiveLink} from "@/shared/components/active-link";
+import {Link} from "@/shared/components/link";
+import {H3} from "@/shared/components/typography";
 import {siteData} from "@/site-data";
 
 import {ToggleTheme} from "./toggle-theme";
@@ -33,9 +34,9 @@ export function MainHeader() {
             <ul className="flex gap-2">
               {siteData.navLinks.map((l) => (
                 <li key={l.href}>
-                  <Link color="gray" href={l.href} weight="medium">
+                  <ActiveLink color="gray" href={l.href} weight="medium">
                     {l.text}
-                  </Link>
+                  </ActiveLink>
                 </li>
               ))}
             </ul>

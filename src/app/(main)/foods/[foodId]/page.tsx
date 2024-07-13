@@ -4,9 +4,9 @@ import {redirect} from "next/navigation";
 import {getFoodRecordById} from "@/persistence/food/dao";
 import type {FoodResult} from "@/persistence/food/types";
 import {Icons} from "@/shared/components/icons";
+import {Link} from "@/shared/components/link";
 import {PageWrapper} from "@/shared/components/page-wrapper";
-import {Link} from "@/shared/components/ui/link";
-import {H1, P, Span} from "@/shared/components/ui/typography";
+import {H1, P, Span} from "@/shared/components/typography";
 import {slugify} from "@/shared/lib/strings";
 
 import {FoodTypeBadge} from "../food-type-badge";

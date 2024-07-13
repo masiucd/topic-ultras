@@ -2,9 +2,9 @@ import {DataList, Flex, Separator, Strong} from "@radix-ui/themes";
 
 import type {FoodResult} from "@/persistence/food/types";
 import {Icons} from "@/shared/components/icons";
-import {Link} from "@/shared/components/ui/link";
-import {Tooltip} from "@/shared/components/ui/tooltip";
-import {P} from "@/shared/components/ui/typography";
+import {Link} from "@/shared/components/link";
+import {Tooltip} from "@/shared/components/tooltip";
+import {P} from "@/shared/components/typography";
 import {cn} from "@/shared/lib/cn";
 
 import {FoodTypeBadge} from "./foods/food-type-badge";

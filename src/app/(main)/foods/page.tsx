@@ -3,10 +3,10 @@ import {redirect} from "next/navigation";
 
 import {getFoodData} from "@/persistence/food/dao";
 import {Icons} from "@/shared/components/icons";
+import {Link} from "@/shared/components/link";
 import {PageWrapper} from "@/shared/components/page-wrapper";
-import {Link} from "@/shared/components/ui/link";
-import {Tooltip} from "@/shared/components/ui/tooltip";
-import {H1, Label} from "@/shared/components/ui/typography";
+import {Tooltip} from "@/shared/components/tooltip";
+import {H1, Label} from "@/shared/components/typography";
 import {slugify} from "@/shared/lib/strings";
 
 import {FoodTypeBadge} from "./food-type-badge";

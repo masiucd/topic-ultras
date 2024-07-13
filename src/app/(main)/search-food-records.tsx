@@ -5,9 +5,9 @@ import type {PropsWithChildren} from "react";
 import {useFormState, useFormStatus} from "react-dom";
 
 import {getFoodResults} from "@/actions/search-food-records";
-import Button from "@/shared/components/ui/button";
-import {Callout} from "@/shared/components/ui/callout";
-import {P, Span} from "@/shared/components/ui/typography";
+import Button from "@/shared/components/button";
+import {Callout} from "@/shared/components/callout";
+import {P, Span} from "@/shared/components/typography";
 
 import {FoodItem} from "./food-item";
 

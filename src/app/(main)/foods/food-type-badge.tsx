@@ -1,8 +1,8 @@
 import {Badge, type BadgeProps} from "@radix-ui/themes";
 
 import type {FoodTypeCategory} from "@/persistence/food/types";
-import {Tooltip} from "@/shared/components/ui/tooltip";
-import {Span} from "@/shared/components/ui/typography";
+import {Tooltip} from "@/shared/components/tooltip";
+import {Span} from "@/shared/components/typography";
 
 type Color = Pick<BadgeProps, "color">["color"];
 function getBadgeColor(foodType?: FoodTypeCategory): Color {

@@ -1,7 +1,7 @@
 import type {ReactNode} from "react";
 
-import {MainFooter} from "../layout-components/main-footer";
-import {MainHeader} from "../layout-components/main-header";
+import {MainFooter} from "../_layout-components/main-footer";
+import {MainHeader} from "../_layout-components/main-header";
 
 export default function RootLayout({
   children,

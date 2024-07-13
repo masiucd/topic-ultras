@@ -2,7 +2,8 @@ import {Callout as RadixCallout, Flex, type FlexProps} from "@radix-ui/themes";
 import type {MarginProps} from "@radix-ui/themes/props";
 import type {PropsWithChildren} from "react";
 
-import {Icons} from "../icons";
+import {Icons} from "./icons";
+
 type Color =
   | "gray"
   | "gold"
