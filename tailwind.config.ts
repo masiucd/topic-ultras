@@ -14,6 +14,12 @@ const config: Config = {
         gray: colors.slate,
         main: colors.indigo,
       },
+      width: {
+        "side-nav": "14rem",
+      },
+    },
+    size: {
+      "side-nav": "14rem", // 224px
     },
   },
   // plugins: [require("tailwindcss-react-aria-components")],

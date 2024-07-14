@@ -1,4 +1,3 @@
-import {Box} from "@radix-ui/themes";
 import type {PropsWithChildren} from "react";
 
 import {cn} from "../lib/cn";

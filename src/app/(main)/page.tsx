@@ -8,7 +8,7 @@ import {SearchFoodRecords} from "./search-food-records";
 export default async function HomePage() {
   return (
     // <PageWrapper className="w-[74rem] bg-red-300">
-    <Box className="border-2 border-red-400 sm:ml-96">
+    <Box className="border-2 border-red-400 sm:ml-auto sm:w-[calc(100dvw-14rem)]">
       <Flex direction="column" gap="1" className="border-4" mb="3">
         <H1>Search for a food item</H1>
         <P>
