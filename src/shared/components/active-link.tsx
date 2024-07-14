@@ -17,6 +17,7 @@ export function ActiveLink<T extends string>(props: LinkProps<T>) {
       className={props.className}
       underline={isActive ? "always" : props.underline}
       color={isActive ? themeData.accentColor : "gray"}
+      weight={isActive ? "bold" : "regular"}
     >
       {props.children}
     </Link>

@@ -26,7 +26,7 @@ export function MainHeader() {
             {siteData.title}
           </H3>
         </Link>
-        <Flex gap="4" className="border border-red-500" py="1" px="2">
+        <Flex gap="4" py="1" px="2">
           <ToggleTheme
             theme={storedTheme?.value === "dark" ? "dark" : "light"}
           />

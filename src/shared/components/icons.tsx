@@ -5,7 +5,9 @@ import {
   Droplet as Fat,
   Flame as Calorie,
   Info,
+  Moon as Dark,
   Scale as Weight,
+  Sun as Light,
   TriangleAlert as Warning,
   Zap as Carbs,
 } from "lucide-react";
@@ -20,4 +22,6 @@ export let Icons = Object.freeze({
   Info,
   Warning,
   Error,
+  Light,
+  Dark,
 });
