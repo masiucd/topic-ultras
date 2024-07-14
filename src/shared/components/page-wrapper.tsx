@@ -13,7 +13,7 @@ export function PageWrapper({
   return (
     <div
       className={cn(
-        "mx-auto flex w-full flex-1 flex-col items-center bg-red-500",
+        "mx-auto flex w-full flex-1 flex-col items-center",
         className,
         fluid ? "max-w-full" : "max-w-6xl",
       )}
