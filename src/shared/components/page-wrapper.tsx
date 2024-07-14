@@ -12,14 +12,14 @@ export function PageWrapper({
   className?: string;
 }>) {
   return (
-    <Box
+    <div
       className={cn(
-        "mx-auto flex w-full flex-1 flex-col items-center",
+        "mx-auto flex w-full flex-1 flex-col items-center bg-red-500",
         className,
         fluid ? "max-w-full" : "max-w-6xl",
       )}
     >
       {children}
-    </Box>
+    </div>
   );
 }

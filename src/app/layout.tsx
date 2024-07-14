@@ -7,6 +7,7 @@ import {Inter} from "next/font/google";
 import {cookies} from "next/headers";
 import type {ReactNode} from "react";
 
+import {cn} from "@/shared/lib/cn";
 import {siteData, themeData} from "@/site-data";
 
 const inter = Inter({subsets: ["latin"]});
@@ -25,7 +26,7 @@ export default function RootLayout({
   let storedTheme = cookieStore.get("theme");
   return (
     <html lang="en" className={storedTheme?.value === "light" ? "dark" : ""}>
-      <body className={inter.className}>
+      <body className={cn("relative", inter.className)}>
         <Theme
           appearance="inherit"
           accentColor={themeData.accentColor}

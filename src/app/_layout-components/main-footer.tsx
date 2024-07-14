@@ -6,7 +6,7 @@ const CURRENT_YEAR = new Date().getFullYear();
 export function MainFooter() {
   return (
     <footer>
-      <Flex className="mx-auto h-20 w-full max-w-6xl border-4">
+      <Flex className="h-20 sm:ml-96">
         <small>
           © {CURRENT_YEAR} {siteData.title}
         </small>
