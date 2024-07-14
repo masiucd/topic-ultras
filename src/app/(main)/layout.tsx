@@ -50,7 +50,7 @@ export default function RootLayout({
           </ul>
         </nav>
       </aside>
-      <main className="flex min-h-[calc(100dvh-10rem)] flex-col border border-red-600 sm:ml-auto sm:w-[calc(100dvw-14rem)]">
+      <main className="flex min-h-[calc(100dvh-10rem)] flex-col border border-red-600 sm:ml-auto sm:min-h-[calc(100dvh-5rem)] sm:w-[calc(100dvw-14rem)]">
         {/* <main className="flex min-h-[calc(100dvh-10rem)] flex-col border border-red-600"> */}
         {children}
       </main>

@@ -2,20 +2,22 @@ import type {PropsWithChildren} from "react";
 
 import {cn} from "../lib/cn";
 
+// import {cn} from "../lib/cn";
+
 export function PageWrapper({
   children,
   className,
-  fluid,
+  // fluid,
 }: PropsWithChildren<{
-  fluid?: boolean;
+  // fluid?: boolean;
   className?: string;
 }>) {
   return (
     <div
       className={cn(
-        "mx-auto flex w-full flex-1 flex-col items-center",
+        "flex w-full flex-1 flex-col pl-0 sm:pl-4",
         className,
-        fluid ? "max-w-full" : "max-w-6xl",
+        // fluid ? "max-w-full" : "max-w-4xl",
       )}
     >
       {children}

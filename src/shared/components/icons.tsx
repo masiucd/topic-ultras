@@ -12,6 +12,7 @@ import {
   Mail as Contact,
   Moon as Dark,
   Scale as Weight,
+  Search,
   Sun as Light,
   TriangleAlert as Warning,
   Zap as Carbs,
@@ -34,4 +35,5 @@ export let Icons = Object.freeze({
   Contact,
   About,
   Calculator,
+  Search,
 });
