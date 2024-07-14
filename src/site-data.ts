@@ -9,6 +9,7 @@ export let siteData = Object.freeze({
     {href: "/foods", text: "Food List"},
     {href: "/about", text: "About"},
     {href: "/contact", text: "Contact"},
+    {href: "/calculator", text: "Food Calculator"},
   ] as {href: Route<string>; text: string}[],
 });
 
