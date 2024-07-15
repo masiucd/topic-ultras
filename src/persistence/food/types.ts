@@ -2,19 +2,19 @@ import "server-only";
 
 import {z} from "zod";
 
-// Enum for food types
+// Enum for food types categories
 let foodTypeCategory = z.enum([
-  "Fruit",
-  "Vegetable",
-  "Grain",
-  "Protein",
-  "Dairy",
-  "Fat",
-  "Sweets",
-  "Beverage",
-  "Other",
-  "fish",
-  "meat",
+  "FRUIT",
+  "VEGETABLE",
+  "GRAIN",
+  "PROTEIN",
+  "DAIRY",
+  "FAT",
+  "SWEETS",
+  "BEVERAGE",
+  "OTHER",
+  "FISH",
+  "MEAT",
 ]);
 
 export type FoodTypeCategory = z.infer<typeof foodTypeCategory>;

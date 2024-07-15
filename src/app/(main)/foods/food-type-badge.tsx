@@ -16,27 +16,27 @@ type Color =
   | "red";
 function getBadgeColor(foodType?: FoodTypeCategory): Color {
   switch (foodType) {
-    case "Fruit":
+    case "FRUIT":
       return "grass";
-    case "Vegetable":
+    case "VEGETABLE":
       return "green";
-    case "Grain":
+    case "GRAIN":
       return "yellow";
-    case "Protein":
+    case "PROTEIN":
       return "blue";
-    case "Dairy":
+    case "DAIRY":
       return "purple";
-    case "Fat":
+    case "FAT":
       return "orange";
-    case "Sweets":
+    case "SWEETS":
       return "pink";
-    case "Beverage":
+    case "BEVERAGE":
       return "cyan";
-    case "Other":
+    case "OTHER":
       return "gray";
-    case "fish":
+    case "FISH":
       return "blue";
-    case "meat":
+    case "MEAT":
       return "red";
     default:
       return "gray";
@@ -85,9 +85,9 @@ export function FoodTypeBadge({
       {disableTooltip ? (
         <P className="uppercase">{foodType ?? "N/A"}</P>
       ) : (
-        <Tooltip content={tooltipContent}>
-          <P className="uppercase">{foodType ?? "N/A"}</P>
-        </Tooltip>
+        // <Tooltip content={tooltipContent}>
+        <P className="uppercase">{foodType ?? "N/A"}</P>
+        // </Tooltip>
       )}
     </Badge>
   );

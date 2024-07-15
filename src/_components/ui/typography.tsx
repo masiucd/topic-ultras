@@ -128,9 +128,7 @@ export function Muted(props: PropsWithChildren<{className?: string}>) {
   );
 }
 
-export function Span(
-  props: PropsWithChildren<{className?: string} & {weight: "bold"}>,
-) {
+export function Span(props: PropsWithChildren<{className?: string}>) {
   return (
     <span className={cn("font-semibold", props.className)}>
       {props.children}
