@@ -11,7 +11,7 @@ export type LinkProps<T extends string> = Omit<RadixLinkProps, "href"> & {
 
 export function Link<T extends string>({href, ...props}: LinkProps<T>) {
   return (
-    <RadixLink {...props} asChild>
+    <RadixLink asChild>
       <NextLink {...props} className={props.className} href={href} />
     </RadixLink>
   );

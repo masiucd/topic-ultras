@@ -14,6 +14,7 @@ let foodTypeCategory = z.enum([
   "Beverage",
   "Other",
   "fish",
+  "meat",
 ]);
 
 export type FoodTypeCategory = z.infer<typeof foodTypeCategory>;

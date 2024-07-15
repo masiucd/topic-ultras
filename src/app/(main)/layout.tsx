@@ -19,6 +19,7 @@ export default function RootLayout({
 }>) {
   let cookieStore = cookies();
   let storedTheme = cookieStore.get("theme");
+  let isDarkTheme = storedTheme?.value === "dark";
   return (
     <>
       <MainHeader />
@@ -41,11 +42,9 @@ export default function RootLayout({
             <Separator size="4" />
             <li className="flex gap-2">
               <ToggleTheme
-                theme={storedTheme?.value === "dark" ? "dark" : "light"}
+                theme={isDarkTheme ? "dark" : "light"}
+                labelText={isDarkTheme ? "Dark theme" : "Light theme"}
               />
-              <Span>
-                {storedTheme?.value === "dark" ? "Dark" : "Light"} theme
-              </Span>
             </li>
           </ul>
         </nav>

@@ -27,7 +27,10 @@ export function FoodItem({
         className,
       )}
     >
-      <Link href={`/food-types-categories/${food.foodType ?? "Other"}`}>
+      <Link
+        href={`/food-types-categories/${food.foodType ?? "Other"}`}
+        color="gray"
+      >
         <FoodTypeBadge
           className="absolute right-2 top-2 hover:opacity-70"
           foodType={foodType ?? "Other"}
@@ -35,15 +38,14 @@ export function FoodItem({
           highContrast
         />
       </Link>
-      <Flex direction="column" gap="1">
-        <Strong>
+      <Flex direction="column" gap="1" my="3">
+        <Strong className="capitalize">
           <Link href={`/foods/${food.foodId}`}>{foodName}</Link>
         </Strong>
-        <Tooltip content="asd">
-          <P size="2" truncate>
-            {description}
-          </P>
-        </Tooltip>
+
+        <P size="2" wrap="pretty">
+          {description}
+        </P>
       </Flex>
       <Separator my="1" size="4" />
       <FoodItemDataList

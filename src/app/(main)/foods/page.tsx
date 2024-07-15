@@ -6,7 +6,6 @@ import type {FoodResult} from "@/persistence/food/types";
 import {Icons} from "@/shared/components/icons";
 import {Link} from "@/shared/components/link";
 import {PageWrapper} from "@/shared/components/page-wrapper";
-// import {PageWrapper} from "@/shared/components/page-wrapper";
 import {Tooltip} from "@/shared/components/tooltip";
 import {H1, Label, P} from "@/shared/components/typography";
 import {slugify} from "@/shared/lib/strings";
@@ -39,7 +38,7 @@ export default async function FoodItemsPage({
         </P>
         {/* TODO ass search input */}
         <Box maxWidth="400px" width="100%">
-          <TextField.Root placeholder="Search the docs…" size="3">
+          <TextField.Root placeholder="Search the foods…" size="3">
             <TextField.Slot>
               <Icons.Search size={18} />
             </TextField.Slot>

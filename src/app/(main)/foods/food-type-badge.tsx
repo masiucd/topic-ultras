@@ -18,7 +18,7 @@ function getBadgeColor(foodType?: FoodTypeCategory): Color {
     case "Dairy":
       return "purple";
     case "Fat":
-      return "red";
+      return "orange";
     case "Sweets":
       return "pink";
     case "Beverage":
@@ -27,6 +27,8 @@ function getBadgeColor(foodType?: FoodTypeCategory): Color {
       return "gray";
     case "fish":
       return "blue";
+    case "meat":
+      return "red";
     default:
       return "gray";
   }
