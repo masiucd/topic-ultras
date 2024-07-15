@@ -1,6 +1,6 @@
 import type {PropsWithChildren} from "react";
 
-import {cn} from "@/shared/lib/cn";
+import {cn} from "@/lib/utils";
 
 export function H1(
   props: PropsWithChildren<{
@@ -125,5 +125,15 @@ export function Muted(props: PropsWithChildren<{className?: string}>) {
     <p className={cn("text-muted-foreground text-sm", props.className)}>
       {props.children}
     </p>
+  );
+}
+
+export function Span(
+  props: PropsWithChildren<{className?: string} & {weight: "bold"}>,
+) {
+  return (
+    <span className={cn("font-semibold", props.className)}>
+      {props.children}
+    </span>
   );
 }

@@ -1,10 +1,10 @@
 "use client";
 import {usePathname} from "next/navigation";
 
+import {Icons} from "@/_components/ui/icons";
+import {Label} from "@/_components/ui/label";
 import {setTheme} from "@/actions/theme";
-import {Icons} from "@/shared/components/icons";
-import {Label} from "@/shared/components/typography";
-import {cn} from "@/shared/lib/cn";
+import {cn} from "@/lib/utils";
 
 export function ToggleTheme({
   theme,

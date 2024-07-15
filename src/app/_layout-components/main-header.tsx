@@ -1,10 +1,8 @@
 import {cookies} from "next/headers";
+import Link from "next/link";
 
-import {ActiveLink} from "@/shared/components/active-link";
-import {Link} from "@/shared/components/link";
-import {NavIcon} from "@/shared/components/nav-icon";
-import {Tooltip} from "@/shared/components/tooltip";
-import {H3} from "@/shared/components/typography";
+import {Tooltip} from "@/_components/ui/tooltip";
+import {H3} from "@/_components/ui/typography";
 import {siteData} from "@/site-data";
 
 import {ToggleTheme} from "./toggle-theme";
@@ -15,11 +13,8 @@ export function MainHeader() {
   return (
     <header className="sm:ml-56">
       <div className="flex items-center justify-between sm:hidden">
-        <Link href="/" color="gray" underline="none">
-          <H3
-            className="uppercase transition-opacity duration-150 hover:opacity-50"
-            size="5"
-          >
+        <Link href="/" color="gray">
+          <H3 className="uppercase transition-opacity duration-150 hover:opacity-50">
             {siteData.title}
           </H3>
         </Link>
@@ -31,11 +26,15 @@ export function MainHeader() {
             <ul className="flex gap-4">
               {siteData.navLinks.map((l) => (
                 <li key={l.href}>
-                  <ActiveLink color="gray" href={l.href} weight="medium">
-                    <Tooltip content={l.text}>
-                      <NavIcon href={l.href} />
-                    </Tooltip>
-                  </ActiveLink>
+                  <Link color="gray" href={l.href}>
+                    {/* <Tooltip */}
+
+                    {/* // content={l.text} */}
+                    {/* > */}
+                    {/* <NavIcon href={l.href} /> */}
+                    <p>icon</p>
+                    {/* </Tooltip> */}
+                  </Link>
                 </li>
               ))}
             </ul>

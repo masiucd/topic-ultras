@@ -1,15 +1,11 @@
-import {DataList, Flex, Separator, Strong} from "@radix-ui/themes";
+import Link from "next/link";
 
+import {Separator} from "@/_components/ui/separator";
+import {P} from "@/_components/ui/typography";
+import {cn} from "@/lib/utils";
 import type {FoodResult} from "@/persistence/food/types";
-import {Icons} from "@/shared/components/icons";
-import {Link} from "@/shared/components/link";
-import {Tooltip} from "@/shared/components/tooltip";
-import {P} from "@/shared/components/typography";
-import {cn} from "@/shared/lib/cn";
 
 import {FoodTypeBadge} from "./foods/food-type-badge";
-
-const ICON_SIZE = 18;
 
 export function FoodItem({
   food,
@@ -38,16 +34,14 @@ export function FoodItem({
           highContrast
         />
       </Link>
-      <Flex direction="column" gap="1" my="3">
-        <Strong className="capitalize">
+      <div className="flex flex-col gap-1">
+        <P className="capitalize">
           <Link href={`/foods/${food.foodId}`}>{foodName}</Link>
-        </Strong>
-
-        <P size="2" wrap="pretty">
-          {description}
         </P>
-      </Flex>
-      <Separator my="1" size="4" />
+
+        <P className="text-pretty">{description}</P>
+      </div>
+      <Separator className="my-1" />
       <FoodItemDataList
         calories={calories}
         carbs={carbs}
@@ -70,55 +64,56 @@ export function FoodItemDataList({
   protein: number;
 }) {
   return (
-    <DataList.Root>
-      <DataList.Item>
-        <DataList.Label minWidth="88px">
-          <Tooltip content="Calories">
-            <Icons.Calorie size={ICON_SIZE} />
-          </Tooltip>
-        </DataList.Label>
-        <DataList.Value>
-          <P size="2" weight="medium">
-            {calories}
-          </P>
-        </DataList.Value>
-      </DataList.Item>
-      <DataList.Item>
-        <DataList.Label minWidth="88px">
-          <Tooltip content="Carbohydrates">
-            <Icons.Carbs size={ICON_SIZE} />
-          </Tooltip>
-        </DataList.Label>
-        <DataList.Value>
-          <P size="2" weight="medium">
-            {carbs}
-          </P>
-        </DataList.Value>
-      </DataList.Item>
-      <DataList.Item>
-        <DataList.Label minWidth="88px">
-          <Tooltip content="Total Fat">
-            <Icons.Fat size={ICON_SIZE} />
-          </Tooltip>
-        </DataList.Label>
-        <DataList.Value>
-          <P size="2" weight="medium">
-            {totalFat}
-          </P>
-        </DataList.Value>
-      </DataList.Item>
-      <DataList.Item>
-        <DataList.Label minWidth="88px">
-          <Tooltip content="Protein">
-            <Icons.Protein size={ICON_SIZE} />
-          </Tooltip>
-        </DataList.Label>
-        <DataList.Value>
-          <P size="2" weight="medium">
-            {protein}
-          </P>
-        </DataList.Value>
-      </DataList.Item>
-    </DataList.Root>
+    <></>
+    // <DataList.Root>
+    //   <DataList.Item>
+    //     <DataList.Label minWidth="88px">
+    //       <Tooltip content="Calories">
+    //         <Icons.Calorie size={ICON_SIZE} />
+    //       </Tooltip>
+    //     </DataList.Label>
+    //     <DataList.Value>
+    //       <P size="2" weight="medium">
+    //         {calories}
+    //       </P>
+    //     </DataList.Value>
+    //   </DataList.Item>
+    //   <DataList.Item>
+    //     <DataList.Label minWidth="88px">
+    //       <Tooltip content="Carbohydrates">
+    //         <Icons.Carbs size={ICON_SIZE} />
+    //       </Tooltip>
+    //     </DataList.Label>
+    //     <DataList.Value>
+    //       <P size="2" weight="medium">
+    //         {carbs}
+    //       </P>
+    //     </DataList.Value>
+    //   </DataList.Item>
+    //   <DataList.Item>
+    //     <DataList.Label minWidth="88px">
+    //       <Tooltip content="Total Fat">
+    //         <Icons.Fat size={ICON_SIZE} />
+    //       </Tooltip>
+    //     </DataList.Label>
+    //     <DataList.Value>
+    //       <P size="2" weight="medium">
+    //         {totalFat}
+    //       </P>
+    //     </DataList.Value>
+    //   </DataList.Item>
+    //   <DataList.Item>
+    //     <DataList.Label minWidth="88px">
+    //       <Tooltip content="Protein">
+    //         <Icons.Protein size={ICON_SIZE} />
+    //       </Tooltip>
+    //     </DataList.Label>
+    //     <DataList.Value>
+    //       <P size="2" weight="medium">
+    //         {protein}
+    //       </P>
+    //     </DataList.Value>
+    //   </DataList.Item>
+    // </DataList.Root>
   );
 }

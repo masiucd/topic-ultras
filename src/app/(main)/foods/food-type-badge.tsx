@@ -1,10 +1,19 @@
-import {Badge, type BadgeProps} from "@radix-ui/themes";
-
+import {Badge} from "@/_components/ui/badge";
+import {Tooltip} from "@/_components/ui/tooltip";
+import {P} from "@/_components/ui/typography";
 import type {FoodTypeCategory} from "@/persistence/food/types";
-import {Tooltip} from "@/shared/components/tooltip";
-import {Span} from "@/shared/components/typography";
 
-type Color = Pick<BadgeProps, "color">["color"];
+type Color =
+  | "grass"
+  | "green"
+  | "yellow"
+  | "blue"
+  | "purple"
+  | "orange"
+  | "pink"
+  | "cyan"
+  | "gray"
+  | "red";
 function getBadgeColor(foodType?: FoodTypeCategory): Color {
   switch (foodType) {
     case "Fruit":
@@ -67,17 +76,17 @@ export function FoodTypeBadge({
   let color = getBadgeColor(foodType);
   return (
     <Badge
-      highContrast={highContrast}
-      variant="soft"
+      // highContrast={highContrast}
+      // variant="soft"
       color={color}
       className={className}
-      size={size}
+      // size={size}
     >
       {disableTooltip ? (
-        <Span className="uppercase">{foodType ?? "N/A"}</Span>
+        <P className="uppercase">{foodType ?? "N/A"}</P>
       ) : (
         <Tooltip content={tooltipContent}>
-          <Span className="uppercase">{foodType ?? "N/A"}</Span>
+          <P className="uppercase">{foodType ?? "N/A"}</P>
         </Tooltip>
       )}
     </Badge>

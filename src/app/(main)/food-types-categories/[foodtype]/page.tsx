@@ -2,7 +2,7 @@ import {redirect} from "next/navigation";
 
 import {foodsBasedOnFoodType} from "@/persistence/food/dao";
 import type {FoodTypeCategory} from "@/persistence/food/types";
-import {PageWrapper} from "@/shared/components/page-wrapper";
+import {PageWrapper} from "@/_components/page-wrapper";
 import {H1} from "@/shared/components/typography";
 
 export default async function FoodTypeSlugPage({
