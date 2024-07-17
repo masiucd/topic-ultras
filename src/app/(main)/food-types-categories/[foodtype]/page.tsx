@@ -1,9 +1,9 @@
 import {redirect} from "next/navigation";
 
+import {PageWrapper} from "@/_components/page-wrapper";
+import {H1} from "@/_components/ui/typography";
 import {foodsBasedOnFoodType} from "@/persistence/food/dao";
 import type {FoodTypeCategory} from "@/persistence/food/types";
-import {PageWrapper} from "@/_components/page-wrapper";
-import {H1} from "@/shared/components/typography";
 
 export default async function FoodTypeSlugPage({
   params: {foodtype},
@@ -34,8 +34,8 @@ export default async function FoodTypeSlugPage({
 function fromSlugToFoodTypeCategory(foodtype: string): FoodTypeCategory {
   switch (foodtype.toLowerCase()) {
     case "fruit":
-      return "Fruit" as FoodTypeCategory;
+      return "FRUIT";
     default:
-      return "Other";
+      return "OTHER";
   }
 }

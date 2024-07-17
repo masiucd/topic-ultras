@@ -1,3 +1,5 @@
+import {Suspense} from "react";
+
 import {PageWrapper} from "@/_components/page-wrapper";
 import {H1, P} from "@/_components/ui/typography";
 
@@ -14,7 +16,9 @@ export default async function HomePage() {
             information.
           </P>
         </div>
-        <SearchFoodRecords />
+        <Suspense fallback={<div>Loading...</div>}>
+          <SearchFoodRecords />
+        </Suspense>
       </div>
     </PageWrapper>
   );

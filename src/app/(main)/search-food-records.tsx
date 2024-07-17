@@ -12,31 +12,36 @@ import {FoodItem} from "./food-item";
 
 export function SearchFoodRecords() {
   let [foodResult, action] = useFormState(getFoodResults, null);
+
   return (
     <div>
       <FoodForm action={action} />
-      {foodResult !== null && (
-        <>
-          {foodResult.result.length > 0 ? (
-            <ul className="mt-3 grid grid-cols-1 gap-1 p-3 sm:grid-cols-2 md:grid-cols-3">
-              {foodResult.result.map((food) => (
-                <FoodItem key={food.foodId} food={food} className="w-56" />
-              ))}
-            </ul>
-          ) : (
-            <div className="my-3 max-w-[500px]">
-              {/* TODO callout component */}
-              <div>
-                <P className="text-pretty">
-                  Food <Span weight="bold">{foodResult.searchTerm}</Span> not
-                  found
-                </P>
-                <P className="text-pretty">Try searching for something else</P>
+      <section className="mx-auto max-w-[950px] border">
+        {foodResult !== null && (
+          <>
+            {foodResult.result.length > 0 ? (
+              <ul className="mt-3 flex flex-wrap justify-center gap-8 bg-blue-100">
+                {foodResult.result.map((food) => (
+                  <FoodItem key={food.foodId} food={food} className="w-56" />
+                ))}
+              </ul>
+            ) : (
+              <div className="my-3 max-w-[500px]">
+                {/* TODO callout component */}
+                <div>
+                  <P className="text-pretty">
+                    Food <Span>{foodResult.searchTerm}</Span> not found
+                  </P>
+                  <P className="text-pretty">
+                    Try searching for something else
+                  </P>
+                </div>
+                {/* TODO callout component */}
               </div>
-            </div>
-          )}
-        </>
-      )}
+            )}
+          </>
+        )}
+      </section>
     </div>
   );
 }

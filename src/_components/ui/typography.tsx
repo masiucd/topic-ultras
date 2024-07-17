@@ -86,7 +86,7 @@ export function InlineCode(props: PropsWithChildren<{className?: string}>) {
   return (
     <code
       className={cn(
-        "bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold",
+        "relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold",
         props.className,
       )}
     >
@@ -97,9 +97,8 @@ export function InlineCode(props: PropsWithChildren<{className?: string}>) {
 
 export function Lead(props: PropsWithChildren<{className?: string}>) {
   return (
-    <p className={cn("text-muted-foreground text-xl", props.className)}>
-      A modal dialog that interrupts the user with important content and expects
-      a response.
+    <p className={cn("text-xl text-muted-foreground", props.className)}>
+      {props.children}
     </p>
   );
 }
@@ -122,7 +121,7 @@ export function Small(props: PropsWithChildren<{className?: string}>) {
 
 export function Muted(props: PropsWithChildren<{className?: string}>) {
   return (
-    <p className={cn("text-muted-foreground text-sm", props.className)}>
+    <p className={cn("text-sm text-muted-foreground", props.className)}>
       {props.children}
     </p>
   );

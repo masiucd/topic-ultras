@@ -1,6 +1,7 @@
 "use server";
 import "server-only";
 
+import {sleep} from "@/lib/utils";
 import {getFoodsDetailsByName} from "@/persistence/food/dao";
 
 export async function getFoodResults(
@@ -18,6 +19,7 @@ export async function getFoodResults(
   //   throw new Error("Expected unit to be a string.");
   // }
 
+  await sleep(2000);
   return await getFoodData(food);
 }
 
