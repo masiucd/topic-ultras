@@ -21,10 +21,22 @@ let badgeVariants = cva(
         medium: "px-2.5 py-0.5 text-xs",
         large: "px-4 py-2 text-xs",
       },
+      // color: {
+      //   red: "bg-red-300 text-red-900",
+      //   green: "bg-green-300 text-green-900",
+      //   blue: "bg-blue-300 text-blue-900",
+      //   yellow: "bg-yellow-300 text-yellow-900",
+      //   purple: "bg-purple-300 text-purple-900",
+      //   orange: "bg-orange-300 text-orange-900",
+      //   pink: "bg-pink-300 text-pink-900",
+      //   cyan: "bg-cyan-300 text-cyan-900",
+      //   gray: "bg-gray-300 text-gray-900",
+      // },
     },
     defaultVariants: {
       variant: "default",
       size: "medium",
+      // color: "gray",
     },
   },
 );
