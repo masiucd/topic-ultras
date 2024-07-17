@@ -29,7 +29,7 @@ export function FoodItem({
       >
         <FoodTypeBadge
           className="absolute right-2 top-2 hover:opacity-70"
-          foodType={foodType ?? "Other"}
+          foodType={foodType ?? "OTHER"}
           disableTooltip
           highContrast
         />

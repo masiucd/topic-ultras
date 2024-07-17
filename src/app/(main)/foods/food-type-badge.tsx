@@ -1,6 +1,4 @@
-import {Badge} from "@/_components/ui/badge";
-import {Tooltip} from "@/_components/ui/tooltip";
-import {P} from "@/_components/ui/typography";
+import {Badge, type BadgeVariant} from "@/_components/ui/badge";
 import type {FoodTypeCategory} from "@/persistence/food/types";
 
 type Color =
@@ -46,49 +44,14 @@ function getBadgeColor(foodType?: FoodTypeCategory): Color {
 type Props = {
   foodType: FoodTypeCategory;
   className?: string;
-  size?: "1" | "2" | "3";
-  tooltipContent?: string; // Add tooltipContent property
-  highContrast?: boolean;
+  variant?: BadgeVariant;
 };
 
-// Base type without `disableTooltip` or with `disableTooltip` set to false
-type WithTooltip = {
-  disableTooltip?: false;
-  tooltipContent: string;
-};
-
-// Type for when `disableTooltip` is true, excluding `tooltipContent`
-type WithoutTooltip = {
-  disableTooltip: true;
-};
-
-// Conditional type that combines both cases
-type TooltipConditional = WithTooltip | WithoutTooltip;
-
-export function FoodTypeBadge({
-  foodType,
-  className,
-  size,
-  disableTooltip = false,
-  tooltipContent,
-  highContrast,
-}: Props & TooltipConditional) {
+export function FoodTypeBadge({foodType, className, variant}: Props) {
   let color = getBadgeColor(foodType);
   return (
-    <Badge
-      // highContrast={highContrast}
-      // variant="soft"
-      color={color}
-      className={className}
-      // size={size}
-    >
-      {disableTooltip ? (
-        <P className="uppercase">{foodType ?? "N/A"}</P>
-      ) : (
-        // <Tooltip content={tooltipContent}>
-        <P className="uppercase">{foodType ?? "N/A"}</P>
-        // </Tooltip>
-      )}
+    <Badge color={color} className={className} variant={variant}>
+      {foodType}
     </Badge>
   );
 }
