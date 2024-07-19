@@ -2,7 +2,7 @@
 import {usePathname} from "next/navigation";
 
 import {Icons} from "@/_components/ui/icons";
-import {Label} from "@/_components/ui/label";
+import {Span} from "@/_components/ui/typography";
 import {setTheme} from "@/actions/theme";
 import {cn} from "@/lib/utils";
 
@@ -30,7 +30,7 @@ export function ToggleTheme({
         ) : (
           <Icons.Dark size={18} />
         )}
-        {labelText && <Label>{labelText}</Label>}
+        {labelText && <Span>{labelText}</Span>}
       </button>
     </form>
   );
