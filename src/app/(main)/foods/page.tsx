@@ -1,7 +1,10 @@
+import {DropdownMenuContent} from "@radix-ui/react-dropdown-menu";
 import Link from "next/link";
 import {redirect} from "next/navigation";
 
 import {PageWrapper} from "@/_components/page-wrapper";
+import {Badge} from "@/_components/ui/badge";
+import {Button} from "@/_components/ui/button";
 import {Icons} from "@/_components/ui/icons";
 import {Input} from "@/_components/ui/input";
 import {
@@ -14,7 +17,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/_components/ui/table";
+import {Tooltip} from "@/_components/ui/tooltip";
 import {H1, P, Span} from "@/_components/ui/typography";
+import {
+  DropdownMenu,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  // DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {ICON_SIZE} from "@/lib/constants";
 import {slugify} from "@/lib/strings";
 import {getFoodData} from "@/persistence/food/dao";
@@ -67,40 +80,35 @@ function FoodTable({foods}: {foods: FoodResult[]}) {
       <TableHeader>
         <TableRow>
           <TableHead>
-            <div className="flex gap-1">
+            <Tooltip content="Food">
               <Icons.Apple size={ICON_SIZE} />
-              <Span>Food</Span>
-            </div>
+            </Tooltip>
           </TableHead>
+
           <TableHead>
-            <div className="flex gap-1">
-              <Icons.Notebook size={ICON_SIZE} />
-              <Span>Description</Span>
-            </div>
-          </TableHead>
-          <TableHead>
-            <div className="flex gap-1">
+            <Tooltip content="Calories">
               <Icons.Calorie size={ICON_SIZE} />
-              <Span>Calories</Span>
-            </div>
+            </Tooltip>
           </TableHead>
           <TableHead>
-            <div className="flex gap-1">
+            <Tooltip content="Carbohydrates">
               <Icons.Carbs size={ICON_SIZE} />
-              <Span>Carbs</Span>
-            </div>
+            </Tooltip>
           </TableHead>
           <TableHead>
-            <div className="flex gap-1">
+            <Tooltip content="Fat">
               <Icons.Fat size={ICON_SIZE} />
-              <Span>Fat</Span>
-            </div>
+            </Tooltip>
           </TableHead>
           <TableHead>
-            <div className="flex gap-1">
+            <Tooltip content="Protein">
               <Icons.Protein size={ICON_SIZE} />
-              <Span>Protein</Span>
-            </div>
+            </Tooltip>
+          </TableHead>
+          <TableHead>
+            <Tooltip content="Description">
+              <Icons.Notebook size={ICON_SIZE} />
+            </Tooltip>
           </TableHead>
           <TableHead>Type</TableHead>
           <TableHead>Actions</TableHead>
@@ -110,14 +118,16 @@ function FoodTable({foods}: {foods: FoodResult[]}) {
         {foods.map((f) => (
           <TableRow key={f.foodId}>
             <TableCell>{f.foodName}</TableCell>
-            <TableCell>{f.description}</TableCell>
             <TableCell>{f.calories}</TableCell>
             <TableCell>{f.carbs}</TableCell>
             <TableCell>{f.totalFat}</TableCell>
             <TableCell>{f.protein}</TableCell>
-            <TableCell>{f.foodType}</TableCell>
+            <TableCell>{f.description}</TableCell>
             <TableCell>
-              <Link href={`/foods/${slugify(f.foodId.toString())}`}>View</Link>
+              <Badge>{f.foodType}</Badge>
+            </TableCell>
+            <TableCell>
+              <Actions foodItem={f} />
             </TableCell>
           </TableRow>
         ))}
@@ -130,77 +140,47 @@ function FoodTable({foods}: {foods: FoodResult[]}) {
       </TableBody>
     </Table>
   );
-  // <Table.Root variant="surface">
-  //   <Table.Header>
-  //     <Table.Row>
-  //       <Table.ColumnHeaderCell>Food</Table.ColumnHeaderCell>
-  //       <Table.ColumnHeaderCell>Description</Table.ColumnHeaderCell>
-  //       <Table.ColumnHeaderCell>Calories</Table.ColumnHeaderCell>
-  //       <Table.ColumnHeaderCell>Carbohydrates</Table.ColumnHeaderCell>
-  //       <Table.ColumnHeaderCell>Fat</Table.ColumnHeaderCell>
-  //       <Table.ColumnHeaderCell>Protein</Table.ColumnHeaderCell>
-  //       <Table.ColumnHeaderCell>Type</Table.ColumnHeaderCell>
-  //       <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
-  //     </Table.Row>
-  //   </Table.Header>
-  //   <Table.Body>
-  //     {foods.map((f) => (
-  //       <Table.Row key={f.foodId}>
-  //         <Table.Cell>{f.foodName}</Table.Cell>
-  //         <Table.Cell maxWidth="300px">
-  //           <Tooltip content={f.description}>
-  //             <Label className="block" as="label" truncate wrap="pretty">
-  //               {f.description}
-  //             </Label>
-  //           </Tooltip>
-  //         </Table.Cell>
-  //         <Table.Cell>
-  //           <Flex align="center" gap="1">
-  //             <Icons.Calorie size={16} />
-  //             <Label as="span">{f.calories}</Label>
-  //           </Flex>
-  //         </Table.Cell>
-  //         <Table.Cell>
-  //           <Flex align="center" gap="1">
-  //             <Icons.Carbs size={16} />
-  //             <Label as="span">{f.carbs}</Label>
-  //           </Flex>
-  //         </Table.Cell>
-  //         <Table.Cell>
-  //           <Flex align="center" gap="1">
-  //             <Icons.Fat size={16} />
-  //             <Label as="span">{f.totalFat}</Label>
-  //           </Flex>
-  //         </Table.Cell>
-  //         <Table.Cell>
-  //           <Flex align="center" gap="1">
-  //             <Icons.Protein size={16} />
-  //             <Label as="span">{f.protein}</Label>
-  //           </Flex>
-  //         </Table.Cell>
+}
 
-  //         <Table.Cell>
-  //           <Flex align="center" gap="1">
-  //             <Link
-  //               href={`/food-types-categories/${slugify(f.foodType ?? "Other")}  `}
-  //             >
-  //               <FoodTypeBadge
-  //                 disableTooltip
-  //                 foodType={f?.foodType ?? "Other"}
-  //               />
-  //             </Link>
-  //           </Flex>
-  //         </Table.Cell>
-
-  //         <Table.Cell>
-  //           <Flex align="center" gap="1">
-  //             <Link href={`/foods/${slugify(f.foodId.toString())}`}>
-  //               View
-  //             </Link>
-  //           </Flex>
-  //         </Table.Cell>
-  //       </Table.Row>
-  //     ))}
-  //   </Table.Body>
-  // </Table.Root>
+function Actions({foodItem}: {foodItem: FoodResult}) {
+  let {foodId, foodName} = foodItem;
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <Button variant="ghost">
+          <Icons.DotsVertical size={ICON_SIZE} />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="bg-primary text-primary-foreground">
+        <DropdownMenuLabel>
+          Food: <Span className="font-bold">{foodName}</Span>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem>
+            <Icons.View size={ICON_SIZE} className="mr-2 size-4" />
+            <Link href={`/foods/${slugify(foodId.toString())}`}>
+              <span>View</span>
+            </Link>
+            {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Icons.Edit size={ICON_SIZE} className="mr-2 size-4" />
+            <span>Edit</span>
+            {/* <DropdownMenuShortcut>⌘B</DropdownMenuShortcut> */}
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            {/* <Settings className="mr-2 h-4 w-4" /> */}
+            <span>Settings</span>
+            {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            {/* <Keyboard className="mr-2 h-4 w-4" /> */}
+            <span>Keyboard shortcuts</span>
+            {/* <DropdownMenuShortcut>⌘K</DropdownMenuShortcut> */}
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 }
