@@ -8,7 +8,7 @@ import {SearchFoodRecords} from "./search-food-records";
 export default async function HomePage() {
   return (
     <PageWrapper>
-      <div className="border-2 border-red-400">
+      <div>
         <div className="mb-3 flex flex-col gap-2 border-4">
           <H1>Search for a food item</H1>
           <P>

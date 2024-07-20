@@ -1,5 +1,6 @@
 import {
   Apple,
+  Badge,
   Beef as Protein,
   Calculator,
   CheckIcon as Check,
@@ -28,6 +29,7 @@ import {
 export let Icons = Object.freeze({
   About,
   Apple,
+  Badge,
   Calculator,
   Calorie,
   Carbs,

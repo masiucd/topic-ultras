@@ -124,20 +124,28 @@ function FoodTable({foods}: {foods: FoodResult[]}) {
             <TableCell>{f.protein}</TableCell>
             <TableCell>{f.description}</TableCell>
             <TableCell>
-              <Badge>{f.foodType}</Badge>
+              <Badge>
+                {f.foodType ? (
+                  <Link href={`/food-categories/${slugify(f.foodType)}`}>
+                    {f.foodType}
+                  </Link>
+                ) : (
+                  f.foodType
+                )}
+              </Badge>
             </TableCell>
             <TableCell>
               <Actions foodItem={f} />
             </TableCell>
           </TableRow>
         ))}
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">{foods.length}</TableCell>
-          </TableRow>
-        </TableFooter>
       </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell colSpan={8}>Total {foods.length}</TableCell>
+          {/* <TableCell className="text-right">{foods.length}</TableCell> */}
+        </TableRow>
+      </TableFooter>
     </Table>
   );
 }

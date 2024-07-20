@@ -21,12 +21,16 @@ export function Link<RouteType>(props: LinkProps<RouteType>) {
 }
 export function ActiveLink<RouteType>(props: LinkProps<RouteType>) {
   let pathname = usePathname();
+  console.log("🚀 ~ pathname:", pathname, props.href);
   let isActive = pathname === props.href;
+  console.log("🚀 ~ isActive:", isActive);
   return (
     <NextLink
       className={cn(
         "",
-        isActive ? "text-blue-500" : "text-gray-500",
+        isActive
+          ? "text-main-500/80 underline decoration-2 underline-offset-2"
+          : null,
         props.className,
       )}
       href={props.href}
