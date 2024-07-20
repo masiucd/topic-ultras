@@ -1,6 +1,8 @@
 "use server";
 import "server-only";
 
+import {revalidatePath} from "next/cache";
+
 import {sleep} from "@/lib/utils";
 import {getFoodsDetailsByName} from "@/persistence/food/dao";
 
@@ -20,6 +22,7 @@ export async function getFoodResults(
   // }
 
   await sleep(2000);
+  revalidatePath("/");
   return await getFoodData(food);
 }
 

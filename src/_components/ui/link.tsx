@@ -9,7 +9,7 @@ export function Link<RouteType>(props: LinkProps<RouteType>) {
   return (
     <NextLink
       className={cn(
-        "decoration-gray-700/40 underline-offset-2 hover:underline",
+        "decoration-gray-700/40 underline-offset-2 hover:underline hover:decoration-purple-900/60 dark:hover:decoration-purple-50/60",
 
         props.className,
       )}
@@ -21,15 +21,14 @@ export function Link<RouteType>(props: LinkProps<RouteType>) {
 }
 export function ActiveLink<RouteType>(props: LinkProps<RouteType>) {
   let pathname = usePathname();
-  console.log("🚀 ~ pathname:", pathname, props.href);
   let isActive = pathname === props.href;
-  console.log("🚀 ~ isActive:", isActive);
+
   return (
     <NextLink
       className={cn(
         "",
         isActive
-          ? "text-main-500/80 underline decoration-2 underline-offset-2"
+          ? "text-main-500/80 underline decoration-2 underline-offset-2 hover:decoration-purple-900 dark:hover:decoration-purple-50"
           : null,
         props.className,
       )}

@@ -28,8 +28,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={storedTheme?.value === "light" ? "dark" : ""}>
       <body
-        // className={cn("relative", inter.className)}
-
         className={cn(
           "bg-background min-h-screen font-sans antialiased",
           fontSans.variable,

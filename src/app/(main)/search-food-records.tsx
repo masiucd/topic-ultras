@@ -1,6 +1,6 @@
 "use client";
 
-import type {PropsWithChildren} from "react";
+import {type PropsWithChildren, useOptimistic, useTransition} from "react";
 import {useFormState, useFormStatus} from "react-dom";
 
 import {Button} from "@/_components/ui/button";
@@ -12,10 +12,18 @@ import {FoodItem} from "./food-item";
 
 export function SearchFoodRecords() {
   let [foodResult, action] = useFormState(getFoodResults, null);
-
+  let [isPending, startTransition] = useTransition();
+  console.log("🚀 ~ SearchFoodRecords ~ isPending:", isPending);
   return (
     <div>
-      <FoodForm action={action} />
+      <FoodForm
+        action={(data) => {
+          startTransition(() => {
+            action(data);
+          });
+        }}
+      />
+      {isPending && <div>Loading...</div>}
       <section className="mx-auto max-w-[950px] border">
         {foodResult !== null && (
           <>
