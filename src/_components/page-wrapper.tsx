@@ -13,7 +13,7 @@ export function PageWrapper({
   className?: string;
 }>) {
   return (
-    <div
+    <section
       className={cn(
         "flex w-full flex-1 flex-col pl-0 sm:pl-4",
         className,
@@ -21,6 +21,6 @@ export function PageWrapper({
       )}
     >
       {children}
-    </div>
+    </section>
   );
 }

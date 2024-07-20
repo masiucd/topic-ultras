@@ -1,10 +1,4 @@
 import {
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@radix-ui/react-tooltip";
-
-import {
   Card,
   CardContent,
   CardDescription,
@@ -15,7 +9,7 @@ import {
 import {Icons} from "@/_components/ui/icons";
 import {Link} from "@/_components/ui/link";
 import {Separator} from "@/_components/ui/separator";
-import {Tooltip} from "@/_components/ui/tooltip";
+import {Muted} from "@/_components/ui/typography";
 import {ICON_SIZE} from "@/lib/constants";
 import {cn} from "@/lib/utils";
 import type {FoodResult} from "@/persistence/food/types";
@@ -41,12 +35,14 @@ export function FoodItem({
   } = food;
 
   return (
-    <Card as="li" className={cn("relative w-full max-w-[12rem]", className)}>
-      <CardHeader className="h-full max-h-[150px] bg-red-100">
-        <FoodTypeBadge
-          className="absolute right-2 top-2 hover:opacity-70"
-          foodType={foodType ?? "OTHER"}
-        />
+    <Card as="li" className={cn("relative w-full flex flex-col  ", className)}>
+      <CardHeader className="h-full max-h-[150px]">
+        <Link href={`/food-categories/${foodType}`}>
+          <FoodTypeBadge
+            className="absolute right-2 top-2 hover:opacity-70"
+            foodType={foodType ?? "OTHER"}
+          />
+        </Link>
 
         <CardTitle className="capitalize">
           <Link href={`/foods/${foodId}`}>{foodName}</Link>
@@ -63,7 +59,9 @@ export function FoodItem({
         />
       </CardContent>
       <CardFooter>
-        <Link href={`/foods/${foodId}`}>View Details</Link>
+        <Link className="text-sm" href={`/foods/${foodId}`}>
+          View Details
+        </Link>
       </CardFooter>
     </Card>
   );
@@ -81,106 +79,38 @@ export function FoodItemDataList({
   protein: number;
 }) {
   return (
-    // <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:gap-8">
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-3">
       <div className="flex justify-between gap-1">
-        <span className="flex items-center gap-1 text-base text-muted-foreground">
+        <Muted className="flex items-center gap-1">
           <Icons.Calorie size={ICON_SIZE} />
           Calories
-          {/* <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <Icons.Calorie size={ICON_SIZE} />
-              </TooltipTrigger>
-              <TooltipContent className="max-w-44">
-                <p className="text-pretty">
-                  Calories are a measure of the amount of energy in food.
-                  Knowing how many calories are in our food can help us to
-                  balance the energy we put into our bodies with the energy we
-                  use.
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider> */}
-        </span>
-        <span className="text-base font-bold">{calories}</span>
+        </Muted>
+        <span className="text-sm font-bold">{calories} / 100g</span>
       </div>
-      <div className="flex flex-col gap-1">
-        <span className="text-base text-muted-foreground">New Customers</span>
-        <span className="text-base font-bold">1,234</span>
+
+      <div className="flex justify-between gap-1">
+        <Muted className="flex items-center gap-1">
+          <Icons.Carbs size={ICON_SIZE} />
+          Carbohydrates
+        </Muted>
+        <span className="text-sm font-bold">{carbs} / 100g</span>
       </div>
-      <div className="flex flex-col gap-1">
-        <span className="text-base text-muted-foreground">Conversion Rate</span>
-        <span className="text-base font-bold">8.2%</span>
+
+      <div className="flex justify-between gap-1">
+        <Muted className="flex items-center gap-1">
+          <Icons.Fat size={ICON_SIZE} />
+          Total Fat
+        </Muted>
+        <span className="text-sm font-bold">{totalFat} / 100g</span>
       </div>
-      <div className="flex flex-col gap-1">
-        <span className="text-base text-muted-foreground">
-          Average Order Value
-        </span>
-        <span className="text-base font-bold">$99.99</span>
-      </div>
-      <div className="flex flex-col gap-1">
-        <span className="text-base text-muted-foreground">
-          Repeat Customers
-        </span>
-        <span className="text-base font-bold">45%</span>
-      </div>
-      <div className="flex flex-col gap-1">
-        <span className="text-base text-muted-foreground">
-          Customer Satisfaction
-        </span>
-        <span className="text-base font-bold">4.8/5</span>
+
+      <div className="flex justify-between gap-1">
+        <Muted className="flex items-center gap-1">
+          <Icons.Protein size={ICON_SIZE} />
+          Protein
+        </Muted>
+        <span className="text-sm font-bold">{protein} / 100g</span>
       </div>
     </div>
-    // <DataList.Root>
-    //   <DataList.Item>
-    //     <DataList.Label minWidth="88px">
-    // <Tooltip content="Calories">
-    //   <Icons.Calorie size={ICON_SIZE} />
-    // </Tooltip>
-    //     </DataList.Label>
-    //     <DataList.Value>
-    //       <P size="2" weight="medium">
-    //         {calories}
-    //       </P>
-    //     </DataList.Value>
-    //   </DataList.Item>
-    //   <DataList.Item>
-    //     <DataList.Label minWidth="88px">
-    //       <Tooltip content="Carbohydrates">
-    //         <Icons.Carbs size={ICON_SIZE} />
-    //       </Tooltip>
-    //     </DataList.Label>
-    //     <DataList.Value>
-    //       <P size="2" weight="medium">
-    //         {carbs}
-    //       </P>
-    //     </DataList.Value>
-    //   </DataList.Item>
-    //   <DataList.Item>
-    //     <DataList.Label minWidth="88px">
-    //       <Tooltip content="Total Fat">
-    //         <Icons.Fat size={ICON_SIZE} />
-    //       </Tooltip>
-    //     </DataList.Label>
-    //     <DataList.Value>
-    //       <P size="2" weight="medium">
-    //         {totalFat}
-    //       </P>
-    //     </DataList.Value>
-    //   </DataList.Item>
-    //   <DataList.Item>
-    //     <DataList.Label minWidth="88px">
-    //       <Tooltip content="Protein">
-    //         <Icons.Protein size={ICON_SIZE} />
-    //       </Tooltip>
-    //     </DataList.Label>
-    //     <DataList.Value>
-    //       <P size="2" weight="medium">
-    //         {protein}
-    //       </P>
-    //     </DataList.Value>
-    //   </DataList.Item>
-    // </DataList.Root>
   );
 }
