@@ -1,10 +1,11 @@
 "use client";
 
-import {type PropsWithChildren, useOptimistic, useTransition} from "react";
+import {type PropsWithChildren, useTransition} from "react";
 import {useFormState, useFormStatus} from "react-dom";
 
 import {Button} from "@/_components/ui/button";
 import {Input} from "@/_components/ui/input";
+import {Skeleton} from "@/_components/ui/skeleton";
 import {P, Span} from "@/_components/ui/typography";
 import {getFoodResults} from "@/actions/search-food-records";
 
@@ -13,7 +14,7 @@ import {FoodItem} from "./food-item";
 export function SearchFoodRecords() {
   let [foodResult, action] = useFormState(getFoodResults, null);
   let [isPending, startTransition] = useTransition();
-  console.log("🚀 ~ SearchFoodRecords ~ isPending:", isPending);
+
   return (
     <div>
       <FoodForm
@@ -23,31 +24,47 @@ export function SearchFoodRecords() {
           });
         }}
       />
-      {isPending && <div>Loading...</div>}
-      <section className="mx-auto max-w-[950px] border">
-        {foodResult !== null && (
-          <>
-            {foodResult.result.length > 0 ? (
-              <ul className="mt-3 flex flex-wrap justify-center gap-8 bg-blue-100">
-                {foodResult.result.map((food) => (
-                  <FoodItem key={food.foodId} food={food} className="w-56" />
-                ))}
-              </ul>
-            ) : (
-              <div className="my-3 max-w-[500px]">
-                {/* TODO callout component */}
-                <div>
-                  <P className="text-pretty">
-                    Food <Span>{foodResult.searchTerm}</Span> not found
-                  </P>
-                  <P className="text-pretty">
-                    Try searching for something else
-                  </P>
+
+      <section className="p-2 py-5 md:max-w-7xl">
+        {isPending && foodResult === null ? (
+          <div className="grid grid-cols-3 place-items-center gap-10 border-2">
+            <Skeleton className="size-60" />
+            <Skeleton className="size-60" />
+            <Skeleton className="size-60" />
+            <Skeleton className="size-60" />
+            <Skeleton className="size-60" />
+            <Skeleton className="size-60" />
+            <Skeleton className="size-60" />
+            <Skeleton className="size-60" />
+            <Skeleton className="size-60" />
+          </div>
+        ) : (
+          foodResult !== null && (
+            <>
+              {foodResult.result.length > 0 ? (
+                // <ul className="grid grid-flow-row grid-cols-1 gap-5  sm:grid-cols-2 md:grid-cols-3">
+
+                <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 ">
+                  {foodResult.result.map((food) => (
+                    <FoodItem key={food.foodId} food={food} className="" />
+                  ))}
+                </ul>
+              ) : (
+                <div className="my-3 max-w-[500px]">
+                  {/* TODO callout component */}
+                  <div>
+                    <P className="text-pretty">
+                      Food <Span>{foodResult.searchTerm}</Span> not found
+                    </P>
+                    <P className="text-pretty">
+                      Try searching for something else
+                    </P>
+                  </div>
+                  {/* TODO callout component */}
                 </div>
-                {/* TODO callout component */}
-              </div>
-            )}
-          </>
+              )}
+            </>
+          )
         )}
       </section>
     </div>
@@ -70,7 +87,6 @@ function FoodForm({
           name="food"
           id="food"
           required
-          // size="3"
           className="w-full"
         />
 

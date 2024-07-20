@@ -5,6 +5,15 @@ import {redirect} from "next/navigation";
 import {PageWrapper} from "@/_components/page-wrapper";
 import {Badge} from "@/_components/ui/badge";
 import {Button} from "@/_components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  // DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/_components/ui/dropdown-menu";
 import {Icons} from "@/_components/ui/icons";
 import {Input} from "@/_components/ui/input";
 import {
@@ -19,15 +28,6 @@ import {
 } from "@/_components/ui/table";
 import {Tooltip} from "@/_components/ui/tooltip";
 import {H1, P, Span} from "@/_components/ui/typography";
-import {
-  DropdownMenu,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  // DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {ICON_SIZE} from "@/lib/constants";
 import {slugify} from "@/lib/strings";
 import {getFoodData} from "@/persistence/food/dao";
@@ -96,7 +96,7 @@ function FoodTable({foods}: {foods: FoodResult[]}) {
             </Tooltip>
           </TableHead>
           <TableHead>
-            <Tooltip content="Fat">
+            <Tooltip content="Total Fat">
               <Icons.Fat size={ICON_SIZE} />
             </Tooltip>
           </TableHead>
