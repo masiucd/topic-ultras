@@ -12,10 +12,39 @@ import {
   type FoodTypeCategory,
 } from "./types";
 
-export async function getFoodData(limit: number = 10, offset: number = 0) {
+export async function getFoodData(
+  limit: number = 20,
+  offset: number = 0,
+  searchTerm: string | null = null,
+) {
   let f = alias(foods, "food");
   let fn = alias(foodNutations, "foodNutation");
   let ft = alias(foodTypes, "foodType");
+
+  if (searchTerm) {
+    let foodRecordsStatement = await db
+      .selectDistinct({
+        foodId: f.foodId,
+        foodName: f.name,
+        lowerName: sql`lower(${f.name})`,
+        description: f.description,
+        calories: fn.calories,
+        carbs: fn.carbohydrates,
+        totalFat: fn.fat,
+        protein: fn.protein,
+        foodType: ft.name,
+        foodTypeId: ft.id,
+      })
+      .from(f)
+      .leftJoin(fn, eq(f.foodId, fn.foodId))
+      .leftJoin(ft, eq(f.type_id, ft.id))
+      .where(like(f.name, `%${searchTerm}%`))
+      .limit(limit)
+      .offset(offset)
+      .groupBy(f.foodId);
+    return foodResultSchema.array().safeParse(foodRecordsStatement);
+  }
+
   let foodRecordsStatement = await db
     .selectDistinct({
       foodId: f.foodId,
@@ -32,6 +61,7 @@ export async function getFoodData(limit: number = 10, offset: number = 0) {
     .from(f)
     .leftJoin(fn, eq(f.foodId, fn.foodId))
     .leftJoin(ft, eq(f.type_id, ft.id))
+
     .limit(limit)
     .offset(offset)
     .groupBy(f.foodId);

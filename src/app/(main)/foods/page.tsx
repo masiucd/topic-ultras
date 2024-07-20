@@ -33,6 +33,8 @@ import {slugify} from "@/lib/strings";
 import {getFoodData} from "@/persistence/food/dao";
 import type {FoodResult} from "@/persistence/food/types";
 
+import {SearchFoodInput} from "./_components/search-food-input";
+
 // Display table of food items with pagination and save the search state in the URL
 export default async function FoodItemsPage({
   searchParams,
@@ -41,7 +43,15 @@ export default async function FoodItemsPage({
 }) {
   console.log("🚀 ~ searchParams:", searchParams);
 
+  let search =
+    typeof searchParams.search === "string" ? searchParams.search : null;
   let foods = await getFoodData();
+
+  let currentSearchParams = new URLSearchParams();
+  if (search) {
+    currentSearchParams.set("search", search);
+  }
+  console.log("currentSearchParams", currentSearchParams);
 
   if (!foods.success) {
     redirect("/404");
@@ -57,10 +67,7 @@ export default async function FoodItemsPage({
           Welcome to the food tracker! Search for food to see its nutritional
           information.
         </P>
-
-        <div className="w-full max-w-[400px]">
-          <Input />
-        </div>
+        <SearchFoodInput search={search} />
       </div>
 
       <div className="my-5 flex max-w-[1060px] flex-col gap-5">
