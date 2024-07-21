@@ -13,9 +13,15 @@ import {
 } from "./types";
 
 export async function getFoodData(
-  limit: number = 20,
-  offset: number = 0,
-  searchTerm: string | null = null,
+  {
+    searchTerm,
+    limit,
+    offset,
+  }: {searchTerm: string | null; limit: number; offset: number} = {
+    searchTerm: "",
+    limit: 10,
+    offset: 0,
+  },
 ) {
   let f = alias(foods, "food");
   let fn = alias(foodNutations, "foodNutation");

@@ -24,9 +24,7 @@ export default function RootLayout({
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-56 flex-col border-r sm:flex">
         <nav className="flex flex-col gap-4 px-2 sm:py-5">
           <Link href="/">
-            <H3 className="uppercase text-main-950 dark:text-main-50">
-              {siteData.title}
-            </H3>
+            <H3 className="uppercase">{siteData.title}</H3>
           </Link>
           <ul className="flex flex-col gap-4">
             {siteData.navLinks.map((link) => (

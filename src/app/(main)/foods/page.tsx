@@ -1,6 +1,5 @@
 import {DropdownMenuContent} from "@radix-ui/react-dropdown-menu";
 import Link from "next/link";
-import {redirect} from "next/navigation";
 
 import {PageWrapper} from "@/_components/page-wrapper";
 import {Badge} from "@/_components/ui/badge";
@@ -11,11 +10,9 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  // DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/_components/ui/dropdown-menu";
 import {Icons} from "@/_components/ui/icons";
-import {Input} from "@/_components/ui/input";
 import {
   Table,
   TableBody,
@@ -45,19 +42,6 @@ export default async function FoodItemsPage({
 
   let search =
     typeof searchParams.search === "string" ? searchParams.search : null;
-  let foods = await getFoodData();
-
-  let currentSearchParams = new URLSearchParams();
-  if (search) {
-    currentSearchParams.set("search", search);
-  }
-  console.log("currentSearchParams", currentSearchParams);
-
-  if (!foods.success) {
-    redirect("/404");
-  }
-
-  let {data} = foods;
 
   return (
     <PageWrapper>
@@ -71,13 +55,31 @@ export default async function FoodItemsPage({
       </div>
 
       <div className="my-5 flex max-w-[1060px] flex-col gap-5">
-        <FoodTable foods={data} />
+        <FoodTable search={search} />
       </div>
     </PageWrapper>
   );
 }
 
-function FoodTable({foods}: {foods: FoodResult[]}) {
+async function FoodTable({search}: {search: string | null}) {
+  let currentSearchParams = new URLSearchParams();
+  if (search) {
+    currentSearchParams.set("search", search);
+  }
+
+  let foods = await getFoodData({
+    searchTerm: currentSearchParams.get("search"),
+    limit: 10,
+    offset: 0,
+  });
+
+  if (!foods.success) {
+    // TODO handle error
+    return null;
+  }
+
+  console.log("currentSearchParams", currentSearchParams);
+
   return (
     <Table>
       <TableCaption>
@@ -122,7 +124,7 @@ function FoodTable({foods}: {foods: FoodResult[]}) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {foods.map((f) => (
+        {foods.data.map((f) => (
           <TableRow key={f.foodId}>
             <TableCell>{f.foodName}</TableCell>
             <TableCell>{f.calories}</TableCell>
@@ -149,7 +151,7 @@ function FoodTable({foods}: {foods: FoodResult[]}) {
       </TableBody>
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={8}>Total {foods.length}</TableCell>
+          <TableCell colSpan={8}>Total {foods.data.length}</TableCell>
           {/* <TableCell className="text-right">{foods.length}</TableCell> */}
         </TableRow>
       </TableFooter>
@@ -161,7 +163,7 @@ function Actions({foodItem}: {foodItem: FoodResult}) {
   let {foodId, foodName} = foodItem;
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Button variant="ghost">
           <Icons.DotsVertical size={ICON_SIZE} />
         </Button>

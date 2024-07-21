@@ -1,5 +1,5 @@
 import {PageWrapper} from "@/_components/page-wrapper";
-import {H1, Lead, P} from "@/_components/ui/typography";
+import {H1, Lead} from "@/_components/ui/typography";
 
 import {SearchFoodRecords} from "./search-food-records";
 
