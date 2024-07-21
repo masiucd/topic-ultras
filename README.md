@@ -10,6 +10,11 @@ NutriCheck is a comprehensive application that allows users to search for differ
 - **Database Integration:** Leverage a comprehensive database of foods and their nutritional profiles.\*\*\*\*
 - **Responsive Design:** Accessible on multiple devices, including desktops, tablets, and smartphones.
 
-## Getting Started
+### Technologies Used
 
-These instructions will help you set up and run the NutriCheck application on your local machine for development and testing purposes.
+- [React](https://reactjs.org/)
+- [Node.js](https://nodejs.org/)
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [SQLlite](https://www.sqlite.org/index.html)
+- [Drizzle](https://orm.drizzle.team/)
