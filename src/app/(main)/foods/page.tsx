@@ -1,5 +1,7 @@
 import {DropdownMenuContent} from "@radix-ui/react-dropdown-menu";
+import type {Route} from "next";
 import Link from "next/link";
+import type {PropsWithChildren} from "react";
 
 import {PageWrapper} from "@/_components/page-wrapper";
 import {Badge} from "@/_components/ui/badge";
@@ -24,10 +26,10 @@ import {
   TableRow,
 } from "@/_components/ui/table";
 import {Tooltip} from "@/_components/ui/tooltip";
-import {H1, P, Span} from "@/_components/ui/typography";
+import {H1, Lead, P, Span} from "@/_components/ui/typography";
 import {ICON_SIZE} from "@/lib/constants";
 import {slugify} from "@/lib/strings";
-import {getFoodData} from "@/persistence/food/dao";
+import {getFoodData, getTotalFoodItems} from "@/persistence/food/dao";
 import type {FoodResult} from "@/persistence/food/types";
 
 import {SearchFoodInput} from "./_components/search-food-input";
@@ -38,39 +40,52 @@ export default async function FoodItemsPage({
 }: {
   searchParams: {[key: string]: string | string[] | undefined};
 }) {
-  console.log("🚀 ~ searchParams:", searchParams);
-
-  let search =
-    typeof searchParams.search === "string" ? searchParams.search : null;
-
   return (
     <PageWrapper>
-      <H1>Food items</H1>
       <div className="mt-6 flex flex-col gap-2 pl-2">
-        <P>
+        <H1>Food items</H1>
+        <Lead>
           Welcome to the food tracker! Search for food to see its nutritional
           information.
-        </P>
-        <SearchFoodInput search={search} />
+        </Lead>
       </div>
 
       <div className="my-5 flex max-w-[1060px] flex-col gap-5">
-        <FoodTable search={search} />
+        <FoodTable searchParams={searchParams} />
       </div>
     </PageWrapper>
   );
 }
 
-async function FoodTable({search}: {search: string | null}) {
+async function FoodTable({
+  searchParams,
+}: {
+  searchParams: {[key: string]: string | string[] | undefined};
+}) {
+  let search =
+    typeof searchParams.search === "string" ? searchParams.search : null;
+  let page = searchParams.page ? parseInt(searchParams.page as string) : 1;
+  console.log("🚀 ~ page:", page);
+
+  let perPage = 3;
+  let totalFoodItems = await getTotalFoodItems();
+
+  // totalPages - 1 because page is 1-indexed
+  let totalPages = Math.ceil(totalFoodItems / perPage);
+  console.log("🚀 ~ totalPages:", totalPages);
+
   let currentSearchParams = new URLSearchParams();
   if (search) {
     currentSearchParams.set("search", search);
   }
+  if (page > 1) {
+    currentSearchParams.set("page", page.toString());
+  }
 
   let foods = await getFoodData({
-    searchTerm: currentSearchParams.get("search"),
-    limit: 10,
-    offset: 0,
+    searchTerm: search,
+    limit: perPage,
+    offset: (page - 1) * perPage,
   });
 
   if (!foods.success) {
@@ -78,85 +93,132 @@ async function FoodTable({search}: {search: string | null}) {
     return null;
   }
 
-  console.log("currentSearchParams", currentSearchParams);
-
   return (
-    <Table>
-      <TableCaption>
-        <P>Foods available in the database</P>
-      </TableCaption>
+    <>
+      <SearchFoodInput search={search} />
+      <Table>
+        <TableCaption>
+          <P>Foods available in the database</P>
+        </TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>
+              <Tooltip content="Food">
+                <Icons.Apple size={ICON_SIZE} />
+              </Tooltip>
+            </TableHead>
 
-      <TableHeader>
-        <TableRow>
-          <TableHead>
-            <Tooltip content="Food">
-              <Icons.Apple size={ICON_SIZE} />
-            </Tooltip>
-          </TableHead>
-
-          <TableHead>
-            <Tooltip content="Calories">
-              <Icons.Calorie size={ICON_SIZE} />
-            </Tooltip>
-          </TableHead>
-          <TableHead>
-            <Tooltip content="Carbohydrates">
-              <Icons.Carbs size={ICON_SIZE} />
-            </Tooltip>
-          </TableHead>
-          <TableHead>
-            <Tooltip content="Total Fat">
-              <Icons.Fat size={ICON_SIZE} />
-            </Tooltip>
-          </TableHead>
-          <TableHead>
-            <Tooltip content="Protein">
-              <Icons.Protein size={ICON_SIZE} />
-            </Tooltip>
-          </TableHead>
-          <TableHead>
-            <Tooltip content="Description">
-              <Icons.Notebook size={ICON_SIZE} />
-            </Tooltip>
-          </TableHead>
-          <TableHead>Type</TableHead>
-          <TableHead>Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {foods.data.map((f) => (
-          <TableRow key={f.foodId}>
-            <TableCell>{f.foodName}</TableCell>
-            <TableCell>{f.calories}</TableCell>
-            <TableCell>{f.carbs}</TableCell>
-            <TableCell>{f.totalFat}</TableCell>
-            <TableCell>{f.protein}</TableCell>
-            <TableCell>{f.description}</TableCell>
-            <TableCell>
-              <Badge>
-                {f.foodType ? (
-                  <Link href={`/food-categories/${slugify(f.foodType)}`}>
-                    {f.foodType}
-                  </Link>
-                ) : (
-                  f.foodType
-                )}
-              </Badge>
-            </TableCell>
-            <TableCell>
-              <Actions foodItem={f} />
+            <TableHead>
+              <Tooltip content="Calories">
+                <Icons.Calorie size={ICON_SIZE} />
+              </Tooltip>
+            </TableHead>
+            <TableHead>
+              <Tooltip content="Carbohydrates">
+                <Icons.Carbs size={ICON_SIZE} />
+              </Tooltip>
+            </TableHead>
+            <TableHead>
+              <Tooltip content="Total Fat">
+                <Icons.Fat size={ICON_SIZE} />
+              </Tooltip>
+            </TableHead>
+            <TableHead>
+              <Tooltip content="Protein">
+                <Icons.Protein size={ICON_SIZE} />
+              </Tooltip>
+            </TableHead>
+            <TableHead>
+              <Tooltip content="Description">
+                <Icons.Notebook size={ICON_SIZE} />
+              </Tooltip>
+            </TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {foods.data.map((f) => (
+            <TableRow key={f.foodId}>
+              <TableCell>{f.foodName}</TableCell>
+              <TableCell>{f.calories}</TableCell>
+              <TableCell>{f.carbs}</TableCell>
+              <TableCell>{f.totalFat}</TableCell>
+              <TableCell>{f.protein}</TableCell>
+              <TableCell>{f.description}</TableCell>
+              <TableCell>
+                <Badge>
+                  {f.foodType ? (
+                    <Link href={`/food-categories/${slugify(f.foodType)}`}>
+                      {f.foodType}
+                    </Link>
+                  ) : (
+                    f.foodType
+                  )}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <Actions foodItem={f} />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={8}>
+              <div className="flex">
+                <P>Total {foods.data.length}</P>
+                <div className="ml-auto flex items-center justify-end gap-3 border">
+                  <PrevPage
+                    page={page}
+                    currentSearchParams={currentSearchParams}
+                  />
+                  <NextPage
+                    page={page}
+                    currentSearchParams={currentSearchParams}
+                    totalPages={totalPages}
+                  />
+                </div>
+              </div>
             </TableCell>
           </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell colSpan={8}>Total {foods.data.length}</TableCell>
-          {/* <TableCell className="text-right">{foods.length}</TableCell> */}
-        </TableRow>
-      </TableFooter>
-    </Table>
+        </TableFooter>
+      </Table>
+    </>
   );
+}
+
+type LinkProps = {
+  page: number;
+  currentSearchParams: URLSearchParams;
+};
+
+function PrevPage({page, currentSearchParams}: LinkProps) {
+  console.log("🚀 ~ PrevPage ~ page:", page);
+  if (page <= 1) {
+    return <DisabledButton>Prev</DisabledButton>;
+  }
+  let urlSearchParams = new URLSearchParams(currentSearchParams);
+  console.log("🚀 ~ urlSearchParams Prevpage:", urlSearchParams.toString());
+  return <Link href={`/foods?page=${page - 1}`}>Prev</Link>;
+}
+
+function NextPage({
+  page,
+  currentSearchParams,
+  totalPages,
+}: LinkProps & {
+  totalPages: number;
+}) {
+  if (page >= totalPages) {
+    return <DisabledButton>Next</DisabledButton>;
+  }
+  let urlSearchParams = new URLSearchParams(currentSearchParams);
+  urlSearchParams.set("page", (page + 1).toString());
+  let href = `/foods?=${urlSearchParams}` as Route<string>;
+  console.log({href});
+  return <Link href={href}>Next</Link>;
+  // return <Link href={`/foods?page=${page + 1}`}>Next</Link>;
 }
 
 function Actions({foodItem}: {foodItem: FoodResult}) {
@@ -199,5 +261,16 @@ function Actions({foodItem}: {foodItem: FoodResult}) {
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function DisabledButton({children}: PropsWithChildren) {
+  return (
+    <button
+      disabled
+      className="disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      {children}
+    </button>
   );
 }

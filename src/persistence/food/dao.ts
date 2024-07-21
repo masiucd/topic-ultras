@@ -1,6 +1,6 @@
 import "server-only";
 
-import {eq, like, sql} from "drizzle-orm";
+import {count, eq, like, sql} from "drizzle-orm";
 import {alias} from "drizzle-orm/sqlite-core";
 
 import {db} from "@/_db/db";
@@ -11,6 +11,11 @@ import {
   foodsByCategorySchema,
   type FoodTypeCategory,
 } from "./types";
+
+export async function getTotalFoodItems() {
+  let f = alias(foods, "food");
+  return (await db.select({count: count()}).from(f).get()?.count) ?? 0;
+}
 
 export async function getFoodData(
   {
