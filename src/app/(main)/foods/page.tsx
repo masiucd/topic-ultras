@@ -65,14 +65,10 @@ async function FoodTable({
   let search =
     typeof searchParams.search === "string" ? searchParams.search : null;
   let page = searchParams.page ? parseInt(searchParams.page as string) : 1;
-  console.log("🚀 ~ page:", page);
 
-  let perPage = 3;
+  let itemsPerPage = 6;
   let totalFoodItems = await getTotalFoodItems();
-
-  // totalPages - 1 because page is 1-indexed
-  let totalPages = Math.ceil(totalFoodItems / perPage);
-  console.log("🚀 ~ totalPages:", totalPages);
+  let totalPages = Math.ceil(totalFoodItems / itemsPerPage);
 
   let currentSearchParams = new URLSearchParams();
   if (search) {
@@ -81,11 +77,10 @@ async function FoodTable({
   if (page > 1) {
     currentSearchParams.set("page", page.toString());
   }
-
   let foods = await getFoodData({
     searchTerm: search,
-    limit: perPage,
-    offset: (page - 1) * perPage,
+    limit: itemsPerPage,
+    offset: (page - 1) * itemsPerPage,
   });
 
   if (!foods.success) {
@@ -194,13 +189,17 @@ type LinkProps = {
 };
 
 function PrevPage({page, currentSearchParams}: LinkProps) {
-  console.log("🚀 ~ PrevPage ~ page:", page);
   if (page <= 1) {
     return <DisabledButton>Prev</DisabledButton>;
   }
   let urlSearchParams = new URLSearchParams(currentSearchParams);
-  console.log("🚀 ~ urlSearchParams Prevpage:", urlSearchParams.toString());
-  return <Link href={`/foods?page=${page - 1}`}>Prev</Link>;
+  if (page > 2) {
+    urlSearchParams.set("page", (page - 1).toString());
+  } else {
+    urlSearchParams.delete("page");
+  }
+  let href = `/foods?${urlSearchParams.toString()}` as Route<string>;
+  return <Link href={href}>Prev</Link>;
 }
 
 function NextPage({
@@ -214,10 +213,9 @@ function NextPage({
     return <DisabledButton>Next</DisabledButton>;
   }
   let urlSearchParams = new URLSearchParams(currentSearchParams);
-  urlSearchParams.set("page", (page + 1).toString());
-  let href = `/foods?=${urlSearchParams}` as Route<string>;
-  console.log({href});
-  return <Link href={href}>Next</Link>;
+  urlSearchParams.set("page", `${page + 1}`);
+  return <Link href={`/foods?${urlSearchParams.toString()}`}>Next</Link>;
+
   // return <Link href={`/foods?page=${page + 1}`}>Next</Link>;
 }
 
