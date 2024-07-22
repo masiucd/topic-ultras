@@ -45,3 +45,10 @@ export let foodsByCategorySchema = z.object({
   foodName: z.string(),
   description: z.string(),
 });
+
+export let foodTypesSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+});
+
+export type FoodType = z.infer<typeof foodTypesSchema>;

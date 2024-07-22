@@ -10,6 +10,7 @@ import {
   foodResultSchema,
   foodsByCategorySchema,
   type FoodTypeCategory,
+  foodTypesSchema,
 } from "./types";
 
 export async function getTotalFoodItems() {
@@ -134,7 +135,6 @@ export async function getFoodRecordById(foodID: number) {
 }
 
 export async function foodsBasedOnFoodType(foodType: FoodTypeCategory) {
-  console.log("🚀 ~ foodsBasedOnFoodType ~ foodType:", foodType);
   let ft = alias(foodTypes, "foodTypeCategory");
   let f = alias(foods, "food");
   let xs = await db
@@ -147,6 +147,12 @@ export async function foodsBasedOnFoodType(foodType: FoodTypeCategory) {
     .innerJoin(f, eq(ft.id, f.type_id))
     .where(eq(ft.name, foodType))
     .all();
-  console.log("xs", xs);
+
   return foodsByCategorySchema.array().safeParse(xs);
+}
+
+export async function getFoodTypes() {
+  let ft = alias(foodTypes, "foodTypes");
+  let res = await db.selectDistinct({id: ft.id, name: ft.name}).from(ft);
+  return foodTypesSchema.array().safeParse(res);
 }
