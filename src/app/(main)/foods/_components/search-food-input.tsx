@@ -13,19 +13,15 @@ export function SearchFoodInput({search}: {search: string | null}) {
     <div className="max-w-xl">
       <Input
         placeholder="Search for food..."
+        name="query"
         onChange={(e) => {
           let query = e.target.value;
-          // router.push({query: {search: query}},{shallow: true});
           searchParams.set("search", query);
-          console.log(
-            "searchParams in SearchFoodInput",
-            searchParams.toString(),
-          );
-          // router.push(`/foods?search=${query}`);
-          router.push(`/foods?search=${query}`);
           if (!query) {
-            router.push(`/foods`);
+            searchParams.delete("search");
+            router.push("/foods");
           }
+          router.push(`/foods?${searchParams.toString()}`);
         }}
         defaultValue={search ?? ""} // or a button to clear the search
       />

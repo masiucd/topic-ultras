@@ -29,11 +29,16 @@ export default function RootLayout({
           <ul className="flex flex-col gap-4">
             {siteData.navLinks.map((link) => (
               <li key={link.href}>
-                <ActiveLink href={link.href}>
+                <ActiveLink href={link.href} className="capitalize">
                   <Muted>{link.text}</Muted>
                 </ActiveLink>
               </li>
             ))}
+            <li>
+              <ActiveLink href="/login" className="capitalize">
+                <Muted>login</Muted>
+              </ActiveLink>
+            </li>
             <Separator />
             <li className="flex gap-2">
               <ToggleTheme

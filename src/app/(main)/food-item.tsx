@@ -1,3 +1,5 @@
+import type {ReactNode} from "react";
+
 import {
   Card,
   CardContent,
@@ -19,9 +21,11 @@ import {FoodTypeBadge} from "./foods/food-type-badge";
 export function FoodItem({
   food,
   className,
+  cardFooterContent,
 }: {
   food: FoodResult;
   className?: string;
+  cardFooterContent: ReactNode;
 }) {
   let {
     foodName,
@@ -58,11 +62,7 @@ export function FoodItem({
           protein={protein}
         />
       </CardContent>
-      <CardFooter>
-        <Link className="text-sm" href={`/foods/${foodId}`}>
-          View Details
-        </Link>
-      </CardFooter>
+      <CardFooter>{cardFooterContent}</CardFooter>
     </Card>
   );
 }

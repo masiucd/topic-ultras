@@ -5,6 +5,7 @@ import {useFormState, useFormStatus} from "react-dom";
 
 import {Button} from "@/_components/ui/button";
 import {Input} from "@/_components/ui/input";
+import {Link} from "@/_components/ui/link";
 import {Skeleton} from "@/_components/ui/skeleton";
 import {P, Span} from "@/_components/ui/typography";
 import {getFoodResults} from "@/actions/search-food-records";
@@ -27,26 +28,25 @@ export function SearchFoodRecords() {
 
       <section className="p-2 py-5 md:max-w-7xl">
         {isPending && foodResult === null ? (
-          <div className="grid grid-cols-3 place-items-center gap-10 border-2">
-            <Skeleton className="size-60" />
-            <Skeleton className="size-60" />
-            <Skeleton className="size-60" />
-            <Skeleton className="size-60" />
-            <Skeleton className="size-60" />
-            <Skeleton className="size-60" />
-            <Skeleton className="size-60" />
-            <Skeleton className="size-60" />
-            <Skeleton className="size-60" />
-          </div>
+          <Loader />
         ) : (
           foodResult !== null && (
             <>
               {foodResult.result.length > 0 ? (
-                // <ul className="grid grid-flow-row grid-cols-1 gap-5  sm:grid-cols-2 md:grid-cols-3">
-
                 <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 ">
                   {foodResult.result.map((food) => (
-                    <FoodItem key={food.foodId} food={food} className="" />
+                    <FoodItem
+                      key={food.foodId}
+                      food={food}
+                      cardFooterContent={
+                        <Link
+                          className="text-sm"
+                          href={`/foods/${food.foodId}`}
+                        >
+                          View Details
+                        </Link>
+                      }
+                    />
                   ))}
                 </ul>
               ) : (
@@ -104,5 +104,21 @@ function SubmitButton({children}: PropsWithChildren) {
     <Button disabled={pending} type="submit" variant="default" color="gray">
       {children}
     </Button>
+  );
+}
+
+function Loader() {
+  return (
+    <div className="grid grid-cols-3 place-items-center gap-5">
+      <Skeleton className="size-72" />
+      <Skeleton className="size-72" />
+      <Skeleton className="size-72" />
+      <Skeleton className="size-72" />
+      <Skeleton className="size-72" />
+      <Skeleton className="size-72" />
+      <Skeleton className="size-72" />
+      <Skeleton className="size-72" />
+      <Skeleton className="size-72" />
+    </div>
   );
 }
