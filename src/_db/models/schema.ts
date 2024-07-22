@@ -57,3 +57,31 @@ let selectFoodTypeSchema = createSelectSchema(foodTypes);
 
 export type FoodType = z.infer<typeof insertFoodTypeSchema>;
 export type SelectFoodType = z.infer<typeof selectFoodTypeSchema>;
+
+export let users = sqliteTable("users", {
+  id: integer("id").primaryKey({autoIncrement: true}).notNull(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  password: text("email").notNull(),
+  admin: numeric("admin").default("0"),
+});
+export let insertUsersSchema = createInsertSchema(users);
+export let selectUsersSchema = createSelectSchema(users);
+
+export type UserType = z.infer<typeof insertUsersSchema>;
+export type SelectUserType = z.infer<typeof selectUsersSchema>;
+
+export let favoriteFoods = sqliteTable("favourite_foods", {
+  id: integer("id").primaryKey({autoIncrement: true}).notNull(),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id),
+  foodId: integer("food_id")
+    .notNull()
+    .references(() => foods.foodId),
+});
+export let insertFavoriteFoodsSchema = createInsertSchema(favoriteFoods);
+export let selectFavoriteFoodsSchema = createSelectSchema(favoriteFoods);
+
+export type FavoriteFoodsType = z.infer<typeof insertUsersSchema>;
+export type SelectFavoriteFoodsType = z.infer<typeof selectUsersSchema>;
