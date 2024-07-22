@@ -1,6 +1,5 @@
 import {DropdownMenuContent} from "@radix-ui/react-dropdown-menu";
 import type {Route} from "next";
-import Link from "next/link";
 import type {PropsWithChildren} from "react";
 
 import {PageWrapper} from "@/_components/page-wrapper";
@@ -15,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/_components/ui/dropdown-menu";
 import {Icons} from "@/_components/ui/icons";
+import {Link} from "@/_components/ui/link";
 import {
   Table,
   TableBody,
@@ -84,7 +84,7 @@ async function FoodTable({
   });
 
   if (!foods.success) {
-    // TODO handle error
+    // TODO handle error, show some error message
     return null;
   }
 
@@ -163,7 +163,7 @@ async function FoodTable({
             <TableCell colSpan={8}>
               <div className="flex">
                 <P>Total {foods.data.length}</P>
-                <div className="ml-auto flex items-center justify-end gap-3 border">
+                <div className="ml-auto flex items-center justify-end gap-3">
                   <PrevPage
                     page={page}
                     currentSearchParams={currentSearchParams}
@@ -242,8 +242,10 @@ function Actions({foodItem}: {foodItem: FoodResult}) {
             {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Icons.Edit size={ICON_SIZE} className="mr-2 size-4" />
-            <span>Edit</span>
+            <Icons.Favorite size={ICON_SIZE} className="mr-2 size-4" />
+            {/* TODO should this be a form? , only when user is logged in */}
+            <button type="button">Favorite</button>
+
             {/* <DropdownMenuShortcut>⌘B</DropdownMenuShortcut> */}
           </DropdownMenuItem>
           <DropdownMenuItem>
