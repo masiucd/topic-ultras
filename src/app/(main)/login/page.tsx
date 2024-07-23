@@ -8,6 +8,7 @@ import {Input} from "@/_components/ui/input";
 import {H1, Span} from "@/_components/ui/typography";
 import {db} from "@/_db/db";
 import {users} from "@/_db/models/schema";
+import {verifyPassword} from "@/lib/password";
 
 // Just a prototype[e , real implementation will be done later
 async function login(data: FormData) {
@@ -18,12 +19,11 @@ async function login(data: FormData) {
     throw new Error("Something is wrong");
   }
 
-  // TODO verify password
-
   let userInDb = await db
     .select({
       id: users.id,
       email: users.email,
+      password: users.password,
       admin: users.admin,
     })
     .from(users)
@@ -33,19 +33,27 @@ async function login(data: FormData) {
     console.log("User does not exist");
     return;
   }
+
+  // TODO verify password
+  let passwordVerified = await verifyPassword(password, userInDb.password);
+  if (!passwordVerified) {
+    console.log("Password is wrong");
+    return;
+  }
+
   console.log("user exists");
   let cookieStore = cookies();
   cookieStore.set(
     "user",
     JSON.stringify({
       ...userInDb,
+      admin: userInDb.admin === "1",
       token: "FakeToken", // TODO
     }),
     {
       secure: true,
     },
   );
-
   // when success
   redirect("/profile");
 }
@@ -56,7 +64,6 @@ export default function LoginPage() {
       <div className="my-5">
         <H1>Login</H1>
       </div>
-
       <div className="max-w-xl">
         <form action={login}>
           <fieldset className="flex flex-col gap-3">

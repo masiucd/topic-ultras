@@ -1,3 +1,4 @@
+import type {Metadata} from "next";
 import {redirect} from "next/navigation";
 
 import {PageWrapper} from "@/_components/page-wrapper";
@@ -7,11 +8,19 @@ import {getFoodRecordById} from "@/persistence/food/dao";
 
 import {FoodItem} from "../../food-item";
 
-export default async function FoodSlugPage({
-  params,
-}: {
+type Props = {
   params: {foodId: string};
-}) {
+};
+
+export async function generateMetadata({params}: Props): Promise<Metadata> {
+  let id = parseInt(params.foodId, 10);
+  return {
+    title: `Food ${id}`, // Time to use the slug instead of the id
+    description: `Information about food ${id}`,
+  };
+}
+
+export default async function FoodSlugPage({params}: Props) {
   let foodItem = await getFoodRecordById(parseInt(params.foodId, 10));
 
   if (!foodItem.success) {
