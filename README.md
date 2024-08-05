@@ -1,20 +1,29 @@
-# NutriCheck
+# Nutri Check
 
-NutriCheck is a comprehensive application that allows users to search for different foods and get detailed nutritional facts. This app is designed to help users make informed dietary choices by providing accurate and up-to-date nutritional information.
+## Description
+
+Nutri Check is a web application that allows users to search for food items and get detailed nutritional information about them. Users can also create an account and save their favorite food items to their profile. The application uses the USDA FoodData Central API to get the nutritional information of food items. The application is built using Flask, a Python web framework, and uses SQLite as the database to store user information and saved food items.
 
 ## Features
 
-- **Food Search:** Easily search for various foods and view their nutritional information.
-- **Detailed Nutritional Facts:** Get detailed information on calories, macronutrients, vitamins, minerals, and more.
-- **User-Friendly Interface:** Simple and intuitive interface for a seamless user experience.
-- **Database Integration:** Leverage a comprehensive database of foods and their nutritional profiles.\*\*\*\*
-- **Responsive Design:** Accessible on multiple devices, including desktops, tablets, and smartphones.
+- Search for food items and get detailed nutritional information
+- Create an account and save favorite food items
+- View saved food items in the profile
+- Delete saved food items from the profile
+- Update user information
+- Change password
+- Reset password
+- Logout
+- Responsive design
+- User authentication
+- User authorization
 
-### Technologies Used
+## Technologies Used
 
-- [React](https://reactjs.org/)
-- [Node.js](https://nodejs.org/)
-- [Next.js](https://nextjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [SQLlite](https://www.sqlite.org/index.html)
-- [Drizzle](https://orm.drizzle.team/)
+- [Next.js](https://nextjs.org/) ⏭️ - Fullstack React Framework
+- [React](https://reactjs.org/) ⚛️ - JavaScript Library for Building User Interfaces
+- [Shadcn](https://ui.shadcn.com/) 😎 - Beautifully designed components that you can copy and paste into your apps.
+- [Tailwind CSS](https://tailwindcss.com/) 💅 - CSS framework
+- [Drizzle](https://orm.drizzle.team/) 📀 - Database ORM
+- [PostgreSQL](https://www.postgresql.org/) 🐘 - Database
+- [Docker](https://www.docker.com/) 🐳 - Containerization to package applications and their dependencies

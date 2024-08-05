@@ -1,12 +1,10 @@
 {
   "compilerOptions": {
+    "verbatimModuleSyntax": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "verbatimModuleSyntax": true,
-    "noUnusedParameters": true,
     "skipLibCheck": true,
     "strict": true,
-    "noUnusedLocals": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
