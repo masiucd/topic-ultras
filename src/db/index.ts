@@ -15,3 +15,5 @@ export let db = drizzle(connection, {
   schema, // All tables will be added to the schema
   logger: env.NODE_ENV === "development" ? true : false, // Log all queries in development
 });
+
+export type DB = typeof db;

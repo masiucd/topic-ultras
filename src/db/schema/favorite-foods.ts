@@ -1,10 +1,10 @@
 import {relations} from "drizzle-orm";
 import {index, integer, pgTable, timestamp} from "drizzle-orm/pg-core";
 
-import {food} from "./food";
-import {user} from "./user";
+import {foods} from "./foods";
+import {users} from "./users";
 
-export let favoriteFood = pgTable(
+export let favoriteFoods = pgTable(
   "favorite_foods",
   {
     userId: integer("user_id").notNull(),
@@ -18,13 +18,13 @@ export let favoriteFood = pgTable(
   })
 );
 
-export let favoriteFoodRelations = relations(favoriteFood, ({one}) => ({
-  user: one(user, {
-    fields: [favoriteFood.userId],
-    references: [user.id],
+export let favoriteFoodRelations = relations(favoriteFoods, ({one}) => ({
+  user: one(users, {
+    fields: [favoriteFoods.userId],
+    references: [users.id],
   }),
-  food: one(food, {
-    fields: [favoriteFood.foodId],
-    references: [food.id],
+  food: one(foods, {
+    fields: [favoriteFoods.foodId],
+    references: [foods.id],
   }),
 }));

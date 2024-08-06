@@ -7,23 +7,24 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 
-import {food} from "./food";
+import {foods} from "./foods";
 
-export let nutrition = pgTable("nutritions", {
+// Everything is based on grams
+export let nutritions = pgTable("nutritions", {
   id: serial("id").primaryKey().notNull(),
   foodId: integer("food_id")
     .notNull()
-    .references(() => food.id),
-  calories: decimal("calories", {precision: 5, scale: 2}).notNull(),
+    .references(() => foods.id),
+  calories: decimal("calories", {precision: 5, scale: 2}).notNull(), // kcal/100g
   fat: decimal("fat", {precision: 5, scale: 2}).notNull(),
   protein: decimal("protein", {precision: 5, scale: 2}).notNull(),
   carbs: decimal("carbs", {precision: 5, scale: 2}).notNull(),
   createdAt: timestamp("created_at", {mode: "string"}).defaultNow(),
 });
 
-export let nutritionRelations = relations(nutrition, ({one}) => ({
-  food: one(food, {
-    fields: [nutrition.foodId],
-    references: [food.id],
+export let nutritionRelations = relations(nutritions, ({one}) => ({
+  food: one(foods, {
+    fields: [nutritions.foodId],
+    references: [foods.id],
   }),
 }));

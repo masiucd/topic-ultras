@@ -1,0 +1,30 @@
+[
+  {
+    "foodId": 1,
+    "calories": 52.0,
+    "fat": 0.2,
+    "protein": 0.3,
+    "carbs": 13.8
+  },
+  {
+    "foodId": 2,
+    "calories": 89.0,
+    "fat": 0.3,
+    "protein": 1.1,
+    "carbs": 22.8
+  },
+  {
+    "foodId": 3,
+    "calories": 47,
+    "fat": 0.1,
+    "protein": 0.9,
+    "carbs": 11.8
+  },
+  {
+    "foodId": 4,
+    "calories": 134,
+    "fat": 10,
+    "protein": 6.4,
+    "carbs": 4.2
+  }
+]

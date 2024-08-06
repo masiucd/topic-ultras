@@ -1,9 +1,9 @@
 import {relations} from "drizzle-orm";
 import {index, pgTable, serial, timestamp, varchar} from "drizzle-orm/pg-core";
 
-import {favoriteFood} from "./favorite-food";
+import {favoriteFoods} from "./favorite-foods";
 
-export let user = pgTable(
+export let users = pgTable(
   "users",
   {
     id: serial("id").primaryKey().notNull(),
@@ -18,6 +18,6 @@ export let user = pgTable(
   })
 );
 
-export let userRelations = relations(user, ({many}) => ({
-  favoriteFoods: many(favoriteFood),
+export let userRelations = relations(users, ({many}) => ({
+  favoriteFoods: many(favoriteFoods),
 }));

@@ -1,0 +1,18 @@
+[
+  {
+    "name": "apple",
+    "type": "FRUIT"
+  },
+  {
+    "name": "banana",
+    "type": "FRUIT"
+  },
+  {
+    "name": "orange",
+    "type": "FRUIT"
+  },
+  {
+    "name": "geek yogurt(10%)",
+    "type": "DAIRY"
+  }
+]
