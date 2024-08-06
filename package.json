@@ -13,7 +13,9 @@
     "db:studio": "bunx drizzle-kit studio"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
     "argon2": "^0.40.3",
+    "bcrypt": "^5.1.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "dotenv-expand": "^11.0.6",
