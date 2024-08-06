@@ -1,3 +1,4 @@
+import {relations} from "drizzle-orm";
 import {
   decimal,
   integer,
@@ -19,3 +20,10 @@ export let nutrition = pgTable("nutritions", {
   carbs: decimal("carbs", {precision: 5, scale: 2}).notNull(),
   createdAt: timestamp("created_at", {mode: "string"}).defaultNow(),
 });
+
+export let nutritionRelations = relations(nutrition, ({one}) => ({
+  food: one(food, {
+    fields: [nutrition.foodId],
+    references: [food.id],
+  }),
+}));
