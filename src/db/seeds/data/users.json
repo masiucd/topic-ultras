@@ -2,16 +2,19 @@
   {
     "firstName": "John",
     "lastName": "Doe",
+    "age": 25,
     "email": "john@e.com"
   },
   {
     "firstName": "Jane",
     "lastName": "Doe",
+    "age": 32,
     "email": "jane@ex.com"
   },
   {
     "firstName": "masiu",
     "lastName": "Ciszek Druzynski",
-    "email": "ciszekmarcell@gmail.com"
+    "age": 29,
+    "email": "mcd@ex.com"
   }
 ]
