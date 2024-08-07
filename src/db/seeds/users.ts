@@ -12,6 +12,7 @@ export async function seed(db: DB) {
         .values({
           firstName: u.firstName,
           lastName: u.lastName,
+          age: u.age,
           email: u.email,
           password: await bcrypt.hash("123456", 10),
         })

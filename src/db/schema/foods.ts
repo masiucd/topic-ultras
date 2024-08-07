@@ -8,7 +8,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import {nutritions} from "./nutritions";
+import {foodNutrients} from "./food-nutrients";
 
 let foodTypeEnum = pgEnum("food_type", [
   "FRUIT",
@@ -44,5 +44,5 @@ export let foods = pgTable(
 );
 
 export let foodRelations = relations(foods, ({one}) => ({
-  nutritionFact: one(nutritions),
+  nutritionFact: one(foodNutrients),
 }));
