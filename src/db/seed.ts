@@ -23,10 +23,10 @@ if (!env.DB_SEED) {
 })();
 
 (async () => {
+  await seeds.foodTypes(db);
   await seeds.foods(db);
   await seeds.users(db);
   await seeds.foodNutrients(db);
-  await seeds.foodTypes(db);
   await connection.end();
 })();
 
