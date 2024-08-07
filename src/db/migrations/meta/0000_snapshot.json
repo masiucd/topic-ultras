@@ -1,5 +1,5 @@
 {
-  "id": "7b588e45-1238-42ee-a8ef-baf372cf1709",
+  "id": "be963432-1fba-41ee-b7d3-8873c8330b89",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -138,6 +138,51 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.food_types": {
+      "name": "food_types",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "food_type_name_index": {
+          "name": "food_type_name_index",
+          "columns": [
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.foods": {
       "name": "foods",
       "schema": "",
@@ -154,13 +199,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "food_type": {
-          "name": "food_type",
-          "type": "food_type",
-          "typeSchema": "public",
+        "type_id": {
+          "name": "type_id",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'OTHER'"
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -171,8 +214,8 @@
         }
       },
       "indexes": {
-        "name_index": {
-          "name": "name_index",
+        "food_name_index": {
+          "name": "food_name_index",
           "columns": [
             {
               "expression": "name",
@@ -187,7 +230,21 @@
           "with": {}
         }
       },
-      "foreignKeys": {},
+      "foreignKeys": {
+        "foods_type_id_food_types_id_fk": {
+          "name": "foods_type_id_food_types_id_fk",
+          "tableFrom": "foods",
+          "tableTo": "food_types",
+          "columnsFrom": [
+            "type_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },

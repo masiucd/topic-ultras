@@ -15,10 +15,16 @@ CREATE TABLE IF NOT EXISTS "food_nutrients" (
 	"created_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "food_types" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" varchar(100) NOT NULL,
+	"created_at" timestamp DEFAULT now()
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "foods" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" varchar(100) NOT NULL,
-	"food_type" "food_type" DEFAULT 'OTHER' NOT NULL,
+	"type_id" integer NOT NULL,
 	"created_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
@@ -39,7 +45,14 @@ EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "foods" ADD CONSTRAINT "foods_type_id_food_types_id_fk" FOREIGN KEY ("type_id") REFERENCES "public"."food_types"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "user_index" ON "favorite_foods" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "food_index" ON "favorite_foods" USING btree ("food_id");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "name_index" ON "foods" USING btree ("name");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "food_type_name_index" ON "food_types" USING btree ("name");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "food_name_index" ON "foods" USING btree ("name");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "email_index" ON "users" USING btree ("email");

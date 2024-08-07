@@ -11,7 +11,12 @@ if (!env.DB_SEED) {
 }
 
 (async () => {
-  for (let table of [schema.foods, schema.foodNutrients, schema.users]) {
+  for (let table of [
+    schema.foods,
+    schema.foodNutrients,
+    schema.foodTypes,
+    schema.users,
+  ]) {
     // await db.delete(table); // clear tables without truncating / resetting ids
     await truncate(db, table);
   }
@@ -21,6 +26,7 @@ if (!env.DB_SEED) {
   await seeds.foods(db);
   await seeds.users(db);
   await seeds.foodNutrients(db);
+  await seeds.foodTypes(db);
   await connection.end();
 })();
 

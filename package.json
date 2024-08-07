@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "cross-env-shell DB_MIGRATING=true tsx src/db/migrate.ts",
-    "db:seed": "cross-env-shell DB_SEEDING=true tsx src/db/seed.ts",
+    "db:migrate": "cross-env-shell DB_MIGRATION=true tsx src/db/migrate.ts",
+    "db:seed": "cross-env-shell DB_SEED=true tsx src/db/seed.ts",
     "db:studio": "bunx drizzle-kit studio"
   },
   "dependencies": {
