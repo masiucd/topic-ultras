@@ -134,3 +134,11 @@ export function Span(props: PropsWithChildren<{className?: string}>) {
     </span>
   );
 }
+
+export function Strong(props: PropsWithChildren<{className?: string}>) {
+  return (
+    <strong className={cn("font-semibold", props.className)}>
+      {props.children}
+    </strong>
+  );
+}
