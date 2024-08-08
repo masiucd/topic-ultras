@@ -74,9 +74,17 @@ export function Blockquote(props: PropsWithChildren<{className?: string}>) {
   );
 }
 
-export function List(props: PropsWithChildren<{className?: string}>) {
+export function List(
+  props: PropsWithChildren<{className?: string; listType?: "none"}>
+) {
   return (
-    <ul className={cn("my-6 ml-6 list-disc [&>li]:mt-2", props.className)}>
+    <ul
+      className={cn(
+        "my-6 ml-6 list-disc [&>li]:mt-2",
+        props.listType === "none" && "list-none",
+        props.className
+      )}
+    >
       {props.children}
     </ul>
   );
