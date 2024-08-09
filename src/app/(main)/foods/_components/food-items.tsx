@@ -1,5 +1,4 @@
 import Link from "next/link";
-import {type PropsWithChildren} from "react";
 
 import {P, Span, Strong} from "@/components/typography";
 import {Badge} from "@/components/ui/badge";
@@ -16,16 +15,22 @@ import {
 } from "@/components/ui/table";
 import {Tooltip} from "@/components/ui/tooltip";
 
-import type {FoodItem} from "../_data/food-items";
+import {getFoodItems} from "../_data/food-items";
 import type {FoodType} from "../_data/food-types";
+import {SearchFood} from "./search-food";
+
+const ITEMS_PER_PAGE = 4;
 
 type Props = {
-  footItems: FoodItem[];
+  foodName: string;
+  page: number;
 };
 
-export function FoodItems({footItems}: PropsWithChildren<Props>) {
+export async function FoodItems({foodName, page}: Props) {
+  let foodItems = await getFoodItems(foodName, ITEMS_PER_PAGE);
   return (
-    <>
+    <div>
+      <SearchFood foodName={foodName} />
       <Table>
         <TableCaption>
           List of food items available in the database
@@ -65,7 +70,7 @@ export function FoodItems({footItems}: PropsWithChildren<Props>) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {footItems.map((x) => (
+          {foodItems.map((x) => (
             <TableRow key={x.foodId}>
               <TableCell>
                 <Link href="/" className="hover:underline hover:opacity-60">
@@ -94,7 +99,7 @@ export function FoodItems({footItems}: PropsWithChildren<Props>) {
           <TableRow>
             <TableCell colSpan={5} className="space-x-2">
               <Span className="italic">Total</Span>
-              <Span className="italic">{footItems.length}</Span>
+              <Span className="italic">{foodItems.length}</Span>
             </TableCell>
             <TableCell className="text-right">
               <div className="flex justify-end gap-2 ">
@@ -105,7 +110,7 @@ export function FoodItems({footItems}: PropsWithChildren<Props>) {
           </TableRow>
         </TableFooter>
       </Table>
-    </>
+    </div>
   );
 }
 
