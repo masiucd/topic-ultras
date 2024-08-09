@@ -6,9 +6,14 @@ import {alias} from "drizzle-orm/pg-core";
 import {db} from "@/db";
 import {foodNutrients, foods, foodTypes} from "@/db/schema";
 
+function sleep(ms = 2000) {
+  return new Promise((res) => setTimeout(res, ms));
+}
+
 export async function getFoodItems(query = "", limit = 5) {
   let ft = alias(foodTypes, "foodType");
   let f = alias(foods, "food");
+  await sleep();
   if (query === "") {
     return await db
       .select({
