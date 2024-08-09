@@ -1,3 +1,5 @@
+import {eq, like, sql} from "drizzle-orm";
+import {alias} from "drizzle-orm/pg-core";
 import Link from "next/link";
 
 import {P, Span, Strong} from "@/components/typography";
@@ -14,23 +16,83 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {Tooltip} from "@/components/ui/tooltip";
+import {db} from "@/db";
+import {foodNutrients, foods, foodTypes} from "@/db/schema";
 
-import {getFoodItems} from "../_data/food-items";
 import type {FoodType} from "../_data/food-types";
 import {SearchFood} from "./search-food";
 
-const ITEMS_PER_PAGE = 4;
+const ITEMS_PER_PAGE = 2; // TODO increase
 
 type Props = {
   foodName: string;
   page: number;
 };
 
+async function getFoodItemsData(query: string, perPage: number) {
+  return await db.transaction(async (tx) => {
+    let ft = alias(foodTypes, "foodType");
+    let f = alias(foods, "food");
+
+    if (query === "") {
+      let foodItems = await tx
+        .select({
+          foodId: f.id,
+          foodName: f.name,
+          foodType: {name: ft.name, id: ft.id},
+          data: {
+            calories: foodNutrients.calories,
+            fat: foodNutrients.fat,
+            protein: foodNutrients.protein,
+            carbs: foodNutrients.carbs,
+          },
+        })
+        .from(f)
+        .innerJoin(ft, eq(f.typeId, ft.id))
+        .innerJoin(foodNutrients, eq(f.id, foodNutrients.foodId))
+        .limit(perPage)
+        .offset(0);
+      let totalFoods = await tx
+        .select({total: sql`count(*)`.mapWith(Number)})
+        .from(foods);
+      return {foodItems, totalFoods};
+    }
+    let foodItems = await tx
+      .select({
+        foodId: f.id,
+        foodName: f.name,
+        foodType: {name: ft.name, id: ft.id},
+        data: {
+          calories: foodNutrients.calories,
+          fat: foodNutrients.fat,
+          protein: foodNutrients.protein,
+          carbs: foodNutrients.carbs,
+        },
+      })
+      .from(f)
+      .innerJoin(ft, eq(f.typeId, ft.id))
+      .innerJoin(foodNutrients, eq(f.id, foodNutrients.foodId))
+      .limit(perPage)
+      .offset(0)
+      .where(like(f.name, `%${query}%`));
+    let totalFoods = await tx
+      .select({total: sql`count(*)`.mapWith(Number)})
+      .from(foods);
+    return {foodItems, totalFoods};
+  });
+}
+
 export async function FoodItems({foodName, page}: Props) {
-  let foodItems = await getFoodItems(foodName, ITEMS_PER_PAGE);
+  let {foodItems, totalFoods} = await getFoodItemsData(
+    foodName,
+    ITEMS_PER_PAGE
+  );
+
   return (
     <div>
-      <SearchFood foodName={foodName} />
+      <div className="mb-5 mt-3">
+        <SearchFood foodName={foodName} />
+      </div>
       <Table>
         <TableCaption>
           List of food items available in the database
@@ -99,7 +161,9 @@ export async function FoodItems({foodName, page}: Props) {
           <TableRow>
             <TableCell colSpan={5} className="space-x-2">
               <Span className="italic">Total</Span>
-              <Span className="italic">{foodItems.length}</Span>
+              <Span className="italic">
+                {foodItems.length}/{totalFoods[0].total}
+              </Span>
             </TableCell>
             <TableCell className="text-right">
               <div className="flex justify-end gap-2 ">

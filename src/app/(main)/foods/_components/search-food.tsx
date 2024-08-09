@@ -2,10 +2,12 @@
 
 import type {Route} from "next";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {useDebouncedCallback} from "use-debounce";
 
 import {H4} from "@/components/typography";
 import {Input} from "@/components/ui/input";
 
+// TODO add debounce
 export function SearchFood({foodName}: {foodName: string}) {
   let searchParams = useSearchParams();
   let pathName = usePathname();
@@ -16,7 +18,7 @@ export function SearchFood({foodName}: {foodName: string}) {
       <H4>Search for food item</H4>
       <Input
         type="text"
-        onChange={(e) => {
+        onChange={useDebouncedCallback((e) => {
           let term = e.target.value;
           if (term) {
             params.set("name", term);
@@ -25,7 +27,7 @@ export function SearchFood({foodName}: {foodName: string}) {
           }
           let newUrl = `${pathName}?${params.toString()}` as Route<string>;
           router.replace(newUrl);
-        }}
+        }, 400)}
         defaultValue={foodName}
       />
     </div>
