@@ -5,14 +5,12 @@ import {H1} from "@/components/typography";
 import {Skeleton} from "@/components/ui/skeleton";
 
 import {FoodItems} from "./_components/food-items";
+import type {SearchParams} from "./types";
 
 export default async function FoodsPage({
   searchParams,
 }: {
-  searchParams?: {
-    name?: string;
-    page?: string;
-  };
+  searchParams?: SearchParams;
 }) {
   let foodName = searchParams?.name || "";
   let page = Number(searchParams?.page) || 1;
@@ -25,7 +23,11 @@ export default async function FoodsPage({
       </aside>
       <div className="flex w-full flex-col md:max-w-6xl">
         <Suspense key={foodName + page} fallback={<Loader />}>
-          <FoodItems foodName={foodName} page={page} />
+          <FoodItems
+            foodName={foodName}
+            page={page}
+            searchParams={searchParams}
+          />
         </Suspense>
       </div>
     </div>

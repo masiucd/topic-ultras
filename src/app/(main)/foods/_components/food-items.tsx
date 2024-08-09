@@ -20,6 +20,7 @@ import {db} from "@/db";
 import {foodNutrients, foods, foodTypes} from "@/db/schema";
 
 import type {FoodType} from "../_data/food-types";
+import type {SearchParams} from "../types";
 import {SearchFood} from "./search-food";
 
 const ITEMS_PER_PAGE = 2; // TODO increase
@@ -27,6 +28,7 @@ const ITEMS_PER_PAGE = 2; // TODO increase
 type Props = {
   foodName: string;
   page: number;
+  searchParams?: SearchParams;
 };
 
 async function getFoodItemsData(query: string, perPage: number) {
@@ -82,7 +84,7 @@ async function getFoodItemsData(query: string, perPage: number) {
   });
 }
 
-export async function FoodItems({foodName, page}: Props) {
+export async function FoodItems({foodName, page, searchParams}: Props) {
   let {foodItems, totalFoods} = await getFoodItemsData(
     foodName,
     ITEMS_PER_PAGE
@@ -165,16 +167,34 @@ export async function FoodItems({foodName, page}: Props) {
                 {foodItems.length}/{totalFoods[0].total}
               </Span>
             </TableCell>
-            <TableCell className="text-right">
-              <div className="flex justify-end gap-2 ">
-                <Link href="/">Prev</Link>
-                <Link href="/">Next</Link>
-              </div>
-            </TableCell>
+            <Pagination page={page} searchParams={searchParams} />
           </TableRow>
         </TableFooter>
       </Table>
     </div>
+  );
+}
+
+function Pagination({
+  page,
+  searchParams,
+}: {
+  page: number;
+  searchParams?: SearchParams;
+}) {
+  let params = new URLSearchParams(searchParams);
+  if (page === 1) {
+    params.delete("page");
+  }
+  console.log("🚀 ~ params:", params.get("page"));
+
+  return (
+    <TableCell className="text-right">
+      <div className="flex justify-end gap-2 ">
+        <Link href="/">Prev</Link>
+        <Link href="/">Next</Link>
+      </div>
+    </TableCell>
   );
 }
 
