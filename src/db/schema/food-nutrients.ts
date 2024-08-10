@@ -28,3 +28,6 @@ export let foodNutritionRelations = relations(foodNutrients, ({one}) => ({
     references: [foods.id],
   }),
 }));
+
+export type FoodNutrient = typeof foodNutrients.$inferSelect; // return type when queried
+export type NewFoodNutrient = typeof foodNutrients.$inferInsert; // insert type

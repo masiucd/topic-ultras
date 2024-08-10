@@ -24,7 +24,7 @@ import type {FoodType} from "../_data/food-types";
 import {Pagination} from "./pagination";
 import {SearchFood} from "./search-food";
 
-const ITEMS_PER_PAGE = 4; // TODO increase
+const ITEMS_PER_PAGE = 6; // TODO increase
 
 type Props = {
   foodName: string;

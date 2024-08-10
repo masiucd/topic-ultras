@@ -28,3 +28,6 @@ export let favoriteFoodRelations = relations(favoriteFoods, ({one}) => ({
     references: [foods.id],
   }),
 }));
+
+export type FavoriteFood = typeof favoriteFoods.$inferSelect; // return type when queried
+export type NewFavoriteFood = typeof favoriteFoods.$inferInsert; // insert type

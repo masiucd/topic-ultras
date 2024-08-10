@@ -33,3 +33,6 @@ export let foodRelations = relations(foods, ({one}) => ({
     references: [foodTypes.id],
   }),
 }));
+
+export type Food = typeof foods.$inferSelect; // return type when queried
+export type NewFood = typeof foods.$inferInsert; // insert type

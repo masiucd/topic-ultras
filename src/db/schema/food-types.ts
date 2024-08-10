@@ -18,3 +18,6 @@ export let foodTypes = pgTable(
 export let foodTypeRelations = relations(foodTypes, ({many}) => ({
   foods: many(foods),
 }));
+
+export type FoodType = typeof foodTypes.$inferSelect; // return type when queried
+export type NewFoodType = typeof foodTypes.$inferInsert; // insert type

@@ -29,3 +29,6 @@ export let users = pgTable(
 export let userRelations = relations(users, ({many}) => ({
   favoriteFoods: many(favoriteFoods),
 }));
+
+export type User = typeof users.$inferSelect; // return type when queried
+export type NewUser = typeof users.$inferInsert; // insert type
