@@ -21,13 +21,9 @@ export default async function FoodsPage({
         <H1>Foods</H1>
         <Link href="/">Back</Link>
       </aside>
-      <div className="flex w-full flex-col md:max-w-6xl">
+      <div className="flex w-full flex-col md:min-h-[600px]  md:max-w-6xl">
         <Suspense key={foodName + page} fallback={<Loader />}>
-          <FoodItems
-            foodName={foodName}
-            page={page}
-            searchParams={searchParams}
-          />
+          <FoodItems foodName={foodName} page={page} />
         </Suspense>
       </div>
     </div>

@@ -7,7 +7,6 @@ import {useDebouncedCallback} from "use-debounce";
 import {H4} from "@/components/typography";
 import {Input} from "@/components/ui/input";
 
-// TODO add debounce
 export function SearchFood({foodName}: {foodName: string}) {
   let searchParams = useSearchParams();
   let pathName = usePathname();
@@ -22,6 +21,9 @@ export function SearchFood({foodName}: {foodName: string}) {
           let term = e.target.value;
           if (term) {
             params.set("name", term);
+            if (params.has("page")) {
+              params.set("page", "1");
+            }
           } else {
             params.delete("name");
           }

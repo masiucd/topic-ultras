@@ -20,7 +20,7 @@ import {db} from "@/db";
 import {foodNutrients, foods, foodTypes} from "@/db/schema";
 
 import type {FoodType} from "../_data/food-types";
-import type {SearchParams} from "../types";
+import {Pagination} from "./pagination";
 import {SearchFood} from "./search-food";
 
 const ITEMS_PER_PAGE = 2; // TODO increase
@@ -28,15 +28,42 @@ const ITEMS_PER_PAGE = 2; // TODO increase
 type Props = {
   foodName: string;
   page: number;
-  searchParams?: SearchParams;
 };
 
-async function getFoodItemsData(query: string, perPage: number) {
-  return await db.transaction(async (tx) => {
-    let ft = alias(foodTypes, "foodType");
-    let f = alias(foods, "food");
+async function getFoodItemsData(
+  query: string,
+  perPage = ITEMS_PER_PAGE,
+  skip = 0
+) {
+  try {
+    return await db.transaction(async (tx) => {
+      let ft = alias(foodTypes, "foodType");
+      let f = alias(foods, "food");
 
-    if (query === "") {
+      if (query === "") {
+        let foodItems = await tx
+          .select({
+            foodId: f.id,
+            foodName: f.name,
+            foodType: {name: ft.name, id: ft.id},
+            data: {
+              calories: foodNutrients.calories,
+              fat: foodNutrients.fat,
+              protein: foodNutrients.protein,
+              carbs: foodNutrients.carbs,
+            },
+          })
+          .from(f)
+          .innerJoin(ft, eq(f.typeId, ft.id))
+          .innerJoin(foodNutrients, eq(f.id, foodNutrients.foodId))
+          .limit(perPage)
+          .offset(skip);
+        let totalFoods = await tx
+          .select({total: sql`count(*)`.mapWith(Number)})
+          .from(foods);
+
+        return {foodItems, totalFoods: totalFoods[0].total};
+      }
       let foodItems = await tx
         .select({
           foodId: f.id,
@@ -53,43 +80,28 @@ async function getFoodItemsData(query: string, perPage: number) {
         .innerJoin(ft, eq(f.typeId, ft.id))
         .innerJoin(foodNutrients, eq(f.id, foodNutrients.foodId))
         .limit(perPage)
-        .offset(0);
+        .offset(skip)
+        .where(like(f.name, `%${query}%`));
       let totalFoods = await tx
         .select({total: sql`count(*)`.mapWith(Number)})
         .from(foods);
-      return {foodItems, totalFoods};
-    }
-    let foodItems = await tx
-      .select({
-        foodId: f.id,
-        foodName: f.name,
-        foodType: {name: ft.name, id: ft.id},
-        data: {
-          calories: foodNutrients.calories,
-          fat: foodNutrients.fat,
-          protein: foodNutrients.protein,
-          carbs: foodNutrients.carbs,
-        },
-      })
-      .from(f)
-      .innerJoin(ft, eq(f.typeId, ft.id))
-      .innerJoin(foodNutrients, eq(f.id, foodNutrients.foodId))
-      .limit(perPage)
-      .offset(0)
-      .where(like(f.name, `%${query}%`));
-    let totalFoods = await tx
-      .select({total: sql`count(*)`.mapWith(Number)})
-      .from(foods);
-    return {foodItems, totalFoods};
-  });
+      return {foodItems, totalFoods: totalFoods[0].total};
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
+    return {foodItems: [], totalFoods: 0};
+  }
 }
 
-export async function FoodItems({foodName, page, searchParams}: Props) {
+export async function FoodItems({foodName, page}: Props) {
   let {foodItems, totalFoods} = await getFoodItemsData(
     foodName,
-    ITEMS_PER_PAGE
+    ITEMS_PER_PAGE,
+    (page - 1) * ITEMS_PER_PAGE // skip items based on page number
   );
 
+  let totalPages = Math.ceil(totalFoods / ITEMS_PER_PAGE);
   return (
     <div>
       <div className="mb-5 mt-3">
@@ -164,37 +176,14 @@ export async function FoodItems({foodName, page, searchParams}: Props) {
             <TableCell colSpan={5} className="space-x-2">
               <Span className="italic">Total</Span>
               <Span className="italic">
-                {foodItems.length}/{totalFoods[0].total}
+                {foodItems.length}/{totalFoods}
               </Span>
             </TableCell>
-            <Pagination page={page} searchParams={searchParams} />
+            <Pagination page={page} totalPages={totalPages} />
           </TableRow>
         </TableFooter>
       </Table>
     </div>
-  );
-}
-
-function Pagination({
-  page,
-  searchParams,
-}: {
-  page: number;
-  searchParams?: SearchParams;
-}) {
-  let params = new URLSearchParams(searchParams);
-  if (page === 1) {
-    params.delete("page");
-  }
-  console.log("🚀 ~ params:", params.get("page"));
-
-  return (
-    <TableCell className="text-right">
-      <div className="flex justify-end gap-2 ">
-        <Link href="/">Prev</Link>
-        <Link href="/">Next</Link>
-      </div>
-    </TableCell>
   );
 }
 
