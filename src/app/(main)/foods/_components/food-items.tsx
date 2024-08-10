@@ -24,7 +24,7 @@ import type {FoodType} from "../_data/food-types";
 import {Pagination} from "./pagination";
 import {SearchFood} from "./search-food";
 
-const ITEMS_PER_PAGE = 3; // TODO increase
+const ITEMS_PER_PAGE = 4; // TODO increase
 
 type Props = {
   foodName: string;
@@ -95,6 +95,10 @@ async function getFoodItemsData(
   }
 }
 
+type FoodItem = Awaited<
+  ReturnType<typeof getFoodItemsData>
+>["foodItems"][number];
+
 export async function FoodItems({foodName, page}: Props) {
   let {foodItems, totalFoods} = await getFoodItemsData(
     foodName,
@@ -113,66 +117,8 @@ export async function FoodItems({foodName, page}: Props) {
         <TableCaption>
           List of food items available in the database
         </TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[200px]">
-              <Tooltip content="Food name">
-                <Icons.Food />
-              </Tooltip>
-            </TableHead>
-            <TableHead>
-              <Tooltip content="Food type">
-                <Icons.Label />
-              </Tooltip>
-            </TableHead>
-            <TableHead>
-              <Tooltip content="Calories in food item">
-                <Icons.Calories />
-              </Tooltip>
-            </TableHead>
-            <TableHead>
-              <Tooltip content="Carbs">
-                <Icons.Carbs />
-              </Tooltip>
-            </TableHead>
-            <TableHead>
-              <Tooltip content="Protein">
-                <Icons.Protein />
-              </Tooltip>
-            </TableHead>
-            <TableHead>
-              <Tooltip content="Total fat">
-                <Icons.Fat />
-              </Tooltip>
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {foodItems.map((foodItem) => (
-            <TableRow key={foodItem.foodId}>
-              <TableCell>
-                <Link href="/" className="hover:underline hover:opacity-60">
-                  <Strong className="capitalize">{foodItem.foodName}</Strong>
-                </Link>
-              </TableCell>
-              <TableCell>
-                <FoodTypeBadge foodType={foodItem.foodType} />
-              </TableCell>
-              <TableCell>
-                <P>{foodItem.data.calories}</P>
-              </TableCell>
-              <TableCell>
-                <Strong>{foodItem.data.carbs}</Strong>
-              </TableCell>
-              <TableCell>
-                <Strong>{foodItem.data.protein}</Strong>
-              </TableCell>
-              <TableCell>
-                <Strong>{foodItem.data.fat}</Strong>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
+        <Head />
+        <Body foodItems={foodItems} />
         <Footer
           totalFoodItems={foodItems.length}
           totalFoods={totalFoods}
@@ -183,6 +129,76 @@ export async function FoodItems({foodName, page}: Props) {
         </Footer>
       </Table>
     </div>
+  );
+}
+
+function Head() {
+  return (
+    <TableHeader>
+      <TableRow>
+        <TableHead className="w-[200px]">
+          <Tooltip content="Food name">
+            <Icons.Food />
+          </Tooltip>
+        </TableHead>
+        <TableHead>
+          <Tooltip content="Food type">
+            <Icons.Label />
+          </Tooltip>
+        </TableHead>
+        <TableHead>
+          <Tooltip content="Calories in food item">
+            <Icons.Calories />
+          </Tooltip>
+        </TableHead>
+        <TableHead>
+          <Tooltip content="Carbs">
+            <Icons.Carbs />
+          </Tooltip>
+        </TableHead>
+        <TableHead>
+          <Tooltip content="Protein">
+            <Icons.Protein />
+          </Tooltip>
+        </TableHead>
+        <TableHead>
+          <Tooltip content="Total fat">
+            <Icons.Fat />
+          </Tooltip>
+        </TableHead>
+      </TableRow>
+    </TableHeader>
+  );
+}
+
+function Body({foodItems}: {foodItems: FoodItem[]}) {
+  return (
+    <TableBody>
+      {foodItems.map((foodItem) => (
+        <TableRow key={foodItem.foodId}>
+          <TableCell>
+            <Link href="/" className="hover:underline hover:opacity-60">
+              <Strong className="capitalize">{foodItem.foodName}</Strong>
+            </Link>
+          </TableCell>
+          <TableCell>
+            <FoodTypeBadge foodType={foodItem.foodType} />
+          </TableCell>
+          <TableCell>
+            <P>{foodItem.data.calories}</P>
+          </TableCell>
+          <TableCell>
+            <Strong>{foodItem.data.carbs}</Strong>
+          </TableCell>
+          <TableCell>
+            <Strong>{foodItem.data.protein}</Strong>
+          </TableCell>
+          <TableCell>
+            <Strong>{foodItem.data.fat}</Strong>
+          </TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
   );
 }
 
