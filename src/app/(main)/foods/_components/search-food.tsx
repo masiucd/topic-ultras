@@ -22,14 +22,14 @@ export function SearchFood({foodName}: {foodName: string}) {
           if (term) {
             params.set("name", term);
             if (params.has("page")) {
-              params.set("page", "1");
+              params.delete("page");
             }
           } else {
             params.delete("name");
           }
           let newUrl = `${pathName}?${params.toString()}` as Route<string>;
           router.replace(newUrl);
-        }, 400)}
+        }, 500)}
         defaultValue={foodName}
       />
     </div>

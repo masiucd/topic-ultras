@@ -23,7 +23,7 @@ import type {FoodType} from "../_data/food-types";
 import {Pagination} from "./pagination";
 import {SearchFood} from "./search-food";
 
-const ITEMS_PER_PAGE = 2; // TODO increase
+const ITEMS_PER_PAGE = 3; // TODO increase
 
 type Props = {
   foodName: string;
@@ -102,6 +102,7 @@ export async function FoodItems({foodName, page}: Props) {
   );
 
   let totalPages = Math.ceil(totalFoods / ITEMS_PER_PAGE);
+  let currentPage = page > totalPages ? totalPages : page;
   return (
     <div>
       <div className="mb-5 mt-3">
@@ -173,11 +174,18 @@ export async function FoodItems({foodName, page}: Props) {
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={5} className="space-x-2">
-              <Span className="italic">Total</Span>
-              <Span className="italic">
-                {foodItems.length}/{totalFoods}
-              </Span>
+            <TableCell colSpan={5}>
+              <div className="flex flex-col">
+                <div className="flex gap-2">
+                  <Span className="italic">Total</Span>
+                  <Span className="italic">
+                    {foodItems.length}/{totalFoods} items
+                  </Span>
+                </div>
+                <Span>
+                  Page {currentPage} of {totalPages}
+                </Span>
+              </div>
             </TableCell>
             <Pagination page={page} totalPages={totalPages} />
           </TableRow>

@@ -26,12 +26,7 @@ export function Pagination({
   return (
     <TableCell className="text-right">
       <div className="flex justify-end gap-2 ">
-        <PrevLink
-          params={params}
-          page={page}
-          pathName={pathName}
-          totalPages={totalPages}
-        />
+        <PrevLink params={params} page={page} pathName={pathName} />
         <NextLink
           params={params}
           page={page}
@@ -47,9 +42,9 @@ type LinkProps = {
   params: URLSearchParams;
   page: number;
   pathName: string;
-  totalPages: number;
 };
-function PrevLink({params, page, pathName, totalPages}: LinkProps) {
+
+function PrevLink({params, page, pathName}: LinkProps) {
   if (page <= 1) {
     return (
       <button className="cursor-not-allowed opacity-50" disabled>
@@ -57,17 +52,23 @@ function PrevLink({params, page, pathName, totalPages}: LinkProps) {
       </button>
     );
   }
-  let href = `${pathName}?${params.toString()}` as Route<string>;
+  let prevLinkUrlParams = new URLSearchParams(params);
+  prevLinkUrlParams.set("page", (page - 1).toString());
   return (
-    <Link className={cn("")} href={"/"}>
+    <Link className={cn("")} href={makeHref(pathName, prevLinkUrlParams)}>
       Prev
     </Link>
   );
 }
-function NextLink({page, params, pathName, totalPages}: LinkProps) {
-  params.set("page", (page + 1).toString());
-  let href = `${pathName}?${params.toString()}` as Route<string>;
-  console.log("🚀 ~ NextLink ~ href:", href);
+
+function NextLink({
+  page,
+  params,
+  pathName,
+  totalPages,
+}: LinkProps & {totalPages: number}) {
+  let nextLinkUrlParams = new URLSearchParams(params);
+  nextLinkUrlParams.set("page", (page + 1).toString());
   if (page >= totalPages) {
     return (
       <button className="cursor-not-allowed opacity-50" disabled>
@@ -75,5 +76,9 @@ function NextLink({page, params, pathName, totalPages}: LinkProps) {
       </button>
     );
   }
-  return <Link href={href}>Next</Link>;
+  return <Link href={makeHref(pathName, nextLinkUrlParams)}>Next</Link>;
+}
+
+function makeHref(pathName: string, params: URLSearchParams) {
+  return `${pathName}?${params.toString()}` as Route<string>;
 }
