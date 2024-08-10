@@ -1,5 +1,3 @@
-import {eq, like, sql} from "drizzle-orm";
-import {alias} from "drizzle-orm/pg-core";
 import Link from "next/link";
 import type {PropsWithChildren} from "react";
 
@@ -17,88 +15,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {Tooltip} from "@/components/ui/tooltip";
-import {db} from "@/db";
-import {foodNutrients, foods, foodTypes} from "@/db/schema";
 
+import {
+  type FoodItem,
+  getFoodItemsData,
+  ITEMS_PER_PAGE,
+} from "../_data/food-items";
 import type {FoodType} from "../_data/food-types";
 import {Pagination} from "./pagination";
 import {SearchFood} from "./search-food";
-
-const ITEMS_PER_PAGE = 6; // TODO increase
 
 type Props = {
   foodName: string;
   page: number;
 };
 
-async function getFoodItemsData(
-  query: string,
-  perPage = ITEMS_PER_PAGE,
-  skip = 0
-) {
-  try {
-    return await db.transaction(async (tx) => {
-      let ft = alias(foodTypes, "foodType");
-      let f = alias(foods, "food");
-
-      if (query === "") {
-        let foodItems = await tx
-          .select({
-            foodId: f.id,
-            foodName: f.name,
-            foodType: {name: ft.name, id: ft.id},
-            data: {
-              calories: foodNutrients.calories,
-              fat: foodNutrients.fat,
-              protein: foodNutrients.protein,
-              carbs: foodNutrients.carbs,
-            },
-          })
-          .from(f)
-          .innerJoin(ft, eq(f.typeId, ft.id))
-          .innerJoin(foodNutrients, eq(f.id, foodNutrients.foodId))
-          .limit(perPage)
-          .offset(skip);
-        let totalFoods = await tx
-          .select({total: sql`count(*)`.mapWith(Number)})
-          .from(foods);
-
-        return {foodItems, totalFoods: totalFoods[0].total};
-      }
-      let foodItems = await tx
-        .select({
-          foodId: f.id,
-          foodName: f.name,
-          foodType: {name: ft.name, id: ft.id},
-          data: {
-            calories: foodNutrients.calories,
-            fat: foodNutrients.fat,
-            protein: foodNutrients.protein,
-            carbs: foodNutrients.carbs,
-          },
-        })
-        .from(f)
-        .innerJoin(ft, eq(f.typeId, ft.id))
-        .innerJoin(foodNutrients, eq(f.id, foodNutrients.foodId))
-        .limit(perPage)
-        .offset(skip)
-        .where(like(f.name, `%${query}%`));
-      let totalFoods = await tx
-        .select({total: sql`count(*)`.mapWith(Number)})
-        .from(foods);
-      return {foodItems, totalFoods: totalFoods[0].total};
-    });
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error);
-    return {foodItems: [], totalFoods: 0};
-  }
-}
-
-type FoodItem = Awaited<
-  ReturnType<typeof getFoodItemsData>
->["foodItems"][number];
-
+// TODO cache search results
 export async function FoodItems({foodName, page}: Props) {
   let {foodItems, totalFoods} = await getFoodItemsData(
     foodName,
