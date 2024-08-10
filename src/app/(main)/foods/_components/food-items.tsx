@@ -1,6 +1,7 @@
 import {eq, like, sql} from "drizzle-orm";
 import {alias} from "drizzle-orm/pg-core";
 import Link from "next/link";
+import type {PropsWithChildren} from "react";
 
 import {P, Span, Strong} from "@/components/typography";
 import {Badge} from "@/components/ui/badge";
@@ -147,51 +148,75 @@ export async function FoodItems({foodName, page}: Props) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {foodItems.map((x) => (
-            <TableRow key={x.foodId}>
+          {foodItems.map((foodItem) => (
+            <TableRow key={foodItem.foodId}>
               <TableCell>
                 <Link href="/" className="hover:underline hover:opacity-60">
-                  <Strong className="capitalize">{x.foodName}</Strong>
+                  <Strong className="capitalize">{foodItem.foodName}</Strong>
                 </Link>
               </TableCell>
               <TableCell>
-                <FoodTypeBadge foodType={x.foodType} />
+                <FoodTypeBadge foodType={foodItem.foodType} />
               </TableCell>
               <TableCell>
-                <P>{x.data.calories}</P>
+                <P>{foodItem.data.calories}</P>
               </TableCell>
               <TableCell>
-                <Strong>{x.data.carbs}</Strong>
+                <Strong>{foodItem.data.carbs}</Strong>
               </TableCell>
               <TableCell>
-                <Strong>{x.data.protein}</Strong>
+                <Strong>{foodItem.data.protein}</Strong>
               </TableCell>
               <TableCell>
-                <Strong>{x.data.fat}</Strong>
+                <Strong>{foodItem.data.fat}</Strong>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={5}>
-              <div className="flex flex-col">
-                <div className="flex gap-2">
-                  <Span className="italic">Total</Span>
-                  <Span className="italic">
-                    {foodItems.length}/{totalFoods} items
-                  </Span>
-                </div>
-                <Span>
-                  Page {currentPage} of {totalPages}
-                </Span>
-              </div>
-            </TableCell>
-            <Pagination page={page} totalPages={totalPages} />
-          </TableRow>
-        </TableFooter>
+        <Footer
+          totalFoodItems={foodItems.length}
+          totalFoods={totalFoods}
+          currentPage={currentPage}
+          totalPages={totalPages}
+        >
+          <Pagination page={page} totalPages={totalPages} />
+        </Footer>
       </Table>
     </div>
+  );
+}
+
+function Footer({
+  totalFoodItems,
+  totalFoods,
+  currentPage,
+  totalPages,
+  children,
+}: PropsWithChildren<{
+  totalFoodItems: number;
+  totalFoods: number;
+  currentPage: number;
+  totalPages: number;
+}>) {
+  return (
+    <TableFooter>
+      <TableRow>
+        <TableCell colSpan={5}>
+          <div className="flex flex-col">
+            <div className="flex gap-2">
+              <Span className="italic">Total</Span>
+              <Span className="italic">
+                {totalFoodItems}/{totalFoods} items
+              </Span>
+            </div>
+            <Span>
+              Page {currentPage} of {totalPages}
+            </Span>
+          </div>
+        </TableCell>
+        {children}
+      </TableRow>
+    </TableFooter>
   );
 }
 
