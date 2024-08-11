@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import PageWrapper from "@/components/page-wrapper";
 import {H1, Lead, Span} from "@/components/typography";
 import {appData} from "@/lib/config";
 
@@ -23,9 +24,9 @@ function Title() {
 
 export default async function Home() {
   return (
-    <div>
+    <PageWrapper>
       <Title />
       <Link href="/foods">View foods</Link>
-    </div>
+    </PageWrapper>
   );
 }

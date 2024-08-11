@@ -2,7 +2,6 @@ import Link from "next/link";
 import type {PropsWithChildren} from "react";
 
 import {P, Span, Strong} from "@/components/typography";
-import {Badge} from "@/components/ui/badge";
 import {FoodTypeBadge} from "@/components/ui/food-type-badge";
 import {Icons} from "@/components/ui/icons";
 import {
@@ -22,7 +21,6 @@ import {
   getFoodItemsData,
   ITEMS_PER_PAGE,
 } from "../_data/food-items";
-import type {FoodType} from "../food-types/_data/food-types";
 import {Pagination} from "./pagination";
 import {SearchFood} from "./search-food";
 
