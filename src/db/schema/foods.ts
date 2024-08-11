@@ -4,6 +4,7 @@ import {
   integer,
   pgTable,
   serial,
+  text,
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -16,7 +17,7 @@ export let foods = pgTable(
   {
     id: serial("id").primaryKey().notNull(),
     name: varchar("name", {length: 100}).notNull(),
-    description: varchar("description", {length: 255}).notNull(),
+    description: text("description").notNull(),
     slug: varchar("slug", {length: 100}).notNull(),
     typeId: integer("type_id")
       .notNull()

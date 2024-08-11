@@ -21,7 +21,7 @@ import {
   getFoodItemsData,
   ITEMS_PER_PAGE,
 } from "../_data/food-items";
-import type {FoodType} from "../_data/food-types";
+import type {FoodType} from "../food-types/_data/food-types";
 import {Pagination} from "./pagination";
 import {SearchFood} from "./search-food";
 
@@ -173,7 +173,7 @@ function Footer({
 
 function FoodTypeBadge({foodType}: {foodType: FoodType}) {
   return (
-    <Link href={`/foods/labels/${foodType.name}`}>
+    <Link href={`/foods/food-types/${foodType.name}`}>
       <Badge className="uppercase">{foodType.name}</Badge>
     </Link>
   );
