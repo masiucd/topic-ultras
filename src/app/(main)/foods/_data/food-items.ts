@@ -15,41 +15,9 @@ export async function getFoodItemsData(
 ) {
   try {
     return await db.transaction(async (tx) => {
-      let ft = alias(foodTypes, "foodType");
-      let f = alias(foods, "food");
-
-      let selectFoodItems = async (
-        tx2: typeof tx,
-        queryCondition: SQL<unknown>
-      ) => {
-        return await tx2
-          .select({
-            foodId: f.id,
-            foodName: f.name,
-            slug: f.slug,
-            foodType: {name: ft.name, id: ft.id},
-            data: {
-              calories: foodNutrients.calories,
-              fat: foodNutrients.fat,
-              protein: foodNutrients.protein,
-              carbs: foodNutrients.carbs,
-            },
-          })
-          .from(f)
-          .innerJoin(ft, eq(f.typeId, ft.id))
-          .innerJoin(foodNutrients, eq(f.id, foodNutrients.foodId))
-          .limit(perPage)
-          .offset(skip)
-          .where(queryCondition);
-      };
-
       let queryCondition = query === "" ? sql`1=1` : like(f.name, `%${query}%`);
-      let foodItems = await selectFoodItems(tx, queryCondition);
-
-      let totalFoods = await tx
-        .select({total: sql`count(*)`.mapWith(Number)})
-        .from(foods);
-
+      let foodItems = await selectFoodItems(tx, queryCondition, perPage, skip);
+      let totalFoods = await getTotalFoodItems();
       return {foodItems, totalFoods: totalFoods[0].total};
     });
   } catch (error) {
@@ -62,3 +30,37 @@ export async function getFoodItemsData(
 export type FoodItem = Awaited<
   ReturnType<typeof getFoodItemsData>
 >["foodItems"][number];
+
+let ft = alias(foodTypes, "foodType");
+let f = alias(foods, "food");
+
+async function selectFoodItems(
+  trx = db,
+  queryCondition: SQL<unknown>,
+  perPage: number,
+  skip: number
+) {
+  return await trx
+    .select({
+      foodId: f.id,
+      foodName: f.name,
+      slug: f.slug,
+      foodType: {name: ft.name, id: ft.id},
+      data: {
+        calories: foodNutrients.calories,
+        fat: foodNutrients.fat,
+        protein: foodNutrients.protein,
+        carbs: foodNutrients.carbs,
+      },
+    })
+    .from(f)
+    .innerJoin(ft, eq(f.typeId, ft.id))
+    .innerJoin(foodNutrients, eq(f.id, foodNutrients.foodId))
+    .limit(perPage)
+    .offset(skip)
+    .where(queryCondition);
+}
+
+async function getTotalFoodItems(trx = db) {
+  return await trx.select({total: sql`count(*)`.mapWith(Number)}).from(foods);
+}
