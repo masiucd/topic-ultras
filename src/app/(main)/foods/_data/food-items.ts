@@ -26,6 +26,7 @@ export async function getFoodItemsData(
           .select({
             foodId: f.id,
             foodName: f.name,
+            slug: f.slug,
             foodType: {name: ft.name, id: ft.id},
             data: {
               calories: foodNutrients.calories,

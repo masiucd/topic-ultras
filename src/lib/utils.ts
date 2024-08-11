@@ -12,3 +12,8 @@ export function sleep(ms = 2000) {
 export function slugify(input: string) {
   return input.toLowerCase().replace(/\s/g, "-");
 }
+
+// TODO do we want to store the slug on the foods table?
+export function unSlugify(input: string) {
+  return input.replace(/-/g, " ");
+}

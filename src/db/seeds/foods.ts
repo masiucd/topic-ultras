@@ -9,6 +9,7 @@ export async function seed(db: DB) {
       .values({
         name: food.name,
         description: food.description,
+        slug: food.slug,
       })
       .execute();
   }

@@ -15,7 +15,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {Tooltip} from "@/components/ui/tooltip";
-import {slugify} from "@/lib/utils";
 
 import {
   type FoodItem,
@@ -111,7 +110,7 @@ function Body({foodItems}: {foodItems: FoodItem[]}) {
         <TableRow key={foodItem.foodId}>
           <TableCell>
             <Link
-              href={`/foods/${slugify(foodItem.foodName)}`}
+              href={`/foods/${foodItem.slug}`}
               className="hover:underline hover:opacity-60"
             >
               <Strong className="capitalize">{foodItem.foodName} </Strong>
@@ -174,7 +173,7 @@ function Footer({
 
 function FoodTypeBadge({foodType}: {foodType: FoodType}) {
   return (
-    <Link href="/">
+    <Link href={`/foods/labels/${foodType.name}`}>
       <Badge className="uppercase">{foodType.name}</Badge>
     </Link>
   );

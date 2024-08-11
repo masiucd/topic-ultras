@@ -16,7 +16,8 @@ export let foods = pgTable(
   {
     id: serial("id").primaryKey().notNull(),
     name: varchar("name", {length: 100}).notNull(),
-    description: varchar("description", {length: 255}),
+    description: varchar("description", {length: 255}).notNull(),
+    slug: varchar("slug", {length: 100}).notNull(),
     typeId: integer("type_id")
       .notNull()
       .references(() => foodTypes.id)
@@ -25,6 +26,7 @@ export let foods = pgTable(
   },
   (table) => ({
     foodNameIndex: index("food_name_index").on(table.name),
+    slugIndex: index("slug_index").on(table.slug),
   })
 );
 
