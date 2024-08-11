@@ -3,28 +3,66 @@
     "foodId": 1,
     "calories": 52.0,
     "fat": 0.2,
+    "saturatedFat": 0.1,
+    "transFat": 0.0,
     "protein": 0.3,
-    "carbs": 13.8
+    "carbs": 13.8,
+    "fiber": 0.6,
+    "sugar": 12.2
   },
   {
     "foodId": 2,
     "calories": 89.0,
     "fat": 0.3,
+    "saturatedFat": 0.1,
+    "transFat": 0.0,
     "protein": 1.1,
-    "carbs": 22.8
+    "carbs": 22.8,
+    "fiber": 2.6,
+    "sugar": 12.2
   },
   {
     "foodId": 3,
     "calories": 47,
     "fat": 0.1,
+    "saturatedFat": 0.0,
+    "transFat": 0.0,
     "protein": 0.9,
-    "carbs": 11.8
+    "carbs": 11.8,
+    "fiber": 2.4,
+    "sugar": 9.4
   },
   {
     "foodId": 4,
     "calories": 134,
     "fat": 10,
+    "saturated": 6.4,
+    "transFat": 0.0,
     "protein": 6.4,
-    "carbs": 4.2
+    "carbs": 4.2,
+    "fiber": 0.0,
+    "sugar": 4.2
+  },
+  {
+    "foodId": 5,
+    "calories": 717,
+    "fat": 81.0,
+    "saturatedFat": 51.0,
+    "transFat": 0.0,
+    "protein": 0.9,
+    "carbs": 0.0,
+    "fiber": 0.0,
+    "sugar": 0.0
+  },
+  {
+    "foodId": 6,
+    "calories": 160,
+    "fat": 15.0,
+    "saturatedFat": 2.1,
+    "transFat": 0.0,
+    "protein": 2.0,
+    "carbs": 9.0,
+    "fiber": 7.0,
+    "sugar": 0.7
   }
 ]

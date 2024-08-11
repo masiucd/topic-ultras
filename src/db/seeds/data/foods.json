@@ -18,5 +18,15 @@
     "name": "geek yogurt",
     "description": "Greek yogurt, Greek-style yogurt, or yogurt (American English) is yogurt that has been strained to remove most of its whey, resulting in a thicker, creamier yogurt. Greek yogurt is a popular dairy product, but is it good for you? This article explains everything you need to know about Greek yogurt.",
     "slug": "greek-yogurt"
+  },
+  {
+    "name": "gras fed butter",
+    "description": "Grass fed butter is high in omega-3 fatty acids, which are anti-inflammatory and can help reduce the risk of heart disease. It also contains conjugated linoleic acid (CLA), which can help reduce body fat and increase lean body mass. Grass fed butter is also a good source of butyrate, a short-chain fatty acid that can help improve gut health.",
+    "slug": "grass-fed-butter"
+  },
+  {
+    "name": "avocado",
+    "description": "The avocado (Persea americana), a tree likely originating from south-central Mexico, is classified as a member of the flowering plant family Lauraceae. The fruit of the plant, also called an avocado (or avocado pear or alligator pear), is botanically a large berry containing a single large seed.",
+    "slug": "avocado"
   }
 ]
