@@ -16,9 +16,11 @@ export let foods = pgTable(
   {
     id: serial("id").primaryKey().notNull(),
     name: varchar("name", {length: 100}).notNull(),
+    description: varchar("description", {length: 255}),
     typeId: integer("type_id")
       .notNull()
-      .references(() => foodTypes.id),
+      .references(() => foodTypes.id)
+      .default(1),
     createdAt: timestamp("created_at", {mode: "string"}).defaultNow(),
   },
   (table) => ({

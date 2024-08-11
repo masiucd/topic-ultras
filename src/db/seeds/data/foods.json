@@ -1,14 +1,18 @@
 [
   {
-    "name": "apple"
+    "name": "apple",
+    "description": "An apple is an edible fruit produced by an apple tree (Malus domestica). Apple trees are cultivated worldwide and are the most widely grown species in the genus Malus. The tree originated in Central Asia, where its wild ancestor, Malus sieversii, is still found today. Apples have been grown for thousands of years in Asia and Europe and were brought to North America by European colonists. Apples have religious and mythological significance in many cultures, including Norse, Greek, and European Christian tradition."
   },
   {
-    "name": "banana"
+    "name": "banana",
+    "description": "A banana is an elongated, edible fruit – botanically a berry – produced by several kinds of large herbaceous flowering plants in the genus Musa. In some countries, bananas used for cooking may be called plantains. The fruit is variable in size, color, and firmness, but is usually elongated and curved, with soft flesh rich in starch covered with a rind, which may be green, yellow, red, purple, or brown when ripe."
   },
   {
-    "name": "orange"
+    "name": "orange",
+    "description": "The orange is the fruit of various citrus species in the family Rutaceae (see list of plants known as orange); it primarily refers to Citrus × sinensis, which is also called sweet orange, to distinguish it from the related Citrus × aurantium, referred to as bitter orange. The sweet orange reproduces asexually (apomixis through nucellar embryony); varieties of sweet orange arise through mutations."
   },
   {
-    "name": "geek yogurt(10%)"
+    "name": "geek yogurt",
+    "description": "Greek yogurt, Greek-style yogurt, or yogurt (American English) is yogurt that has been strained to remove most of its whey, resulting in a thicker, creamier yogurt. Greek yogurt is a popular dairy product, but is it good for you? This article explains everything you need to know about Greek yogurt."
   }
 ]

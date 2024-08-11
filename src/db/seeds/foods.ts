@@ -8,7 +8,7 @@ export async function seed(db: DB) {
       .insert(foods)
       .values({
         name: food.name,
-        typeId: 1,
+        description: food.description,
       })
       .execute();
   }
