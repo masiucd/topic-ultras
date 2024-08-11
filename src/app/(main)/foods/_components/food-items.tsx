@@ -3,6 +3,7 @@ import type {PropsWithChildren} from "react";
 
 import {P, Span, Strong} from "@/components/typography";
 import {Badge} from "@/components/ui/badge";
+import {FoodTypeBadge} from "@/components/ui/food-type-badge";
 import {Icons} from "@/components/ui/icons";
 import {
   Table,
@@ -117,7 +118,7 @@ function Body({foodItems}: {foodItems: FoodItem[]}) {
             </Link>
           </TableCell>
           <TableCell>
-            <FoodTypeBadge foodType={foodItem.foodType} />
+            <FoodTypeBadge name={foodItem.foodType.name} />
           </TableCell>
           <TableCell>
             <P>{foodItem.data.calories}</P>
@@ -168,13 +169,5 @@ function Footer({
         {children}
       </TableRow>
     </TableFooter>
-  );
-}
-
-function FoodTypeBadge({foodType}: {foodType: FoodType}) {
-  return (
-    <Link href={`/foods/food-types/${foodType.name}`}>
-      <Badge className="uppercase">{foodType.name}</Badge>
-    </Link>
   );
 }

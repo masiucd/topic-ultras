@@ -136,11 +136,7 @@ export function Muted(props: PropsWithChildren<{className?: string}>) {
 }
 
 export function Span(props: PropsWithChildren<{className?: string}>) {
-  return (
-    <span className={cn("font-semibold", props.className)}>
-      {props.children}
-    </span>
-  );
+  return <span className={cn("", props.className)}>{props.children}</span>;
 }
 
 export function Strong(props: PropsWithChildren<{className?: string}>) {
