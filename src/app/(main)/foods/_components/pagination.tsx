@@ -4,8 +4,8 @@ import type {Route} from "next";
 import Link from "next/link";
 import {usePathname, useSearchParams} from "next/navigation";
 
+import {Icons} from "@/components/ui/icons";
 import {TableCell} from "@/components/ui/table";
-import {cn} from "@/lib/utils";
 
 export function Pagination({
   page,
@@ -47,16 +47,22 @@ type LinkProps = {
 function PrevLink({params, page, pathName}: LinkProps) {
   if (page <= 1) {
     return (
-      <button className="cursor-not-allowed opacity-50" disabled>
-        Prev
+      <button
+        className="flex cursor-not-allowed items-center opacity-50"
+        disabled
+      >
+        <Icons.Left /> Prev
       </button>
     );
   }
   let prevLinkUrlParams = new URLSearchParams(params);
   prevLinkUrlParams.set("page", (page - 1).toString());
   return (
-    <Link className={cn("")} href={makeHref(pathName, prevLinkUrlParams)}>
-      Prev
+    <Link
+      className="flex items-center hover:underline hover:opacity-50"
+      href={makeHref(pathName, prevLinkUrlParams)}
+    >
+      <Icons.Left /> Prev
     </Link>
   );
 }
@@ -71,12 +77,23 @@ function NextLink({
   nextLinkUrlParams.set("page", (page + 1).toString());
   if (page >= totalPages) {
     return (
-      <button className="cursor-not-allowed opacity-50" disabled>
-        Next
+      <button
+        className="flex cursor-not-allowed items-center opacity-50"
+        disabled
+      >
+        Next <Icons.Right />
       </button>
     );
   }
-  return <Link href={makeHref(pathName, nextLinkUrlParams)}>Next</Link>;
+  return (
+    <Link
+      className="flex items-center hover:underline hover:opacity-50 "
+      href={makeHref(pathName, nextLinkUrlParams)}
+    >
+      Next
+      <Icons.Right />
+    </Link>
+  );
 }
 
 function makeHref(pathName: string, params: URLSearchParams) {

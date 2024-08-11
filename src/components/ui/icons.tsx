@@ -1,5 +1,7 @@
 import {
   Apple,
+  ArrowLeft,
+  ArrowRight,
   BadgeIcon,
   Beef,
   CopyIcon,
@@ -26,4 +28,7 @@ export let Icons = Object.freeze({
   StarHalf: (props: LucideProps) => <StarHalf {...props} size={ICON_SIZE} />,
   Carbs: (props: LucideProps) => <Zap {...props} size={ICON_SIZE} />,
   Label: (props: LucideProps) => <BadgeIcon {...props} size={ICON_SIZE} />,
+
+  Left: (props: LucideProps) => <ArrowLeft {...props} size={ICON_SIZE} />,
+  Right: (props: LucideProps) => <ArrowRight {...props} size={ICON_SIZE} />,
 });

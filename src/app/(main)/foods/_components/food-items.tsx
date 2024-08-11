@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {Tooltip} from "@/components/ui/tooltip";
+import {slugify} from "@/lib/utils";
 
 import {
   type FoodItem,
@@ -109,8 +110,11 @@ function Body({foodItems}: {foodItems: FoodItem[]}) {
       {foodItems.map((foodItem) => (
         <TableRow key={foodItem.foodId}>
           <TableCell>
-            <Link href="/" className="hover:underline hover:opacity-60">
-              <Strong className="capitalize">{foodItem.foodName}</Strong>
+            <Link
+              href={`/foods/${slugify(foodItem.foodName)}`}
+              className="hover:underline hover:opacity-60"
+            >
+              <Strong className="capitalize">{foodItem.foodName} </Strong>
             </Link>
           </TableCell>
           <TableCell>
