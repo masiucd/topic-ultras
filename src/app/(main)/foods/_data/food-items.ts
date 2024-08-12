@@ -3,7 +3,7 @@ import "server-only";
 import {eq, like, SQL, sql} from "drizzle-orm";
 import {alias} from "drizzle-orm/pg-core";
 
-import {db} from "@/db";
+import {type DB, db} from "@/db";
 import {foodNutrients, foods, foodTypes} from "@/db/schema";
 
 export const ITEMS_PER_PAGE = 6;
@@ -14,12 +14,13 @@ export async function getFoodItemsData(
   skip = 0
 ) {
   try {
-    return await db.transaction(async (tx) => {
+    let res = await db.transaction(async (tx) => {
       let queryCondition = query === "" ? sql`1=1` : like(f.name, `%${query}%`);
       let foodItems = await selectFoodItems(tx, queryCondition, perPage, skip);
-      let totalFoods = await getTotalFoodItems();
+      let totalFoods = await getTotalFoodItems(tx);
       return {foodItems, totalFoods: totalFoods[0].total};
     });
+    return res;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error);
@@ -35,7 +36,7 @@ let ft = alias(foodTypes, "foodType");
 let f = alias(foods, "food");
 
 async function selectFoodItems(
-  trx = db,
+  trx: DB,
   queryCondition: SQL<unknown>,
   perPage: number,
   skip: number
@@ -61,6 +62,6 @@ async function selectFoodItems(
     .where(queryCondition);
 }
 
-async function getTotalFoodItems(trx = db) {
+async function getTotalFoodItems(trx: DB) {
   return await trx.select({total: sql`count(*)`.mapWith(Number)}).from(foods);
 }

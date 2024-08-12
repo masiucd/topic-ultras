@@ -1,7 +1,7 @@
-import {eq} from "drizzle-orm";
 import {redirect} from "next/navigation";
 import type {ReactNode} from "react";
 
+import PageWrapper from "@/components/page-wrapper";
 import {Span} from "@/components/typography";
 import {Button} from "@/components/ui/button";
 import {
@@ -15,38 +15,10 @@ import {
 import {FoodTypeBadge} from "@/components/ui/food-type-badge";
 import {Icons} from "@/components/ui/icons";
 import {Separator} from "@/components/ui/sperator";
-import {db} from "@/db";
-import {foodNutrients, foods, foodTypes} from "@/db/schema";
 
-async function getFoodItemByName(foodName: string) {
-  try {
-    let item = await db
-      .select({
-        name: foods.name,
-        description: foods.description,
-        type: {
-          name: foodTypes.name,
-          id: foodTypes.id,
-        },
-        nutrients: {
-          calories: foodNutrients.calories,
-          fat: foodNutrients.fat,
-          protein: foodNutrients.protein,
-          carbs: foodNutrients.carbs,
-        },
-      })
-      .from(foods)
-      .innerJoin(foodTypes, eq(foods.typeId, foodTypes.id))
-      .innerJoin(foodNutrients, eq(foods.id, foodNutrients.foodId))
-      .where(eq(foods.slug, foodName));
-
-    return item[0];
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error);
-    return null;
-  }
-}
+import {getFoodItemByName} from "./_data/food-item";
+import {PieChart} from "./pie";
+import type {FoodItem} from "./types";
 
 export default async function FoodNamePage({
   params: {foodname},
@@ -58,16 +30,18 @@ export default async function FoodNamePage({
     return redirect("/404");
   }
   return (
-    <div>
-      <FoodCard foodItem={food} />
-    </div>
+    <PageWrapper>
+      <div className="flex flex-col border border-red-500 md:flex-row">
+        <FoodCard foodItem={food} />
+        <PieChart foodItem={food} />
+      </div>
+    </PageWrapper>
   );
 }
 
-type FoodItem = NonNullable<Awaited<ReturnType<typeof getFoodItemByName>>>;
 function FoodCard({foodItem}: {foodItem: FoodItem}) {
   return (
-    <Card className="max-w-2xl ">
+    <Card className="flex-1">
       <CardHeader className="relative">
         <CardTitle className="flex  items-center justify-between">
           <Span className="text-4xl capitalize">Nutrition Facts</Span>
@@ -84,8 +58,7 @@ function FoodCard({foodItem}: {foodItem: FoodItem}) {
         <Separator />
       </div>
       <CardContent>
-        {/* TODO add vizual diagram */}
-        <ul className="flex max-w-60 flex-col gap-4 pe-1.5">
+        <ul className="flex  flex-1 flex-col gap-4 border border-red-500 px-5 py-2">
           <ListItem
             iconAndLabel={{icon: <Icons.Food />, label: "Food"}}
             value={foodItem.name}

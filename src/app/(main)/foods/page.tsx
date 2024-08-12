@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {Suspense} from "react";
 
+import PageWrapper from "@/components/page-wrapper";
 import {H1} from "@/components/typography";
 import {Skeleton} from "@/components/ui/skeleton";
 
@@ -16,7 +17,7 @@ export default async function FoodsPage({
   let page = Number(searchParams?.page) || 1;
 
   return (
-    <div>
+    <PageWrapper>
       <aside className="mb-20">
         <H1>Foods</H1>
         <Link href="/">Back</Link>
@@ -26,7 +27,7 @@ export default async function FoodsPage({
           <FoodItems foodName={foodName} page={page} />
         </Suspense>
       </div>
-    </div>
+    </PageWrapper>
   );
 }
 
