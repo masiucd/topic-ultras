@@ -5,7 +5,7 @@ import Link from "next/link";
 import {usePathname, useSearchParams} from "next/navigation";
 
 import {Icons} from "@/components/ui/icons";
-import {TableCell} from "@/components/ui/table";
+import {Flex} from "@radix-ui/themes";
 
 export function Pagination({
   page,
@@ -24,8 +24,8 @@ export function Pagination({
   }
 
   return (
-    <TableCell className="text-right">
-      <div className="flex justify-end gap-2 ">
+    <Flex asChild>
+      <div className=" justify-end gap-2">
         <PrevLink params={params} page={page} pathName={pathName} />
         <NextLink
           params={params}
@@ -34,7 +34,7 @@ export function Pagination({
           totalPages={totalPages}
         />
       </div>
-    </TableCell>
+    </Flex>
   );
 }
 

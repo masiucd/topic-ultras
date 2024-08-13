@@ -2,10 +2,10 @@ import {Suspense} from "react";
 
 import PageWrapper from "@/components/page-wrapper";
 import {H1, Lead} from "@/components/typography";
-import {Skeleton} from "@/components/ui/skeleton";
 
 import {FoodItems} from "./_components/food-items";
 import type {SearchParams} from "./types";
+import {Skeleton} from "@radix-ui/themes";
 
 export default async function FoodsPage({
   searchParams,
@@ -19,7 +19,7 @@ export default async function FoodsPage({
     <PageWrapper>
       <aside className="mb-20">
         <H1>Foods</H1>
-        <Lead>food items</Lead>
+        <Lead>food items available in the database.</Lead>
       </aside>
       <div className="flex w-full flex-col md:min-h-[600px]  md:max-w-6xl">
         <Suspense key={foodName + page} fallback={<Loader />}>

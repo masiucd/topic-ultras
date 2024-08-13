@@ -5,7 +5,9 @@ import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {useDebouncedCallback} from "use-debounce";
 
 import {H4} from "@/components/typography";
-import {Input} from "@/components/ui/input";
+import {TextField} from "@radix-ui/themes";
+import type {RootProps} from "@radix-ui/themes/dist/esm/components/text-field.js";
+import {Icons} from "@/components/ui/icons";
 
 export function SearchFood({foodName}: {foodName: string}) {
   let searchParams = useSearchParams();
@@ -33,5 +35,15 @@ export function SearchFood({foodName}: {foodName: string}) {
         defaultValue={foodName}
       />
     </div>
+  );
+}
+
+function Input(props: RootProps) {
+  return (
+    <TextField.Root placeholder="Search ..." {...props}>
+      <TextField.Slot>
+        <Icons.Search />
+      </TextField.Slot>
+    </TextField.Root>
   );
 }
