@@ -32,8 +32,6 @@
     "postgres": "^3.4.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-google-charts": "^4.0.1",
-    "react-hot-toast": "^2.4.1",
     "recharts": "^2.12.7",
     "server-only": "^0.0.1",
     "sonner": "^1.5.0",
