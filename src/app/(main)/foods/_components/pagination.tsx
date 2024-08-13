@@ -48,7 +48,7 @@ function PrevLink({params, page, pathName}: LinkProps) {
   if (page <= 1) {
     return (
       <button
-        className="flex cursor-not-allowed items-center opacity-50"
+        className="flex cursor-not-allowed items-center gap-1 opacity-50"
         disabled
       >
         <Icons.Left /> Prev
@@ -59,7 +59,7 @@ function PrevLink({params, page, pathName}: LinkProps) {
   prevLinkUrlParams.set("page", (page - 1).toString());
   return (
     <Link
-      className="flex items-center hover:underline hover:opacity-50"
+      className="flex items-center gap-1 hover:underline hover:opacity-50"
       href={makeHref(pathName, prevLinkUrlParams)}
     >
       <Icons.Left /> Prev
@@ -78,7 +78,7 @@ function NextLink({
   if (page >= totalPages) {
     return (
       <button
-        className="flex cursor-not-allowed items-center opacity-50"
+        className="flex cursor-not-allowed items-center gap-1 opacity-50"
         disabled
       >
         Next <Icons.Right />
@@ -87,7 +87,7 @@ function NextLink({
   }
   return (
     <Link
-      className="flex items-center hover:underline hover:opacity-50 "
+      className="flex items-center gap-1 hover:underline hover:opacity-50"
       href={makeHref(pathName, nextLinkUrlParams)}
     >
       Next

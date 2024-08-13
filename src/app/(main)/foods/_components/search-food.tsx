@@ -14,7 +14,7 @@ export function SearchFood({foodName}: {foodName: string}) {
   let params = new URLSearchParams(searchParams);
   return (
     <div className="flex w-full max-w-xl flex-col gap-1">
-      <H4>Search for food item</H4>
+      <H4>Search for food a item</H4>
       <Input
         type="text"
         onChange={useDebouncedCallback((e) => {

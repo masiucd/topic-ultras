@@ -29,7 +29,6 @@ type Props = {
   page: number;
 };
 
-// TODO cache search results
 export async function FoodItems({foodName, page}: Props) {
   let {foodItems, totalFoods} = await getFoodItemsData(
     foodName,
@@ -40,8 +39,8 @@ export async function FoodItems({foodName, page}: Props) {
   let totalPages = Math.ceil(totalFoods / ITEMS_PER_PAGE);
   let currentPage = page > totalPages ? totalPages : page;
   return (
-    <div>
-      <div className="mb-5 mt-3">
+    <>
+      <div className="mb-5">
         <SearchFood foodName={foodName} />
       </div>
       <Table>
@@ -59,7 +58,7 @@ export async function FoodItems({foodName, page}: Props) {
           <Pagination page={page} totalPages={totalPages} />
         </Footer>
       </Table>
-    </div>
+    </>
   );
 }
 

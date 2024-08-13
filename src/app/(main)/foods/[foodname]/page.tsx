@@ -2,7 +2,7 @@ import {redirect} from "next/navigation";
 import type {ReactNode} from "react";
 
 import PageWrapper from "@/components/page-wrapper";
-import {Span} from "@/components/typography";
+import {P, Span} from "@/components/typography";
 import {Button} from "@/components/ui/button";
 import {
   Card,
@@ -31,9 +31,11 @@ export default async function FoodNamePage({
   }
   return (
     <PageWrapper>
-      <div className="flex flex-col border border-red-500 md:flex-row">
+      <div className="flex flex-col gap-2 border border-red-500 md:flex-row">
         <FoodCard foodItem={food} />
-        <PieChart foodItem={food} />
+        <div className="flex flex-1 items-center">
+          <PieChart foodItem={food} />
+        </div>
       </div>
     </PageWrapper>
   );
@@ -50,8 +52,8 @@ function FoodCard({foodItem}: {foodItem: FoodItem}) {
           </Button>
         </CardTitle>
         <CardDescription className="text-lg">
-          {/* {foodItem.description} */}
-          Serving size: 100g (3.5 oz)
+          <P>Serving size: 100g (3.5 oz).</P>
+          <P>{foodItem.description}</P>
         </CardDescription>
       </CardHeader>
       <div className="mb-2 px-6">
