@@ -1,4 +1,6 @@
 import {
+  Code as RadixCode,
+  type CodeProps,
   Heading,
   type HeadingProps,
   Strong as RadixStrong,
@@ -49,4 +51,8 @@ export function Lead(props: TextProps) {
 }
 export function Strong(props: StrongProps) {
   return <RadixStrong {...props} />;
+}
+
+export function Code(props: CodeProps) {
+  return <RadixCode {...props} />;
 }
