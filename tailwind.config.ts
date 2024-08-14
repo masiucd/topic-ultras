@@ -20,6 +20,7 @@ const config = {
     },
     extend: {
       gray: colors.slate,
+      paragraph: colors.slate,
     },
   },
   plugins: [require("tailwindcss-animate")],
