@@ -30,9 +30,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class">
           <Theme
-            accentColor="crimson"
+            accentColor="blue"
             grayColor="slate"
-            radius="large"
+            radius="medium"
             scaling="95%"
           >
             {children}

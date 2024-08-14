@@ -35,8 +35,13 @@ type Props = {
 
 export function FoodTypeBadge(props: Props) {
   return (
-    <Link href={`/foods/food-types/${props.name}`}>
-      <Badge className="uppercase" color={getColor(props.name)} {...props}>
+    <Link href={`/foods/food-types/${props.name}`} className="hover:opacity-70">
+      <Badge
+        className="uppercase"
+        color={getColor(props.name)}
+        highContrast
+        {...props}
+      >
         {props.name}
       </Badge>
     </Link>

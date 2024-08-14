@@ -3,9 +3,9 @@ import {Suspense} from "react";
 import PageWrapper from "@/components/page-wrapper";
 import {H1, Lead} from "@/components/typography";
 
-import {FoodItems} from "./_components/food-items";
 import type {SearchParams} from "./types";
 import {Skeleton} from "@radix-ui/themes";
+import {FoodTable} from "./_components/food-table";
 
 export default async function FoodsPage({
   searchParams,
@@ -23,7 +23,7 @@ export default async function FoodsPage({
       </aside>
       <div className="flex w-full flex-col md:min-h-[600px]  md:max-w-6xl">
         <Suspense key={foodName + page} fallback={<Loader />}>
-          <FoodItems foodName={foodName} page={page} />
+          <FoodTable foodName={foodName} page={page} />
         </Suspense>
       </div>
     </PageWrapper>
