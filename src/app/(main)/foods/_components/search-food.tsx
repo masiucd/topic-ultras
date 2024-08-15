@@ -1,12 +1,11 @@
 "use client";
 
-import {TextField} from "@radix-ui/themes";
-import type {RootProps} from "@radix-ui/themes/dist/esm/components/text-field.js";
 import type {Route} from "next";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {useDebouncedCallback} from "use-debounce";
 
 import {Icons} from "@/components/ui/icons";
+import {Input, Slot} from "@/components/ui/input";
 
 export function SearchFood({foodName}: {foodName: string}) {
   let searchParams = useSearchParams();
@@ -15,7 +14,7 @@ export function SearchFood({foodName}: {foodName: string}) {
   let params = new URLSearchParams(searchParams);
   return (
     <Input
-      type="text"
+      placeholder="Search ..."
       onChange={useDebouncedCallback((e) => {
         let term = e.target.value;
         if (term) {
@@ -30,16 +29,10 @@ export function SearchFood({foodName}: {foodName: string}) {
         router.replace(newUrl);
       }, 500)}
       defaultValue={foodName}
-    />
-  );
-}
-
-function Input(props: RootProps) {
-  return (
-    <TextField.Root placeholder="Search ..." {...props}>
-      <TextField.Slot>
+    >
+      <Slot>
         <Icons.Search />
-      </TextField.Slot>
-    </TextField.Root>
+      </Slot>
+    </Input>
   );
 }

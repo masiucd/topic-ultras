@@ -11,10 +11,10 @@ function Title() {
       <H1>{appData.title}</H1>
       <Lead className="flex gap-1">
         Welcome to{" "}
-        <Span className="relative rounded-sm after:absolute after:left-0 after:top-3 after:h-1 after:w-full after:-rotate-3  after:bg-primary/20 after:transition-transform after:content-['']">
+        <Span className="after:bg-primary/20 relative rounded-sm after:absolute after:left-0 after:top-3 after:h-1 after:w-full  after:-rotate-3 after:transition-transform after:content-['']">
           {nutri}
         </Span>{" "}
-        <Span className="relative rounded-sm after:absolute after:bottom-1 after:left-0 after:h-2 after:w-full after:rotate-2 after:bg-primary/20 after:transition-transform after:content-['']">
+        <Span className="after:bg-primary/20 relative rounded-sm after:absolute after:bottom-1 after:left-0 after:h-2 after:w-full after:rotate-2 after:transition-transform after:content-['']">
           {check}
         </Span>
       </Lead>

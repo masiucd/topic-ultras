@@ -1,54 +1,38 @@
 import {Button, Flex} from "@radix-ui/themes";
-import {eq} from "drizzle-orm";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
 
 import PageWrapper from "@/components/page-wrapper";
 import {Input} from "@/components/ui/input";
-import {db} from "@/db";
-import {users} from "@/db/schema";
+import {getUserByEmail} from "@/db/dao/user";
+import {encrypt} from "@/lib/crypto";
 import {verifyPassword} from "@/lib/password";
-
-async function getUserByEmail(email: string) {
-  try {
-    let user = await db
-      .select({id: users.id, email: users.email, password: users.password})
-      .from(users)
-      .where(eq(users.email, email));
-    if (user.length > 0) {
-      return user[0];
-    }
-    return null;
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error);
-    return null;
-  }
-}
 
 async function login(data: FormData) {
   "use server";
   let email = data.get("email");
   let password = data.get("password");
-  console.log({email, password});
   if (typeof email !== "string" || typeof password !== "string") {
-    // throw new Error("This should never happened!!");
-    return;
+    throw new Error("Invalid email or password");
   }
   let user = await getUserByEmail(email);
   if (user === null) {
-    return;
+    return {ok: false};
     // throw new Error("Wrong email or password");
   }
   let isValidPassword = await verifyPassword(password, user.password);
   if (!isValidPassword) {
-    return;
-    // throw new Error("Wrong email or password");
+    return {ok: false};
   }
-
   let cookieStorage = cookies();
-  // cookieStorage.set('session',)
-
+  cookieStorage.set(
+    "session",
+    await encrypt({
+      id: user.id,
+      email: user.email,
+      expires: Date.now() + 1000 * 60 * 60 * 2, // 2 hours
+    })
+  );
   redirect("/user/profile");
 }
 

@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import {hashPassword} from "@/lib/password";
 
 import type {DB} from "..";
 import {users} from "../schema";
@@ -14,7 +14,7 @@ export async function seed(db: DB) {
           lastName: u.lastName,
           age: u.age,
           email: u.email,
-          password: await bcrypt.hash("123456", 10),
+          password: await hashPassword("123456"),
         })
         .execute();
     }

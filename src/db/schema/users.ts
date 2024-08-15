@@ -1,5 +1,6 @@
 import {relations} from "drizzle-orm";
 import {
+  boolean,
   index,
   integer,
   pgTable,
@@ -19,6 +20,7 @@ export let users = pgTable(
     age: integer("age").notNull(),
     email: varchar("email", {length: 200}).notNull().unique(),
     password: varchar("password", {length: 200}).notNull(),
+    admin: boolean("admin").default(false),
     createdAt: timestamp("created_at", {mode: "string"}).defaultNow(),
   },
   (table) => ({
