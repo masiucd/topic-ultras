@@ -1,7 +1,7 @@
 import "server-only";
 
-import {eq, like, SQL, sql} from "drizzle-orm";
-import {alias} from "drizzle-orm/pg-core";
+import {desc, eq, like, SQL, sql} from "drizzle-orm";
+import {alias, PgColumn} from "drizzle-orm/pg-core";
 
 import {type DB, db} from "@/db";
 import {foodNutrients, foods, foodTypes} from "@/db/schema";
@@ -11,12 +11,24 @@ export const ITEMS_PER_PAGE = 6;
 export async function getFoodItemsData(
   query: string,
   perPage = ITEMS_PER_PAGE,
-  skip = 0
+  skip = 0,
+  orderBy: string
 ) {
+  console.log("🚀 ~ orderBy:", orderBy);
   try {
     let res = await db.transaction(async (tx) => {
       let queryCondition = query === "" ? sql`1=1` : like(f.name, `%${query}%`);
-      let foodItems = await selectFoodItems(tx, queryCondition, perPage, skip);
+      let orderByCondition =
+        orderBy === ""
+          ? f.name
+          : foodNutrients[orderBy as "carbs" | "protein" | "fat"];
+      let foodItems = await selectFoodItems(
+        tx,
+        queryCondition,
+        perPage,
+        skip,
+        orderByCondition
+      );
       let totalFoods = await getTotalFoodItems(tx);
       return {foodItems, totalFoods: totalFoods[0].total};
     });
@@ -39,7 +51,8 @@ async function selectFoodItems(
   trx: DB,
   queryCondition: SQL<unknown>,
   perPage: number,
-  skip: number
+  skip: number,
+  orderByCondition: PgColumn
 ) {
   return await trx
     .select({
@@ -63,7 +76,8 @@ async function selectFoodItems(
     .innerJoin(foodNutrients, eq(f.id, foodNutrients.foodId))
     .limit(perPage)
     .offset(skip)
-    .where(queryCondition);
+    .where(queryCondition)
+    .orderBy(desc(orderByCondition));
 }
 
 async function getTotalFoodItems(trx: DB) {

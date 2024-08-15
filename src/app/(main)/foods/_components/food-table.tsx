@@ -1,4 +1,4 @@
-import {Tooltip} from "@radix-ui/themes";
+import {Flex, Tooltip} from "@radix-ui/themes";
 import Link from "next/link";
 import type {PropsWithChildren} from "react";
 
@@ -27,22 +27,22 @@ import {SearchFood} from "./search-food";
 type Props = {
   foodName: string;
   page: number;
+  orderBy: string;
 };
 
-export async function FoodTable({foodName, page}: Props) {
+export async function FoodTable({foodName, page, orderBy}: Props) {
   let {foodItems, totalFoods} = await getFoodItemsData(
     foodName,
     ITEMS_PER_PAGE,
-    (page - 1) * ITEMS_PER_PAGE // skip items based on page number
+    (page - 1) * ITEMS_PER_PAGE, // skip items based on page number
+    orderBy
   );
 
   let totalPages = Math.ceil(totalFoods / ITEMS_PER_PAGE);
   let currentPage = page > totalPages ? totalPages : page;
   return (
     <>
-      <div className="mb-5 flex w-full max-w-md flex-col gap-1">
-        <SearchFood foodName={foodName} />
-      </div>
+      <Filters foodName={foodName} />
       <Table className="relative">
         <TableCaption>
           List of food items available in the database
@@ -60,6 +60,23 @@ export async function FoodTable({foodName, page}: Props) {
         </TableBody>
       </Table>
     </>
+  );
+}
+
+function Filters({foodName}: {foodName: string}) {
+  return (
+    <Flex asChild direction="column" gap="2">
+      <div className="mb-5  w-full max-w-md ">
+        <SearchFood foodName={foodName} />
+        <Flex gap="3">
+          <Link href="/foods?orderby=carbs">Carbs</Link>
+          <Link href="/foods?orderby=protein">Protein</Link>
+          <Link href="/foods?orderby=fat">Fat</Link>
+          <Link href="/foods?orderby=calories">Calories</Link>
+          <Link href="/foods">Reset</Link>
+        </Flex>
+      </div>
+    </Flex>
   );
 }
 
