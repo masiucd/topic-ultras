@@ -1,7 +1,7 @@
 import "server-only";
 
-import {desc, eq, like, SQL, sql} from "drizzle-orm";
-import {alias, PgColumn} from "drizzle-orm/pg-core";
+import {asc, desc, eq, like, SQL, sql} from "drizzle-orm";
+import {alias} from "drizzle-orm/pg-core";
 
 import {type DB, db} from "@/db";
 import {foodNutrients, foods, foodTypes} from "@/db/schema";
@@ -20,8 +20,8 @@ export async function getFoodItemsData(
       let queryCondition = query === "" ? sql`1=1` : like(f.name, `%${query}%`);
       let orderByCondition =
         orderBy === ""
-          ? f.name
-          : foodNutrients[orderBy as "carbs" | "protein" | "fat"];
+          ? asc(f.name)
+          : desc(foodNutrients[orderBy as "carbs" | "protein" | "fat"]);
       let foodItems = await selectFoodItems(
         tx,
         queryCondition,
@@ -52,7 +52,7 @@ async function selectFoodItems(
   queryCondition: SQL<unknown>,
   perPage: number,
   skip: number,
-  orderByCondition: PgColumn
+  orderByCondition: SQL<unknown>
 ) {
   return await trx
     .select({
@@ -77,7 +77,7 @@ async function selectFoodItems(
     .limit(perPage)
     .offset(skip)
     .where(queryCondition)
-    .orderBy(desc(orderByCondition));
+    .orderBy(orderByCondition);
 }
 
 async function getTotalFoodItems(trx: DB) {
