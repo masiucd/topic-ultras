@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --red: hsl(0, 100%, 74%);
+}
+
 @layer base {
   .radix-themes {
     --default-font-family: var(--font-inter);

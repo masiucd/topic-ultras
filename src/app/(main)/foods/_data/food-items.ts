@@ -46,7 +46,11 @@ async function selectFoodItems(
       foodId: f.id,
       foodName: f.name,
       slug: f.slug,
-      foodType: {name: ft.name, id: ft.id},
+      foodType: {
+        id: ft.id,
+        name: ft.name,
+        slug: ft.slug,
+      },
       data: {
         calories: foodNutrients.calories,
         fat: foodNutrients.fat,

@@ -13,6 +13,7 @@ export async function getFoodItemByName(foodName: string) {
         description: foods.description,
         type: {
           name: foodTypes.name,
+          slug: foodTypes.slug,
           id: foodTypes.id,
         },
         nutrients: {
@@ -34,3 +35,5 @@ export async function getFoodItemByName(foodName: string) {
     return null;
   }
 }
+
+export type FoodItem = Awaited<ReturnType<typeof getFoodItemByName>>;

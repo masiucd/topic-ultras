@@ -119,7 +119,10 @@ function TableBody({
             </Link>
           </RowHeaderCell>
           <Cell>
-            <FoodTypeBadge name={foodItem.foodType.name} />
+            <FoodTypeBadge
+              name={foodItem.foodType.name}
+              slug={foodItem.foodType.slug}
+            />
           </Cell>
           <Cell>
             <Span>{foodItem.data.calories}</Span>

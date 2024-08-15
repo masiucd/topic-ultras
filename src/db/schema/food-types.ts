@@ -8,10 +8,12 @@ export let foodTypes = pgTable(
   {
     id: serial("id").primaryKey().notNull(),
     name: varchar("name", {length: 100}).notNull(),
+    slug: varchar("slug", {length: 100}).notNull(),
     createdAt: timestamp("created_at", {mode: "string"}).defaultNow(),
   },
   (table) => ({
     foodTypeNameIndex: index("food_type_name_index").on(table.name),
+    foodTypeSlugIndex: index("food_type_slug_index").on(table.slug),
   })
 );
 
