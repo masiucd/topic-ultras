@@ -14,7 +14,6 @@ export async function getFoodItemsData(
   skip = 0,
   orderBy: string
 ) {
-  console.log("🚀 ~ orderBy:", orderBy);
   try {
     let res = await db.transaction(async (tx) => {
       let queryCondition = query === "" ? sql`1=1` : like(f.name, `%${query}%`);

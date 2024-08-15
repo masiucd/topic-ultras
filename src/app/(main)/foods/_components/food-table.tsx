@@ -42,7 +42,11 @@ export async function FoodTable({foodName, page, orderBy}: Props) {
   let currentPage = page > totalPages ? totalPages : page;
   return (
     <>
-      <Filters foodName={foodName} />
+      <Flex asChild direction="column" gap="2">
+        <div className="mb-5  w-full max-w-md ">
+          <SearchFood foodName={foodName} />
+        </div>
+      </Flex>
       <Table className="relative">
         <TableCaption>
           List of food items available in the database
@@ -63,31 +67,17 @@ export async function FoodTable({foodName, page, orderBy}: Props) {
   );
 }
 
-function Filters({foodName}: {foodName: string}) {
-  return (
-    <Flex asChild direction="column" gap="2">
-      <div className="mb-5  w-full max-w-md ">
-        <SearchFood foodName={foodName} />
-        <Flex gap="3">
-          <Link href="/foods?orderby=carbs">Carbs</Link>
-          <Link href="/foods?orderby=protein">Protein</Link>
-          <Link href="/foods?orderby=fat">Fat</Link>
-          <Link href="/foods?orderby=calories">Calories</Link>
-          <Link href="/foods">Reset</Link>
-        </Flex>
-      </div>
-    </Flex>
-  );
-}
-
 function TableHead() {
+  let searchParams = new URLSearchParams(); // TODO
   return (
     <Header>
       <Row>
         <ColumnHeaderCell>
-          <Tooltip content="Food name">
-            <Icons.Food />
-          </Tooltip>
+          <Link href="/foods?orderby=name">
+            <Tooltip content="Food name">
+              <Icons.Food />
+            </Tooltip>
+          </Link>
         </ColumnHeaderCell>
         <ColumnHeaderCell>
           <Tooltip content="Food type">
@@ -95,24 +85,32 @@ function TableHead() {
           </Tooltip>
         </ColumnHeaderCell>
         <ColumnHeaderCell>
-          <Tooltip content="Calories in food item">
-            <Icons.Calories />
-          </Tooltip>
+          <Link href="/foods?orderby=calories">
+            <Tooltip content="Calories in food item">
+              <Icons.Calories />
+            </Tooltip>
+          </Link>
         </ColumnHeaderCell>
         <ColumnHeaderCell>
-          <Tooltip content="Carbs">
-            <Icons.Carbs />
-          </Tooltip>
+          <Link href="/foods?orderby=carbs">
+            <Tooltip content="Carbs">
+              <Icons.Carbs />
+            </Tooltip>
+          </Link>
         </ColumnHeaderCell>
         <ColumnHeaderCell>
-          <Tooltip content="Protein">
-            <Icons.Protein />
-          </Tooltip>
+          <Link href="/foods?orderby=protein">
+            <Tooltip content="Protein">
+              <Icons.Protein />
+            </Tooltip>
+          </Link>
         </ColumnHeaderCell>
         <ColumnHeaderCell>
-          <Tooltip content="Total fat">
-            <Icons.Fat />
-          </Tooltip>
+          <Link href="/foods?orderby=fat">
+            <Tooltip content="Total fat">
+              <Icons.Fat />
+            </Tooltip>
+          </Link>
         </ColumnHeaderCell>
       </Row>
     </Header>
