@@ -17,6 +17,7 @@ let envSchema = z.object({
   DB_URL: z.string(),
   DB_MIGRATION: stringBoolean,
   DB_SEED: stringBoolean,
+  JWT_SECRET: z.string(),
 });
 
 export type EnvSchema = z.infer<typeof envSchema>;
