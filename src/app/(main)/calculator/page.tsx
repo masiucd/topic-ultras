@@ -1,3 +1,5 @@
+import PageWrapper from "@/components/page-wrapper";
+
 export default function CalculatorPage() {
-  return <div>CalculatorPage</div>;
+  return <PageWrapper>CalculatorPage</PageWrapper>;
 }

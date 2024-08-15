@@ -1,3 +1,4 @@
+import {Flex} from "@radix-ui/themes";
 import {eq} from "drizzle-orm";
 import Link from "next/link";
 
@@ -42,10 +43,12 @@ export default async function FoodTypePage({
 
   return (
     <PageWrapper>
-      <H1>{foodType.name}</H1>
-      <Lead>
-        Food items in the <strong>{foodType.name}</strong> category.
-      </Lead>
+      <Flex direction="column" gap="3">
+        <H1 className="capitalize">{foodType.name}</H1>
+        <Lead>
+          Food items in the <strong>{foodType.name}</strong> category.
+        </Lead>
+      </Flex>
       <ul>
         {foodItems.map((item) => (
           <li key={item.id}>
