@@ -1,13 +1,14 @@
-import {Box, Button, Card, DataList, Flex, Separator} from "@radix-ui/themes";
+import {Box, Button, Card, Flex, Separator} from "@radix-ui/themes";
 import {redirect} from "next/navigation";
 
 import PageWrapper from "@/components/page-wrapper";
 import {Code, H3, H4, P, Span} from "@/components/typography";
+import {DataList} from "@/components/ui/datalist";
 import {FoodTypeBadge} from "@/components/ui/food-type-badge";
 import {Icons} from "@/components/ui/icons";
+import {getFoodItemByName} from "@/db/dao/foods";
 
 import {PieChart} from "./_components/pie";
-import {type FoodItem, getFoodItemByName} from "./_data/food-item";
 
 export default async function FoodNamePage({
   params: {foodname},
@@ -36,6 +37,7 @@ export default async function FoodNamePage({
   );
 }
 
+type FoodItem = Awaited<ReturnType<typeof getFoodItemByName>>;
 function FoodCard({food}: {food: NonNullable<FoodItem>}) {
   return (
     <Box width="500px">
@@ -66,7 +68,7 @@ function FoodCard({food}: {food: NonNullable<FoodItem>}) {
           </Flex>
         </Flex>
 
-        <DataList.Root>
+        <DataList>
           <DataList.Item align="center">
             <DataList.Label minWidth="128px">
               <Span weight="bold">Type</Span>
@@ -119,7 +121,7 @@ function FoodCard({food}: {food: NonNullable<FoodItem>}) {
               </Flex>
             </DataList.Value>
           </DataList.Item>
-        </DataList.Root>
+        </DataList>
       </Card>
     </Box>
   );

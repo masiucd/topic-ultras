@@ -1,8 +1,11 @@
-import {Box, Card, Tabs, Text} from "@radix-ui/themes";
+import {Badge, Box, Card, Tabs, Text} from "@radix-ui/themes";
 
 import PageWrapper from "@/components/page-wrapper";
-import {H1, P} from "@/components/typography";
-import {getUserFromSession} from "@/lib/auth";
+import {H1, Span} from "@/components/typography";
+import {DataList} from "@/components/ui/datalist";
+import {getUserFromSession, type User} from "@/lib/auth";
+
+import {SettingsTab} from "./_components/tabs/settings";
 
 export default async function UserProfilePage() {
   let user = await getUserFromSession();
@@ -19,7 +22,6 @@ export default async function UserProfilePage() {
   );
 }
 
-type User = NonNullable<Awaited<ReturnType<typeof getUserFromSession>>>;
 function UserTabs({user}: {user: User}) {
   return (
     <Tabs.Root defaultValue="account">
@@ -27,33 +29,88 @@ function UserTabs({user}: {user: User}) {
         <Tabs.Trigger value="account">Account</Tabs.Trigger>
         <Tabs.Trigger value="contact">Contact</Tabs.Trigger>
         <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+        <Tabs.Trigger value="all">All</Tabs.Trigger>
       </Tabs.List>
-
       <Box pt="3">
-        <Tabs.Content value="account">
-          <Text size="2">Make changes to your account.</Text>
-
-          <Card>
-            <P>Email: {user.email}</P>
-            <P>Age: {user.age}</P>
-            <P>Admin: {user.admin ? "Yes" : "No"}</P>
-          </Card>
-        </Tabs.Content>
-
-        <Tabs.Content value="contact">
-          <Text size="2">Contact information</Text>
-          <Card>
-            <Text size="2">Documents</Text>
-          </Card>
-        </Tabs.Content>
-
-        <Tabs.Content value="settings">
-          <Text size="2">Edit your profile or update contact information.</Text>
-          <Card>
-            <Text size="2">Settings</Text>
-          </Card>
-        </Tabs.Content>
+        <AccountTab user={user} />
+        <ContactTab />
+        <SettingsTab user={user} />
+        <AllTab />
       </Box>
     </Tabs.Root>
+  );
+}
+
+function AccountTab({user}: {user: User}) {
+  return (
+    <Tabs.Content value="account">
+      <Box maxWidth="350px">
+        <Card>
+          <DataList>
+            <DataList.Item>
+              <DataList.Label minWidth="128px">
+                <Span weight="bold">Type</Span>
+              </DataList.Label>
+              <DataList.Value>
+                <Badge color={user.admin ? "iris" : "crimson"}>
+                  {user.admin ? "ADMIN" : "USER"}
+                </Badge>
+              </DataList.Value>
+            </DataList.Item>
+            <DataList.Item>
+              <DataList.Label>
+                <Span weight="bold">Email</Span>
+              </DataList.Label>
+              <DataList.Value>
+                <Span>{user.email}</Span>
+              </DataList.Value>
+            </DataList.Item>
+            <DataList.Item>
+              <DataList.Label>
+                <Span weight="bold">First Name</Span>
+              </DataList.Label>
+              <DataList.Value>
+                <Span className="capitalize">{user.firstName}</Span>
+              </DataList.Value>
+            </DataList.Item>
+            <DataList.Item>
+              <DataList.Label>
+                <Span weight="bold">Last Name</Span>
+              </DataList.Label>
+              <DataList.Value>
+                <Span className="capitalize">{user.lastName}</Span>
+              </DataList.Value>
+            </DataList.Item>
+            <DataList.Item>
+              <DataList.Label>
+                <Span weight="bold">Age</Span>
+              </DataList.Label>
+              <DataList.Value>
+                <Span>{user.age}</Span>
+              </DataList.Value>
+            </DataList.Item>
+          </DataList>
+        </Card>
+      </Box>
+    </Tabs.Content>
+  );
+}
+
+function ContactTab() {
+  return (
+    <Tabs.Content value="contact">
+      <Text size="2">Contact information</Text>
+      <Card>
+        <Text size="2">Documents</Text>
+      </Card>
+    </Tabs.Content>
+  );
+}
+
+function AllTab() {
+  return (
+    <Tabs.Content value="all">
+      <Text size="2">All tabs</Text>
+    </Tabs.Content>
   );
 }
