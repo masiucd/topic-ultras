@@ -18,6 +18,7 @@ export async function getUserFromSession() {
   let user = await getUserByEmail(payload.email);
   return user;
 }
+export type User = NonNullable<Awaited<ReturnType<typeof getUserFromSession>>>;
 
 // TODO this function is already defined in the the DAO it just need to be more generic
 async function getUserByEmail(email: string) {

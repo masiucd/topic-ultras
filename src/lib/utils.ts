@@ -9,11 +9,16 @@ export function sleep(ms = 2000) {
   return new Promise((res) => setTimeout(res, ms));
 }
 
-export function slugify(input: string) {
-  return input.toLowerCase().replace(/\s/g, "-");
-}
-
-// TODO do we want to store the slug on the foods table?
-export function unSlugify(input: string) {
-  return input.replace(/-/g, " ");
+export function validateFormData(
+  data: FormData,
+  fields: string[]
+): [boolean, string[]] {
+  let xs = [];
+  for (const field of fields) {
+    const value = data.get(field);
+    if (typeof value === "string") {
+      xs.push(value);
+    }
+  }
+  return [xs.length === fields.length, xs];
 }
