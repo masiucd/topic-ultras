@@ -3,8 +3,41 @@ import "server-only";
 import {asc, desc, eq, like, SQL, sql} from "drizzle-orm";
 import {alias} from "drizzle-orm/pg-core";
 
-import {type DB, db} from "@/db";
-import {foodNutrients, foods, foodTypes} from "@/db/schema";
+import {type DB, db} from "..";
+import {foodNutrients, foods, foodTypes} from "../schema";
+
+export async function getFoodItemByName(foodName: string) {
+  try {
+    let item = await db
+      .select({
+        name: foods.name,
+        description: foods.description,
+        type: {
+          name: foodTypes.name,
+          slug: foodTypes.slug,
+          id: foodTypes.id,
+        },
+        nutrients: {
+          calories: foodNutrients.calories,
+          fat: foodNutrients.fat,
+          protein: foodNutrients.protein,
+          carbs: foodNutrients.carbs,
+        },
+      })
+      .from(foods)
+      .innerJoin(foodTypes, eq(foods.typeId, foodTypes.id))
+      .innerJoin(foodNutrients, eq(foods.id, foodNutrients.foodId))
+      .where(eq(foods.slug, foodName));
+
+    return item[0];
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
+    return null;
+  }
+}
+
+// export type FoodItemType = Awaited<ReturnType<typeof getFoodItemByName>>;
 
 export const ITEMS_PER_PAGE = 6;
 
@@ -20,7 +53,10 @@ export async function getFoodItemsData(
       let orderByCondition =
         orderBy === ""
           ? asc(f.name)
-          : desc(foodNutrients[orderBy as "carbs" | "protein" | "fat"]);
+          : desc(
+              foodNutrients[orderBy as "carbs" | "protein" | "fat" | "calories"]
+            );
+
       let foodItems = await selectFoodItems(
         tx,
         queryCondition,
@@ -28,6 +64,7 @@ export async function getFoodItemsData(
         skip,
         orderByCondition
       );
+
       let totalFoods = await getTotalFoodItems(tx);
       return {foodItems, totalFoods: totalFoods[0].total};
     });
@@ -38,10 +75,6 @@ export async function getFoodItemsData(
     return {foodItems: [], totalFoods: 0};
   }
 }
-
-export type FoodItem = Awaited<
-  ReturnType<typeof getFoodItemsData>
->["foodItems"][number];
 
 let ft = alias(foodTypes, "foodType");
 let f = alias(foods, "food");

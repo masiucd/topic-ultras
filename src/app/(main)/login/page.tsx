@@ -1,10 +1,10 @@
 import {Button, Flex} from "@radix-ui/themes";
-import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
 
 import PageWrapper from "@/components/page-wrapper";
 import {Input} from "@/components/ui/input";
 import {getUserByEmail} from "@/db/dao/user";
+import {setCookie} from "@/lib/cookies";
 import {encrypt} from "@/lib/crypto";
 import {verifyPassword} from "@/lib/password";
 
@@ -24,13 +24,13 @@ async function login(data: FormData) {
   if (!isValidPassword) {
     return {ok: false};
   }
-  let cookieStorage = cookies();
-  cookieStorage.set(
+  setCookie(
     "session",
     await encrypt({
       id: user.id,
       email: user.email,
-      expires: Date.now() + 1000 * 60 * 60 * 2, // 2 hours
+      iat: Date.now(),
+      exp: Date.now() + 1000 * 60 * 60 * 2, // 2 hours
     })
   );
   redirect("/user/profile");

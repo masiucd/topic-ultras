@@ -15,12 +15,8 @@ import {
   Table,
   TableCaption,
 } from "@/components/ui/table";
+import {getFoodItemsData, ITEMS_PER_PAGE} from "@/db/dao/foods";
 
-import {
-  type FoodItem,
-  getFoodItemsData,
-  ITEMS_PER_PAGE,
-} from "../_data/food-items";
 import {HeadTitle} from "./head-title";
 import {Pagination} from "./pagination";
 import {SearchFood} from "./search-food";
@@ -41,7 +37,7 @@ export async function FoodTable({foodName, page, orderBy}: Props) {
 
   let totalPages = Math.ceil(totalFoods / ITEMS_PER_PAGE);
   let currentPage = page > totalPages ? totalPages : page;
-  console.log("🚀 ~ FoodTable ~ foodItems:", foodItems);
+
   return (
     <>
       <Flex asChild direction="column" gap="2">
@@ -69,6 +65,7 @@ export async function FoodTable({foodName, page, orderBy}: Props) {
   );
 }
 
+// TODO bug when order by seleted head title
 function TableHead() {
   return (
     <Header>
@@ -107,16 +104,20 @@ function TableHead() {
           </HeadTitle>
         </ColumnHeaderCell>
         <ColumnHeaderCell>
-          <Link href="/foods?orderby=fat">
+          <HeadTitle title="fat">
             <Tooltip content="Total fat">
               <Icons.Fat />
             </Tooltip>
-          </Link>
+          </HeadTitle>
         </ColumnHeaderCell>
       </Row>
     </Header>
   );
 }
+
+type FoodItem = Awaited<
+  ReturnType<typeof getFoodItemsData>
+>["foodItems"][number];
 
 function TableBody({
   foodItems,
