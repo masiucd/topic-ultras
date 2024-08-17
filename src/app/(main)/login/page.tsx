@@ -24,14 +24,16 @@ async function login(data: FormData) {
   if (!isValidPassword) {
     return {ok: false};
   }
+  let expires = Date.now() + 1000 * 60 * 60 * 2; // 2 hours
   setCookie(
     "session",
     await encrypt({
       id: user.id,
       email: user.email,
       iat: Date.now(),
-      exp: Date.now() + 1000 * 60 * 60 * 2, // 2 hours
-    })
+      exp: expires,
+    }),
+    expires
   );
   redirect("/user/profile");
 }

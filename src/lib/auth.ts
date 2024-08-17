@@ -2,7 +2,6 @@ import "server-only";
 
 import {eq} from "drizzle-orm";
 import {cookies} from "next/headers";
-import {redirect} from "next/navigation";
 
 import {db} from "@/db";
 import {users} from "@/db/schema";
@@ -12,7 +11,7 @@ export async function getUserFromSession() {
   let cookieStorage = cookies();
   let session = cookieStorage.get("session");
   if (!session) {
-    redirect("/login");
+    return null;
   }
   let payload = await decrypt(session.value);
   let user = await getUserByEmail(payload.email);

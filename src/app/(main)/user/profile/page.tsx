@@ -1,4 +1,5 @@
 import {Badge, Box, Card, Tabs, Text} from "@radix-ui/themes";
+import {redirect} from "next/navigation";
 
 import PageWrapper from "@/components/page-wrapper";
 import {H1, Span} from "@/components/typography";
@@ -9,8 +10,9 @@ import {SettingsTab} from "./_components/tabs/settings";
 
 export default async function UserProfilePage() {
   let user = await getUserFromSession();
-  if (!user) {
-    return null;
+
+  if (user === null) {
+    redirect("/login");
   }
   return (
     <PageWrapper>
