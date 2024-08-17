@@ -4,7 +4,8 @@ import {redirect} from "next/navigation";
 import PageWrapper from "@/components/page-wrapper";
 import {Input} from "@/components/ui/input";
 import {getUserByEmail} from "@/db/dao/user";
-import {setCookie} from "@/lib/cookies";
+import {getUserFromSession} from "@/lib/auth";
+import {getExpiresInHours, setCookie} from "@/lib/cookies";
 import {encrypt} from "@/lib/crypto";
 import {verifyPassword} from "@/lib/password";
 
@@ -24,21 +25,35 @@ async function login(data: FormData) {
   if (!isValidPassword) {
     return {ok: false};
   }
-  let expires = Date.now() + 1000 * 60 * 60 * 2; // 2 hours
+
   setCookie(
     "session",
     await encrypt({
       id: user.id,
       email: user.email,
       iat: Date.now(),
-      exp: expires,
-    }),
-    expires
+      exp: getExpiresInHours(2),
+    })
   );
+
   redirect("/user/profile");
 }
 
-export default function LoginPage() {
+async function isLoggedIn() {
+  let user = await getUserFromSession();
+
+  if (user !== null) {
+    return true;
+  }
+  return false;
+}
+
+export default async function LoginPage() {
+  let loggedIn = await isLoggedIn();
+  if (loggedIn) {
+    redirect("/user/profile");
+  }
+
   return (
     <PageWrapper>
       <Flex asChild direction="column" maxWidth="500px">
