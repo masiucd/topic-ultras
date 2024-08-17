@@ -22,6 +22,9 @@ export let users = pgTable(
     password: varchar("password", {length: 200}).notNull(),
     admin: boolean("admin").default(false),
     createdAt: timestamp("created_at", {mode: "string"}).defaultNow(),
+    updatedAt: timestamp("updated_at", {mode: "string"})
+      .defaultNow()
+      .$onUpdate(() => new Date().toISOString()),
   },
   (table) => ({
     emailIndex: index("email_index").on(table.email),

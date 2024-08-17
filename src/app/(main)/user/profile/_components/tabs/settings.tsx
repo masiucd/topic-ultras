@@ -20,18 +20,8 @@ export function SettingsTab({user}: {user: User}) {
           <Input value={user.firstName} disabled />
           <Input value={user.lastName} disabled />
           <form action={updateUser}>
-            <Email
-              user={user}
-              disabled={editType === "PASSWORD"}
-              enabled={editType === "EMAIL"}
-              toggle={() => {
-                if (editType === "EMAIL") {
-                  setEditType(null);
-                } else {
-                  setEditType("EMAIL");
-                }
-              }}
-            />
+            <input type="hidden" name="userid" value={user.id} />
+            <Email user={user} />
             <Password
               enabled={editType === "PASSWORD"}
               toggle={() => {
@@ -41,12 +31,8 @@ export function SettingsTab({user}: {user: User}) {
                   setEditType("PASSWORD");
                 }
               }}
-              disabled={editType === "EMAIL"}
             />
-
-            <Button type="submit" disabled={editType === null}>
-              Update
-            </Button>
+            <Button type="submit">Update</Button>
           </form>
         </Flex>
       </Card>
@@ -54,45 +40,15 @@ export function SettingsTab({user}: {user: User}) {
   );
 }
 
-function Email({
-  enabled,
-  disabled,
-  toggle,
-  user,
-}: {
-  enabled: boolean;
-  disabled: boolean;
-  toggle: () => void;
-  user: User;
-}) {
+function Email({user}: {user: User}) {
   return (
     <Flex direction="column">
-      <Input placeholder={user.email} disabled={!enabled} />
-      <Flex>
-        <Tooltip content="Edit email">
-          <Button
-            variant={enabled ? "soft" : "outline"}
-            type="button"
-            disabled={disabled}
-            onClick={toggle}
-          >
-            <Icons.Edit />
-          </Button>
-        </Tooltip>
-      </Flex>
+      <Input placeholder={user.email} name="email" />
     </Flex>
   );
 }
 
-function Password({
-  enabled,
-  toggle,
-  disabled,
-}: {
-  enabled: boolean;
-  disabled: boolean;
-  toggle: () => void;
-}) {
+function Password({enabled, toggle}: {enabled: boolean; toggle: () => void}) {
   return (
     <Flex direction="column" gap="2">
       <Flex direction="column" gap="3">
@@ -103,11 +59,7 @@ function Password({
           type="password"
         />
         {enabled && (
-          <Input
-            placeholder="new password"
-            type="password"
-            disabled={disabled}
-          />
+          <Input placeholder="new password" type="password" name="password" />
         )}
       </Flex>
 
@@ -116,7 +68,6 @@ function Password({
           <Button
             variant={enabled ? "soft" : "outline"}
             type="button"
-            disabled={disabled}
             onClick={toggle}
           >
             <Icons.Edit />

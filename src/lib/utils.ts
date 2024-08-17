@@ -12,13 +12,13 @@ export function sleep(ms = 2000) {
 export function validateFormData(
   data: FormData,
   fields: string[]
-): [boolean, string[]] {
-  let xs = [];
+): Record<string, string> {
+  let res: Record<string, string> = {};
   for (const field of fields) {
     const value = data.get(field);
     if (typeof value === "string") {
-      xs.push(value);
+      res[field] = value;
     }
   }
-  return [xs.length === fields.length, xs];
+  return res;
 }
