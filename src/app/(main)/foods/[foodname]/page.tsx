@@ -1,4 +1,6 @@
 import {Box, Button, Card, Flex, Separator} from "@radix-ui/themes";
+import {and, eq} from "drizzle-orm";
+import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
 
 import PageWrapper from "@/components/page-wrapper";
@@ -6,7 +8,11 @@ import {Code, H3, H4, P, Span} from "@/components/typography";
 import {DataList} from "@/components/ui/datalist";
 import {FoodTypeBadge} from "@/components/ui/food-type-badge";
 import {Icons} from "@/components/ui/icons";
+import {db} from "@/db";
 import {getFoodItemByName} from "@/db/dao/foods";
+import {favoriteFoods} from "@/db/schema";
+import {getUserFromSession} from "@/lib/auth";
+import {validateFormData} from "@/lib/utils";
 
 import {PieChart} from "./_components/pie";
 
@@ -24,8 +30,7 @@ export default async function FoodNamePage({
     <PageWrapper>
       <Flex asChild gap="3">
         <div>
-          <FoodCard food={food} />
-          {/* Show graph here */}
+          <FoodCard food={food} foodName={foodname} />
           <Card variant="surface" asChild>
             <div className="size-[400px]">
               <PieChart data={food.nutrients} />
@@ -37,8 +42,57 @@ export default async function FoodNamePage({
   );
 }
 
+async function addToFavorite(data: FormData) {
+  "use server";
+  let record = validateFormData(data, [
+    "food-id",
+    "user-id",
+    "food-name",
+    "is-favorite",
+  ]);
+  let userId = record["user-id"];
+  let foodId = record["food-id"];
+  let foodName = record["food-name"];
+  let isFavorite = record["is-favorite"];
+  console.log({
+    userId,
+    foodId,
+    foodName,
+    isFavorite,
+  });
+  if (userId && foodId && foodName && isFavorite) {
+    if (isFavorite === "true") {
+      await db
+        .delete(favoriteFoods)
+        .where(eq(favoriteFoods.foodId, Number(foodId)));
+    } else {
+      await db
+        .insert(favoriteFoods)
+        .values({userId: Number(userId), foodId: Number(foodId)});
+    }
+    revalidatePath(`/foods/${foodName}`);
+  }
+}
+
+async function getFavoriteFoods(userId: number, foodId: number) {
+  return await db
+    .select()
+    .from(favoriteFoods)
+    .where(
+      and(eq(favoriteFoods.userId, userId), eq(favoriteFoods.foodId, foodId))
+    );
+}
+
 type FoodItem = Awaited<ReturnType<typeof getFoodItemByName>>;
-function FoodCard({food}: {food: NonNullable<FoodItem>}) {
+async function FoodCard({
+  food,
+  foodName,
+}: {
+  food: NonNullable<FoodItem>;
+  foodName: string;
+}) {
+  let user = await getUserFromSession();
+
   return (
     <Box width="500px">
       <Card variant="surface">
@@ -50,9 +104,13 @@ function FoodCard({food}: {food: NonNullable<FoodItem>}) {
                 Serving size: (100g), (0.22 lb) (3.52 oz)
               </P>
             </Flex>
-            <Button variant="outline" color="gray">
-              <Icons.Star />
-            </Button>
+            {user !== null && (
+              <FavoriteButton
+                user={user}
+                foodId={food.foodId}
+                foodName={foodName}
+              />
+            )}
           </Flex>
 
           <Flex direction="column" gap="3">
@@ -124,5 +182,40 @@ function FoodCard({food}: {food: NonNullable<FoodItem>}) {
         </DataList>
       </Card>
     </Box>
+  );
+}
+
+async function FavoriteButton({
+  user,
+  foodId,
+  foodName,
+}: {
+  user: NonNullable<Awaited<ReturnType<typeof getUserFromSession>>>;
+  foodId: number;
+  foodName: string;
+}) {
+  let favoriteFoods = await getFavoriteFoods(user.id, foodId);
+  console.log("🚀 ~ favoriteFoods:", favoriteFoods);
+  let favoriteFood = favoriteFoods.find(
+    (ff) => ff.foodId === foodId && ff.userId === user.id
+  );
+  return (
+    <form action={addToFavorite}>
+      <input type="hidden" name="food-id" value={foodId} />
+      <input type="hidden" name="user-id" value={user.id} />
+      <input type="hidden" name="food-name" value={foodName} />
+      <input
+        type="hidden"
+        name="is-favorite"
+        value={favoriteFood ? "true" : "false"}
+      />
+      <Button
+        type="submit"
+        variant={favoriteFood ? "solid" : "soft"}
+        color={favoriteFood ? "blue" : "gray"}
+      >
+        <Icons.Star />
+      </Button>
+    </form>
   );
 }

@@ -31,12 +31,14 @@ function UserTabs({user}: {user: User}) {
         <Tabs.Trigger value="account">Account</Tabs.Trigger>
         <Tabs.Trigger value="contact">Contact</Tabs.Trigger>
         <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+        <Tabs.Trigger value="favorites">Favorites</Tabs.Trigger>
         <Tabs.Trigger value="all">All</Tabs.Trigger>
       </Tabs.List>
       <Box pt="3">
         <AccountTab user={user} />
         <ContactTab />
         <SettingsTab user={user} />
+        <FavoriteFoods />
         <AllTab />
       </Box>
     </Tabs.Root>
@@ -105,6 +107,14 @@ function ContactTab() {
       <Card>
         <Text size="2">Documents</Text>
       </Card>
+    </Tabs.Content>
+  );
+}
+
+function FavoriteFoods() {
+  return (
+    <Tabs.Content value="favorites">
+      <Text size="2">favorite foods</Text>
     </Tabs.Content>
   );
 }

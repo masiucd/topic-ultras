@@ -12,7 +12,7 @@ export function sleep(ms = 2000) {
 export function validateFormData(
   data: FormData,
   fields: string[]
-): Record<string, string> {
+): Record<string, string | undefined> {
   let res: Record<string, string> = {};
   for (const field of fields) {
     const value = data.get(field);

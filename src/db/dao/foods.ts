@@ -10,6 +10,7 @@ export async function getFoodItemByName(foodName: string) {
   try {
     let item = await db
       .select({
+        foodId: foods.id,
         name: foods.name,
         description: foods.description,
         type: {

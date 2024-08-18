@@ -41,7 +41,6 @@ async function login(data: FormData) {
 
 async function isLoggedIn() {
   let user = await getUserFromSession();
-
   if (user !== null) {
     return true;
   }
