@@ -12,8 +12,6 @@ import type {PropsWithChildren} from "react";
 
 import {cn} from "@/lib/utils";
 
-// import {cn} from "@/lib/utils";
-
 export function Table(props: RootProps) {
   return <RadixUiTable.Root variant="surface" {...props} />;
 }

@@ -1,4 +1,4 @@
-import {Button, Flex} from "@radix-ui/themes";
+import {Button, Flex, Skeleton} from "@radix-ui/themes";
 import {redirect} from "next/navigation";
 
 import PageWrapper from "@/components/page-wrapper";
