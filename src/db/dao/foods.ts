@@ -39,7 +39,7 @@ export async function getFoodItemByName(foodName: string) {
 
 // export type FoodItemType = Awaited<ReturnType<typeof getFoodItemByName>>;
 
-export const ITEMS_PER_PAGE = 6;
+export const ITEMS_PER_PAGE = 4;
 
 export async function getFoodItemsData(
   query: string,

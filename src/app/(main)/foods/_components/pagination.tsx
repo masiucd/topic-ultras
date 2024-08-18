@@ -1,6 +1,6 @@
 "use client";
 
-import {Flex} from "@radix-ui/themes";
+import {Flex, Link as RadixLink} from "@radix-ui/themes";
 import type {Route} from "next";
 import Link from "next/link";
 import {usePathname, useSearchParams} from "next/navigation";
@@ -24,9 +24,15 @@ export function Pagination({
   }
 
   return (
-    <Flex asChild>
-      <div className=" h-full justify-end gap-2">
+    <Flex asChild gap="2" justify="end" height="100%">
+      <div>
         <PrevLink params={params} page={page} pathName={pathName} />
+        <PageSequence
+          page={page}
+          totalPages={totalPages}
+          pathName={pathName}
+          params={params}
+        />
         <NextLink
           params={params}
           page={page}
@@ -38,6 +44,42 @@ export function Pagination({
   );
 }
 
+function generatePageSequence(totalPages: number) {
+  let pages = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push(i);
+  }
+  return pages;
+}
+
+function PageSequence({
+  page,
+  totalPages,
+  pathName,
+  params,
+}: {
+  page: number;
+  totalPages: number;
+  pathName: string;
+  params: URLSearchParams;
+}) {
+  return generatePageSequence(totalPages).map((pageNumber) => {
+    let pageLinkUrlParams = new URLSearchParams(params);
+    pageLinkUrlParams.set("page", pageNumber.toString());
+    return (
+      <Link
+        key={pageNumber}
+        href={makeHref(pathName, pageLinkUrlParams)}
+        className={`flex items-center gap-1 hover:underline hover:opacity-50 ${
+          pageNumber === page ? "text-blue-500" : ""
+        }`}
+      >
+        {pageNumber}
+      </Link>
+    );
+  });
+}
+
 type LinkProps = {
   params: URLSearchParams;
   page: number;
@@ -46,24 +88,18 @@ type LinkProps = {
 
 function PrevLink({params, page, pathName}: LinkProps) {
   if (page <= 1) {
-    return (
-      <button
-        className="flex cursor-not-allowed items-center gap-1 opacity-50"
-        disabled
-      >
-        <Icons.Left /> Prev
-      </button>
-    );
+    return null;
   }
   let prevLinkUrlParams = new URLSearchParams(params);
   prevLinkUrlParams.set("page", (page - 1).toString());
   return (
-    <Link
-      className="flex items-center gap-1 hover:underline hover:opacity-50"
+    <RadixLink
+      color="gray"
+      className="flex items-center gap-1  hover:opacity-50"
       href={makeHref(pathName, prevLinkUrlParams)}
     >
       <Icons.Left /> Prev
-    </Link>
+    </RadixLink>
   );
 }
 
@@ -76,23 +112,17 @@ function NextLink({
   let nextLinkUrlParams = new URLSearchParams(params);
   nextLinkUrlParams.set("page", (page + 1).toString());
   if (page >= totalPages) {
-    return (
-      <button
-        className="flex cursor-not-allowed items-center gap-1 opacity-50"
-        disabled
-      >
-        Next <Icons.Right />
-      </button>
-    );
+    return null;
   }
   return (
-    <Link
-      className="flex items-center gap-1 hover:underline hover:opacity-50"
+    <RadixLink
+      color="gray"
+      className="flex items-center gap-1  hover:opacity-50"
       href={makeHref(pathName, nextLinkUrlParams)}
     >
       Next
       <Icons.Right />
-    </Link>
+    </RadixLink>
   );
 }
 

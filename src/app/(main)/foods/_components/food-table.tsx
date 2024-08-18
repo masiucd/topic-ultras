@@ -13,7 +13,7 @@ import {
   Row,
   RowHeaderCell,
   Table,
-  TableCaption,
+  // TableCaption,
 } from "@/components/ui/table";
 import {getFoodItemsData, ITEMS_PER_PAGE} from "@/db/dao/foods";
 
@@ -46,9 +46,9 @@ export async function FoodTable({foodName, page, orderBy}: Props) {
         </div>
       </Flex>
       <Table className="relative">
-        <TableCaption>
+        {/* <TableCaption>
           List of food items available in the database
-        </TableCaption>
+        </TableCaption> */}
         <TableHead />
         <TableBody foodItems={foodItems}>
           <Footer
