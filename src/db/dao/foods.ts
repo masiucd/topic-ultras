@@ -50,13 +50,7 @@ export async function getFoodItemsData(
   try {
     let res = await db.transaction(async (tx) => {
       let queryCondition = query === "" ? sql`1=1` : like(f.name, `%${query}%`);
-      let orderByCondition =
-        orderBy === ""
-          ? asc(f.name)
-          : desc(
-              foodNutrients[orderBy as "carbs" | "protein" | "fat" | "calories"]
-            );
-
+      let orderByCondition = getOrderByCondition(orderBy);
       let foodItems = await selectFoodItems(
         tx,
         queryCondition,
@@ -114,4 +108,20 @@ async function selectFoodItems(
 
 async function getTotalFoodItems(trx: DB) {
   return await trx.select({total: sql`count(*)`.mapWith(Number)}).from(foods);
+}
+
+function getOrderByCondition(orderBy: string) {
+  switch (orderBy) {
+    case "carbs":
+      return desc(foodNutrients.carbs);
+    case "protein":
+      return desc(foodNutrients.protein);
+    case "fat":
+      return desc(foodNutrients.fat);
+    case "calories":
+      return desc(foodNutrients.calories);
+
+    default:
+      return asc(f.name);
+  }
 }
