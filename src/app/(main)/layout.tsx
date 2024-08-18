@@ -1,4 +1,4 @@
-import {Flex, type FlexProps} from "@radix-ui/themes";
+import {Flex, type FlexProps, Link as RadixLink} from "@radix-ui/themes";
 import Link from "next/link";
 import type {ReactNode} from "react";
 
@@ -18,7 +18,9 @@ export default function MainLayout({
   return (
     <>
       <Header />
-      <main className="min-h-[calc(100dvh-10rem)]">{children}</main>
+      <main className="flex min-h-[calc(100dvh-10rem)] flex-col">
+        {children}
+      </main>
       <footer className="h-20">
         <Wrapper>
           <small>
@@ -47,7 +49,7 @@ async function Nav() {
   let user = await getUserFromSession();
   return (
     <nav>
-      <Flex asChild gap="2">
+      <Flex asChild gap="2" align="center">
         <ul>
           {appData.routes.map((route) => (
             <li key={route.name}>
@@ -55,14 +57,16 @@ async function Nav() {
             </li>
           ))}
           {user !== null ? (
-            <li>
+            <li className="ml-1">
               <form action={Logout}>
-                <button type="submit">Logout</button>
+                <RadixLink asChild size="2" weight="medium">
+                  <button type="submit">Logout</button>
+                </RadixLink>
               </form>
             </li>
           ) : (
             <li>
-              <ActiveLink href="/login">Log in</ActiveLink>
+              <ActiveLink href="/login">Sign in</ActiveLink>
             </li>
           )}
         </ul>

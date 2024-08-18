@@ -9,12 +9,12 @@ import {DataList} from "@/components/ui/datalist";
 import {FoodTypeBadge} from "@/components/ui/food-type-badge";
 import {Icons} from "@/components/ui/icons";
 import {db} from "@/db";
-import {getFoodItemByName} from "@/db/dao/foods";
 import {favoriteFoods} from "@/db/schema";
 import {getUserFromSession} from "@/lib/auth";
 import {validateFormData} from "@/lib/utils";
 
 import {PieChart} from "./_components/pie";
+import {getFoodItemByName} from "./dao";
 
 export default async function FoodNamePage({
   params: {foodname},
@@ -54,12 +54,6 @@ async function addToFavorite(data: FormData) {
   let foodId = record["food-id"];
   let foodName = record["food-name"];
   let isFavorite = record["is-favorite"];
-  console.log({
-    userId,
-    foodId,
-    foodName,
-    isFavorite,
-  });
   if (userId && foodId && foodName && isFavorite) {
     if (isFavorite === "true") {
       await db
@@ -195,7 +189,6 @@ async function FavoriteButton({
   foodName: string;
 }) {
   let favoriteFoods = await getFavoriteFoods(user.id, foodId);
-  console.log("🚀 ~ favoriteFoods:", favoriteFoods);
   let favoriteFood = favoriteFoods.find(
     (ff) => ff.foodId === foodId && ff.userId === user.id
   );

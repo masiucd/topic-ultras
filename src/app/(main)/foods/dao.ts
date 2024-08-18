@@ -1,44 +1,8 @@
-import "server-only";
-
 import {asc, desc, eq, like, SQL, sql} from "drizzle-orm";
 import {alias} from "drizzle-orm/pg-core";
 
-import {type DB, db} from "..";
-import {foodNutrients, foods, foodTypes} from "../schema";
-
-export async function getFoodItemByName(foodName: string) {
-  try {
-    let item = await db
-      .select({
-        foodId: foods.id,
-        name: foods.name,
-        description: foods.description,
-        type: {
-          name: foodTypes.name,
-          slug: foodTypes.slug,
-          id: foodTypes.id,
-        },
-        nutrients: {
-          calories: foodNutrients.calories,
-          fat: foodNutrients.fat,
-          protein: foodNutrients.protein,
-          carbs: foodNutrients.carbs,
-        },
-      })
-      .from(foods)
-      .innerJoin(foodTypes, eq(foods.typeId, foodTypes.id))
-      .innerJoin(foodNutrients, eq(foods.id, foodNutrients.foodId))
-      .where(eq(foods.slug, foodName));
-
-    return item[0];
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error);
-    return null;
-  }
-}
-
-// export type FoodItemType = Awaited<ReturnType<typeof getFoodItemByName>>;
+import {type DB, db} from "@/db";
+import {foodNutrients, foods, foodTypes} from "@/db/schema";
 
 export const ITEMS_PER_PAGE = 4;
 

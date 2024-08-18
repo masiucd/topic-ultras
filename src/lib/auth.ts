@@ -1,12 +1,14 @@
 import "server-only";
 
 import {eq} from "drizzle-orm";
+// import {Effect} from "effect";
 import {cookies} from "next/headers";
 
 import {db} from "@/db";
 import {users} from "@/db/schema";
 import {decrypt} from "@/lib/crypto";
 
+export type User = NonNullable<Awaited<ReturnType<typeof getUserFromSession>>>;
 export async function getUserFromSession() {
   let cookieStorage = cookies();
   let session = cookieStorage.get("session");
@@ -17,9 +19,7 @@ export async function getUserFromSession() {
   let user = await getUserByEmail(payload.email);
   return user;
 }
-export type User = NonNullable<Awaited<ReturnType<typeof getUserFromSession>>>;
 
-// TODO this function is already defined in the the DAO it just need to be more generic
 async function getUserByEmail(email: string) {
   try {
     let user = await db

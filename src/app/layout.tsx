@@ -30,7 +30,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class">
           <Theme
-            accentColor="blue"
+            accentColor="gray"
             grayColor="slate"
             radius="medium"
             scaling="95%"

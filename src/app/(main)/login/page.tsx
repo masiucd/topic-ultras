@@ -2,42 +2,11 @@ import {Button, Flex} from "@radix-ui/themes";
 import {redirect} from "next/navigation";
 
 import PageWrapper from "@/components/page-wrapper";
+import {H1, Label, Lead, Span} from "@/components/typography";
 import {Input} from "@/components/ui/input";
-import {getUserByEmail} from "@/db/dao/user";
 import {getUserFromSession} from "@/lib/auth";
-import {getExpiresInHours, setCookie} from "@/lib/cookies";
-import {encrypt} from "@/lib/crypto";
-import {verifyPassword} from "@/lib/password";
 
-async function login(data: FormData) {
-  "use server";
-  let email = data.get("email");
-  let password = data.get("password");
-  if (typeof email !== "string" || typeof password !== "string") {
-    throw new Error("Invalid email or password");
-  }
-  let user = await getUserByEmail(email);
-  if (user === null) {
-    return {ok: false};
-    // throw new Error("Wrong email or password");
-  }
-  let isValidPassword = await verifyPassword(password, user.password);
-  if (!isValidPassword) {
-    return {ok: false};
-  }
-
-  setCookie(
-    "session",
-    await encrypt({
-      id: user.id,
-      email: user.email,
-      iat: Date.now(),
-      exp: getExpiresInHours(2),
-    })
-  );
-
-  redirect("/user/profile");
-}
+import {login} from "./actions";
 
 async function isLoggedIn() {
   let user = await getUserFromSession();
@@ -54,19 +23,33 @@ export default async function LoginPage() {
   }
 
   return (
-    <PageWrapper>
-      <Flex asChild direction="column" maxWidth="500px">
+    <PageWrapper className="items-center justify-center ">
+      <Flex direction="column" gap="2" mb="5" align="center">
+        <H1>Welcome Back</H1>
+        <Lead size="4">Enter your email and password to sign in</Lead>
+      </Flex>
+      <Flex
+        asChild
+        direction="column"
+        maxWidth="500px"
+        width="100%"
+        p="3"
+        gap="3"
+        className="rounded-md border shadow-md border-gray-900/10"
+      >
         <form action={login}>
           <label htmlFor="email">
-            <span>Email</span>
-            <Input type="email" id="email" required name="email" />
+            <Label weight="medium">Email</Label>
+            <Input size="3" type="email" id="email" required name="email" />
           </label>
           <label htmlFor="password">
-            <span>Password</span>
-            <Input type="password" required name="password" />
+            <Label weight="medium">Password</Label>
+            <Input size="3" type="password" required name="password" />
           </label>
-          <Button type="submit" variant="soft">
-            Log in
+          <Button type="submit" variant="solid" highContrast size="3">
+            <Span weight="medium" size="3">
+              Sign in
+            </Span>
           </Button>
         </form>
       </Flex>

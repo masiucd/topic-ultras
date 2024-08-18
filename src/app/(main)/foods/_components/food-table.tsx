@@ -15,8 +15,8 @@ import {
   Table,
   // TableCaption,
 } from "@/components/ui/table";
-import {getFoodItemsData, ITEMS_PER_PAGE} from "@/db/dao/foods";
 
+import {getFoodItemsData, ITEMS_PER_PAGE} from "../dao";
 import {HeadTitle} from "./head-title";
 import {Pagination} from "./pagination";
 import {SearchFood} from "./search-food";
@@ -46,9 +46,6 @@ export async function FoodTable({foodName, page, orderBy}: Props) {
         </div>
       </Flex>
       <Table className="relative">
-        {/* <TableCaption>
-          List of food items available in the database
-        </TableCaption> */}
         <TableHead />
         <TableBody foodItems={foodItems}>
           <Footer
@@ -65,7 +62,6 @@ export async function FoodTable({foodName, page, orderBy}: Props) {
   );
 }
 
-// TODO bug when order by seleted head title
 function TableHead() {
   return (
     <Header>
