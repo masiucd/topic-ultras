@@ -60,7 +60,7 @@ async function Nav() {
             </li>
           ) : (
             <li>
-              <ActiveLink href="/login">Sign in</ActiveLink>
+              <ActiveLink href="/signin">Sign in</ActiveLink>
             </li>
           )}
         </ul>
