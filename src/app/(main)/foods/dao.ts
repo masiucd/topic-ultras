@@ -4,7 +4,7 @@ import {alias} from "drizzle-orm/pg-core";
 import {type DB, db} from "@/db";
 import {foodNutrients, foods, foodTypes} from "@/db/schema";
 
-export const ITEMS_PER_PAGE = 4;
+export const ITEMS_PER_PAGE = 6;
 
 export async function getFoodItemsData(
   query: string,

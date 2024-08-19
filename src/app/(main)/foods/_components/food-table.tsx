@@ -13,7 +13,6 @@ import {
   Row,
   RowHeaderCell,
   Table,
-  // TableCaption,
 } from "@/components/ui/table";
 
 import {getFoodItemsData, ITEMS_PER_PAGE} from "../dao";

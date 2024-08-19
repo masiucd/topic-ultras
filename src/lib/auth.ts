@@ -14,5 +14,12 @@ export async function isAuthorized() {
     return null;
   }
   let payload = await decrypt(session.value);
+  if (payload && payload.exp) {
+    let now = Date.now();
+    if (now > payload.exp) {
+      return null;
+    }
+  }
+
   return {id: payload.id, email: payload.email};
 }

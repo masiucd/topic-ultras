@@ -28,6 +28,8 @@ function getColor(foodType: string): Color {
       return "green";
     case "dairy":
       return "blue";
+    case "meet":
+      return "red";
     default:
       return undefined;
   }

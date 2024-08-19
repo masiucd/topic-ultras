@@ -34,6 +34,7 @@ export default function RootLayout({
             grayColor="slate"
             radius="medium"
             scaling="95%"
+            panelBackground="translucent"
           >
             {children}
           </Theme>
