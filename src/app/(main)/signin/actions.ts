@@ -10,21 +10,22 @@ import {getExpiresInHours, setCookie} from "@/lib/cookies";
 import {encrypt} from "@/lib/crypto";
 import {verifyPassword} from "@/lib/password";
 
-export async function login(data: FormData) {
+export async function login(
+  prevState: {message: string} | null,
+  data: FormData
+) {
   let email = data.get("email");
   let password = data.get("password");
   if (typeof email !== "string" || typeof password !== "string") {
     throw new Error("Invalid email or password");
   }
-
   let user = await getUserByEmail(email);
   if (user === null) {
-    return {ok: false};
-    // throw new Error("Wrong email or password");
+    return {message: "Wrong email or password"};
   }
   let isValidPassword = await verifyPassword(password, user.password);
   if (!isValidPassword) {
-    return {ok: false};
+    return {message: "Wrong email or password"};
   }
 
   setCookie(

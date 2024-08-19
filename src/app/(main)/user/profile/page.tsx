@@ -4,16 +4,25 @@ import {redirect} from "next/navigation";
 import PageWrapper from "@/components/page-wrapper";
 import {H1, Span} from "@/components/typography";
 import {DataList} from "@/components/ui/datalist";
-import {getUserFromSession, type User} from "@/lib/auth";
+import {isAuthorized} from "@/lib/auth";
 
+import {getUserByEmail, type User as UserType} from "../dao";
 import {SettingsTab} from "./_components/tabs/settings";
 
-export default async function UserProfilePage() {
-  let user = await getUserFromSession();
-
-  if (user === null) {
-    redirect("/login");
+async function getUser() {
+  let payload = await isAuthorized();
+  if (payload === null) {
+    redirect("/signin");
   }
+  let user = await getUserByEmail(payload.email);
+  if (user === null) {
+    redirect("/signin");
+  }
+  return user;
+}
+
+export default async function UserProfilePage() {
+  let user = await getUser();
   return (
     <PageWrapper>
       <H1>
@@ -23,7 +32,7 @@ export default async function UserProfilePage() {
     </PageWrapper>
   );
 }
-
+type User = NonNullable<UserType>;
 function UserTabs({user}: {user: User}) {
   return (
     <Tabs.Root defaultValue="account">

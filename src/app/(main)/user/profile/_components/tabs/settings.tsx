@@ -5,10 +5,11 @@ import {useState} from "react";
 import {P} from "@/components/typography";
 import {Icons} from "@/components/ui/icons";
 import {Input} from "@/components/ui/input";
-import type {User} from "@/lib/auth";
 
+import type {User as UserType} from "../../../dao";
 import {updateUser} from "../../actions";
 
+type User = NonNullable<UserType>;
 export function SettingsTab({user}: {user: User}) {
   let [editType, setEditType] = useState<null | "EMAIL" | "PASSWORD">(null);
   return (

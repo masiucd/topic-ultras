@@ -4,7 +4,7 @@ import type {ReactNode} from "react";
 
 import {Strong} from "@/components/typography";
 import {ActiveLink} from "@/components/ui/active-link";
-import {getUserFromSession} from "@/lib/auth";
+import {isAuthorized} from "@/lib/auth";
 import {appData} from "@/lib/config";
 import {cn} from "@/lib/utils";
 
@@ -21,13 +21,7 @@ export default function MainLayout({
       <main className="flex min-h-[calc(100dvh-10rem)] flex-col">
         {children}
       </main>
-      <footer className="h-20">
-        <Wrapper>
-          <small>
-            {appData.title} &copy; {new Date().getFullYear()}
-          </small>
-        </Wrapper>
-      </footer>
+      <Footer />
     </>
   );
 }
@@ -46,7 +40,7 @@ function Header() {
 }
 
 async function Nav() {
-  let user = await getUserFromSession();
+  let payload = await isAuthorized();
   return (
     <nav>
       <Flex asChild gap="2" align="center">
@@ -56,7 +50,7 @@ async function Nav() {
               <ActiveLink href={route.href}>{route.name}</ActiveLink>
             </li>
           ))}
-          {user !== null ? (
+          {payload !== null ? (
             <li className="ml-1">
               <form action={Logout}>
                 <RadixLink asChild size="2" weight="medium">
@@ -72,6 +66,18 @@ async function Nav() {
         </ul>
       </Flex>
     </nav>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="h-20">
+      <Wrapper>
+        <small>
+          {appData.title} &copy; {new Date().getFullYear()}
+        </small>
+      </Wrapper>
+    </footer>
   );
 }
 

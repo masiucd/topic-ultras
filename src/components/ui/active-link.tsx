@@ -1,10 +1,11 @@
 "use client";
 
-import {cn} from "@/lib/utils";
 import {Link as RadixLink} from "@radix-ui/themes";
 import type {RouteType} from "next/dist/lib/load-custom-routes";
 import NextLink, {type LinkProps} from "next/link";
 import {usePathname} from "next/navigation";
+
+import {cn} from "@/lib/utils";
 
 export function ActiveLink(props: LinkProps<RouteType>) {
   let path = usePathname();
@@ -12,7 +13,6 @@ export function ActiveLink(props: LinkProps<RouteType>) {
   return (
     <RadixLink
       asChild
-      // color={isActive ? "blue" : "gray"}
       underline={isActive ? "always" : "hover"}
       size="2"
       weight="medium"

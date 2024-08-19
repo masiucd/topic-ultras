@@ -1,45 +1,18 @@
 import "server-only";
 
-import {eq} from "drizzle-orm";
 // import {Effect} from "effect";
 import {cookies} from "next/headers";
 
-import {db} from "@/db";
-import {users} from "@/db/schema";
 import {decrypt} from "@/lib/crypto";
 
-export type User = NonNullable<Awaited<ReturnType<typeof getUserFromSession>>>;
-export async function getUserFromSession() {
+// TODO use Effect
+export type User = NonNullable<Awaited<ReturnType<typeof isAuthorized>>>;
+export async function isAuthorized() {
   let cookieStorage = cookies();
   let session = cookieStorage.get("session");
   if (!session) {
     return null;
   }
   let payload = await decrypt(session.value);
-  let user = await getUserByEmail(payload.email);
-  return user;
-}
-
-async function getUserByEmail(email: string) {
-  try {
-    let user = await db
-      .select({
-        id: users.id,
-        email: users.email,
-        firstName: users.firstName,
-        lastName: users.lastName,
-        age: users.age,
-        admin: users.admin,
-      })
-      .from(users)
-      .where(eq(users.email, email));
-    if (user.length > 0) {
-      return user[0];
-    }
-    return null;
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error);
-    return null;
-  }
+  return {id: payload.id, email: payload.email};
 }

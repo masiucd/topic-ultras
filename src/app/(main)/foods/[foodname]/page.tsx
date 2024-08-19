@@ -10,7 +10,7 @@ import {FoodTypeBadge} from "@/components/ui/food-type-badge";
 import {Icons} from "@/components/ui/icons";
 import {db} from "@/db";
 import {favoriteFoods} from "@/db/schema";
-import {getUserFromSession} from "@/lib/auth";
+import {isAuthorized} from "@/lib/auth";
 import {validateFormData} from "@/lib/utils";
 
 import {PieChart} from "./_components/pie";
@@ -85,7 +85,7 @@ async function FoodCard({
   food: NonNullable<FoodItem>;
   foodName: string;
 }) {
-  let user = await getUserFromSession();
+  let user = await isAuthorized();
 
   return (
     <Box width="500px">
@@ -184,7 +184,7 @@ async function FavoriteButton({
   foodId,
   foodName,
 }: {
-  user: NonNullable<Awaited<ReturnType<typeof getUserFromSession>>>;
+  user: NonNullable<Awaited<ReturnType<typeof isAuthorized>>>;
   foodId: number;
   foodName: string;
 }) {
