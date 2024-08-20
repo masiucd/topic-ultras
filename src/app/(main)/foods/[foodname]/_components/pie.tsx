@@ -1,31 +1,23 @@
 "use client";
 import {ResponsivePie} from "@nivo/pie";
 
-import type {FoodItem} from "../_data/food-item";
+import type {getFoodItemByName} from "../dao";
 
-export function PieChart({data}: {data: NonNullable<FoodItem>["nutrients"]}) {
+export function PieChart({
+  data,
+}: {
+  data: {
+    id: string;
+    label: string;
+    value: number | string;
+  }[];
+}) {
   return (
     <ResponsivePie
-      data={[
-        {
-          id: "Fat",
-          label: "Fat",
-          value: data.fat,
-        },
-        {
-          id: "Protein",
-          label: "Protein",
-          value: data.protein,
-        },
-        {
-          id: "Carbs",
-          label: "Carbs",
-          value: data.carbs,
-        },
-      ]}
+      data={data}
       margin={{top: 40, right: 80, bottom: 80, left: 80}}
-      colors={{scheme: "purple_blue"}}
-      innerRadius={0.5}
+      colors={{scheme: "set2"}}
+      innerRadius={0.6}
       padAngle={0.7}
       cornerRadius={3}
       activeOuterRadiusOffset={8}

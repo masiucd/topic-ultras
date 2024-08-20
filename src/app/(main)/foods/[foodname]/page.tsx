@@ -5,7 +5,6 @@ import {redirect} from "next/navigation";
 
 import PageWrapper from "@/components/page-wrapper";
 import {Code, H3, H4, P, Span} from "@/components/typography";
-import {AreaChart} from "@/components/ui/area-chart";
 import {DataList} from "@/components/ui/datalist";
 import {FoodTypeBadge} from "@/components/ui/food-type-badge";
 import {Icons} from "@/components/ui/icons";
@@ -33,16 +32,40 @@ export default async function FoodNamePage({
         <div>
           <FoodCard food={food} foodName={foodname} />
           <Card variant="surface" asChild>
-            <div className="size-[400px]">
-              <PieChart data={food.nutrients} />
-            </div>
+            <Chart nutrients={food.nutrients} />
           </Card>
         </div>
       </Flex>
-      <div className="size-[500px] border border-red-500">
-        <AreaChart />
-      </div>
     </PageWrapper>
+  );
+}
+
+type Nutrients = NonNullable<
+  Awaited<ReturnType<typeof getFoodItemByName>>
+>["nutrients"];
+function Chart({nutrients}: {nutrients: Nutrients}) {
+  return (
+    <div className="size:[400px] md:size-[500px]">
+      <PieChart
+        data={[
+          {
+            id: "Fat",
+            label: "Fat",
+            value: nutrients.fat,
+          },
+          {
+            id: "Protein",
+            label: "Protein",
+            value: nutrients.protein,
+          },
+          {
+            id: "Carbs",
+            label: "Carbs",
+            value: nutrients.carbs,
+          },
+        ]}
+      />
+    </div>
   );
 }
 
