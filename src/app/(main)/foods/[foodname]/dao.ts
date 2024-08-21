@@ -1,7 +1,7 @@
-import {eq} from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
-import {db} from "@/db";
-import {foodNutrients, foods, foodTypes} from "@/db/schema";
+import { db } from "@/db";
+import { favoriteFoods, foodNutrients, foods, foodTypes } from "@/db/schema";
 
 export async function getFoodItemByName(foodName: string) {
   try {
@@ -33,4 +33,13 @@ export async function getFoodItemByName(foodName: string) {
     console.error(error);
     return null;
   }
+}
+
+export async function getFavoriteFoods(userId: number, foodId: number) {
+  return await db
+    .select()
+    .from(favoriteFoods)
+    .where(
+      and(eq(favoriteFoods.userId, userId), eq(favoriteFoods.foodId, foodId)),
+    );
 }
