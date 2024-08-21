@@ -20,6 +20,5 @@ export async function isAuthorized() {
       return null;
     }
   }
-
   return {id: payload.id, email: payload.email};
 }

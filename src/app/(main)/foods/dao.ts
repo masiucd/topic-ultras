@@ -3,6 +3,7 @@ import {alias} from "drizzle-orm/pg-core";
 
 import {type DB, db} from "@/db";
 import {foodNutrients, foods, foodTypes} from "@/db/schema";
+import {safe} from "@/lib/safe";
 
 export const ITEMS_PER_PAGE = 6;
 
@@ -10,29 +11,28 @@ export async function getFoodItemsData(
   query: string,
   perPage = ITEMS_PER_PAGE,
   skip = 0,
-  orderBy: string
+  orderBy: string,
 ) {
-  try {
-    let res = await db.transaction(async (tx) => {
-      let queryCondition = query === "" ? sql`1=1` : like(f.name, `%${query}%`);
-      let orderByCondition = getOrderByCondition(orderBy);
-      let foodItems = await selectFoodItems(
-        tx,
-        queryCondition,
-        perPage,
-        skip,
-        orderByCondition
-      );
+  let result = safe(
+    async () =>
+      await db.transaction(async (tx) => {
+        let queryCondition = query === "" ? sql`1=1` : like(f.name, `%${query}%`);
+        let orderByCondition = getOrderByCondition(orderBy);
+        let foodItems = await selectFoodItems(tx, queryCondition, perPage, skip, orderByCondition);
+        let totalFoods = await getTotalFoodItems(tx);
+        return {foodItems, totalFoods: totalFoods[0].total};
+      }),
+  );
 
-      let totalFoods = await getTotalFoodItems(tx);
-      return {foodItems, totalFoods: totalFoods[0].total};
-    });
-    return res;
-  } catch (error) {
+  if (result.success) {
+    return await result.value;
+  } else {
     // eslint-disable-next-line no-console
-    console.error(error);
+    console.error(result.error);
     return {foodItems: [], totalFoods: 0};
   }
+
+  // return res;
 }
 
 let ft = alias(foodTypes, "foodType");
@@ -43,7 +43,7 @@ async function selectFoodItems(
   queryCondition: SQL<unknown>,
   perPage: number,
   skip: number,
-  orderByCondition: SQL<unknown>
+  orderByCondition: SQL<unknown>,
 ) {
   return await trx
     .select({

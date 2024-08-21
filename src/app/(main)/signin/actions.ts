@@ -9,11 +9,9 @@ import {users} from "@/db/schema";
 import {getExpiresInHours, setCookie} from "@/lib/cookies";
 import {encrypt} from "@/lib/crypto";
 import {verifyPassword} from "@/lib/password";
+import {safe} from "@/lib/safe";
 
-export async function login(
-  prevState: {message: string} | null,
-  data: FormData
-) {
+export async function login(prevState: {message: string} | null, data: FormData) {
   let email = data.get("email");
   let password = data.get("password");
   if (typeof email !== "string" || typeof password !== "string") {
@@ -35,25 +33,26 @@ export async function login(
       email: user.email,
       iat: Date.now(),
       exp: getExpiresInHours(2),
-    })
+    }),
   );
 
   redirect("/user/profile");
 }
 
 async function getUserByEmail(email: string) {
-  try {
-    let user = await db
+  let result = safe(async () => {
+    return await db
       .select({id: users.id, email: users.email, password: users.password})
       .from(users)
       .where(eq(users.email, email));
-    if (user.length > 0) {
-      return user[0];
-    }
-    return null;
-  } catch (error) {
+  });
+
+  if (result.success) {
+    let user = await result.value;
+    return user[0];
+  } else {
     // eslint-disable-next-line no-console
-    console.error(error);
+    console.error(result.error);
     return null;
   }
 }
