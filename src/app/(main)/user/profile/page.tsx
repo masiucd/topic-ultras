@@ -1,9 +1,15 @@
-import {Badge, Box, Card, Tabs, Text} from "@radix-ui/themes";
+import {Badge, Box, Card, Flex, Tabs, Text} from "@radix-ui/themes";
+import {eq} from "drizzle-orm";
+import Link from "next/link";
 import {redirect} from "next/navigation";
 
 import PageWrapper from "@/components/page-wrapper";
-import {H1, Span} from "@/components/typography";
+import {H1, H3, Span} from "@/components/typography";
 import {DataList} from "@/components/ui/datalist";
+import {FoodTypeBadge} from "@/components/ui/food-type-badge";
+import {Icons} from "@/components/ui/icons";
+import {db} from "@/db";
+import {favoriteFoods, foods, foodTypes, users} from "@/db/schema";
 import {isAuthorized} from "@/lib/auth";
 
 import {getUserByEmail, type User as UserType} from "../dao";
@@ -47,13 +53,13 @@ function UserTabs({user}: {user: User}) {
         <AccountTab user={user} />
         <ContactTab />
         <SettingsTab user={user} />
-        <FavoriteFoods />
+        <FavoriteFoods userId={user.id} />
         <AllTab />
       </Box>
     </Tabs.Root>
   );
 }
-
+// TODO parallel routes?
 function AccountTab({user}: {user: User}) {
   return (
     <Tabs.Content value="account">
@@ -120,10 +126,44 @@ function ContactTab() {
   );
 }
 
-function FavoriteFoods() {
+async function FavoriteFoods({userId}: {userId: number}) {
+  let favorites = await db
+    .select({
+      foodId: foods.id,
+      foodName: foods.name,
+      foodDescription: foods.description,
+      foodSlug: foods.slug,
+      foodTypeId: foods.typeId,
+      foodTypeName: foodTypes.name,
+      foodTypeSlug: foodTypes.slug,
+    })
+    .from(favoriteFoods)
+    .innerJoin(users, eq(favoriteFoods.userId, users.id))
+    .innerJoin(foods, eq(favoriteFoods.foodId, foods.id))
+    .innerJoin(foodTypes, eq(foods.typeId, foodTypes.id))
+    .where(eq(users.id, userId));
+
   return (
     <Tabs.Content value="favorites">
-      <Text size="2">favorite foods</Text>
+      <H3 className="flex items-center gap-2" mb="3">
+        Favorite foods <Icons.Star size={20} />
+      </H3>
+      <Flex asChild direction="column" gap="2">
+        <ul>
+          {favorites.map((f) => (
+            <Flex key={f.foodId} asChild gap="2">
+              <li>
+                <Link href={`/foods/${f.foodSlug}`} className="transition-opacity hover:opacity-40">
+                  <Span className="capitalize" weight="medium" color="gray">
+                    {f.foodName}
+                  </Span>
+                </Link>
+                <FoodTypeBadge name={f.foodTypeName} slug={f.foodTypeSlug} />
+              </li>
+            </Flex>
+          ))}
+        </ul>
+      </Flex>
     </Tabs.Content>
   );
 }

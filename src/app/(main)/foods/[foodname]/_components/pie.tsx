@@ -1,8 +1,6 @@
 "use client";
 import {ResponsivePie} from "@nivo/pie";
 
-import type {getFoodItemByName} from "../dao";
-
 export function PieChart({
   data,
 }: {
