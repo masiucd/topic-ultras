@@ -4,6 +4,7 @@ import {
   ArrowRight,
   BadgeIcon,
   Beef,
+  Check,
   CopyIcon,
   Droplet,
   Flame,
@@ -34,4 +35,5 @@ export let Icons = Object.freeze({
   Edit: (props: LucideProps) => <Pen size={ICON_SIZE} {...props} />,
   Left: (props: LucideProps) => <ArrowLeft size={ICON_SIZE} {...props} />,
   Right: (props: LucideProps) => <ArrowRight size={ICON_SIZE} {...props} />,
+  Check: (props: LucideProps) => <Check size={ICON_SIZE} {...props} />,
 });

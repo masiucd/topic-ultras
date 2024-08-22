@@ -14,8 +14,9 @@ import {
   RowHeaderCell,
   Table,
 } from "@/components/ui/table";
+import {isAuthorized} from "@/lib/auth";
 
-import {getFoodItemsData, ITEMS_PER_PAGE} from "../dao";
+import {getFavoriteFoodsForUser, getFoodItemsData, ITEMS_PER_PAGE} from "../dao";
 import {HeadTitle} from "./head-title";
 import {Pagination} from "./pagination";
 import {SearchFood} from "./search-food";
@@ -27,11 +28,12 @@ type Props = {
 };
 
 export async function FoodTable({foodName, page, orderBy}: Props) {
+  let authorized = await isAuthorized();
   let {foodItems, totalFoods} = await getFoodItemsData(
     foodName,
     ITEMS_PER_PAGE,
     (page - 1) * ITEMS_PER_PAGE, // skip items based on page number
-    orderBy
+    orderBy,
   );
 
   let totalPages = Math.ceil(totalFoods / ITEMS_PER_PAGE);
@@ -45,8 +47,8 @@ export async function FoodTable({foodName, page, orderBy}: Props) {
         </div>
       </Flex>
       <Table className="relative">
-        <TableHead />
-        <TableBody foodItems={foodItems}>
+        <TableHead isAuthorized={authorized !== null} />
+        <TableBody foodItems={foodItems} userId={authorized?.id}>
           <Footer
             totalFoodItems={foodItems.length}
             totalFoods={totalFoods}
@@ -61,7 +63,7 @@ export async function FoodTable({foodName, page, orderBy}: Props) {
   );
 }
 
-function TableHead() {
+function TableHead({isAuthorized}: {isAuthorized: boolean}) {
   return (
     <Header>
       <Row>
@@ -98,43 +100,46 @@ function TableHead() {
             </Tooltip>
           </HeadTitle>
         </ColumnHeaderCell>
-        <ColumnHeaderCell>
+
+        <ColumnHeaderCell width="100px">
           <HeadTitle title="fat">
             <Tooltip content="Total fat">
               <Icons.Fat />
             </Tooltip>
           </HeadTitle>
         </ColumnHeaderCell>
+
+        {isAuthorized && (
+          <ColumnHeaderCell>
+            <Tooltip content="Favorite">
+              <Icons.Star />
+            </Tooltip>
+          </ColumnHeaderCell>
+        )}
       </Row>
     </Header>
   );
 }
 
-type FoodItem = Awaited<
-  ReturnType<typeof getFoodItemsData>
->["foodItems"][number];
+type FoodItem = Awaited<ReturnType<typeof getFoodItemsData>>["foodItems"][number];
 
-function TableBody({
+async function TableBody({
   foodItems,
+  userId,
   children,
-}: PropsWithChildren<{foodItems: FoodItem[]}>) {
+}: PropsWithChildren<{foodItems: FoodItem[]; userId: number | undefined}>) {
+  let favoriteFoodsForUser = userId ? await getFavoriteFoodsForUser(userId) : null;
   return (
     <Body>
       {foodItems.map((foodItem) => (
         <Row key={foodItem.foodId}>
           <RowHeaderCell>
-            <Link
-              href={`/foods/${foodItem.slug}`}
-              className="hover:underline hover:opacity-60"
-            >
+            <Link href={`/foods/${foodItem.slug}`} className="hover:underline hover:opacity-60">
               <Strong className="capitalize">{foodItem.foodName} </Strong>
             </Link>
           </RowHeaderCell>
           <Cell>
-            <FoodTypeBadge
-              name={foodItem.foodType.name}
-              slug={foodItem.foodType.slug}
-            />
+            <FoodTypeBadge name={foodItem.foodType.name} slug={foodItem.foodType.slug} />
           </Cell>
           <Cell>
             <Span>{foodItem.data.calories}</Span>
@@ -148,6 +153,13 @@ function TableBody({
           <Cell>
             <Span>{foodItem.data.fat}</Span>
           </Cell>
+          {favoriteFoodsForUser !== null && (
+            <Cell>
+              {favoriteFoodsForUser.find(({foodId}) => foodId === foodItem.foodId) ? (
+                <Icons.Check size={16} />
+              ) : null}
+            </Cell>
+          )}
         </Row>
       ))}
       {children}

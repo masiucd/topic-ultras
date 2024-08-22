@@ -48,6 +48,7 @@ const blueA = {
   blueA11: "hsla(208, 100%, 40%, 0.95)",
   blueA12: "hsla(216, 100%, 17%, 0.93)",
 };
+
 const COLORS = [
   "hsla(216, 100%, 17%, 0.93)",
   "hsla(320, 100%, 17%, 0.93)",
@@ -88,11 +89,7 @@ export function PieChart({data}: {data: {name: string; value: number}[]}) {
           content={({active, payload}) => {
             if (active && payload && payload.length > 0) {
               return (
-                <Flex
-                  p="4"
-                  direction="column"
-                  className="rounded-md bg-white shadow"
-                >
+                <Flex p="4" direction="column" className="rounded-md bg-white shadow">
                   <Label className="capitalize" color="gray">
                     {payload[0].name}: <span>{payload[0].value}</span>{" "}
                   </Label>

@@ -19,6 +19,6 @@ export function HeadTitle({
     params.delete("orderby");
   }
   let href = `${pathName}?${params.toString()}` as Route<string>;
-  console.log("href", href);
+
   return <Link href={href}>{children}</Link>;
 }

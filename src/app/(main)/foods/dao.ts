@@ -2,7 +2,7 @@ import {asc, desc, eq, like, SQL, sql} from "drizzle-orm";
 import {alias} from "drizzle-orm/pg-core";
 
 import {type DB, db} from "@/db";
-import {foodNutrients, foods, foodTypes} from "@/db/schema";
+import {favoriteFoods, foodNutrients, foods, foodTypes, users} from "@/db/schema";
 import {safe} from "@/lib/safe";
 
 export const ITEMS_PER_PAGE = 6;
@@ -26,11 +26,10 @@ export async function getFoodItemsData(
 
   if (result.success) {
     return await result.value;
-  } else {
-    // eslint-disable-next-line no-console
-    console.error(result.error);
-    return {foodItems: [], totalFoods: 0};
   }
+  // eslint-disable-next-line no-console
+  console.error(result.error);
+  return {foodItems: [], totalFoods: 0};
 
   // return res;
 }
@@ -69,6 +68,24 @@ async function selectFoodItems(
     .offset(skip)
     .where(queryCondition)
     .orderBy(orderByCondition);
+}
+
+export async function getFavoriteFoodsForUser(userId: number) {
+  let result = safe(
+    async () =>
+      await db
+        .select({
+          userId: favoriteFoods.userId,
+          foodId: favoriteFoods.foodId,
+        })
+        .from(favoriteFoods)
+        .innerJoin(users, eq(favoriteFoods.userId, users.id))
+        .where(eq(users.id, userId)),
+  );
+  if (result.success) {
+    return await result.value;
+  }
+  return [];
 }
 
 async function getTotalFoodItems(trx: DB) {
