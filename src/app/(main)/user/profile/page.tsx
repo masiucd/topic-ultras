@@ -27,6 +27,7 @@ async function getUser() {
   return user;
 }
 
+// TODO parallel routes?
 export default async function UserProfilePage() {
   let user = await getUser();
   return (
@@ -59,7 +60,7 @@ function UserTabs({user}: {user: User}) {
     </Tabs.Root>
   );
 }
-// TODO parallel routes?
+
 function AccountTab({user}: {user: User}) {
   return (
     <Tabs.Content value="account">

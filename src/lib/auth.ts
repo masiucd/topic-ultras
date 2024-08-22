@@ -1,13 +1,12 @@
 import "server-only";
 
-// import {Effect} from "effect";
 import {cookies} from "next/headers";
+import {cache} from "react";
 
 import {decrypt} from "@/lib/crypto";
 
-// TODO use Effect
 export type User = NonNullable<Awaited<ReturnType<typeof isAuthorized>>>;
-export async function isAuthorized() {
+export let isAuthorized = cache(async () => {
   let cookieStorage = cookies();
   let session = cookieStorage.get("session");
   if (!session) {
@@ -21,4 +20,4 @@ export async function isAuthorized() {
     }
   }
   return {id: payload.id, email: payload.email};
-}
+});
