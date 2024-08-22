@@ -18,9 +18,7 @@ export default function MainLayout({
   return (
     <>
       <Header />
-      <main className="flex min-h-[calc(100dvh-10rem)] flex-col">
-        {children}
-      </main>
+      <main className="flex min-h-[calc(100dvh-10rem)] flex-col">{children}</main>
       <Footer />
     </>
   );
@@ -51,13 +49,18 @@ async function Nav() {
             </li>
           ))}
           {payload !== null ? (
-            <li className="ml-1">
-              <form action={Logout}>
-                <RadixLink asChild size="2" weight="medium">
-                  <button type="submit">Logout</button>
-                </RadixLink>
-              </form>
-            </li>
+            <>
+              <li>
+                <ActiveLink href="/user/profile">Profile</ActiveLink>
+              </li>
+              <li className="ml-1">
+                <form action={Logout}>
+                  <RadixLink asChild size="2" weight="medium">
+                    <button type="submit">Logout</button>
+                  </RadixLink>
+                </form>
+              </li>
+            </>
           ) : (
             <li>
               <ActiveLink href="/signin">Sign in</ActiveLink>
@@ -84,9 +87,7 @@ function Footer() {
 function Wrapper(props: FlexProps) {
   return (
     <Flex asChild align="center" {...props}>
-      <div className={cn("mx-auto  h-full max-w-6xl", props.className)}>
-        {props.children}
-      </div>
+      <div className={cn("mx-auto  h-full max-w-6xl", props.className)}>{props.children}</div>
     </Flex>
   );
 }
