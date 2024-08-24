@@ -62,7 +62,7 @@ export default async function FoodTypePage({params: {type}}: {params: {type: str
               <Link asChild weight="medium" underline="none">
                 <NextLink
                   href={`/foods/${item.slug}`}
-                  className="rounded-md bg-blueA1 p-1 shadow transition-all duration-150 hover:bg-blueA4 hover:shadow-md"
+                  className="rounded-md p-1 shadow transition-all duration-150 hover:shadow-md"
                 >
                   <Span size="4" className="capitalize">
                     {item.name}

@@ -7,7 +7,7 @@ function Title() {
   return (
     <aside>
       <H1>{appData.title}</H1>
-      <Lead className="flex gap-1 text-gray-1000">
+      <Lead className="flex gap-1">
         Welcome to{" "}
         <Span className="relative rounded-sm after:absolute after:left-0 after:top-3 after:h-2 after:w-full after:-rotate-3  after:bg-gray-800/20 after:transition-transform after:content-['']">
           {nutri}
