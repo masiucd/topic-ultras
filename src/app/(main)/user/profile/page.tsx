@@ -4,7 +4,7 @@ import Link from "next/link";
 import {redirect} from "next/navigation";
 
 import PageWrapper from "@/components/page-wrapper";
-import {H1, H3, Span} from "@/components/typography";
+import {Code, H1, H3, Span} from "@/components/typography";
 import {DataList} from "@/components/ui/datalist";
 import {FoodTypeBadge} from "@/components/ui/food-type-badge";
 import {Icons} from "@/components/ui/icons";
@@ -13,7 +13,6 @@ import {favoriteFoods, foods, foodTypes, users} from "@/db/schema";
 import {isAuthorized} from "@/lib/auth";
 
 import {getUserByEmail, type User as UserType} from "../dao";
-import {SettingsTab} from "./_components/tabs/settings";
 
 async function getUser() {
   let payload = await isAuthorized();
@@ -46,14 +45,14 @@ function UserTabs({user}: {user: User}) {
       <Tabs.List>
         <Tabs.Trigger value="account">Account</Tabs.Trigger>
         <Tabs.Trigger value="contact">Contact</Tabs.Trigger>
-        <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+
         <Tabs.Trigger value="favorites">Favorites</Tabs.Trigger>
         <Tabs.Trigger value="all">All</Tabs.Trigger>
       </Tabs.List>
       <Box pt="3">
         <AccountTab user={user} />
         <ContactTab />
-        <SettingsTab user={user} />
+
         <FavoriteFoods userId={user.id} />
         <AllTab />
       </Box>
@@ -103,10 +102,18 @@ function AccountTab({user}: {user: User}) {
             </DataList.Item>
             <DataList.Item>
               <DataList.Label>
+                <Span weight="bold">Password</Span>
+              </DataList.Label>
+              <DataList.Value>
+                <Code>********</Code>
+              </DataList.Value>
+            </DataList.Item>
+            <DataList.Item>
+              <DataList.Label>
                 <Span weight="bold">Age</Span>
               </DataList.Label>
               <DataList.Value>
-                <Span>{user.age}</Span>
+                <Code>{user.age}</Code>
               </DataList.Value>
             </DataList.Item>
           </DataList>
