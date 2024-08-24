@@ -31,7 +31,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class">
           <Theme
             accentColor="gray"
-            grayColor="slate"
+            grayColor="mauve"
             radius="medium"
             scaling="95%"
             panelBackground="translucent"

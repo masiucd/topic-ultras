@@ -51,7 +51,7 @@ async function Nav() {
           {payload !== null ? (
             <>
               <li>
-                <ActiveLink href="/user/profile">Profile</ActiveLink>
+                <ActiveLink href="/dashboard">Dashboard</ActiveLink>
               </li>
               <li className="ml-1">
                 <form action={Logout}>
