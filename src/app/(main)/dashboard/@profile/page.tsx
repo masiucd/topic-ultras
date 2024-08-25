@@ -1,7 +1,7 @@
 import {Badge, Box, Card} from "@radix-ui/themes";
 import {redirect} from "next/navigation";
 
-import {Code, Span} from "@/components/typography";
+import {Code, H4, Span} from "@/components/typography";
 import {DataList} from "@/components/ui/datalist";
 import {isAuthorized} from "@/lib/auth";
 import {sleep} from "@/lib/utils";
@@ -27,6 +27,9 @@ export default async function ProfileSlot() {
   return (
     <Box maxWidth="350px">
       <Card>
+        <H4 size="3" className="flex items-center gap-2" mb="3">
+          Account profile
+        </H4>
         <DataList>
           <DataList.Item>
             <DataList.Label minWidth="128px">

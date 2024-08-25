@@ -2,9 +2,8 @@ import {Card, Flex} from "@radix-ui/themes";
 import {eq} from "drizzle-orm";
 import Link from "next/link";
 import {redirect} from "next/navigation";
-import * as R from "remeda";
 
-import {H3, Span} from "@/components/typography";
+import {H4, Span} from "@/components/typography";
 import {FoodTypeBadge} from "@/components/ui/food-type-badge";
 import {db} from "@/db";
 import {favoriteFoods, foods, foodTypes, users} from "@/db/schema";
@@ -33,13 +32,13 @@ export default async function FavoriteSlot() {
     .innerJoin(foodTypes, eq(foods.typeId, foodTypes.id))
     .where(eq(users.id, payload.id));
 
-  let hasFavorites = !R.isEmpty(favorites);
+  let hasFavorites = favorites.length > 0;
 
   return (
     <Card>
-      <H3 className="flex items-center gap-2" mb="3">
+      <H4 size="3" className="flex items-center gap-2" mb="3">
         Favorite foods
-      </H3>
+      </H4>
       <Flex asChild direction="column" gap="2">
         {hasFavorites ? (
           <ul>

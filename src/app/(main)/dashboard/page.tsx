@@ -25,7 +25,7 @@ export default async function DashboardPage() {
       <H1>
         Welcome back {user.firstName} {user.lastName}!
       </H1>
-      <Link href="/dashboard">account</Link>
+      {/* <Link href="/dashboard">account</Link> */}
       {/* <Link href="/user/profile/contact">account</Link>
       <Link href="/user/profile/favorites">account</Link> */}
     </>

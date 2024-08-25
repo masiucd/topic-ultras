@@ -1,11 +1,10 @@
 "use client";
 
+import {Link} from "@radix-ui/themes";
 import type {Route} from "next";
-import Link from "next/link";
+import NextLink from "next/link";
 import {usePathname, useSearchParams} from "next/navigation";
 import type {PropsWithChildren} from "react";
-
-import {cn} from "@/lib/utils";
 
 export function HeadTitle({
   title,
@@ -28,8 +27,8 @@ export function HeadTitle({
   let href = `${pathName}?${params.toString()}` as Route<string>;
 
   return (
-    <Link className={cn(orderBy === title && "text-blueA11")} href={href}>
-      {children}
+    <Link asChild underline="hover" color={orderBy === title ? "blue" : "gray"}>
+      <NextLink href={href}>{children}</NextLink>
     </Link>
   );
 }
