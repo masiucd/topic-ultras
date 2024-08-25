@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {redirect} from "next/navigation";
 
-import {H1} from "@/components/typography";
+import {H1, Span} from "@/components/typography";
 import {isAuthorized} from "@/lib/auth";
 
 import {getUserByEmail} from "./dao";
@@ -22,8 +22,21 @@ export default async function DashboardPage() {
   let user = await getUser();
   return (
     <>
-      <H1>
-        Welcome back {user.firstName} {user.lastName}!
+      <H1 mb="5">
+        Welcome back{" "}
+        <Span
+          className="relative rounded-sm capitalize after:absolute after:bottom-3 after:left-0 after:h-3 after:w-full after:-rotate-3 after:bg-blue-800/55 after:transition-transform after:content-['']"
+          weight="medium"
+        >
+          {user.firstName}
+        </Span>{" "}
+        <Span
+          className="relative rounded-sm capitalize after:absolute after:bottom-5 after:left-0 after:h-4 after:w-full after:rotate-3 after:bg-blue-800/55 after:transition-transform after:content-['']"
+          weight="medium"
+        >
+          {user.lastName}
+        </Span>
+        !
       </H1>
       {/* <Link href="/dashboard">account</Link> */}
       {/* <Link href="/user/profile/contact">account</Link>
