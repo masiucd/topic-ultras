@@ -6,6 +6,9 @@ import {cache} from "react";
 import {decrypt} from "@/lib/crypto";
 
 export type User = NonNullable<Awaited<ReturnType<typeof isAuthorized>>>;
+
+// isAuthorized function is used to check if the user is authorized or not.
+// by caching the result of the function, we can avoid calling the function multiple times.
 export let isAuthorized = cache(async () => {
   let cookieStorage = cookies();
   let session = cookieStorage.get("session");
