@@ -3,31 +3,30 @@ import "server-only";
 import {eq} from "drizzle-orm";
 
 import {db} from "@/db";
-import {users} from "@/db/schema";
-import {safe} from "@/lib/safe";
+import {userInfos, users} from "@/db/schema";
 
 export async function getUserByEmail(email: string) {
-  let userResult = safe(
-    async () =>
-      await db
-        .select({
-          id: users.id,
-          email: users.email,
-          firstName: users.firstName,
-          lastName: users.lastName,
-          age: users.age,
-          admin: users.admin,
-        })
-        .from(users)
-        .where(eq(users.email, email)),
-  );
+  try {
+    const user = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        age: users.age,
+        admin: users.admin,
+        information: {
+          about: userInfos.about,
+        },
+      })
+      .from(users)
+      .where(eq(users.email, email))
+      .innerJoin(userInfos, eq(users.id, userInfos.userId));
 
-  if (userResult.success) {
-    let user = await userResult.value;
     return user[0];
-  } else {
+  } catch (error) {
     // eslint-disable-next-line no-console
-    console.error(userResult.error);
+    console.error(error);
     return null;
   }
 }
