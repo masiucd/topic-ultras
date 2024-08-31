@@ -1,5 +1,4 @@
 import {Tooltip} from "@radix-ui/themes";
-import * as R from "remeda";
 
 import {Icons} from "@/components/ui/icons";
 import {SubmitButton} from "@/components/ui/submit-button";
@@ -17,7 +16,7 @@ export async function FavoriteButton({
   foodName: string;
 }) {
   let favoriteFoods = await getFavoriteFoods(userId, foodId);
-  let favoriteFood = R.find(favoriteFoods, (ff) => ff.foodId === foodId && ff.userId === userId);
+  let favoriteFood = favoriteFoods.find((ff) => ff.foodId === foodId && ff.userId === userId);
 
   return (
     <Tooltip content={favoriteFood ? `Unfavorite ${foodName}` : `Add ${foodName} to favorites`}>

@@ -13,8 +13,11 @@ import {
   Pen,
   Scale,
   Search,
+  Settings,
+  Settings2,
   Star,
   StarHalf,
+  User2,
   Zap,
 } from "lucide-react";
 
@@ -36,4 +39,7 @@ export let Icons = Object.freeze({
   Left: (props: LucideProps) => <ArrowLeft size={ICON_SIZE} {...props} />,
   Right: (props: LucideProps) => <ArrowRight size={ICON_SIZE} {...props} />,
   Check: (props: LucideProps) => <Check size={ICON_SIZE} {...props} />,
+  Settings: (props: LucideProps) => <Settings size={ICON_SIZE} {...props} />,
+  Settings2: (props: LucideProps) => <Settings2 size={ICON_SIZE} {...props} />,
+  Profile: (props: LucideProps) => <User2 size={ICON_SIZE} {...props} />,
 });
