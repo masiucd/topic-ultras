@@ -1,8 +1,10 @@
-# Nutri Check
+# Nutri Check (Not done yet)!!
 
 ## Description
 
 Nutri Check is a web application that allows users to search for food items and get detailed nutritional information about them. Users can also create an account and save their favorite food items to their profile. The application uses the USDA FoodData Central API to get the nutritional information of food items. The application is built using Flask, a Python web framework, and uses SQLite as the database to store user information and saved food items.
+
+Note that the application is still in development and some features may not be fully implemented yet.
 
 ## Features
 
