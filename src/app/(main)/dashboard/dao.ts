@@ -1,11 +1,18 @@
 import "server-only";
 
 import {eq} from "drizzle-orm";
+import {cache} from "react";
 
 import {db} from "@/db";
 import {userInfos, users} from "@/db/schema";
 
-export async function getUserByEmail(email: string) {
+/**
+ * Retrieves a user from the database based on their email.
+ *
+ * @param email - The email of the user to retrieve.
+ * @returns The user object if found, otherwise null.
+ */
+export let getUserByEmail = cache(async (email: string) => {
   try {
     const user = await db
       .select({
@@ -29,6 +36,6 @@ export async function getUserByEmail(email: string) {
     console.error(error);
     return null;
   }
-}
+});
 
 export type User = Awaited<ReturnType<typeof getUserByEmail>>;
