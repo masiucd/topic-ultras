@@ -5,7 +5,7 @@ import "server-only";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
 
-export async function Logout() {
+export async function logout() {
   deleteSession("session");
   redirect("/");
 }
