@@ -8,7 +8,7 @@ import {isAuthorized} from "@/lib/auth";
 import {appData} from "@/lib/config";
 import {cn} from "@/lib/utils";
 
-import {Logout} from "./actions";
+import {logout} from "./actions";
 
 export default function MainLayout({
   children,
@@ -54,7 +54,7 @@ async function Nav() {
                 <ActiveLink href="/dashboard">Dashboard</ActiveLink>
               </li>
               <li className="ml-1">
-                <form action={Logout}>
+                <form action={logout}>
                   <RadixLink asChild size="2" weight="medium">
                     <button type="submit">Logout</button>
                   </RadixLink>

@@ -4,6 +4,7 @@ import type {ReactNode} from "react";
 import PageWrapper from "@/components/page-wrapper";
 import {H3} from "@/components/typography";
 
+import {logout} from "../actions";
 import {AsideLinks} from "./_components/aside-links";
 
 export default async function DashboardLayout({
@@ -29,7 +30,7 @@ export default async function DashboardLayout({
             <ul>
               <AsideLinks />
               <li className="max-w-fit">
-                <form action="">
+                <form action={logout}>
                   <Flex asChild px="1">
                     <Button variant="outline">Logout</Button>
                   </Flex>
