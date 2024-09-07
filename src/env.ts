@@ -18,6 +18,7 @@ let envSchema = z.object({
   DB_MIGRATION: stringBoolean,
   DB_SEED: stringBoolean,
   JWT_SECRET: z.string(),
+  REDIS_PORT: z.string(),
 });
 
 export type EnvSchema = z.infer<typeof envSchema>;
