@@ -8,6 +8,20 @@
       "when": 1725118109585,
       "tag": "0000_curious_nomad",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1725185558546,
+      "tag": "0001_smooth_captain_universe",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1725186429593,
+      "tag": "0002_black_quicksilver",
+      "breakpoints": true
     }
   ]
 }
