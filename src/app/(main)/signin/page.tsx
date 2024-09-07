@@ -7,7 +7,6 @@ import {isAuthorized} from "@/lib/auth";
 
 import {SignInForm} from "./sign-in-form";
 
-// TODO add session to the sessions table
 export default async function SignInPage() {
   let payload = await isAuthorized();
   if (payload !== null) {

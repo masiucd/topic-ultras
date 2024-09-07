@@ -24,27 +24,14 @@ export function SignInForm() {
         gap="3"
         className="rounded-md border border-gray-900/10 shadow-md"
       >
-        <form
-          action={(data) => {
-            if (ref.current) {
-              ref.current.value = "";
-            }
-            action(data);
-          }}
-        >
+        <form action={action}>
           <label htmlFor="email">
             <Label weight="medium">Email</Label>
             <Input size="3" type="email" id="email" required name="email" />
           </label>
           <label htmlFor="password">
             <Label weight="medium">Password</Label>
-            <Input
-              size="3"
-              type="password"
-              required
-              name="password"
-              ref={ref}
-            />
+            <Input size="3" type="password" required name="password" ref={ref} />
           </label>
           <SubmitButton>
             <Span weight="medium" size="3">
@@ -54,7 +41,11 @@ export function SignInForm() {
         </form>
       </Flex>
       <Flex direction="column" minHeight="100px">
-        {state !== null && <Callout type="error">{state.message}</Callout>}
+        {!state?.ok && (
+          <Callout type="error">
+            <Span size="2">Invalid email or password</Span>
+          </Callout>
+        )}
       </Flex>
     </Flex>
   );

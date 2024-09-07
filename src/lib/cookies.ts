@@ -1,5 +1,6 @@
 import "server-only";
 
+import {addHours, formatISO} from "date-fns";
 import {cookies} from "next/headers";
 
 export function setCookie(key: string, value: string, expiresInHours = 2) {
@@ -11,9 +12,24 @@ export function setCookie(key: string, value: string, expiresInHours = 2) {
   });
 }
 
+/**
+ * Calculates the expiration time in milliseconds based on the given number of hours.
+ *
+ * @param hours - The number of hours to add to the current time. Default is 2.
+ * @returns The expiration time in milliseconds.
+ */
 export function getExpiresInHours(hours = 2) {
-  if (hours < 1) {
-    return Date.now() + 1000 * 60 * 60 * 2;
-  }
-  return Date.now() + 1000 * 60 * 60 * hours;
+  return addHours(Date.now(), hours).getTime();
+}
+
+/**
+ * Creates an expiration date for cookies.
+ *
+ * @param hours - The number of hours until the expiration date. Default is 2 hours.
+ * @returns The formatted expiration date in ISO format.
+ */
+export function createExpirationDate(hours = 2) {
+  let now = new Date();
+  let expiresAt = addHours(now, hours);
+  return formatISO(expiresAt);
 }
