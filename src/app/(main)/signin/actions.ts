@@ -46,7 +46,7 @@ export async function login(prevState: {ok: boolean} | null, data: FormData) {
 async function getUserByEmail(email: string) {
   try {
     let result = await db
-      .select({id: users.id, email: users.email, password: users.password})
+      .select({id: users.id, email: users.email, password: users.password, admin: users.admin})
       .from(users)
       .where(eq(users.email, email));
 

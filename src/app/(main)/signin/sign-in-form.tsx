@@ -41,7 +41,7 @@ export function SignInForm() {
         </form>
       </Flex>
       <Flex direction="column" minHeight="100px">
-        {!state?.ok && (
+        {state && !state.ok && (
           <Callout type="error">
             <Span size="2">Invalid email or password</Span>
           </Callout>
