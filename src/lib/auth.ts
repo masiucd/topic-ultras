@@ -1,6 +1,8 @@
 import "server-only";
 
+import {getExpire} from "@/db/redis";
 import {decrypt} from "@/lib/crypto";
+import {differenceInMilliseconds} from "date-fns";
 import {cookies} from "next/headers";
 import {cache} from "react";
 
@@ -20,7 +22,11 @@ export let isAuthorized = cache(async () => {
 	let payload = await decrypt(cookieSession.value);
 	if (payload?.exp) {
 		let now = Date.now();
-		if (now > payload.exp) {
+		if (differenceInMilliseconds(now, payload.exp) > 0) {
+			return null;
+		}
+		let sessionToken = await getExpire(`session:${payload.id}`);
+		if (!sessionToken || sessionToken !== cookieSession.value) {
 			return null;
 		}
 		return {id: payload.id, email: payload.email};
