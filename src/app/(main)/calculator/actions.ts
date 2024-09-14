@@ -2,16 +2,13 @@
 
 import "server-only";
 
-let Goals = new Set(["maintain", "lose", "gain"]);
-
-let activityLevels = Object.freeze({
-	sedentary: 1.2,
-	light: 1.375,
-	moderate: 1.55,
-	active: 1.725,
-	"very-active": 1.9,
-});
-
+/**
+ * Calculates the result based on the provided form data.
+ *
+ * @param _prevState - The previous state (optional).
+ * @param data - The form data.
+ * @returns An object containing the calculation result and a boolean indicating if the calculation was successful.
+ */
 export async function calculate(
 	_prevState: null | {ok: boolean; result: number},
 	data: FormData,
@@ -48,6 +45,18 @@ export async function calculate(
 	return {ok: true, result: Math.floor(result)};
 }
 
+/**
+ * Calculates the final result based on the given parameters.
+ *
+ * @param {Object} params - The parameters for the calculation.
+ * @param {number} params.age - The age of the person.
+ * @param {number} params.weight - The weight of the person.
+ * @param {number} params.height - The height of the person.
+ * @param {string} params.gender - The gender of the person.
+ * @param {string} params.activityLevel - The activity level of the person.
+ * @param {string} params.goal - The goal of the calculation.
+ * @returns {number | null} The final result of the calculation, or null if the calculation is not possible.
+ */
 function calculateFinalResult({
 	age,
 	weight,
@@ -77,6 +86,17 @@ function calculateFinalResult({
 	return tdee !== null ? calculateBasedOnGoal(tdee, goal) : null;
 }
 
+/**
+ * Calculates the Basal Metabolic Rate (BMR) based on the given parameters.
+ *
+ * @param {Object} params - The parameters required for the calculation.
+ * @param {number} params.age - The age of the person.
+ * @param {number} params.weight - The weight of the person in kilograms.
+ * @param {number} params.height - The height of the person in centimeters.
+ * @param {string} params.gender - The gender of the person ("male" or "female").
+ *
+ * @returns {number | null} The calculated BMR value or null if the gender is not recognized.
+ */
 function calculateBmr({
 	age,
 	weight,
@@ -97,10 +117,23 @@ function calculateBmr({
 	return null;
 }
 
+/**
+ * Calculates the Total Daily Energy Expenditure (TDEE) based on the Basal Metabolic Rate (BMR) and activity level.
+ *
+ * @param bmr - The Basal Metabolic Rate.
+ * @param activityLevel - The activity level, which can be one of the following: sedentary, light, moderate, or high.
+ * @returns The calculated TDEE.
+ */
 function calculateTdee(bmr: number, activityLevel: keyof typeof activityLevels) {
 	return bmr * activityLevels[activityLevel];
 }
 
+/**
+ * Calculates the calorie intake based on the Total Daily Energy Expenditure (TDEE) and the goal.
+ * @param tdee - The Total Daily Energy Expenditure.
+ * @param goal - The goal for the calorie intake. Possible values are "maintain", "lose", or "gain".
+ * @returns The calculated calorie intake based on the goal. Returns null if the goal is not valid.
+ */
 function calculateBasedOnGoal(tdee: number, goal: string) {
 	if (Goals.has(goal)) {
 		switch (goal) {
@@ -114,3 +147,19 @@ function calculateBasedOnGoal(tdee: number, goal: string) {
 	}
 	return null;
 }
+
+/**
+ * Represents a set of goals for a calculator.
+ */
+let Goals = new Set(["maintain", "lose", "gain"]);
+
+/**
+ * Represents different activity levels and their corresponding values.
+ */
+let activityLevels = Object.freeze({
+	sedentary: 1.2,
+	light: 1.375,
+	moderate: 1.55,
+	active: 1.725,
+	"very-active": 1.9,
+});

@@ -26,7 +26,9 @@ export function CalculateForm() {
 						</Label>
 						<Flex gap="8" px="3">
 							<FormGroup direction="column" flexGrow="1" gap="0">
-								<label htmlFor="age">Age</label>
+								<Label weight="medium" htmlFor="age">
+									Age
+								</Label>
 								<Input
 									type="number"
 									name="age"
@@ -37,6 +39,10 @@ export function CalculateForm() {
 								/>
 							</FormGroup>
 							<RadioGroup.Root name="gender" highContrast required defaultValue="male">
+								<Label weight="medium" htmlFor="gender">
+									Gender
+								</Label>
+
 								<FormGroup direction="row" align="center" className="h-full" gap="5">
 									<RadioGroup.Item id="male" value="male">
 										Male
@@ -47,12 +53,12 @@ export function CalculateForm() {
 								</FormGroup>
 							</RadioGroup.Root>
 						</Flex>
-						<Flex gap="3">
+						<Flex gap="3" px="3">
 							<FormGroup flexGrow="1">
-								<label htmlFor="weight">
+								<Label weight="medium" htmlFor="weight">
 									Weight
 									<Span className="text-sm"> (kg)</Span>
-								</label>
+								</Label>
 								<Input
 									type="number"
 									name="weight"
@@ -63,10 +69,10 @@ export function CalculateForm() {
 								/>
 							</FormGroup>
 							<FormGroup flexGrow="1">
-								<label htmlFor="height">
+								<Label weight="medium" htmlFor="height">
 									Height
 									<Span className="text-sm"> (cm)</Span>
-								</label>
+								</Label>
 								<Input
 									type="number"
 									name="height"
@@ -77,36 +83,7 @@ export function CalculateForm() {
 								/>
 							</FormGroup>
 						</Flex>
-						<Flex gap="3">
-							<FormGroup flexGrow="1">
-								<Select defaultValue="light" required name="activity-level">
-									<Select.Trigger />
-									<Select.Content>
-										<Select.Group>
-											<Select.Label>Activity Level</Select.Label>
-											<Select.Item value="sedentary">Sedentary</Select.Item>
-											<Select.Item value="light">Light</Select.Item>
-											<Select.Item value="moderate">Moderate</Select.Item>
-											<Select.Item value="active">Active</Select.Item>
-											<Select.Item value="very-active">Very active</Select.Item>
-										</Select.Group>
-									</Select.Content>
-								</Select>
-							</FormGroup>
-							<FormGroup flexGrow="1">
-								<Select defaultValue="maintain" required name="goal">
-									<Select.Trigger />
-									<Select.Content>
-										<Select.Group>
-											<Select.Label>Goal</Select.Label>
-											<Select.Item value="maintain">Maintain</Select.Item>
-											<Select.Item value="lose">Lose</Select.Item>
-											<Select.Item value="gain">Gain</Select.Item>
-										</Select.Group>
-									</Select.Content>
-								</Select>
-							</FormGroup>
-						</Flex>
+						<ActivityAndGoalSelects />
 						<SubmitButton highContrast type="submit" size="3">
 							<Span weight="bold">Calculate</Span>
 						</SubmitButton>
@@ -124,6 +101,43 @@ export function CalculateForm() {
 					</Lead>
 				</Callout>
 			)}
+		</Flex>
+	);
+}
+
+function ActivityAndGoalSelects() {
+	return (
+		<Flex gap="3" px="3">
+			<FormGroup flexGrow="1">
+				<Label weight="medium">Activity Level</Label>
+				<Select defaultValue="light" required name="activity-level">
+					<Select.Trigger />
+					<Select.Content>
+						<Select.Group>
+							<Select.Label>Activity Level</Select.Label>
+							<Select.Item value="sedentary">Sedentary</Select.Item>
+							<Select.Item value="light">Light</Select.Item>
+							<Select.Item value="moderate">Moderate</Select.Item>
+							<Select.Item value="active">Active</Select.Item>
+							<Select.Item value="very-active">Very active</Select.Item>
+						</Select.Group>
+					</Select.Content>
+				</Select>
+			</FormGroup>
+			<FormGroup flexGrow="1">
+				<Label weight="medium">Goal</Label>
+				<Select defaultValue="maintain" required name="goal">
+					<Select.Trigger />
+					<Select.Content>
+						<Select.Group>
+							<Select.Label>Goal</Select.Label>
+							<Select.Item value="maintain">Maintain</Select.Item>
+							<Select.Item value="lose">Lose</Select.Item>
+							<Select.Item value="gain">Gain</Select.Item>
+						</Select.Group>
+					</Select.Content>
+				</Select>
+			</FormGroup>
 		</Flex>
 	);
 }
