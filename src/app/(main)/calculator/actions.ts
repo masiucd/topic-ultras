@@ -39,8 +39,10 @@ export async function calculate(data: FormData) {
 		activityLevel,
 		goal,
 	});
-	console.log({result});
-	return result;
+	if (result === null) {
+		return {error: "Invalid data"};
+	}
+	return Math.floor(result);
 }
 
 function calculateFinalResult({
