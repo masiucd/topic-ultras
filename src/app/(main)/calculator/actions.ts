@@ -12,7 +12,10 @@ let activityLevels = Object.freeze({
 	"very-active": 1.9,
 });
 
-export async function calculate(data: FormData) {
+export async function calculate(
+	_prevState: null | {ok: boolean; result: number},
+	data: FormData,
+) {
 	let age = data.get("age");
 	let gender = data.get("gender");
 	let weight = data.get("weight");
@@ -28,7 +31,7 @@ export async function calculate(data: FormData) {
 		typeof goal !== "string" ||
 		typeof gender !== "string"
 	) {
-		return {error: "Invalid data"};
+		return {ok: false, result: 0};
 	}
 
 	let result = calculateFinalResult({
@@ -40,9 +43,9 @@ export async function calculate(data: FormData) {
 		goal,
 	});
 	if (result === null) {
-		return {error: "Invalid data"};
+		return {ok: false, result: 0};
 	}
-	return Math.floor(result);
+	return {ok: true, result: Math.floor(result)};
 }
 
 function calculateFinalResult({
