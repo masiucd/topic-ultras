@@ -52,10 +52,21 @@
           "level": "warn",
           "fix": "safe"
         },
-
         "useNamingConvention": {
-          "level": "error",
-          "options": {"strictCase": false},
+          "level": "info",
+          "options": {
+            "strictCase": false,
+            "conventions": [
+              {
+                "selector": {
+                  "kind": "const",
+                  "scope": "global"
+                },
+                "formats": ["CONSTANT_CASE"]
+              }
+            ]
+          },
+
           "fix": "safe"
         }
       }
