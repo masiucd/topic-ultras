@@ -1,6 +1,5 @@
 // import {relations} from "drizzle-orm";
 import {
-  boolean,
   index,
   integer,
   pgTable,
@@ -18,11 +17,10 @@ export let users = pgTable(
     age: integer("age").notNull(),
     email: varchar("email", {length: 200}).notNull().unique(),
     password: varchar("password", {length: 200}).notNull(),
-    admin: boolean("admin").notNull().default(false),
     createdAt: timestamp("created_at", {mode: "string"}).defaultNow(),
-    // updatedAt: timestamp("updated_at", {mode: "string"})
-    //   .defaultNow()
-    //   .$onUpdate(() => new Date().toISOString()),
+    updatedAt: timestamp("updated_at", {mode: "string"})
+      .defaultNow()
+      .$onUpdate(() => new Date().toISOString()),
   },
   (table) => ({
     emailIndex: index("email_index").on(table.email),
