@@ -1,4 +1,5 @@
 // import {relations} from "drizzle-orm";
+import {relations} from "drizzle-orm";
 import {
   index,
   integer,
@@ -7,6 +8,8 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
+import {favoriteFoods} from "./favorite-foods";
+import {foodItems} from "./food-items";
 
 export let users = pgTable(
   "users",
@@ -26,3 +29,9 @@ export let users = pgTable(
     emailIndex: index("email_index").on(table.email),
   })
 );
+
+// One to many relationship with food items - one user can have many food items
+export let usersRelations = relations(users, ({many}) => ({
+  foodItems: many(foodItems),
+  favoriteFoods: many(favoriteFoods),
+}));

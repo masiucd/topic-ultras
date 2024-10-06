@@ -4,7 +4,11 @@ import {users} from "./users";
 
 export let userInfos = pgTable("user_infos", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id),
+  userId: integer("user_id")
+    .references(() => users.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
   age: integer("age"),
   gender: text("gender"),
   height: integer("height"),

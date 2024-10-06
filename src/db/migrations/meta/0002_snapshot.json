@@ -1,6 +1,6 @@
 {
-  "id": "68bf918e-23d9-4b92-95e2-685bbeb8d0b9",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "52988ef5-7102-41d1-baf9-c0cd1d980b20",
+  "prevId": "1a8fb9bb-1e35-42c7-9d7d-489c6e141538",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -111,8 +111,8 @@
         }
       },
       "indexes": {
-        "name_index": {
-          "name": "name_index",
+        "food_category_name_index": {
+          "name": "food_category_name_index",
           "columns": [
             {
               "expression": "name",
@@ -121,7 +121,7 @@
               "nulls": "last"
             }
           ],
-          "isUnique": false,
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -129,7 +129,15 @@
       },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "food_categories_name_unique": {
+          "name": "food_categories_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      }
     },
     "public.food_items": {
       "name": "food_items",
@@ -199,7 +207,7 @@
               "nulls": "last"
             }
           ],
-          "isUnique": false,
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -234,7 +242,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "food_items_name_unique": {
+          "name": "food_items_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      }
     },
     "public.food_nutrients": {
       "name": "food_nutrients",
