@@ -40,10 +40,14 @@ export default async function Home() {
       <p>
         Nutri Check application where you can track your nutrition and health.
       </p>
-      <Badge>Default</Badge>
-      <Badge variant="secondary">Secondary</Badge>
-      <Badge variant="destructive">Destructive</Badge>
-      <Badge variant="outline">Outline</Badge>
+      <div className="flex max-w-[20rem] flex-wrap gap-2">
+        <Badge>Default</Badge>
+        <Badge variant="secondary" colors="orange">
+          Secondary
+        </Badge>
+        <Badge variant="destructive">Destructive</Badge>
+        <Badge variant="outline">Outline</Badge>
+      </div>
       <ul>
         {allFoodItems.map((foodItem) => (
           <li key={foodItem.foodName}>{foodItem.foodName}</li>
