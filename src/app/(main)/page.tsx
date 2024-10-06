@@ -1,4 +1,5 @@
 import PageWrapper from "@/components/page-wrapper";
+import {Badge} from "@/components/ui/badge";
 import {db} from "@/db";
 import {foodCategories, foodItems, foodNutrients} from "@/db/schema";
 import {eq} from "drizzle-orm";
@@ -39,6 +40,10 @@ export default async function Home() {
       <p>
         Nutri Check application where you can track your nutrition and health.
       </p>
+      <Badge>Default</Badge>
+      <Badge variant="secondary">Secondary</Badge>
+      <Badge variant="destructive">Destructive</Badge>
+      <Badge variant="outline">Outline</Badge>
       <ul>
         {allFoodItems.map((foodItem) => (
           <li key={foodItem.foodName}>{foodItem.foodName}</li>
