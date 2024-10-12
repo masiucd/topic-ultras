@@ -16,7 +16,9 @@ import {db} from "@/db";
 import {foodCategories, foodItems, foodNutrients} from "@/db/schema";
 import type {FoodType} from "@/db/schema/food-items";
 import {eq, sql} from "drizzle-orm";
+import type {Route} from "next";
 import Link from "next/link";
+import {FoodItemSearch} from "./food-item-search";
 
 // type Foo = infer SelectModel<typeof foodCategories>;
 // type SelectUser = typeof foodCategories.$inferSelect['name'];
@@ -78,6 +80,10 @@ export default async function Home(props: {
         Nutri Check application where you can track your nutrition and health.
       </p>
 
+      <div>
+        <FoodItemSearch />
+      </div>
+
       <Table>
         <TableCaption>
           <Muted>Food items stored in the database</Muted>
@@ -86,8 +92,8 @@ export default async function Home(props: {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[200px]">Food item</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead>Type</TableHead>
+            <TableHead className="w-[300px]">Description</TableHead>
+            <TableHead className="w-[100px]">Type</TableHead>
             <TableHead>Category</TableHead>
             <TableHead>Calories</TableHead>
             <TableHead>Protein</TableHead>
@@ -119,6 +125,7 @@ export default async function Home(props: {
           totalFoodItems={totalFoodItems}
           page={page}
           totalPages={totalPages}
+          searchParams={props.searchParams}
         />
       </Table>
     </PageWrapper>
@@ -129,9 +136,9 @@ function Footer(props: {
   skip: number;
   limit: number;
   totalFoodItems: {count: number}[];
-
   page: number;
   totalPages: number;
+  searchParams: Record<string, string>;
 }) {
   let {skip, limit, totalFoodItems, page, totalPages} = props;
   return (
@@ -145,11 +152,18 @@ function Footer(props: {
         </TableCell>
         <TableCell>
           <div className="flex gap-2">
-            <PrevLink limit={limit} skip={skip} />
+            <PrevLink
+              limit={limit}
+              skip={skip}
+              searchParams={props.searchParams}
+              page={page}
+            />
             <NextLink
               skip={skip}
               limit={limit}
               totalFoodItems={totalFoodItems}
+              searchParams={props.searchParams}
+              page={page}
             />
           </div>
         </TableCell>
@@ -158,24 +172,45 @@ function Footer(props: {
   );
 }
 
-function PrevLink({skip, limit}: {skip: number; limit: number}) {
-  let prevUrl = `/?limit=${limit}&skip=${skip - limit}`;
+function PrevLink(props: {
+  skip: number;
+  limit: number;
+  searchParams: Record<string, string>;
+  page: number;
+}) {
+  let {skip, limit, searchParams, page} = props;
+  let url = new URLSearchParams(searchParams);
+  console.log({skip, limit, page});
+  if (page === 2) {
+    url.delete("skip");
+    url.delete("limit");
+  } else {
+    url.set("skip", `${skip - limit}`);
+    url.set("limit", `${limit}`);
+  }
+  let prevUrl = `/?${url.toString()}` as Route<string>;
   return (
     <Link className={skip === 0 ? "pointer-events-none" : ""} href={prevUrl}>
       prev
     </Link>
   );
 }
-function NextLink({
-  skip,
-  limit,
-  totalFoodItems,
-}: {
+
+function NextLink(porps: {
   skip: number;
   limit: number;
   totalFoodItems: {count: number}[];
+  searchParams: Record<string, string>;
+  page: number;
 }) {
-  let nextUrl = `/?limit=${limit}&skip=${skip + limit}`;
+  let {skip, limit, totalFoodItems, searchParams, page} = porps;
+  let url = new URLSearchParams(searchParams);
+  if (page >= 1) {
+    url.set("skip", `${skip + limit}`);
+    url.set("limit", `${limit}`);
+  }
+  let nextUrl = `/?${url.toString()}` as Route<string>;
+  console.log("nextUrl", nextUrl);
   return (
     <Link
       className={
