@@ -19,11 +19,14 @@ export let foodType = pgEnum("food_type", [
   "VEGETABLE",
   "GRAIN",
   "PROTEIN",
+  "CARBOHYDRATE",
   "DAIRY",
   "LEGUME",
   "NUT",
   "SEED",
   "SPICE",
+  "HERB",
+  "FAST_FOOD",
   "OTHER",
 ]);
 
