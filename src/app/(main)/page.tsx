@@ -15,7 +15,8 @@ import {Muted} from "@/components/ui/typography";
 import {db} from "@/db";
 import {foodCategories, foodItems, foodNutrients} from "@/db/schema";
 import type {FoodType} from "@/db/schema/food-items";
-import {eq} from "drizzle-orm";
+import {eq, sql} from "drizzle-orm";
+import Link from "next/link";
 
 // type Foo = infer SelectModel<typeof foodCategories>;
 // type SelectUser = typeof foodCategories.$inferSelect['name'];
@@ -33,7 +34,20 @@ import {eq} from "drizzle-orm";
 //   setExpire({key: "team", value: name});
 // }
 
-export default async function Home() {
+const ITEMS_PER_PAGE = 5;
+
+export default async function Home(props: {
+  searchParams: Record<string, string>;
+}) {
+  let limit = Number.parseInt(props.searchParams.limit, 10) || ITEMS_PER_PAGE;
+  let skip = Number.parseInt(props.searchParams.skip, 10) || 0;
+
+  let totalFoodItems = await db
+    .select({
+      count: sql`count(*)`.mapWith(Number),
+    })
+    .from(foodItems);
+
   let allFoodItems = await db
     .select({
       foodName: foodItems.name,
@@ -50,7 +64,16 @@ export default async function Home() {
     .from(foodItems)
     .innerJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
     .innerJoin(foodCategories, eq(foodItems.foodCategoryId, foodCategories.id))
-    .limit(4);
+    .orderBy(foodItems.name)
+    .limit(limit) // limit 4
+    .offset(skip); // skip 4
+
+  let nextUrl = `/?limit=${limit}&skip=${skip + limit}`;
+  let prevUrl = `/?limit=${limit}&skip=${skip - limit}`;
+
+  let page = Math.floor(skip / limit) + 1;
+  let totalPages = Math.ceil(totalFoodItems[0].count / limit) + 1;
+  console.log("page", page, skip + limit);
 
   return (
     <PageWrapper className="border border-red-500">
@@ -97,11 +120,30 @@ export default async function Home() {
         <TableFooter>
           <TableRow>
             <TableCell colSpan={7}>
-              <Muted>Total</Muted>
-              <Muted>{allFoodItems.length}</Muted>
+              <Muted>{totalFoodItems[0].count} items in total</Muted>
+              <Muted>
+                Page {page} of {totalPages}
+              </Muted>
             </TableCell>
             <TableCell>
-              <Muted>a</Muted>
+              <div className="flex gap-2">
+                <Link
+                  className={skip === 0 ? "pointer-events-none" : ""}
+                  href={prevUrl}
+                >
+                  prev
+                </Link>
+                <Link
+                  className={
+                    skip + limit >= totalFoodItems[0].count
+                      ? "pointer-events-none"
+                      : ""
+                  }
+                  href={nextUrl}
+                >
+                  next
+                </Link>
+              </div>
             </TableCell>
           </TableRow>
         </TableFooter>
