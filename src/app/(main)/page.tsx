@@ -68,12 +68,8 @@ export default async function Home(props: {
     .limit(limit) // limit 4
     .offset(skip); // skip 4
 
-  let nextUrl = `/?limit=${limit}&skip=${skip + limit}`;
-  let prevUrl = `/?limit=${limit}&skip=${skip - limit}`;
-
   let page = Math.floor(skip / limit) + 1;
   let totalPages = Math.ceil(totalFoodItems[0].count / limit) + 1;
-  console.log("page", page, skip + limit);
 
   return (
     <PageWrapper className="border border-red-500">
@@ -117,38 +113,78 @@ export default async function Home(props: {
             </TableRow>
           ))}
         </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={7}>
-              <Muted>{totalFoodItems[0].count} items in total</Muted>
-              <Muted>
-                Page {page} of {totalPages}
-              </Muted>
-            </TableCell>
-            <TableCell>
-              <div className="flex gap-2">
-                <Link
-                  className={skip === 0 ? "pointer-events-none" : ""}
-                  href={prevUrl}
-                >
-                  prev
-                </Link>
-                <Link
-                  className={
-                    skip + limit >= totalFoodItems[0].count
-                      ? "pointer-events-none"
-                      : ""
-                  }
-                  href={nextUrl}
-                >
-                  next
-                </Link>
-              </div>
-            </TableCell>
-          </TableRow>
-        </TableFooter>
+        <Footer
+          skip={skip}
+          limit={limit}
+          totalFoodItems={totalFoodItems}
+          page={page}
+          totalPages={totalPages}
+        />
       </Table>
     </PageWrapper>
+  );
+}
+
+function Footer(props: {
+  skip: number;
+  limit: number;
+  totalFoodItems: {count: number}[];
+
+  page: number;
+  totalPages: number;
+}) {
+  let {skip, limit, totalFoodItems, page, totalPages} = props;
+  return (
+    <TableFooter>
+      <TableRow>
+        <TableCell colSpan={7}>
+          <Muted>
+            Page {page} of {totalPages} pages
+          </Muted>
+          <Muted>{totalFoodItems[0].count} items in total</Muted>
+        </TableCell>
+        <TableCell>
+          <div className="flex gap-2">
+            <PrevLink limit={limit} skip={skip} />
+            <NextLink
+              skip={skip}
+              limit={limit}
+              totalFoodItems={totalFoodItems}
+            />
+          </div>
+        </TableCell>
+      </TableRow>
+    </TableFooter>
+  );
+}
+
+function PrevLink({skip, limit}: {skip: number; limit: number}) {
+  let prevUrl = `/?limit=${limit}&skip=${skip - limit}`;
+  return (
+    <Link className={skip === 0 ? "pointer-events-none" : ""} href={prevUrl}>
+      prev
+    </Link>
+  );
+}
+function NextLink({
+  skip,
+  limit,
+  totalFoodItems,
+}: {
+  skip: number;
+  limit: number;
+  totalFoodItems: {count: number}[];
+}) {
+  let nextUrl = `/?limit=${limit}&skip=${skip + limit}`;
+  return (
+    <Link
+      className={
+        skip + limit > totalFoodItems[0].count ? "pointer-events-none" : ""
+      }
+      href={nextUrl}
+    >
+      next
+    </Link>
   );
 }
 
