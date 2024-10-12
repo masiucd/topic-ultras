@@ -1,7 +1,25 @@
 import PageWrapper from "@/components/page-wrapper";
+import {Badge} from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  // TableFooter,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {Muted} from "@/components/ui/typography";
 import {db} from "@/db";
 import {foodCategories, foodItems, foodNutrients} from "@/db/schema";
+import type {FoodType} from "@/db/schema/food-items";
 import {eq} from "drizzle-orm";
+
+// type Foo = infer SelectModel<typeof foodCategories>;
+// type SelectUser = typeof foodCategories.$inferSelect['name'];
+
 // import {setExpire} from "@/db/redis";
 
 // async function redisTest(data: FormData) {
@@ -31,7 +49,8 @@ export default async function Home() {
     })
     .from(foodItems)
     .innerJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
-    .innerJoin(foodCategories, eq(foodItems.foodCategoryId, foodCategories.id));
+    .innerJoin(foodCategories, eq(foodItems.foodCategoryId, foodCategories.id))
+    .limit(4);
 
   return (
     <PageWrapper className="border border-red-500">
@@ -40,34 +59,60 @@ export default async function Home() {
         Nutri Check application where you can track your nutrition and health.
       </p>
 
-      <table>
-        <thead>
-          <tr className="rounded-md border-2 border-gray-500 text-left">
-            <th>Food Name</th>
-            <th>Food Description</th>
-            <th>Food Type</th>
-            <th>Food Category</th>
-            <th>Calories</th>
-            <th>Protein</th>
-            <th>Fat</th>
-            <th>Carbs</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableCaption>
+          <Muted>Food items stored in the database</Muted>
+          <Muted>All food items is calculated per 100g</Muted>
+        </TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[200px]">Food item</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead>Calories</TableHead>
+            <TableHead>Protein</TableHead>
+            <TableHead>Fat</TableHead>
+            <TableHead>Carbs</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {allFoodItems.map((foodItem) => (
-            <tr key={foodItem.foodName}>
-              <td>{foodItem.foodName}</td>
-              <td>{foodItem.foodDescription}</td>
-              <td>{foodItem.foodType}</td>
-              <td>{foodItem.foodCategory}</td>
-              <td>{foodItem.nutrients.calories}</td>
-              <td>{foodItem.nutrients.protein}</td>
-              <td>{foodItem.nutrients.fat}</td>
-              <td>{foodItem.nutrients.carbs}</td>
-            </tr>
+            <TableRow key={foodItem.foodName}>
+              <TableCell>{foodItem.foodName}</TableCell>
+              <TableCell>{foodItem.foodDescription}</TableCell>
+              <TableCell>
+                <FoodTypeBadge foodType={foodItem.foodType} />
+              </TableCell>
+              <TableCell>
+                <FoodCategoryBadge foodCategory={foodItem.foodCategory} />
+              </TableCell>
+              <TableCell>{foodItem.nutrients.calories}</TableCell>
+              <TableCell>{foodItem.nutrients.protein}</TableCell>
+              <TableCell>{foodItem.nutrients.fat}</TableCell>
+              <TableCell>{foodItem.nutrients.carbs}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={7}>
+              <Muted>Total</Muted>
+              <Muted>{allFoodItems.length}</Muted>
+            </TableCell>
+            <TableCell>
+              <Muted>a</Muted>
+            </TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
     </PageWrapper>
   );
+}
+
+function FoodTypeBadge({foodType}: {foodType: FoodType}) {
+  return <Badge className="uppercase">{foodType}</Badge>;
+}
+function FoodCategoryBadge({foodCategory}: {foodCategory: string}) {
+  return <Badge className="uppercase">{foodCategory}</Badge>;
 }
