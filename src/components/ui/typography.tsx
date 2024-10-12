@@ -71,8 +71,47 @@ export function TextLarge(props: Props & ComponentProps<"p">) {
   );
 }
 
+export function Muted(props: Props & ComponentProps<"p">) {
+  return (
+    <p
+      className={cn("text-muted-foreground text-sm", props.className)}
+      {...props}
+    />
+  );
+}
+
 export function Lead(props: Props & ComponentProps<"p">) {
   return (
-    <p className={cn("text-gray-800/50 text-lg", props.className)} {...props} />
+    <p
+      className={cn("text-muted-foreground text-xl", props.className)}
+      {...props}
+    />
+  );
+}
+
+export function P(props: Props & ComponentProps<"p">) {
+  return (
+    <p
+      className={cn("leading-7 [&:not(:first-child)]:mt-6", props.className)}
+      {...props}
+    />
+  );
+}
+
+export function Blockquote(props: Props & ComponentProps<"blockquote">) {
+  return (
+    <blockquote
+      className={cn("mt-6 border-l-2 pl-6 italic", props.className)}
+      {...props}
+    />
+  );
+}
+
+export function List(props: Props & ComponentProps<"ul">) {
+  return (
+    <ul
+      className={cn("my-6 ml-6 list-disc [&>li]:mt-2", props.className)}
+      {...props}
+    />
   );
 }
