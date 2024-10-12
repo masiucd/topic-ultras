@@ -30,6 +30,8 @@ export let foodType = pgEnum("food_type", [
   "OTHER",
 ]);
 
+export type FoodType = (typeof foodType.enumValues)[number];
+
 export let foodItems = pgTable(
   "food_items",
   {
@@ -37,7 +39,7 @@ export let foodItems = pgTable(
     userId: integer("user_id").references(() => users.id), // A user can create a food item
     name: varchar("name", {length: 100}).unique().notNull(),
     description: text("description"),
-    foodType: foodType("food_type").default("OTHER"),
+    foodType: foodType("food_type").default("OTHER").notNull(),
     foodCategoryId: integer("food_category_id")
       .references(() => foodCategories.id, {onDelete: "cascade"})
       .notNull(),
