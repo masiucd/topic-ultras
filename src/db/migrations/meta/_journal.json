@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1728222206938,
-      "tag": "0000_melodic_moon_knight",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1728222390526,
-      "tag": "0001_calm_true_believers",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1728222475106,
-      "tag": "0002_colossal_blazing_skull",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1728651397366,
-      "tag": "0003_clear_carnage",
+      "when": 1728744232325,
+      "tag": "0000_short_scarlet_witch",
       "breakpoints": true
     }
   ]

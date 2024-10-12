@@ -1,5 +1,5 @@
 DO $$ BEGIN
- CREATE TYPE "public"."food_type" AS ENUM('FRUIT', 'VEGETABLE', 'GRAIN', 'PROTEIN', 'DAIRY', 'LEGUME', 'NUT', 'SEED', 'SPICE', 'OTHER');
+ CREATE TYPE "public"."food_type" AS ENUM('FRUIT', 'VEGETABLE', 'GRAIN', 'PROTEIN', 'CARBOHYDRATE', 'DAIRY', 'LEGUME', 'NUT', 'SEED', 'SPICE', 'HERB', 'FAST_FOOD', 'OTHER');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS "food_categories" (
 	"name" varchar(100) NOT NULL,
 	"description" text,
 	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now()
+	"updated_at" timestamp DEFAULT now(),
+	CONSTRAINT "food_categories_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "food_items" (
@@ -28,7 +29,8 @@ CREATE TABLE IF NOT EXISTS "food_items" (
 	"food_type" "food_type" DEFAULT 'OTHER',
 	"food_category_id" integer NOT NULL,
 	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now()
+	"updated_at" timestamp DEFAULT now(),
+	CONSTRAINT "food_items_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "food_nutrients" (
@@ -119,6 +121,6 @@ EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "name_index" ON "food_categories" USING btree ("name");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "food_name_index" ON "food_items" USING btree ("name");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "food_category_name_index" ON "food_categories" USING btree ("name");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "food_name_index" ON "food_items" USING btree ("name");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "email_index" ON "users" USING btree ("email");
