@@ -15,7 +15,7 @@ import {Muted} from "@/components/ui/typography";
 import {db} from "@/db";
 import {foodCategories, foodItems, foodNutrients} from "@/db/schema";
 import type {FoodType} from "@/db/schema/food-items";
-import {eq, sql} from "drizzle-orm";
+import {eq, ilike, sql} from "drizzle-orm";
 import type {Route} from "next";
 import Link from "next/link";
 import {FoodItemSearch} from "./food-item-search";
@@ -43,32 +43,9 @@ export default async function Home(props: {
 }) {
   let limit = Number.parseInt(props.searchParams.limit, 10) || ITEMS_PER_PAGE;
   let skip = Number.parseInt(props.searchParams.skip, 10) || 0;
+  let name = props.searchParams.name;
 
-  let totalFoodItems = await db
-    .select({
-      count: sql`count(*)`.mapWith(Number),
-    })
-    .from(foodItems);
-
-  let allFoodItems = await db
-    .select({
-      foodName: foodItems.name,
-      foodDescription: foodItems.description,
-      foodType: foodItems.foodType,
-      foodCategory: foodCategories.name,
-      nutrients: {
-        calories: foodNutrients.calories,
-        protein: foodNutrients.protein,
-        fat: foodNutrients.fat,
-        carbs: foodNutrients.carbs,
-      },
-    })
-    .from(foodItems)
-    .innerJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
-    .innerJoin(foodCategories, eq(foodItems.foodCategoryId, foodCategories.id))
-    .orderBy(foodItems.name)
-    .limit(limit) // limit 4
-    .offset(skip); // skip 4
+  let {totalFoodItems, allFoodItems} = await getFoodItems({name, limit, skip});
 
   let page = Math.floor(skip / limit) + 1;
   let totalPages = Math.ceil(totalFoodItems[0].count / limit) + 1;
@@ -80,8 +57,14 @@ export default async function Home(props: {
         Nutri Check application where you can track your nutrition and health.
       </p>
 
-      <div>
-        <FoodItemSearch />
+      <div className="mb-5 md:max-w-xl">
+        <FoodItemSearch
+          label="Search for food items"
+          htmlFor="search"
+          placeholder="Apple, Banana, etc."
+          type="text"
+          name={name}
+        />
       </div>
 
       <Table>
@@ -228,4 +211,48 @@ function FoodTypeBadge({foodType}: {foodType: FoodType}) {
 }
 function FoodCategoryBadge({foodCategory}: {foodCategory: string}) {
   return <Badge className="uppercase">{foodCategory}</Badge>;
+}
+
+async function getFoodItems({
+  name,
+  limit,
+  skip,
+}: {
+  name?: string;
+  limit: number;
+  skip: number;
+}) {
+  console.log({name, limit, skip});
+
+  // TODO make a transaction!
+  // db.transaction
+
+  let totalFoodItems = await db
+    .select({
+      count: sql`count(*)`.mapWith(Number),
+    })
+    .from(foodItems);
+
+  let allFoodItems = await db
+    .select({
+      foodName: foodItems.name,
+      foodDescription: foodItems.description,
+      foodType: foodItems.foodType,
+      foodCategory: foodCategories.name,
+      nutrients: {
+        calories: foodNutrients.calories,
+        protein: foodNutrients.protein,
+        fat: foodNutrients.fat,
+        carbs: foodNutrients.carbs,
+      },
+    })
+    .from(foodItems)
+    .innerJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
+    .innerJoin(foodCategories, eq(foodItems.foodCategoryId, foodCategories.id))
+    .orderBy(foodItems.name)
+    .where(name ? ilike(foodItems.name, `%${name}%`) : undefined)
+    .limit(limit) // limit 4
+    .offset(skip); // skip 4
+
+  return {totalFoodItems, allFoodItems};
 }
