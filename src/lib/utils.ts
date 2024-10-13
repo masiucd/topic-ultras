@@ -19,3 +19,18 @@ export function debounce<T extends (...args: any[]) => void>(
     }, timeout);
   };
 }
+
+export function slugify(str: string) {
+  return str
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^a-z0-9-]/g, "");
+}
+
+export function unSlugify(str: string) {
+  return str.replace(/-/g, " ");
+}
+
+export async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
