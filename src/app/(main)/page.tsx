@@ -3,7 +3,6 @@ import {Badge} from "@/components/ui/badge";
 import {
   Table,
   TableBody,
-  // TableFooter,
   TableCaption,
   TableCell,
   TableFooter,
@@ -46,9 +45,8 @@ export default async function Home(props: {
   let name = props.searchParams.name;
 
   let {totalFoodItems, allFoodItems} = await getFoodItems({name, limit, skip});
-
   let page = Math.floor(skip / limit) + 1;
-  let totalPages = Math.ceil(totalFoodItems[0].count / limit) + 1;
+  let totalPages = Math.ceil(totalFoodItems / limit) + 1;
 
   return (
     <PageWrapper className="border border-red-500">
@@ -57,7 +55,7 @@ export default async function Home(props: {
         Nutri Check application where you can track your nutrition and health.
       </p>
 
-      <div className="mb-5 md:max-w-xl">
+      <div className="my-5 flex flex-col gap-2 md:max-w-xl">
         <FoodItemSearch
           label="Search for food items"
           htmlFor="search"
@@ -86,8 +84,10 @@ export default async function Home(props: {
         </TableHeader>
         <TableBody>
           {allFoodItems.map((foodItem) => (
-            <TableRow key={foodItem.foodName}>
-              <TableCell>{foodItem.foodName}</TableCell>
+            <TableRow key={foodItem.foodId}>
+              <TableCell>
+                <span className="capitalize">{foodItem.foodName}</span>
+              </TableCell>
               <TableCell>{foodItem.foodDescription}</TableCell>
               <TableCell>
                 <FoodTypeBadge foodType={foodItem.foodType} />
@@ -118,7 +118,7 @@ export default async function Home(props: {
 function Footer(props: {
   skip: number;
   limit: number;
-  totalFoodItems: {count: number}[];
+  totalFoodItems: number;
   page: number;
   totalPages: number;
   searchParams: Record<string, string>;
@@ -131,7 +131,7 @@ function Footer(props: {
           <Muted>
             Page {page} of {totalPages} pages
           </Muted>
-          <Muted>{totalFoodItems[0].count} items in total</Muted>
+          <Muted>{totalFoodItems} items in total</Muted>
         </TableCell>
         <TableCell>
           <div className="flex gap-2">
@@ -182,7 +182,7 @@ function PrevLink(props: {
 function NextLink(porps: {
   skip: number;
   limit: number;
-  totalFoodItems: {count: number}[];
+  totalFoodItems: number;
   searchParams: Record<string, string>;
   page: number;
 }) {
@@ -193,12 +193,10 @@ function NextLink(porps: {
     url.set("limit", `${limit}`);
   }
   let nextUrl = `/?${url.toString()}` as Route<string>;
-  console.log("nextUrl", nextUrl);
+
   return (
     <Link
-      className={
-        skip + limit > totalFoodItems[0].count ? "pointer-events-none" : ""
-      }
+      className={skip + limit > totalFoodItems ? "pointer-events-none" : ""}
       href={nextUrl}
     >
       next
@@ -222,8 +220,6 @@ async function getFoodItems({
   limit: number;
   skip: number;
 }) {
-  console.log({name, limit, skip});
-
   // TODO make a transaction!
   // db.transaction
 
@@ -235,6 +231,7 @@ async function getFoodItems({
 
   let allFoodItems = await db
     .select({
+      foodId: foodItems.id,
       foodName: foodItems.name,
       foodDescription: foodItems.description,
       foodType: foodItems.foodType,
@@ -254,5 +251,8 @@ async function getFoodItems({
     .limit(limit) // limit 4
     .offset(skip); // skip 4
 
-  return {totalFoodItems, allFoodItems};
+  return {
+    totalFoodItems: totalFoodItems[0].count,
+    allFoodItems,
+  };
 }

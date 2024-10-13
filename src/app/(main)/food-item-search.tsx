@@ -27,15 +27,12 @@ export function FoodItemSearch(props: {
           let term = e.target.value;
           if (term) {
             params.set("name", term);
-            // handle if page pagination is present. then remove it
             params.delete("skip");
+            params.delete("limit");
           } else {
             params.delete("name");
           }
           let newUrl = `${pathName}?${params.toString()}` as Route<string>;
-
-          console.log("🚀 ~ newUrl:", newUrl);
-          // console.log({pathName, term, url});
           router.replace(newUrl);
         }}
         defaultValue={props.name}
