@@ -113,11 +113,11 @@ function NutritionInfo(props: {
 		<List className="flex flex-col gap-3 text-sm">
 			<li className="flex w-1/2 justify-between gap-5 ">
 				<Strong>Food type</Strong>
-				<FoodTypeBadge foodType={foodItem.foodType} />
+				<FoodTypeBadge foodType={foodItem.foodType} withLink />
 			</li>
 			<li className="flex w-1/2 justify-between gap-5 ">
 				<Strong>Food category</Strong>
-				<FoodCategoryBadge foodCategory={foodItem.foodCategory} />
+				<FoodCategoryBadge foodCategory={foodItem.foodCategory} withLink />
 			</li>
 			<li className="flex w-1/2 justify-between gap-5 ">
 				<Strong>Protein</Strong> <Muted>{foodItem.nutrition.protein}</Muted>
