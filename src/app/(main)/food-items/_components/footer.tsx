@@ -45,6 +45,8 @@ export function Footer(props: {
   );
 }
 
+const linkClassName = "underline hover:opacity-55";
+
 function PrevLink(props: {
   skip: number;
   limit: number;
@@ -52,6 +54,17 @@ function PrevLink(props: {
   page: number;
 }) {
   let {skip, limit, searchParams, page} = props;
+  if (page === 1) {
+    return (
+      <button
+        disabled
+        aria-description="Previous page disabled"
+        className="opacity-50 cursor-not-allowed"
+      >
+        Prev
+      </button>
+    );
+  }
   let url = new URLSearchParams(searchParams);
   if (page === 2) {
     url.delete("skip");
@@ -62,10 +75,7 @@ function PrevLink(props: {
   }
   let prevUrl = `food-items/?${url.toString()}` as Route<string>;
   return (
-    <Link
-      className={cn("", page === 1 ? "pointer-events-none" : "")}
-      href={prevUrl}
-    >
+    <Link className={linkClassName} href={prevUrl}>
       Prev
     </Link>
   );
@@ -79,6 +89,17 @@ function NextLink(porps: {
   totalPages: number;
 }) {
   let {skip, limit, searchParams, page, totalPages} = porps;
+  if (page === totalPages) {
+    return (
+      <button
+        disabled
+        aria-description="Next page disabled"
+        className="opacity-50 cursor-not-allowed"
+      >
+        Next
+      </button>
+    );
+  }
   let url = new URLSearchParams(searchParams);
   if (page >= 1) {
     url.set("skip", `${skip + limit}`);
@@ -86,14 +107,8 @@ function NextLink(porps: {
   }
   let nextUrl = `food-items/?${url.toString()}` as Route<string>;
 
-  let isDisabled = page === totalPages;
   return (
-    <Link
-      className={cn("", isDisabled ? "pointer-events-none opacity-50" : "")}
-      aria-disabled={isDisabled}
-      aria-label={isDisabled ? "Next page disabled" : "Go to next page"}
-      href={nextUrl}
-    >
+    <Link href={nextUrl} className={linkClassName}>
       Next
     </Link>
   );
