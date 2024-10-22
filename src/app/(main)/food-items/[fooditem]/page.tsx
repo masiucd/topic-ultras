@@ -6,31 +6,32 @@ import {FoodItem} from "./_components/food-item";
 import {getFoodItemData} from "./dao";
 
 type Props = {
-	params: {
+	params: Promise<{
 		fooditem: string;
-	};
+	}>;
 	// searchParams: {[key: string]: string | string[] | undefined};
 };
 
-export async function generateMetadata({params}: Props): Promise<Metadata> {
-	return {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+    const params = await props.params;
+    return {
 		title: params.fooditem,
 		description: `Nutritional values of ${params.fooditem}`,
 	};
 }
 
 export default async function FoodItemPage(props: Props) {
-	let foodItem = await getFoodItemData(props.params.fooditem);
+	let foodItem = await getFoodItemData((await props.params).fooditem);
 	if (!foodItem) {
 		return <div>Food item not found</div>;
 	}
 
 	return (
-		<PageWrapper>
-			<H1>Food item {unSlugify(props.params.fooditem)}</H1>
-			<div className="my-5 flex w-[30rem] ">
+        (<PageWrapper>
+            <H1>Food item {unSlugify((await props.params).fooditem)}</H1>
+            <div className="my-5 flex w-[30rem] ">
 				<FoodItem foodItem={foodItem} />
 			</div>
-		</PageWrapper>
-	);
+        </PageWrapper>)
+    );
 }

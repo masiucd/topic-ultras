@@ -7,11 +7,11 @@ import {FoodItemSearch} from "./_components/food-item-search";
 import {FoodTable} from "./_components/food-table";
 
 export default async function Home(props: {
-  searchParams: Record<string, string>;
+  searchParams: Promise<Record<string, string>>;
 }) {
-  let name = props.searchParams.name;
+  let name = (await props.searchParams).name;
   return (
-    <PageWrapper>
+    (<PageWrapper>
       <H1>Food Items</H1>
       <Lead>
         Browse through our food items database and find the nutritional values
@@ -28,10 +28,10 @@ export default async function Home(props: {
           />
         </div>
         <Suspense fallback={<FoodTableSkeleton />}>
-          <FoodTable name={name} searchParams={props.searchParams} />
+          <FoodTable name={name} searchParams={(await props.searchParams)} />
         </Suspense>
       </section>
-    </PageWrapper>
+    </PageWrapper>)
   );
 }
 
