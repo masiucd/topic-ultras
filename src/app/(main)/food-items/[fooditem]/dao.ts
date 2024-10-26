@@ -1,8 +1,7 @@
-import {db} from "@/db";
-import {foodCategories, foodItems, foodNutrients} from "@/db/schema";
-import {unSlugify} from "@/lib/utils";
-import {eq, sql} from "drizzle-orm";
 import "server-only";
+import {db} from "@/db";
+import {foodCategories, foodItems, foodNutrients, slugs} from "@/db/schema";
+import {eq, sql} from "drizzle-orm";
 
 export async function getFoodItemData(foodName: string) {
 	try {
@@ -23,7 +22,8 @@ export async function getFoodItemData(foodName: string) {
 			.from(foodItems)
 			.innerJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
 			.innerJoin(foodCategories, eq(foodItems.foodCategoryId, foodCategories.id))
-			.where(eq(foodItems.name, unSlugify(foodName)));
+			.innerJoin(slugs, eq(foodItems.id, slugs.objectId))
+			.where(eq(slugs.slug, foodName));
 
 		if (!data.length) {
 			return null;

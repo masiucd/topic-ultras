@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import {TooltipComponent} from "@/components/ui/tooltip";
 import {Muted} from "@/components/ui/typography";
-import {slugify} from "@/lib/utils";
+import {cn} from "@/lib/utils";
 import Link from "next/link";
 import {getFoodItems} from "../dao";
 import {Footer} from "./footer";
@@ -48,8 +48,13 @@ export async function FoodTable(props: {
 					<TableRow key={foodItem.foodId}>
 						<TableCell>
 							<Link
-								href={`/food-items/${slugify(foodItem.foodName)}`}
-								className="capitalize underline underline-offset-3 hover:opacity-60"
+								aria-label={foodItem.slug ? `View ${foodItem.foodName}` : "Not available"}
+								href={`/food-items/${foodItem.slug}`}
+								className={cn(
+									"capitalize underline underline-offset-3 hover:opacity-60",
+									!foodItem.slug &&
+										"pointer-events-none cursor-not-allowed no-underline ",
+								)}
 							>
 								{foodItem.foodName}
 							</Link>

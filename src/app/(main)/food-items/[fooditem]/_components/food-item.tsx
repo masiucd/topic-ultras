@@ -110,23 +110,23 @@ function NutritionInfo(props: {
 }) {
 	let {foodItem} = props;
 	return (
-		<List className="flex flex-col gap-3 text-sm">
-			<li className="flex w-1/2 justify-between gap-5 ">
+		<List className="flex flex-col gap-3 text-sm md:pr-20">
+			<li className="flex justify-between gap-5 ">
 				<Strong>Food type</Strong>
 				<FoodTypeBadge foodType={foodItem.foodType} withLink />
 			</li>
-			<li className="flex w-1/2 justify-between gap-5 ">
+			<li className="flex justify-between gap-5 ">
 				<Strong>Food category</Strong>
 				<FoodCategoryBadge foodCategory={foodItem.foodCategory} withLink />
 			</li>
-			<li className="flex w-1/2 justify-between gap-5 ">
-				<Strong>Protein</Strong> <Muted>{foodItem.nutrition.protein}</Muted>
+			<li className="flex justify-between gap-5 ">
+				<Strong>Protein</Strong> <Muted>{foodItem.nutrition.protein}g</Muted>
 			</li>
-			<li className="flex w-1/2 justify-between gap-5 ">
-				<Strong>Fat</Strong> <Muted>{foodItem.nutrition.fat}</Muted>
+			<li className="flex justify-between gap-5 ">
+				<Strong>Fat</Strong> <Muted>{foodItem.nutrition.fat}g</Muted>
 			</li>
-			<li className="flex w-1/2 justify-between gap-5 ">
-				<Strong>Carbs</Strong> <Muted>{foodItem.nutrition.carbs}</Muted>
+			<li className="flex justify-between gap-5 ">
+				<Strong>Carbs</Strong> <Muted>{foodItem.nutrition.carbs}g</Muted>
 			</li>
 		</List>
 	);

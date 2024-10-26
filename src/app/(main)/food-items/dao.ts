@@ -1,6 +1,6 @@
 import "server-only";
 import {db} from "@/db";
-import {foodCategories, foodItems, foodNutrients} from "@/db/schema";
+import {foodCategories, foodItems, foodNutrients, slugs} from "@/db/schema";
 import {eq, ilike, sql} from "drizzle-orm";
 
 export async function getFoodItems({
@@ -27,6 +27,7 @@ export async function getFoodItems({
 					foodDescription: foodItems.description,
 					foodType: foodItems.foodType,
 					foodCategory: foodCategories.name,
+					slug: slugs.slug,
 					nutrients: {
 						calories: foodNutrients.calories,
 						protein: foodNutrients.protein,
@@ -37,6 +38,7 @@ export async function getFoodItems({
 				.from(foodItems)
 				.leftJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
 				.leftJoin(foodCategories, eq(foodItems.foodCategoryId, foodCategories.id))
+				.leftJoin(slugs, eq(foodItems.id, slugs.objectId))
 				.orderBy(foodItems.name)
 				.where(name ? ilike(foodItems.name, `%${name}%`) : undefined)
 				.limit(limit) // limit 4
