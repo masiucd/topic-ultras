@@ -17,7 +17,6 @@ export function FoodItem(props: {
 	foodItem: NonNullable<FoodItemType>;
 }) {
 	let {foodItem} = props;
-
 	return (
 		<Card className="w-full">
 			<Header foodItem={foodItem} />
