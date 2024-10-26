@@ -13,7 +13,7 @@ export function SubmitButton(props: PropsWithChildren<ComponentProps<"button">>)
 			aria-label="Submit"
 			aria-description="Submit the form"
 			type="submit"
-			className={cn(pending && "cursor-not-allowed opacity-50")}
+			className={cn("relative active:top-1", pending && "cursor-not-allowed opacity-50")}
 			{...props}
 		>
 			{props.children}

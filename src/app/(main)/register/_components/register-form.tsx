@@ -8,8 +8,7 @@ import {useActionState} from "react";
 
 export function RegisterForm() {
 	let [state, action, pending] = useActionState(register, null);
-	console.log("error", state?.errors);
-
+	console.log("error", state);
 	return (
 		<form action={action}>
 			<fieldset
@@ -28,7 +27,9 @@ export function RegisterForm() {
 						id="username"
 						name="username"
 						defaultValue={state?.values.username}
+						required
 					/>
+					<span className="text-red-500">{state?.error?.get("username")?.message}</span>
 				</Label>
 				<Label htmlFor="email">
 					<span>Email</span>
@@ -37,7 +38,9 @@ export function RegisterForm() {
 						id="email"
 						name="email"
 						defaultValue={state?.values.email}
+						required
 					/>
+					<span className="text-red-500">{state?.error?.get("email")?.message}</span>
 				</Label>
 				<Label htmlFor="password">
 					<span>Password</span>
@@ -46,7 +49,9 @@ export function RegisterForm() {
 						id="password"
 						name="password"
 						defaultValue={state?.values.password}
+						required
 					/>
+					<span className="text-red-500">{state?.error?.get("password")?.message}</span>
 				</Label>
 				<Label htmlFor="confirmPassword">
 					<span>Confirm Password</span>
@@ -55,7 +60,11 @@ export function RegisterForm() {
 						id="confirmPassword"
 						name="confirmPassword"
 						defaultValue={state?.values.confirmPassword}
+						required
 					/>
+					<span className="text-red-500">
+						{state?.error?.get("confirmPassword")?.message}
+					</span>
 				</Label>
 				<Button type="submit">Register</Button>
 			</fieldset>
