@@ -23,6 +23,8 @@ export async function register(
 	let validatedData = registerSchema.safeParse(formValues);
 	if (!validatedData.success) {
 		let error = formatErrors(validatedData.error.errors);
+		console.log("validatedData.error.errors", validatedData.error.errors);
+
 		return {
 			values: {
 				username: (formValues.username as string) ?? "",
@@ -50,10 +52,14 @@ function formatErrors(errors: z.ZodIssue[]) {
 	let result = new Map<string, {message: string; code: string}>();
 	for (let error of errors) {
 		let obj = {
-			message: error.message.replace("String", error.path[0] as string),
+			message: error.message.replace("String", pathToString(error.path)),
 			code: error.code,
 		};
-		result.set(error.path[0] as string, obj);
+		result.set(pathToString(error.path), obj);
 	}
 	return result;
+}
+
+function pathToString(path: (string | number)[]) {
+	return typeof path[0] === "string" ? path[0] : typeof path[0].toString();
 }
