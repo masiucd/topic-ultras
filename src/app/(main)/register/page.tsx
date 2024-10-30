@@ -10,7 +10,7 @@ export default function RegisterPage() {
 			<Lead>Register as a new user for Nutri Check</Lead>
 			<div className="mx-auto my-10 w-[45rem]">
 				<RegisterForm />
-				<small>
+				<small className="bg-red p-10 ">
 					Already have an account? <Link href="/log-in">Log in</Link>
 				</small>
 			</div>

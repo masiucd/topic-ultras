@@ -1,29 +1,57 @@
+"use client";
+import {logIn} from "@/app/actions";
 import {SubmitButton} from "@/components/submit-button";
+import {Input} from "@/components/ui/input";
+import {H3, Label} from "@/components/ui/typography";
 import {cn} from "@/lib/utils";
 import {useActionState} from "react";
 
 export function LogInForm() {
-	let [state, action, pending] = useActionState(register, null);
-	return (
-		<form action="">
-			<fieldset
-				className={cn(
-					"flex flex-col gap-3 rounded-sm border-2 border-foreground p-4",
-					// pending && "animate-pulse opacity-55"
-				)}
-			>
-				<legend>Log in</legend>
-				<div>
-					<label htmlFor="email">Email</label>
-					<input type="email" id="email" name="email" />
-				</div>
-				<div>
-					<label htmlFor="password">Password</label>
-					<input type="password" id="password" name="password" />
-				</div>
+  let [state, action, pending] = useActionState(logIn, null);
+  return (
+    <form action={action}>
+      <fieldset
+        className={cn(
+          "flex flex-col gap-3 rounded-sm border-2 border-foreground p-4",
+          pending && "animate-pulse opacity-55"
+        )}
+      >
+        <legend>
+          <H3>Account Information</H3>
+        </legend>
+        <Label htmlFor="email">
+          <span>Email</span>
+          <Input
+            type="email"
+            id="email"
+            name="email"
+            // defaultValue={state?.values.email}
+            required
+          />
+          {/* {hasSomeError && (
+            <span className="text-red-500">
+              {hasSomeError.get("email")?.message}
+            </span>
+          )} */}
+        </Label>
+        <Label htmlFor="password">
+          <span>Password</span>
+          <Input
+            type="password"
+            id="password"
+            name="password"
+            // defaultValue={state?.values.password}
+            required
+          />
+          {/* {hasSomeError && (
+            <span className="text-red-500">
+              {hasSomeError.get("password")?.message}
+            </span>
+          )} */}
+        </Label>
 
-				<SubmitButton type="submit">Login</SubmitButton>
-			</fieldset>
-		</form>
-	);
+        <SubmitButton type="submit">Login</SubmitButton>
+      </fieldset>
+    </form>
+  );
 }
