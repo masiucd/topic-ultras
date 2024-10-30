@@ -4,6 +4,7 @@ import {db} from "@/db";
 import {getUserByEmail} from "@/db/dao/user";
 import {users} from "@/db/schema";
 import {formatErrors, formatZodErrors} from "@/lib/helpers";
+import {encrypt} from "@/lib/jwt";
 import {hashPassword, verifyPassword} from "@/lib/password";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
@@ -163,7 +164,10 @@ export async function logIn(_prevState: LoginPrevState, data: FormData) {
 
   // Set session
   let cookieStore = await cookies();
-  cookieStore.set("session", user.id.toString());
-
-  console.log("validatedData.", validatedData.data);
+  let token = await encrypt({id: user.id, email: user.email});
+  console.log("token", token);
+  if (token !== null) {
+    cookieStore.set("session", token);
+    redirect("/dashboard");
+  }
 }
