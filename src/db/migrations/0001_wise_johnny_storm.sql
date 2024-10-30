@@ -1,1 +1,0 @@
-ALTER TABLE "food_items" ALTER COLUMN "food_type" SET NOT NULL;

@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS "food_items" (
 	"user_id" integer,
 	"name" varchar(100) NOT NULL,
 	"description" text,
-	"food_type" "food_type" DEFAULT 'OTHER',
+	"food_type" "food_type" DEFAULT 'OTHER' NOT NULL,
 	"food_category_id" integer NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
@@ -42,6 +42,15 @@ CREATE TABLE IF NOT EXISTS "food_nutrients" (
 	"carbs" numeric(10, 2),
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now()
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "slugs" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"slug" varchar(100) NOT NULL,
+	"object_id" integer NOT NULL,
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp DEFAULT now(),
+	CONSTRAINT "slugs_slug_unique" UNIQUE("slug")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_addresses" (
@@ -69,13 +78,15 @@ CREATE TABLE IF NOT EXISTS "user_infos" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"first_name" varchar(100) NOT NULL,
-	"last_name" varchar(100) NOT NULL,
-	"age" integer NOT NULL,
+	"username" varchar(100) NOT NULL,
+	"first_name" varchar(100),
+	"last_name" varchar(100),
+	"age" integer,
 	"email" varchar(200) NOT NULL,
 	"password" varchar(200) NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
+	CONSTRAINT "users_username_unique" UNIQUE("username"),
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
@@ -123,4 +134,6 @@ END $$;
 --> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "food_category_name_index" ON "food_categories" USING btree ("name");--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "food_name_index" ON "food_items" USING btree ("name");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "slug_index" ON "slugs" USING btree ("slug");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "slug_object_id_index" ON "slugs" USING btree ("object_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "email_index" ON "users" USING btree ("email");

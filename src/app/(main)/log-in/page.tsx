@@ -1,27 +1,15 @@
-import {Button} from "@/components/ui/button";
+import PageWrapper from "@/components/page-wrapper";
+import {H1, Lead} from "@/components/ui/typography";
 import Link from "next/link";
+import {LogInForm} from "./_components/log-in-form";
 
 export default function LoginPage() {
 	return (
-		<div>
-			<h1>Register</h1>
-			<p>Log in for Nutri Check</p>
+		<PageWrapper>
+			<H1>Register</H1>
+			<Lead>Log in for Nutri Check</Lead>
 			<div>
-				<form action="">
-					<fieldset>
-						<legend>Log in</legend>
-						<div>
-							<label htmlFor="email">Email</label>
-							<input type="email" id="email" name="email" />
-						</div>
-						<div>
-							<label htmlFor="password">Password</label>
-							<input type="password" id="password" name="password" />
-						</div>
-
-						<Button type="submit">Login</Button>
-					</fieldset>
-				</form>
+				<LogInForm />
 				<small>
 					Don't have an account? <Link href="/register">Register</Link>
 				</small>
@@ -29,6 +17,6 @@ export default function LoginPage() {
 					<Link href="/forgot-password">Forgot password?</Link>
 				</small>
 			</div>
-		</div>
+		</PageWrapper>
 	);
 }

@@ -8,7 +8,7 @@ import {useActionState} from "react";
 
 export function RegisterForm() {
   let [state, action, pending] = useActionState(register, null);
-  console.log("error", state?.error, state?.error?.get("password"));
+  let hasSomeError = state?.error;
   return (
     <form action={action}>
       <fieldset
@@ -29,9 +29,11 @@ export function RegisterForm() {
             defaultValue={state?.values.username}
             required
           />
-          <span className="text-red-500">
-            {state?.error?.get("username")?.message}
-          </span>
+          {hasSomeError && (
+            <span className="text-red-500">
+              {hasSomeError.get("username")?.message}
+            </span>
+          )}
         </Label>
         <Label htmlFor="email">
           <span>Email</span>
@@ -42,9 +44,11 @@ export function RegisterForm() {
             defaultValue={state?.values.email}
             required
           />
-          <span className="text-red-500">
-            {state?.error?.get("email")?.message}
-          </span>
+          {hasSomeError && (
+            <span className="text-red-500">
+              {hasSomeError.get("email")?.message}
+            </span>
+          )}
         </Label>
         <Label htmlFor="password">
           <span>Password</span>
@@ -55,9 +59,11 @@ export function RegisterForm() {
             defaultValue={state?.values.password}
             required
           />
-          <span className="text-red-500">
-            {state?.error?.get("password")?.message}
-          </span>
+          {hasSomeError && (
+            <span className="text-red-500">
+              {hasSomeError.get("password")?.message}
+            </span>
+          )}
         </Label>
         <Label htmlFor="confirmPassword">
           <span>Confirm Password</span>
@@ -68,12 +74,19 @@ export function RegisterForm() {
             defaultValue={state?.values.confirmPassword}
             required
           />
-          <span className="text-red-500">
-            {state?.error?.get("confirmPassword")?.message}
-          </span>
+          {hasSomeError && (
+            <span className="text-red-500">
+              {hasSomeError.get("confirmPassword")?.message}
+            </span>
+          )}
         </Label>
         <Button type="submit">Register</Button>
       </fieldset>
+      {hasSomeError && (
+        <span className="text-red-500">
+          {hasSomeError.get("invalid-input")?.message}
+        </span>
+      )}
     </form>
   );
 }

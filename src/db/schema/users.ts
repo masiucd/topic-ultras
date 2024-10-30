@@ -15,9 +15,10 @@ export let users = pgTable(
   "users",
   {
     id: serial("id").primaryKey().notNull(),
-    firstName: varchar("first_name", {length: 100}).notNull(),
-    lastName: varchar("last_name", {length: 100}).notNull(),
-    age: integer("age").notNull(),
+    username: varchar("username", {length: 100}).notNull().unique(),
+    firstName: varchar("first_name", {length: 100}),
+    lastName: varchar("last_name", {length: 100}),
+    age: integer("age"),
     email: varchar("email", {length: 200}).notNull().unique(),
     password: varchar("password", {length: 200}).notNull(),
     createdAt: timestamp("created_at", {mode: "string"}).defaultNow(),
