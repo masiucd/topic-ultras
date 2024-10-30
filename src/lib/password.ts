@@ -1,4 +1,5 @@
-import {hash, genSalt, compare} from "bcrypt";
+import "server-only";
+import {compare, genSalt, hash} from "bcrypt";
 
 export async function hashPassword(password: string, saltRounds = 8) {
   try {
