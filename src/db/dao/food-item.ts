@@ -12,7 +12,7 @@ export async function getFoodItemData(foodName: string) {
 				description: foodItems.description,
 				foodType: foodItems.foodType,
 				foodCategory: foodCategories.name,
-        
+
 				nutrition: {
 					calories: sql<number>`${foodNutrients.calories}`.mapWith(Number),
 					protein: sql<number>`${foodNutrients.protein}`.mapWith(Number),
