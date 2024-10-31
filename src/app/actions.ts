@@ -165,10 +165,9 @@ export async function logIn(_prevState: LoginPrevState | null, data: FormData) {
   // Set session
   let cookieStore = await cookies();
   let token = await encrypt({id: user.id, email: user.email});
-  console.log("token", token);
   if (token !== null) {
     cookieStore.set("session", token);
-    redirect("/dashboard");
+    redirect("/profile/dashboard");
   }
   return {
     values: {email, password},
