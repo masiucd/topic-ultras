@@ -31,7 +31,7 @@ export default async function FoodItemPage(props: Props) {
   return (
     <PageWrapper>
       <H1>{foodItem.name}</H1>
-      <div className="my-5 flex w-[70rem]">
+      <div className="my-5 flex w-[50rem] gap-2">
         <FoodItem foodItem={foodItem} />
         <PieChartComponent foodItem={foodItem} />
       </div>
