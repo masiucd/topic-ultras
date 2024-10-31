@@ -123,9 +123,10 @@ type LoginPrevState = {
   error: ErrosObj | null;
 };
 
-export async function logIn(_prevState: LoginPrevState, data: FormData) {
+export async function logIn(_prevState: LoginPrevState | null, data: FormData) {
   let formValues = Object.fromEntries(data);
   let validatedData = loginSchema.safeParse(formValues);
+  console.log("_prevState", _prevState);
   if (!validatedData.success) {
     return {
       values: {
@@ -148,7 +149,6 @@ export async function logIn(_prevState: LoginPrevState, data: FormData) {
       ]),
     };
   }
-
   let validPassword = await verifyPassword(password, user.password);
   if (!validPassword) {
     return {
@@ -170,4 +170,13 @@ export async function logIn(_prevState: LoginPrevState, data: FormData) {
     cookieStore.set("session", token);
     redirect("/dashboard");
   }
+  return {
+    values: {email, password},
+    error: formatErrors([
+      {
+        message: "Error when signing in",
+        name: "invalid-input",
+      },
+    ]),
+  };
 }

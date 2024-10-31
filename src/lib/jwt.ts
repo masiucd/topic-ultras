@@ -1,18 +1,19 @@
 import "server-only";
 import env from "@/env";
 import {addHours} from "date-fns";
-import {type JWTPayload, SignJWT, jwtVerify} from "jose";
+import {SignJWT, jwtVerify} from "jose";
 import {z} from "zod";
 
 const KEY = new TextEncoder().encode(env.JWT_SECRET);
 const ALGORITHM = "HS256";
 
 let payloadSchema = z.object({
-  id: z.string(),
+  id: z.number(),
   email: z.string().email(),
 });
+type Payload = z.infer<typeof payloadSchema>;
 
-export async function encrypt(payload: JWTPayload) {
+export async function encrypt(payload: Payload) {
   let result = payloadSchema.safeParse(payload);
   if (!result.success) {
     return null;
