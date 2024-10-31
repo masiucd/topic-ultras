@@ -19,13 +19,13 @@
       "quoteStyle": "double",
       "bracketSpacing": false,
       "semicolons": "always",
+      "trailingCommas": "all",
       "lineWidth": 90
     }
   },
 
   "linter": {
     "enabled": true,
-
     "rules": {
       "recommended": true,
       "nursery": {
@@ -40,7 +40,8 @@
       },
       "correctness": {
         "noUnusedImports": "error",
-        "noUnusedVariables": "error"
+        "noUnusedVariables": "error",
+        "noEmptyPattern": "error"
       },
 
       "a11y": {
