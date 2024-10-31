@@ -33,6 +33,9 @@ export default async function Nav() {
             </li>
           </>
         )}
+        <li>
+          <ActiveLink href="/food-items">Food-items</ActiveLink>
+        </li>
       </ul>
     </nav>
   );
