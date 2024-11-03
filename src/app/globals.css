@@ -12,8 +12,8 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-    --bg-badge: 0 0% 73.9%;
-    --badge-foreground: 222.2 84% 4.9%;
+    --badge: 30 4.3% 9%;
+    --badge-foreground: 0 0% 94.1%;
     /* --dark-gray-50: 0 0% 98%;
     --dark-gray-100: 0 0% 96.1%;
     --dark-gray-200: 0 0% 93.3%;
