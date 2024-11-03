@@ -7,7 +7,10 @@ export default async function Nav() {
   return (
     <nav className="flex-1">
       <ul className="flex justify-end gap-2 bg-blue-100 ">
-        {loggedIn ? (
+        <li>
+          <ActiveLink href="/food-items">Food-items</ActiveLink>
+        </li>
+        {loggedIn && (
           <>
             <li>
               <ActiveLink href="/profile">Profile</ActiveLink>
@@ -23,8 +26,10 @@ export default async function Nav() {
               </form>
             </li>
           </>
-        ) : (
+        )}
+        {!loggedIn && (
           <>
+            {" "}
             <li>
               <ActiveLink href="/log-in">Log in</ActiveLink>
             </li>
@@ -33,9 +38,6 @@ export default async function Nav() {
             </li>
           </>
         )}
-        <li>
-          <ActiveLink href="/food-items">Food-items</ActiveLink>
-        </li>
       </ul>
     </nav>
   );
