@@ -1,9 +1,9 @@
 import {signOut} from "@/app/actions";
-import {isLoggedIn} from "@/lib/auth";
+import {getSessionId} from "@/lib/auth";
 import {ActiveLink} from "./active-link";
 
 export default async function Nav() {
-  let loggedIn = await isLoggedIn();
+  let loggedIn = await getSessionId();
   return (
     <nav className="flex-1">
       <ul className="flex justify-end gap-2 bg-blue-100 ">

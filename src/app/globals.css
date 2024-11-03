@@ -14,6 +14,7 @@
     --foreground: 222.2 84% 4.9%;
     --badge: 30 4.3% 9%;
     --badge-foreground: 0 0% 94.1%;
+    --common: 0 9% 16.9%;
     /* --dark-gray-50: 0 0% 98%;
     --dark-gray-100: 0 0% 96.1%;
     --dark-gray-200: 0 0% 93.3%;
@@ -63,6 +64,7 @@
     --foreground: 0 0% 98%;
     --bg-badge: 240 10% 3.9%;
     --badge-foreground: 0 0% 98%;
+    --common: 0 5.6% 92.9%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
