@@ -21,13 +21,13 @@ import {
 
 export const description = "A donut chart with text";
 
-const CHART_DATA = [
-  {macro: "protein", value: 275, fill: "var(--color-protein)"},
-  {macro: "carbs", value: 200, fill: "var(--color-carbs)"},
-  {macro: "fat", value: 287, fill: "var(--color-fat)"},
-  // {macro: "edge", value: 173, fill: "var(--color-edge)"},
-  // {macro: "other", value: 190, fill: "var(--color-other)"},
-];
+// const CHART_DATA = [
+//   {macro: "protein", value: 275, fill: "var(--color-protein)"},
+//   {macro: "carbs", value: 200, fill: "var(--color-carbs)"},
+//   {macro: "fat", value: 287, fill: "var(--color-fat)"},
+//   // {macro: "edge", value: 173, fill: "var(--color-edge)"},
+//   // {macro: "other", value: 190, fill: "var(--color-other)"},
+// ];
 
 const CHART_CONFIG = {
   value: {

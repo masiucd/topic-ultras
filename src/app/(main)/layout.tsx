@@ -1,3 +1,4 @@
+import {ThemeButton} from "@/components/theme-button";
 import Nav from "./_components/nav";
 
 export default function MainLayout({
@@ -8,9 +9,12 @@ export default function MainLayout({
   return (
     <>
       <header>
-        <div className="mx-auto flex h-20 max-w-7xl items-center border border-red-500">
+        <div className="mx-auto flex h-20 max-w-7xl items-center border border-red-500 ">
           <strong>Nutri Check</strong>
           <Nav />
+          <div className="ml-1">
+            <ThemeButton />
+          </div>
         </div>
       </header>
       <main className="flex min-h-[calc(100vh-10rem)] flex-col">

@@ -1,11 +1,11 @@
-import {MoonIcon, SunIcon} from "@radix-ui/react-icons";
-import {Beef, Droplet, Flame, Zap} from "lucide-react";
+import {Beef, ComputerIcon, Droplet, Flame, Moon, Sun, Zap} from "lucide-react";
 
 export let Icons = Object.freeze({
-	Moon: MoonIcon,
-	Sun: SunIcon,
-	Fat: Droplet,
-	Caloreis: Flame,
-	Protein: Beef,
-	Carbs: Zap,
+  Carbs: Zap,
+  Caloreis: Flame,
+  Computer: ComputerIcon,
+  Fat: Droplet,
+  Moon,
+  Sun,
+  Protein: Beef,
 });
