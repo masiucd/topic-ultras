@@ -1,9 +1,3 @@
-DO $$ BEGIN
- CREATE TYPE "public"."food_type" AS ENUM('FRUIT', 'VEGETABLE', 'GRAIN', 'PROTEIN', 'CARBOHYDRATE', 'DAIRY', 'LEGUME', 'NUT', 'SEED', 'SPICE', 'HERB', 'FAST_FOOD', 'OTHER');
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "favorite_foods" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" integer NOT NULL,
@@ -26,8 +20,7 @@ CREATE TABLE IF NOT EXISTS "food_items" (
 	"user_id" integer,
 	"name" varchar(100) NOT NULL,
 	"description" text,
-	"food_type" "food_type" DEFAULT 'OTHER' NOT NULL,
-	"food_category_id" integer NOT NULL,
+	"food_category_id" integer,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
 	CONSTRAINT "food_items_name_unique" UNIQUE("name")
@@ -81,7 +74,6 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"username" varchar(100) NOT NULL,
 	"first_name" varchar(100),
 	"last_name" varchar(100),
-	"age" integer,
 	"email" varchar(200) NOT NULL,
 	"password" varchar(200) NOT NULL,
 	"created_at" timestamp DEFAULT now(),

@@ -1,5 +1,5 @@
 {
-  "id": "8e07fd37-45f5-4fd3-afa8-8091a6862317",
+  "id": "a052a496-f309-4d26-8644-f2298ed0f223",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -167,19 +167,11 @@
           "primaryKey": false,
           "notNull": false
         },
-        "food_type": {
-          "name": "food_type",
-          "type": "food_type",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'OTHER'"
-        },
         "food_category_id": {
           "name": "food_category_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -589,12 +581,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "age": {
-          "name": "age",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "email": {
           "name": "email",
           "type": "varchar(200)",
@@ -659,27 +645,7 @@
       }
     }
   },
-  "enums": {
-    "public.food_type": {
-      "name": "food_type",
-      "schema": "public",
-      "values": [
-        "FRUIT",
-        "VEGETABLE",
-        "GRAIN",
-        "PROTEIN",
-        "CARBOHYDRATE",
-        "DAIRY",
-        "LEGUME",
-        "NUT",
-        "SEED",
-        "SPICE",
-        "HERB",
-        "FAST_FOOD",
-        "OTHER"
-      ]
-    }
-  },
+  "enums": {},
   "schemas": {},
   "sequences": {},
   "_meta": {
