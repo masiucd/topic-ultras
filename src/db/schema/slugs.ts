@@ -8,6 +8,7 @@ import {
 	uniqueIndex,
 	varchar,
 } from "drizzle-orm/pg-core";
+import {foodCategories} from "./food-categories";
 import {foodItems} from "./food-items";
 
 export let slugs = pgTable(
@@ -31,5 +32,9 @@ export let slugsRelations = relations(slugs, ({one}) => ({
 	foodItem: one(foodItems, {
 		fields: [slugs.objectId],
 		references: [foodItems.id],
+	}),
+	foodCategory: one(foodCategories, {
+		fields: [slugs.objectId],
+		references: [foodCategories.id],
 	}),
 }));

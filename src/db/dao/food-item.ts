@@ -10,7 +10,6 @@ export async function getFoodItemData(foodName: string) {
 				foodId: foodItems.id,
 				name: foodItems.name,
 				description: foodItems.description,
-				foodType: foodItems.foodType,
 				foodCategory: foodCategories.name,
 
 				nutrition: {
@@ -60,8 +59,10 @@ export async function getFoodItems({
 					foodId: foodItems.id,
 					foodName: foodItems.name,
 					foodDescription: foodItems.description,
-					foodType: foodItems.foodType,
-					foodCategory: foodCategories.name,
+					foodCategory: {
+						id: foodCategories.id,
+						name: foodCategories.name,
+					},
 					slug: slugs.slug,
 					nutrients: {
 						calories: foodNutrients.calories,
