@@ -6,7 +6,7 @@ export default async function Nav() {
   let loggedIn = await getSessionId();
   return (
     <nav className="flex-1">
-      <ul className="flex justify-end gap-2 bg-blue-100 ">
+      <ul className="flex justify-end gap-2">
         <li>
           <ActiveLink href="/food-items">Food-items</ActiveLink>
         </li>

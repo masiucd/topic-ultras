@@ -1,7 +1,7 @@
 import "server-only";
 import env from "@/env";
 import {addHours} from "date-fns";
-import {SignJWT, jwtVerify} from "jose";
+import {type JWTPayload, SignJWT, jwtVerify} from "jose";
 import {z} from "zod";
 
 const KEY = new TextEncoder().encode(env.JWT_SECRET);
@@ -12,16 +12,16 @@ let payloadSchema = z.object({
 	email: z.string().email(),
 	expireDate: z.date().optional(),
 });
-type Payload = z.infer<typeof payloadSchema>;
 
-export async function encrypt(payload: Payload) {
+export async function encrypt(payload: JWTPayload) {
 	let expireDate = addHours(Date.now(), 2);
-	let result = payloadSchema.safeParse({...payload, expireDate});
+	let exp = Math.floor(expireDate.getTime() / 1000);
+	let result = payloadSchema.safeParse({...payload, expireDate, exp});
 	if (!result.success) {
 		return null;
 	}
 	try {
-		return await new SignJWT(payload)
+		return await new SignJWT(result.data)
 			.setProtectedHeader({alg: ALGORITHM})
 			.setIssuedAt()
 			.setExpirationTime(expireDate)

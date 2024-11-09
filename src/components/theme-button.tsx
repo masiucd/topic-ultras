@@ -21,7 +21,10 @@ export function ThemeButton() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="p-1">
+      <DropdownMenuContent
+        align="end"
+        className="rounded-lg bg-accent px-4 py-2 shadow-lg"
+      >
         <DropdownMenuItem
           onClick={() => setTheme("light")}
           className="underline-offset-2 outline-none hover:underline"

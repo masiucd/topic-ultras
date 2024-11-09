@@ -1,4 +1,5 @@
 import {ThemeButton} from "@/components/theme-button";
+import Link from "next/link";
 import Nav from "./_components/nav";
 
 export default function MainLayout({
@@ -9,8 +10,13 @@ export default function MainLayout({
   return (
     <>
       <header>
-        <div className="mx-auto flex h-20 max-w-7xl items-center border border-red-500 ">
-          <strong>Nutri Check</strong>
+        <div className="mx-auto flex h-20 max-w-7xl items-center border border-red-500">
+          <Link
+            href="/"
+            className="transition-all duration-150 hover:underline hover:opacity-55"
+          >
+            <strong>Nutri Check</strong>
+          </Link>
           <Nav />
           <div className="ml-1">
             <ThemeButton />
