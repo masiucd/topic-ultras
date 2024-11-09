@@ -181,3 +181,19 @@ export async function signOut() {
 	cookieStore.delete("session");
 	redirect("/log-in");
 }
+
+let updateProfileSchema = z.object({
+	firstName: z.string().min(2),
+	lastName: z.string().min(2),
+	age: z.string(),
+});
+
+export async function updateProfile(data: FormData) {
+	let formValues = Object.fromEntries(data);
+	let validatedData = updateProfileSchema.safeParse(formValues);
+	if (!validatedData.success) {
+		console.error("validatedData.error.errors", validatedData.error.errors);
+		return null;
+	}
+	console.log("validatedData", validatedData);
+}

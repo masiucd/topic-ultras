@@ -1,4 +1,4 @@
-import {FoodCategoryBadge, FoodTypeBadge} from "@/components/food-badge";
+import {FoodCategoryBadge} from "@/components/food-badge";
 import {
   Table,
   TableBody,
@@ -36,8 +36,7 @@ export async function FoodTable(props: {
         <TableRow>
           <TableHead className="w-[200px]">Food item</TableHead>
           <TableHead className="w-[250px]">Description</TableHead>
-          <TableHead className="w-[100px]">Type</TableHead>
-          <TableHead className="w-[100px]">Category</TableHead>
+          <TableHead className="w-[160px]">Category</TableHead>
           <TableHead className="w-[80px]">Calories</TableHead>
           <TableHead className="w-[80px]">Protein</TableHead>
           <TableHead className="w-[80px]">Fat</TableHead>
@@ -46,40 +45,7 @@ export async function FoodTable(props: {
       </TableHeader>
       <TableBody>
         {allFoodItems.map((foodItem) => (
-          <TableRow key={foodItem.foodId}>
-            <TableCell>
-              <Link
-                aria-label={
-                  foodItem.slug ? `View ${foodItem.foodName}` : "Not available"
-                }
-                href={`/food-items/${foodItem.slug}`}
-                className={cn(
-                  "capitalize underline underline-offset-3 hover:opacity-60",
-                  !foodItem.slug &&
-                    "pointer-events-none cursor-not-allowed no-underline "
-                )}
-              >
-                {foodItem.foodName}
-              </Link>
-            </TableCell>
-            <TableCell>
-              <TooltipComponent content={foodItem.foodDescription}>
-                <div className="max-w-[250px] truncate">
-                  {foodItem.foodDescription}
-                </div>
-              </TooltipComponent>
-            </TableCell>
-            <TableCell>
-              <FoodTypeBadge foodType={foodItem.foodType} />
-            </TableCell>
-            <TableCell>
-              <FoodCategoryBadge foodCategory={foodItem.foodCategory} />
-            </TableCell>
-            <TableCell>{foodItem.nutrients?.calories ?? "NA"}</TableCell>
-            <TableCell>{foodItem.nutrients?.protein ?? "NA"}</TableCell>
-            <TableCell>{foodItem.nutrients?.fat ?? "NA"}</TableCell>
-            <TableCell>{foodItem.nutrients?.carbs ?? "NA"}</TableCell>
-          </TableRow>
+          <TableRowItem key={foodItem.foodId} foodItem={foodItem} />
         ))}
       </TableBody>
       <Footer
@@ -90,5 +56,45 @@ export async function FoodTable(props: {
         itemsPerPage={ITEMS_PER_PAGE}
       />
     </Table>
+  );
+}
+
+function TableRowItem(props: {
+  foodItem: Awaited<ReturnType<typeof getFoodItems>>["allFoodItems"][number];
+}) {
+  let {foodItem} = props;
+  return (
+    <TableRow key={foodItem.foodId}>
+      <TableCell>
+        <Link
+          aria-label={
+            foodItem.slug ? `View ${foodItem.foodName}` : "Not available"
+          }
+          href={`/food-items/${foodItem.slug}`}
+          className={cn(
+            "capitalize underline underline-offset-3 hover:opacity-60",
+            !foodItem.slug &&
+              "pointer-events-none cursor-not-allowed no-underline "
+          )}
+        >
+          {foodItem.foodName}
+        </Link>
+      </TableCell>
+      <TableCell>
+        <TooltipComponent content={foodItem.foodDescription}>
+          <div className="max-w-[250px] truncate">
+            {foodItem.foodDescription}
+          </div>
+        </TooltipComponent>
+      </TableCell>
+
+      <TableCell>
+        <FoodCategoryBadge foodCategory={foodItem.foodCategory} withLink />
+      </TableCell>
+      <TableCell>{foodItem.nutrients?.calories ?? "NA"}</TableCell>
+      <TableCell>{foodItem.nutrients?.protein ?? "NA"}</TableCell>
+      <TableCell>{foodItem.nutrients?.fat ?? "NA"}</TableCell>
+      <TableCell>{foodItem.nutrients?.carbs ?? "NA"}</TableCell>
+    </TableRow>
   );
 }

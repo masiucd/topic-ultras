@@ -1,3 +1,4 @@
+import {updateProfile} from "@/app/actions";
 import {SubmitButton} from "@/components/submit-button";
 import {Button} from "@/components/ui/button";
 import {
@@ -49,53 +50,51 @@ export function ProfileCard(props: Props) {
         </List>
       </CardContent>
       <CardFooter>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="secondary">Edit profile</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Update user profile</DialogTitle>
-              <DialogDescription>
-                Update your profile information
-              </DialogDescription>
-            </DialogHeader>
-
-            <form action="">
-              <fieldset>
-                <legend>
-                  <h2 className="font-semibold text-lg">Profile information</h2>
-                </legend>
-                <div className="flex flex-col gap-1">
-                  <label htmlFor="firstName">First Name</label>
-                  <Input
-                    type="text"
-                    id="firstName"
-                    name="first_name"
-                    required
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label htmlFor="lastName">Last Name</label>
-                  <Input type="text" id="lastName" name="last_name" required />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label htmlFor="age">Age</label>
-                  <Input
-                    type="number"
-                    id="age"
-                    name="age"
-                    required
-                    min={18}
-                    max={99}
-                  />
-                </div>
-              </fieldset>
-              <SubmitButton variant="secondary">Update profile</SubmitButton>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <UpdateProfileDialog />
       </CardFooter>
     </Card>
+  );
+}
+
+function UpdateProfileDialog() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="secondary">Edit profile</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Update user profile</DialogTitle>
+          <DialogDescription>Update your profile information</DialogDescription>
+        </DialogHeader>
+        <form action={updateProfile}>
+          <fieldset>
+            <legend>
+              <h2 className="font-semibold text-lg">Profile information</h2>
+            </legend>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="firstName">First Name</label>
+              <Input type="text" id="firstName" name="firstName" required />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="lastName">Last Name</label>
+              <Input type="text" id="lastName" name="lastName" required />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="age">Age</label>
+              <Input
+                type="number"
+                id="age"
+                name="age"
+                required
+                min={18}
+                max={99}
+              />
+            </div>
+          </fieldset>
+          <SubmitButton variant="secondary">Update profile</SubmitButton>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
