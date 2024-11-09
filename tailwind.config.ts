@@ -12,10 +12,6 @@ const config: Config = {
 			colors: {
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",
-				common: {
-					DEFAULT: "hsl(var(--common))",
-					foreground: "hsl(var(--background))",
-				},
 				card: {
 					DEFAULT: "hsl(var(--card))",
 					foreground: "hsl(var(--card-foreground))",
@@ -27,10 +23,6 @@ const config: Config = {
 				primary: {
 					DEFAULT: "hsl(var(--primary))",
 					foreground: "hsl(var(--primary-foreground))",
-				},
-				badge: {
-					DEFAULT: "hsl(var(--badge))",
-					foreground: "hsl(var(--badge-foreground))",
 				},
 				secondary: {
 					DEFAULT: "hsl(var(--secondary))",
