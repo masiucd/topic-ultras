@@ -11,7 +11,9 @@
     "format": "biome format",
     "lint": "biome lint",
     "check": "biome check",
-    "biome": "biome"
+    "biome": "biome",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "cross-env-shell DB_MIGRATION=true tsx app/.server/db/migrate.ts"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.0",
@@ -26,6 +28,7 @@
     "isbot": "^4.1.0",
     "lucide-react": "^0.456.0",
     "pg": "^8.13.1",
+    "postgres": "^3.4.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwind-merge": "^2.5.4",
