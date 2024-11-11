@@ -1,31 +1,40 @@
-# Nutri Check (Not done yet)!! Still in development
+# Welcome to Remix!
 
-## Description
+- 📖 [Remix docs](https://remix.run/docs)
 
-Nutri Check is a web application that allows users to search for food items and get detailed nutritional information about them. Users can also create an account and save their favorite food items to their profile. The application uses the USDA FoodData Central API to get the nutritional information of food items. The application is built using Flask, a Python web framework, and uses SQLite as the database to store user information and saved food items.
+## Development
 
-Note that the application is still in development and some features may not be fully implemented yet.
+Run the dev server:
 
-## Features
+```shellscript
+npm run dev
+```
 
-- Search for food items and get detailed nutritional information
-- Create an account and save favorite food items
-- View saved food items in the profile
-- Delete saved food items from the profile
-- Update user information
-- Change password
-- Reset password
-- Logout
-- Responsive design
-- User authentication
-- User authorization
+## Deployment
 
-## Technologies Used
+First, build your app for production:
 
-- [Next.js](https://nextjs.org/) ⏭️ - Fullstack React Framework
-- [React](https://reactjs.org/) ⚛️ - JavaScript Library for Building User Interfaces
-- [Shadcn](https://ui.shadcn.com/) 😎 - Beautifully designed components that you can copy and paste into your apps.
-- [Tailwind CSS](https://tailwindcss.com/) 💅 - CSS framework
-- [Drizzle](https://orm.drizzle.team/) 📀 - Database ORM
-- [PostgreSQL](https://www.postgresql.org/) 🐘 - Database
-- [Docker](https://www.docker.com/) 🐳 - Containerization to package applications and their dependencies
+```sh
+npm run build
+```
+
+Then run the app in production mode:
+
+```sh
+npm start
+```
+
+Now you'll need to pick a host to deploy it to.
+
+### DIY
+
+If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
+
+Make sure to deploy the output of `npm run build`
+
+- `build/server`
+- `build/client`
+
+## Styling
+
+This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
