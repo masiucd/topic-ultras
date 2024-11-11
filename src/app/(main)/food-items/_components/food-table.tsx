@@ -82,9 +82,7 @@ function TableRowItem(props: {
       </TableCell>
       <TableCell>
         <TooltipComponent content={foodItem.foodDescription}>
-          <div className="max-w-[250px] truncate">
-            {foodItem.foodDescription}
-          </div>
+          <p className="max-w-[250px] truncate">{foodItem.foodDescription}</p>
         </TooltipComponent>
       </TableCell>
 

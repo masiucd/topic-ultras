@@ -1,4 +1,4 @@
-import {FoodCategoryBadge, FoodTypeBadge} from "@/components/food-badge";
+import {FoodCategoryBadge} from "@/components/food-badge";
 import {Icons} from "@/components/icons";
 import {
   Card,
