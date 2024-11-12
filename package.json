@@ -13,7 +13,8 @@
     "check": "biome check",
     "biome": "biome",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "cross-env-shell DB_MIGRATION=true tsx app/.server/db/migrate.ts"
+    "db:migrate": "drizzle-kit migrate",
+    "db:migrateV2": "cross-env-shell DB_MIGRATION=true tsx app/.server/db/migrate.ts"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.0",
@@ -44,6 +45,7 @@
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
     "autoprefixer": "^10.4.19",
+    "cross-env": "^7.0.3",
     "drizzle-kit": "^0.28.0",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
