@@ -26,9 +26,7 @@ export let foodItems = pgTable(
 			.defaultNow()
 			.$onUpdate(() => new Date().toISOString()),
 	},
-	(table) => ({
-		foodItemNameIndex: uniqueIndex("food_item_name_index").on(table.name),
-	}),
+	(t) => [uniqueIndex("food_item_name_index").on(t.name)],
 );
 
 export let foodItemRelations = relations(foodItems, ({one}) => ({

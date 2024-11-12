@@ -1,4 +1,8 @@
+import {relations} from "drizzle-orm";
 import {pgTable, serial, timestamp, uniqueIndex, varchar} from "drizzle-orm/pg-core";
+import {favoriteFoods} from "./favorite-foods";
+import {foodItems} from "./food-items";
+import {sessions} from "./sessions";
 
 export let users = pgTable(
 	"users",
@@ -13,7 +17,14 @@ export let users = pgTable(
 			.defaultNow()
 			.$onUpdate(() => new Date().toISOString()),
 	},
-	(table) => ({
-		emailIndex: uniqueIndex("user_email_index").on(table.email),
-	}),
+	(t) => [uniqueIndex("user_email_index").on(t.email)],
 );
+
+export let usersRelations = relations(users, ({many}) => ({
+	// A user has many sessions - one to many relationship
+	sessions: many(sessions),
+	// A user has can have many food items - many to many relationship
+	foodItems: many(foodItems),
+	// A user can have many favorite foods - many to many relationship
+	favoriteFoods: many(favoriteFoods),
+}));
