@@ -31,7 +31,7 @@ export let foodItems = pgTable(
 	}),
 );
 
-export let foodItemRelations = relations(foodItems, ({one, many}) => ({
+export let foodItemRelations = relations(foodItems, ({one}) => ({
 	// A food item belongs to a food category - one to one relationship
 	foodCategory: one(foodCategories, {
 		fields: [foodItems.foodCategoryId],
