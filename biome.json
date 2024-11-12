@@ -27,7 +27,13 @@
   "linter": {
     "enabled": true,
     "rules": {
+      "suspicious": {
+        "noArrayIndexKey": "error"
+      },
       "recommended": true,
+      "complexity": {
+        "noForEach": "error"
+      },
       "nursery": {
         "useSortedClasses": {
           "fix": "safe",
@@ -41,10 +47,13 @@
       "correctness": {
         "noUnusedImports": "error",
         "noUnusedVariables": "error",
-        "noEmptyPattern": "error"
+        "noEmptyPattern": "error",
+        "useExhaustiveDependencies": "error",
+        "useHookAtTopLevel": "error"
       },
       "a11y": {
-        "all": true
+        "all": true,
+        "useAltText": "error"
       },
       "style": {
         "useConst": "off",
