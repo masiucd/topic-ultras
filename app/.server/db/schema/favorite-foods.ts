@@ -7,7 +7,6 @@ export let favoriteFoods = pgTable(
 	"favorite_foods",
 	{
 		userId: integer("user_id")
-			.primaryKey()
 			.references(() => users.id)
 			.notNull(),
 		foodItemId: integer("food_item_id")
@@ -19,7 +18,6 @@ export let favoriteFoods = pgTable(
 			.$onUpdate(() => new Date().toISOString()),
 	},
 	(t) => [
-		primaryKey({columns: [t.userId, t.foodItemId]}),
 		primaryKey({
 			columns: [t.userId, t.foodItemId],
 			name: "user_food_item_pk",

@@ -14,6 +14,7 @@
       "enabled": true
     }
   },
+
   "javascript": {
     "formatter": {
       "quoteStyle": "double",
@@ -30,6 +31,7 @@
       "suspicious": {
         "noArrayIndexKey": "error"
       },
+
       "recommended": true,
       "complexity": {
         "noForEach": "error"

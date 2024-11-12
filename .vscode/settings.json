@@ -4,5 +4,8 @@
   "files.associations": {
     "*.ts": "typescript",
     "*.tsx": "typescriptreact"
+  },
+  "editor.codeActionsOnSave": {
+    "source.organizeImports.biome": "explicit"
   }
 }
