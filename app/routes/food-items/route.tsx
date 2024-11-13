@@ -5,25 +5,10 @@ import {
   useLoaderData,
   useLocation,
   useNavigate,
+  useSearchParams,
 } from "@remix-run/react";
-import {eq, ilike, sql} from "drizzle-orm";
-import {db} from "~/.server/db";
-import {
-  foodCategories,
-  foodItems,
-  foodNutrients,
-  slugs,
-} from "~/.server/db/schema";
+import {getFoodItemsData} from "~/.server/db/dao/food-items";
 import {Input} from "~/components/ui/input";
-// import {
-//   Pagination,
-//   PaginationContent,
-//   PaginationEllipsis,
-//   PaginationItem,
-//   PaginationLink,
-//   PaginationNext,
-//   PaginationPrevious,
-// } from "~/components/ui/pagination";
 import {
   Table,
   TableBody,
@@ -37,70 +22,27 @@ import {
 import {H1} from "~/components/ui/typography";
 
 // import  invariant from "tiny-invariant";
-const PER_PAGE = 4;
 
 export async function loader({request}: LoaderFunctionArgs) {
   let url = new URL(request.url);
   let name = url.searchParams.get("name");
   let page = Number(url.searchParams.get("page")) || 1;
-
-  try {
-    let totalUsers = await db
-      .select({count: sql`count(*)`.mapWith(Number)})
-      .from(foodItems);
-
-    let totalPages = Math.ceil(totalUsers[0].count / PER_PAGE);
-
-    let results = await db
-      .select({
-        foodId: foodItems.id,
-        foodName: foodItems.name,
-        foodDescription: foodItems.description,
-        foodCategory: {
-          id: foodCategories.id,
-          name: foodCategories.name,
-        },
-        slug: slugs.slug,
-        nutrients: {
-          calories: foodNutrients.calories,
-          protein: foodNutrients.protein,
-          fat: foodNutrients.fat,
-          carbs: foodNutrients.carbs,
-        },
-      })
-      .from(foodItems)
-      .leftJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
-      .leftJoin(foodCategories, eq(foodItems.foodCategoryId, foodCategories.id))
-      .leftJoin(slugs, eq(foodItems.id, slugs.objectId))
-      .orderBy(sql`${foodItems.name} ASC`)
-      .where(name ? ilike(foodItems.name, `%${name}%`) : undefined)
-      .limit(PER_PAGE)
-      .offset((page - 1) * PER_PAGE);
-
-    return {
-      results,
-      totalPages,
-      page,
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      results: [],
-      totalPages: 1,
-      page: 1,
-    };
-  }
+  return await getFoodItemsData(name, page);
 }
 
+// TODO : copy url feature to share the search results
 export default function FoodItemsRoute() {
   let {results, totalPages, page} = useLoaderData<typeof loader>();
+  let [searchParams] = useSearchParams();
   let location = useLocation();
+  let name = searchParams.get("name");
+
   return (
     <div>
       <H1>Food Items</H1>
       <div className="my-10 max-w-[65rem]">
         <div>
-          <SearchInput location={location} />
+          <SearchInput location={location} name={name} />
         </div>
         <Table title="Food items table">
           <TableCaption>Food Items in the Database.</TableCaption>
@@ -151,14 +93,15 @@ export default function FoodItemsRoute() {
   );
 }
 
-function SearchInput(props: {location: Location}) {
+function SearchInput(props: {location: Location; name: string | null}) {
   let navigate = useNavigate();
-  let {location} = props;
+  let {location, name} = props;
 
   return (
     <Input
       type="text"
       placeholder="Search food items"
+      defaultValue={name ?? undefined}
       onChange={(e) => {
         let search = new URLSearchParams(location.search);
         search.set("name", e.target.value);
