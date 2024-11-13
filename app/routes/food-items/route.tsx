@@ -1,5 +1,11 @@
 import type {LoaderFunctionArgs} from "@remix-run/node";
-import {Link, useLoaderData, useLocation, useNavigate} from "@remix-run/react";
+import {
+  Link,
+  type Location,
+  useLoaderData,
+  useLocation,
+  useNavigate,
+} from "@remix-run/react";
 import {eq, ilike, sql} from "drizzle-orm";
 import {db} from "~/.server/db";
 import {
@@ -88,29 +94,13 @@ export async function loader({request}: LoaderFunctionArgs) {
 
 export default function FoodItemsRoute() {
   let {results, totalPages, page} = useLoaderData<typeof loader>();
-  // let [searchParams, setSearchParams] = useSearchParams();
-  // let location = useLocation();
-  // let search = new URLSearchParams(location.search);
-  // console.log("🚀 ~ FoodItemsRoute ~ location:", location);
-
-  // let currentSearchParams = new URLSearchParams();
-  // let name = search.get("name");
-
-  // if (name) {
-  //   currentSearchParams.set("name", name);
-  // }
-  // if (page) {
-  //   currentSearchParams.set("page", page.toString());
-  // }
-
-  // console.log({page, totalPages});
-
+  let location = useLocation();
   return (
     <div>
       <H1>Food Items</H1>
       <div className="my-10 max-w-[65rem]">
         <div>
-          <SearchInput />
+          <SearchInput location={location} />
         </div>
         <Table title="Food items table">
           <TableCaption>Food Items in the Database.</TableCaption>
@@ -145,8 +135,12 @@ export default function FoodItemsRoute() {
               <TableCell colSpan={7}>Total</TableCell>
               <TableCell className="">
                 <div className="flex gap-2">
-                  <PreviousLink page={page} />
-                  <NextLink page={page} totalPages={totalPages} />
+                  <PreviousLink page={page} location={location} />
+                  <NextLink
+                    page={page}
+                    totalPages={totalPages}
+                    location={location}
+                  />
                 </div>
               </TableCell>
             </TableRow>
@@ -157,9 +151,10 @@ export default function FoodItemsRoute() {
   );
 }
 
-function SearchInput() {
+function SearchInput(props: {location: Location}) {
   let navigate = useNavigate();
-  let location = useLocation();
+  let {location} = props;
+
   return (
     <Input
       type="text"
@@ -180,13 +175,8 @@ function SearchInput() {
   );
 }
 
-function PreviousLink(props: {page: number}) {
-  let {page} = props;
-  let location = useLocation();
-  let search = new URLSearchParams(location.search);
-  if (search.get("name")) {
-    search.delete("name");
-  }
+function PreviousLink(props: {page: number; location: Location}) {
+  let {page, location} = props;
   if (page < 2) {
     return (
       <button
@@ -199,19 +189,24 @@ function PreviousLink(props: {page: number}) {
       </button>
     );
   }
-  let to =
-    page > 2 ? `${location.pathname}?page=${page - 1}` : location.pathname;
-  return <Link to={to}>Prev</Link>;
+  let searchParams = new URLSearchParams(location.search);
+  if (searchParams.get("page")) {
+    searchParams.delete("page");
+  }
+  searchParams.set("page", (page - 1).toString());
+  if (searchParams.get("page") === "1") {
+    searchParams.delete("page");
+  }
+  let url = `${location.pathname}?${searchParams.toString()}`;
+  return <Link to={url}>Prev</Link>;
 }
 
-function NextLink(props: {page: number; totalPages: number}) {
-  let {page, totalPages} = props;
-  let location = useLocation();
-  let search = new URLSearchParams(location.search);
-  if (search.get("name")) {
-    search.delete("name");
-  }
-
+function NextLink(props: {
+  page: number;
+  totalPages: number;
+  location: Location;
+}) {
+  let {page, totalPages, location} = props;
   if (page >= totalPages) {
     return (
       <button
@@ -224,8 +219,8 @@ function NextLink(props: {page: number; totalPages: number}) {
       </button>
     );
   }
-
-  // let page = Number.parseInt(search.get("page") ?? "1", 10);
-  let to = `${location.pathname}?page=${page + 1}`;
-  return <Link to={to}>Next</Link>;
+  let searchParams = new URLSearchParams(location.search);
+  searchParams.set("page", (page + 1).toString());
+  let url = `${location.pathname}?${searchParams.toString()}`;
+  return <Link to={url}>Next</Link>;
 }
