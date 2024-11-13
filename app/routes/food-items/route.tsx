@@ -1,5 +1,5 @@
 import type {LoaderFunctionArgs} from "@remix-run/node";
-import {useLoaderData, useSearchParams} from "@remix-run/react";
+import {useLoaderData, useLocation, useNavigate} from "@remix-run/react";
 import {eq, ilike, sql} from "drizzle-orm";
 import {db} from "~/.server/db";
 import {
@@ -8,6 +8,7 @@ import {
   foodNutrients,
   slugs,
 } from "~/.server/db/schema";
+import {Input} from "~/components/ui/input";
 import {
   Table,
   TableBody,
@@ -22,52 +23,57 @@ import {H1} from "~/components/ui/typography";
 
 export async function loader({request}: LoaderFunctionArgs) {
   let url = new URL(request.url);
-  let term = url.searchParams.get("name");
+  let name = url.searchParams.get("name");
   let limit = Number.parseInt(url.searchParams.get("limit") ?? "4", 10);
   let skip = Number.parseInt(url.searchParams.get("skip") ?? "0", 10);
-  console.log({term, limit, skip});
+  console.log({name, limit, skip});
 
-  let name = undefined;
   // let limit = 4;
   // let skip = 0;
-  let results = await db
-    .select({
-      foodId: foodItems.id,
-      foodName: foodItems.name,
-      foodDescription: foodItems.description,
-      foodCategory: {
-        id: foodCategories.id,
-        name: foodCategories.name,
-      },
-      slug: slugs.slug,
-      nutrients: {
-        calories: foodNutrients.calories,
-        protein: foodNutrients.protein,
-        fat: foodNutrients.fat,
-        carbs: foodNutrients.carbs,
-      },
-    })
-    .from(foodItems)
+  try {
+    let results = await db
+      .select({
+        foodId: foodItems.id,
+        foodName: foodItems.name,
+        foodDescription: foodItems.description,
+        foodCategory: {
+          id: foodCategories.id,
+          name: foodCategories.name,
+        },
+        slug: slugs.slug,
+        nutrients: {
+          calories: foodNutrients.calories,
+          protein: foodNutrients.protein,
+          fat: foodNutrients.fat,
+          carbs: foodNutrients.carbs,
+        },
+      })
+      .from(foodItems)
+      .leftJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
+      .leftJoin(foodCategories, eq(foodItems.foodCategoryId, foodCategories.id))
+      .leftJoin(slugs, eq(foodItems.id, slugs.objectId))
+      .orderBy(sql`${foodItems.name} ASC`)
+      .where(name ? ilike(foodItems.name, `%${name}%`) : undefined)
+      .limit(limit)
+      .offset(skip);
 
-    .leftJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
-    .leftJoin(foodCategories, eq(foodItems.foodCategoryId, foodCategories.id))
-    .leftJoin(slugs, eq(foodItems.id, slugs.objectId))
-    .orderBy(sql`${foodItems.name} ASC`)
-    .where(name ? ilike(foodItems.name, `%${name}%`) : undefined)
-    .limit(limit)
-    .offset(skip);
-
-  return results;
+    return results;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 }
 
 export default function FoodItemsRoute() {
   let results = useLoaderData<typeof loader>();
-  let [s] = useSearchParams();
-  console.log("s", s);
+
   return (
     <div>
       <H1>Food Items</H1>
       <div className="my-10 max-w-[65rem]">
+        <div>
+          <SearchInput />
+        </div>
         <Table title="Food items table">
           <TableCaption>Food Items in the Database.</TableCaption>
           <TableHeader>
@@ -99,5 +105,27 @@ export default function FoodItemsRoute() {
         </Table>
       </div>
     </div>
+  );
+}
+
+function SearchInput() {
+  // let [s] = useSearchParams();
+  let navigate = useNavigate();
+  let location = useLocation();
+  return (
+    <Input
+      type="text"
+      placeholder="Search food items"
+      onChange={(e) => {
+        let search = new URLSearchParams(location.search);
+        search.set("name", e.target.value);
+        console.log("search", search.get("name"));
+        navigate(`${location.pathname}?${search.toString()}`);
+        if (e.target.value === "") {
+          search.delete("name");
+          navigate(`${location.pathname}?${search.toString()}`);
+        }
+      }}
+    />
   );
 }
