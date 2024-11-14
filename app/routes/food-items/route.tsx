@@ -12,6 +12,7 @@ import {amountOfRows} from "~/.server/cookies/rows";
 import {getFoodItemsData} from "~/.server/db/dao/food-items";
 import {FoodCategory} from "~/components/food-category";
 import PageWrapper from "~/components/page-wrapper";
+import {Button} from "~/components/ui/button";
 import {
   Pagination,
   PaginationContent,
@@ -127,32 +128,37 @@ export default function FoodItemsRoute() {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={2} className="bg-red-400">
+              <TableCell colSpan={2}>
                 <div className="flex flex-col gap-1">
                   <span>
                     Page {page} / {totalPages}
                   </span>
-                  {/* <span>
+                  <span>
                     {page === totalPages
                       ? totalFoodItems
                       : (page - 1) * results.length + results.length}{" "}
                     of {totalFoodItems} food items
-                  </span> */}
+                  </span>
                 </div>
               </TableCell>
-              <TableCell colSpan={2} className="bg-blue-300">
+              {/* <TableCell colSpan={2} className="bg-blue-300">
                 <div className="flex items-center justify-end gap-2">
                   <SelectRows rows={rows} />
                 </div>
-              </TableCell>
-              <TableCell colSpan={4} className="bg-green-400">
-                {/* <div className="flex justify-end gap-2"> */}
-                <PaginationComponent
-                  page={page}
-                  location={location}
-                  totalPages={totalPages}
-                />
-                {/* </div> */}
+              </TableCell> */}
+              <TableCell colSpan={6}>
+                <div className="flex items-center">
+                  <div className="flex-1">
+                    <SelectRows rows={rows} />
+                  </div>
+                  <div>
+                    <PaginationComponent
+                      page={page}
+                      location={location}
+                      totalPages={totalPages}
+                    />
+                  </div>
+                </div>
               </TableCell>
             </TableRow>
           </TableFooter>
@@ -165,7 +171,7 @@ export default function FoodItemsRoute() {
 function SelectRows(props: {rows: number}) {
   return (
     <Form method="post" id="rows">
-      <fieldset className="flex gap-1">
+      <fieldset className="flex flex-row-reverse items-center gap-2">
         <Select name="rows">
           <SelectTrigger className="h-7 w-[60px]">
             <SelectValue placeholder={props.rows} />
@@ -178,7 +184,9 @@ function SelectRows(props: {rows: number}) {
             ))}
           </SelectContent>
         </Select>
-        <button type="submit">Rows per page </button>
+        <Button className="h-6" type="submit" variant="outline">
+          Rows per page
+        </Button>
       </fieldset>
     </Form>
   );
@@ -190,7 +198,7 @@ export function PaginationComponent(props: {
   totalPages: number;
 }) {
   return (
-    <Pagination className="justify-end">
+    <Pagination>
       <PaginationContent>
         <PaginationItem>
           <PreviousLink page={props.page} location={props.location} />

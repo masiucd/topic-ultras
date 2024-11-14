@@ -2,19 +2,14 @@ import {eq, ilike, sql} from "drizzle-orm";
 import {db} from "..";
 import {foodCategories, foodItems, foodNutrients, slugs} from "../schema";
 
-const PER_PAGE = 4;
-export async function getFoodItemsData(
-	name: string | null,
-	page: number,
-	rows = PER_PAGE,
-) {
+export async function getFoodItemsData(name: string | null, page: number, rows: number) {
 	try {
 		return await db.transaction(async (trx) => {
 			let totalFoodItems = await trx
 				.select({count: sql`count(*)`.mapWith(Number)})
 				.from(foodItems);
 
-			let totalPages = Math.ceil(totalFoodItems[0].count / PER_PAGE);
+			let totalPages = Math.ceil(totalFoodItems[0].count / rows);
 
 			let results = await trx
 				.select({
