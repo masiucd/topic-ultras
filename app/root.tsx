@@ -8,6 +8,7 @@ import {
 } from "@remix-run/react";
 
 import "./tailwind.css";
+import {H4} from "./components/ui/typography";
 
 export const links: LinksFunction = () => [
   {rel: "preconnect", href: "https://fonts.googleapis.com"},
@@ -23,8 +24,6 @@ export const links: LinksFunction = () => [
 ];
 
 export function Layout({children}: {children: React.ReactNode}) {
-  let x = false;
-  console.log(x);
   return (
     <html lang="en">
       <head>
@@ -34,7 +33,19 @@ export function Layout({children}: {children: React.ReactNode}) {
         <Links />
       </head>
       <body>
-        {children}
+        <header>
+          <div className="h-[8rem] bg-muted shadow-md">
+            <H4>Nutri Check</H4>
+          </div>
+        </header>
+        <main className="flex min-h-[calc(100dvh-16rem)] flex-col">
+          {children}
+        </main>
+        <footer>
+          <div className="h-[8rem] bg-muted shadow-sm">
+            <H4>Footer</H4>
+          </div>
+        </footer>
         <ScrollRestoration />
         <Scripts />
       </body>

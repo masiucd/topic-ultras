@@ -3,7 +3,11 @@ import {db} from "..";
 import {foodCategories, foodItems, foodNutrients, slugs} from "../schema";
 
 const PER_PAGE = 4;
-export async function getFoodItemsData(name: string | null, page: number) {
+export async function getFoodItemsData(
+	name: string | null,
+	page: number,
+	rows = PER_PAGE,
+) {
 	try {
 		return await db.transaction(async (trx) => {
 			let totalFoodItems = await trx
@@ -35,8 +39,8 @@ export async function getFoodItemsData(name: string | null, page: number) {
 				.leftJoin(slugs, eq(foodItems.id, slugs.objectId))
 				.orderBy(sql`${foodItems.name} ASC`)
 				.where(name ? ilike(foodItems.name, `%${name}%`) : undefined)
-				.limit(PER_PAGE)
-				.offset((page - 1) * PER_PAGE);
+				.limit(rows)
+				.offset((page - 1) * rows);
 
 			return {
 				results,
