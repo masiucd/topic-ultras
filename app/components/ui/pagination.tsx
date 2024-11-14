@@ -1,3 +1,4 @@
+import {Link} from "@remix-run/react";
 import {ChevronLeft, ChevronRight, MoreHorizontal} from "lucide-react";
 import * as React from "react";
 
@@ -36,6 +37,7 @@ PaginationItem.displayName = "PaginationItem";
 
 type PaginationLinkProps = {
   isActive?: boolean;
+  to: string;
 } & Pick<ButtonProps, "size"> &
   React.ComponentProps<"a">;
 
@@ -45,7 +47,7 @@ const PaginationLink = ({
   size = "icon",
   ...props
 }: PaginationLinkProps) => (
-  <a
+  <Link
     aria-current={isActive ? "page" : undefined}
     className={cn(
       buttonVariants({
