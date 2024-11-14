@@ -1,7 +1,5 @@
 import type {MetaFunction} from "@remix-run/node";
-import {Link, useLoaderData} from "@remix-run/react";
-import {db} from "~/.server/db";
-import {users} from "~/.server/db/schema";
+import {Link} from "@remix-run/react";
 import {H1, List} from "~/components/ui/typography";
 
 export const meta: MetaFunction = () => {
@@ -11,14 +9,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function loader() {
-  let result = await db.select().from(users);
-  return result;
-}
-
 export default function Index() {
-  let data = useLoaderData<typeof loader>();
-  console.log("data", data);
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       <H1>Welcome to Nutri Check</H1>

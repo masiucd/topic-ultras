@@ -8,7 +8,7 @@ import {
 } from "@remix-run/react";
 import {useMemo} from "react";
 import {getFoodItemsData} from "~/.server/db/dao/food-items";
-import {Badge, type BadgeVariant} from "~/components/ui/badge";
+import {FoodCategory} from "~/components/food-category";
 import {Input} from "~/components/ui/input";
 import {
   Pagination,
@@ -49,9 +49,9 @@ export default function FoodItemsRoute() {
   let name = searchParams.get("name");
 
   return (
-    <div>
+    <div className="flex min-h-screen flex-col items-center justify-center border border-blue-500">
       <H1>Food Items</H1>
-      <div className="my-10 max-w-[65rem]">
+      <div className="mx-auto my-10 max-w-[75rem] border border-red-500 ">
         <div className="mb-2">
           <SearchInput location={location} name={name} />
         </div>
@@ -87,7 +87,7 @@ export default function FoodItemsRoute() {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={7}>
+              <TableCell colSpan={5}>
                 <span>
                   {page === totalPages
                     ? totalFoodItems
@@ -95,7 +95,7 @@ export default function FoodItemsRoute() {
                   of {totalFoodItems} food items
                 </span>
               </TableCell>
-              <TableCell className="">
+              <TableCell colSpan={3}>
                 <div className="flex gap-2">
                   <PaginationComponent
                     page={page}
@@ -109,20 +109,6 @@ export default function FoodItemsRoute() {
         </Table>
       </div>
     </div>
-  );
-}
-
-type FoodCategoryProps = {
-  name?: string;
-  className?: string;
-  variant?: BadgeVariant;
-};
-
-function FoodCategory(props: FoodCategoryProps) {
-  return (
-    <Badge className={cn("uppercase", props.className)} variant={props.variant}>
-      {props.name ?? "N/A"}
-    </Badge>
   );
 }
 
