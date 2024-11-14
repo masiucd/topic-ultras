@@ -8,6 +8,7 @@ import {
 } from "@remix-run/react";
 import {useMemo} from "react";
 import {getFoodItemsData} from "~/.server/db/dao/food-items";
+import {Badge, type BadgeVariant} from "~/components/ui/badge";
 import {Input} from "~/components/ui/input";
 import {
   Pagination,
@@ -41,7 +42,8 @@ export async function loader({request}: LoaderFunctionArgs) {
 
 // TODO : copy url feature to share the search results
 export default function FoodItemsRoute() {
-  let {results, totalPages, page} = useLoaderData<typeof loader>();
+  let {results, totalPages, page, totalFoodItems} =
+    useLoaderData<typeof loader>();
   let [searchParams] = useSearchParams();
   let location = useLocation();
   let name = searchParams.get("name");
@@ -50,16 +52,16 @@ export default function FoodItemsRoute() {
     <div>
       <H1>Food Items</H1>
       <div className="my-10 max-w-[65rem]">
-        <div>
+        <div className="mb-2">
           <SearchInput location={location} name={name} />
         </div>
         <Table title="Food items table">
           <TableCaption>Food Items in the Database.</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">ID</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Description</TableHead>
+              <TableHead className="w-[70px]">ID</TableHead>
+              <TableHead className="w-[250px]">Name</TableHead>
+              <TableHead className="w-[450px]">Description</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Calories</TableHead>
               <TableHead>Protein</TableHead>
@@ -73,7 +75,9 @@ export default function FoodItemsRoute() {
                 <TableCell>{result.foodId}</TableCell>
                 <TableCell>{result.foodName}</TableCell>
                 <TableCell>{result.foodDescription}</TableCell>
-                <TableCell>{result.foodCategory?.name ?? "N/A"}</TableCell>
+                <TableCell>
+                  <FoodCategory name={result.foodCategory?.name} />
+                </TableCell>
                 <TableCell>{result.nutrients?.calories ?? "N/A"}</TableCell>
                 <TableCell>{result.nutrients?.protein ?? "N/A"}</TableCell>
                 <TableCell>{result.nutrients?.fat ?? "N/A"}</TableCell>
@@ -83,7 +87,14 @@ export default function FoodItemsRoute() {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={7}>Total</TableCell>
+              <TableCell colSpan={7}>
+                <span>
+                  {page === totalPages
+                    ? totalFoodItems
+                    : (page - 1) * results.length + results.length}{" "}
+                  of {totalFoodItems} food items
+                </span>
+              </TableCell>
               <TableCell className="">
                 <div className="flex gap-2">
                   <PaginationComponent
@@ -98,6 +109,20 @@ export default function FoodItemsRoute() {
         </Table>
       </div>
     </div>
+  );
+}
+
+type FoodCategoryProps = {
+  name?: string;
+  className?: string;
+  variant?: BadgeVariant;
+};
+
+function FoodCategory(props: FoodCategoryProps) {
+  return (
+    <Badge className={cn("uppercase", props.className)} variant={props.variant}>
+      {props.name ?? "N/A"}
+    </Badge>
   );
 }
 
@@ -156,7 +181,6 @@ function PaginationLinks(props: {
 function SearchInput(props: {location: Location; name: string | null}) {
   let navigate = useNavigate();
   let {location, name} = props;
-
   return (
     <Input
       type="text"
@@ -180,7 +204,7 @@ function SearchInput(props: {location: Location; name: string | null}) {
 
 function PreviousLink(props: {page: number; location: Location}) {
   let {page, location} = props;
-
+  // TODO: Remove name param before navigating???
   let searchParams = new URLSearchParams(location.search);
   if (searchParams.get("page")) {
     searchParams.delete("page");
@@ -208,7 +232,7 @@ function NextLink(props: {
 }) {
   let {page, totalPages, location} = props;
   let isDisabled = page >= totalPages;
-
+  // TODO: Remove name param before navigating???
   let searchParams = new URLSearchParams(location.search);
   searchParams.set("page", (page + 1).toString());
   let url = `${location.pathname}?${searchParams.toString()}`;

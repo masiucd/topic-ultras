@@ -6,11 +6,11 @@ const PER_PAGE = 4;
 export async function getFoodItemsData(name: string | null, page: number) {
 	try {
 		return await db.transaction(async (trx) => {
-			let totalUsers = await trx
+			let totalFoodItems = await trx
 				.select({count: sql`count(*)`.mapWith(Number)})
 				.from(foodItems);
 
-			let totalPages = Math.ceil(totalUsers[0].count / PER_PAGE);
+			let totalPages = Math.ceil(totalFoodItems[0].count / PER_PAGE);
 
 			let results = await trx
 				.select({
@@ -42,6 +42,7 @@ export async function getFoodItemsData(name: string | null, page: number) {
 				results,
 				totalPages,
 				page,
+				totalFoodItems: totalFoodItems[0].count,
 			};
 		});
 	} catch (error) {
@@ -50,6 +51,7 @@ export async function getFoodItemsData(name: string | null, page: number) {
 			results: [],
 			totalPages: 0,
 			page: 0,
+			totalFoodItems: 0,
 		};
 	}
 }
