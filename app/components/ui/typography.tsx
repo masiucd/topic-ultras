@@ -123,3 +123,12 @@ export function Strong(props: Props & ComponentProps<"strong">) {
 export function Label(props: Props & ComponentProps<"label">) {
   return <span className={cn("font-semibold", props.className)} {...props} />;
 }
+
+export function Span(props: Props & ComponentProps<"span">) {
+  return (
+    <span
+      className={cn("font-semibold text-foreground/80", props.className)}
+      {...props}
+    />
+  );
+}
