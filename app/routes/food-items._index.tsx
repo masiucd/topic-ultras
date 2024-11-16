@@ -123,7 +123,7 @@ export default function FoodItemsRoute() {
                   </TableCell>
                   <TableCell>{item.foodDescription}</TableCell>
                   <TableCell>
-                    <FoodCategory name={item.foodCategory?.name} />
+                    <FoodCategory withLink name={item.foodCategory?.name} />
                   </TableCell>
                   <TableCell>{item.nutrients?.calories ?? "N/A"}</TableCell>
                   <TableCell>{item.nutrients?.protein ?? "N/A"}</TableCell>
