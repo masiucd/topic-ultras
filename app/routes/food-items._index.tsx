@@ -3,7 +3,6 @@ import {redirect} from "@remix-run/node"; // or cloudflare/deno
 import {
   Form,
   Link,
-  type Location,
   useLoaderData,
   useLocation,
   useSearchParams,
@@ -12,8 +11,8 @@ import {
 import {amountOfRows} from "~/.server/cookies/rows";
 import {getFoodItemsData} from "~/.server/db/dao/food-items";
 import {FoodCategory} from "~/components/food-category";
+import {Pagination} from "~/components/food-items/pagination";
 import {SearchInput} from "~/components/food-items/search-input";
-import {Icons} from "~/components/icons";
 import PageWrapper from "~/components/page-wrapper";
 import {Checkbox} from "~/components/ui/checkbox";
 import {
@@ -41,7 +40,6 @@ import {cn} from "~/lib/utils";
 export async function action({request}: ActionFunctionArgs) {
   let formData = await request.formData();
   let rows = formData.get("rows");
-  console.log("rows  SERVER ", rows);
   const cookieHeader = request.headers.get("Cookie");
   let cookie = (await amountOfRows.parse(cookieHeader)) || {rows: 4};
 
@@ -63,8 +61,6 @@ export async function loader({request}: LoaderFunctionArgs) {
 
   let cookieHeader = request.headers.get("Cookie");
   let cookie = (await amountOfRows.parse(cookieHeader)) || {rows: 4};
-
-  console.log("cookie", cookie);
 
   return {
     ...(await getFoodItemsData(name, page, cookie.rows)),
@@ -98,9 +94,8 @@ export default function FoodItemsRoute() {
                 <TableHead className="w-[10px]">
                   <Checkbox />
                 </TableHead>
-
-                <TableHead className="w-[100px]">Name</TableHead>
-                <TableHead className="w-[250px]">Description</TableHead>
+                <TableHead className="w-[200px]">Name</TableHead>
+                <TableHead className="w-[300px]">Description</TableHead>
                 <TableHead>Category</TableHead>
                 <TableHead>Calories</TableHead>
                 <TableHead>Protein</TableHead>
@@ -200,68 +195,5 @@ function SelectRows(props: {rows: number}) {
         </Select>
       </fieldset>
     </Form>
-  );
-}
-
-export function Pagination(props: {
-  page: number;
-  location: Location;
-  totalPages: number;
-}) {
-  return (
-    <div className="flex gap-2">
-      <PreviousLink page={props.page} location={props.location} />
-      <NextLink
-        page={props.page}
-        totalPages={props.totalPages}
-        location={props.location}
-      />
-    </div>
-  );
-}
-
-function PreviousLink(props: {page: number; location: Location}) {
-  let {page, location} = props;
-  // TODO: Remove name param before navigating???
-  let searchParams = new URLSearchParams(location.search);
-  if (searchParams.get("page")) {
-    searchParams.delete("page");
-  }
-  searchParams.set("page", (page - 1).toString());
-  if (searchParams.get("page") === "1") {
-    searchParams.delete("page");
-  }
-  let url = `${location.pathname}?${searchParams.toString()}`;
-  let isDisabled = page < 2;
-  return (
-    <Link
-      to={url}
-      className={cn("", isDisabled && "pointer-events-none opacity-50")}
-      aria-disabled={isDisabled}
-    >
-      <Icons.LeftArrow />
-    </Link>
-  );
-  // return <Link to={url}>Prev</Link>;
-}
-
-function NextLink(props: {
-  page: number;
-  totalPages: number;
-  location: Location;
-}) {
-  let {page, totalPages, location} = props;
-  let isDisabled = page >= totalPages;
-  // TODO: Remove name param before navigating???
-  let searchParams = new URLSearchParams(location.search);
-  searchParams.set("page", (page + 1).toString());
-  let url = `${location.pathname}?${searchParams.toString()}`;
-  return (
-    <Link
-      to={url}
-      className={cn("", isDisabled && "pointer-events-none opacity-50")}
-    >
-      <Icons.RightArrow />
-    </Link>
   );
 }
