@@ -3,13 +3,14 @@ import {redirect} from "@remix-run/node"; // or cloudflare/deno
 import {
   Form,
   Link,
+  type Location,
   useLoaderData,
   useLocation,
   useSearchParams,
   useSubmit,
 } from "@remix-run/react";
 import {amountOfRows} from "~/.server/cookies/rows";
-import {getFoodItemsData} from "~/.server/db/dao/food-items";
+import {type FoodItemData, getFoodItemsData} from "~/.server/db/dao/food-items";
 import {FoodCategory} from "~/components/food-category";
 import {Pagination} from "~/components/food-items/pagination";
 import {SearchInput} from "~/components/food-items/search-input";
@@ -34,8 +35,6 @@ import {
 } from "~/components/ui/table";
 import {H1, Lead, Span} from "~/components/ui/typography";
 import {cn} from "~/lib/utils";
-
-// import  invariant from "tiny-invariant";
 
 export async function action({request}: ActionFunctionArgs) {
   let formData = await request.formData();
@@ -83,7 +82,7 @@ export default function FoodItemsRoute() {
         Nutrition facts for the food you love. Search for food items by name.
       </Lead>
       <div className="mx-auto my-10 w-full max-w-[80rem]">
-        <div className="mb-2">
+        <div className="mb-2 md:w-7/12">
           <SearchInput location={location} name={name} />
         </div>
         <div className="rounded-lg border-2">
@@ -132,37 +131,14 @@ export default function FoodItemsRoute() {
                 </TableRow>
               ))}
             </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell colSpan={3}>
-                  <div className="flex gap-5">
-                    <span>
-                      Page {page} / {totalPages}
-                    </span>
-                    <span>
-                      {page === totalPages
-                        ? totalFoodItems
-                        : (page - 1) * results.length + results.length}{" "}
-                      of {totalFoodItems} food items
-                    </span>
-                  </div>
-                </TableCell>
-                <TableCell colSpan={5}>
-                  <div className="flex items-center ">
-                    <div className="mr-3 flex flex-1 items-center justify-end gap-3 ">
-                      <Span>Rows per page</Span>
-                      <SelectRows rows={rows} />
-                    </div>
-
-                    <Pagination
-                      page={page}
-                      location={location}
-                      totalPages={totalPages}
-                    />
-                  </div>
-                </TableCell>
-              </TableRow>
-            </TableFooter>
+            <Footer
+              page={page}
+              totalPages={totalPages}
+              totalFoodItems={totalFoodItems}
+              rows={rows}
+              results={results}
+              location={location}
+            />
           </Table>
         </div>
       </div>
@@ -170,7 +146,51 @@ export default function FoodItemsRoute() {
   );
 }
 
-function SelectRows(props: {rows: number}) {
+function Footer(props: {
+  page: number;
+  totalPages: number;
+  totalFoodItems: number;
+  rows: number;
+  results: FoodItemData["results"];
+  location: Location;
+}) {
+  let {page, totalPages, totalFoodItems, rows, results, location} = props;
+  return (
+    <TableFooter>
+      <TableRow>
+        <TableCell colSpan={3}>
+          <div className="flex gap-5">
+            <span>
+              Page {page} / {totalPages}
+            </span>
+            <span>
+              {page === totalPages
+                ? totalFoodItems
+                : (page - 1) * results.length + results.length}{" "}
+              of {totalFoodItems} food items
+            </span>
+          </div>
+        </TableCell>
+        <TableCell colSpan={5}>
+          <div className="flex items-center ">
+            <div className="mr-3 flex flex-1 items-center justify-end gap-3 ">
+              <Span>Rows per page</Span>
+              <SelectRows rows={rows} totalFoodItems={totalFoodItems} />
+            </div>
+
+            <Pagination
+              page={page}
+              location={location}
+              totalPages={totalPages}
+            />
+          </div>
+        </TableCell>
+      </TableRow>
+    </TableFooter>
+  );
+}
+
+function SelectRows(props: {rows: number; totalFoodItems: number}) {
   let submit = useSubmit();
   return (
     <Form
@@ -186,7 +206,7 @@ function SelectRows(props: {rows: number}) {
             <SelectValue placeholder={props.rows} />
           </SelectTrigger>
           <SelectContent>
-            {[4, 6, 8, 10, 12, 14, 16].map((p) => (
+            {makeRowValues(props.totalFoodItems).map((p) => (
               <SelectItem key={p} value={p.toString()}>
                 {p}
               </SelectItem>
@@ -196,4 +216,12 @@ function SelectRows(props: {rows: number}) {
       </fieldset>
     </Form>
   );
+}
+
+function makeRowValues(totalFoodItems: number) {
+  let xs = [];
+  for (let i = 2; i < totalFoodItems; i += 2) {
+    xs.push(i);
+  }
+  return xs;
 }
