@@ -9,13 +9,23 @@ import {
   useSearchParams,
   useSubmit,
 } from "@remix-run/react";
+import {useState} from "react";
 import {amountOfRows} from "~/.server/cookies/rows";
 import {type FoodItemData, getFoodItemsData} from "~/.server/db/dao/food-items";
 import {FoodCategory} from "~/components/food-category";
 import {Pagination} from "~/components/food-items/pagination";
 import {SearchInput} from "~/components/food-items/search-input";
+import {Icons} from "~/components/icons";
 import PageWrapper from "~/components/page-wrapper";
 import {Checkbox} from "~/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import {
   Select,
   SelectContent,
@@ -82,67 +92,158 @@ export default function FoodItemsRoute() {
         Nutrition facts for the food you love. Search for food items by name.
       </Lead>
       <div className="mx-auto my-10 w-full max-w-[80rem]">
-        <div className="mb-2 md:w-7/12">
-          <SearchInput location={location} name={name} />
+        <div className="mb-2 flex gap-2">
+          <div>
+            <SearchInput location={location} name={name} />
+          </div>
+          <CategoryFilter results={results} />
         </div>
         <div className="rounded-lg border-2">
-          <Table title="Food items table">
-            <TableCaption>Food Items in the Database.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[10px]">
-                  <Checkbox />
-                </TableHead>
-                <TableHead className="w-[200px]">Name</TableHead>
-                <TableHead className="w-[300px]">Description</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Calories</TableHead>
-                <TableHead>Protein</TableHead>
-                <TableHead>Fat</TableHead>
-                <TableHead>Carbs</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {results.map((item) => (
-                <TableRow key={item.foodId}>
-                  <TableCell>
-                    <Checkbox />
-                  </TableCell>
-                  <TableCell>
-                    <Link
-                      className={cn(
-                        item.slug
-                          ? "underline hover:no-underline hover:opacity-50"
-                          : "pointer-events-none opacity-80"
-                      )}
-                      to={`/food-items/${item.slug}`}
-                    >
-                      {item.foodName}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{item.foodDescription}</TableCell>
-                  <TableCell>
-                    <FoodCategory withLink name={item.foodCategory?.name} />
-                  </TableCell>
-                  <TableCell>{item.nutrients?.calories ?? "N/A"}</TableCell>
-                  <TableCell>{item.nutrients?.protein ?? "N/A"}</TableCell>
-                  <TableCell>{item.nutrients?.fat ?? "N/A"}</TableCell>
-                  <TableCell>{item.nutrients?.carbs ?? "N/A"}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-            <Footer
-              page={page}
-              totalPages={totalPages}
-              totalFoodItems={totalFoodItems}
-              rows={rows}
-              results={results}
-              location={location}
-            />
-          </Table>
+          <FoodItems
+            page={page}
+            totalPages={totalPages}
+            totalFoodItems={totalFoodItems}
+            rows={rows}
+            results={results}
+            location={location}
+          />
         </div>
       </div>
     </PageWrapper>
+  );
+}
+
+// TODO: Add a category filter
+function CategoryFilter(props: {results: FoodItemData["results"]}) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="flex items-center gap-1">
+        <Icons.Category size={16} />
+        Category
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuLabel>Food Categories</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {getUniqueCategories(props.results).map((category) => (
+          <DropdownMenuItem key={category.id}>
+            <DropdownMenuItem>{category.name}</DropdownMenuItem>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function getUniqueCategories(results: FoodItemData["results"]) {
+  let categories = new Map<number, string>();
+  for (const item of results) {
+    if (item.foodCategory) {
+      if (!categories.has(item.foodCategory.id)) {
+        categories.set(item.foodCategory.id, item.foodCategory.name);
+      }
+    }
+  }
+  return Array.from(categories).map(([id, name]) => ({id, name}));
+}
+
+function FoodItems(props: {
+  page: number;
+  totalPages: number;
+  totalFoodItems: number;
+  rows: number;
+  results: FoodItemData["results"];
+  location: Location;
+}) {
+  let {page, totalPages, totalFoodItems, rows, results, location} = props;
+  let [selectedFoodItems, setSelectedFoodItems] = useState<Set<number>>(
+    new Set()
+  );
+  return (
+    <Table title="Food items table">
+      <TableCaption>Food Items in the Database.</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[10px]">
+            <Checkbox
+              onCheckedChange={(checked) => {
+                if (checked) {
+                  setSelectedFoodItems((p) => {
+                    let newSet = new Set(p);
+                    for (const item of results) {
+                      newSet.add(item.foodId);
+                    }
+                    return newSet;
+                  });
+                } else {
+                  setSelectedFoodItems(new Set());
+                }
+              }}
+            />
+          </TableHead>
+          <TableHead className="w-[200px]">Name</TableHead>
+          <TableHead className="w-[300px]">Description</TableHead>
+          <TableHead>Category</TableHead>
+          <TableHead>Calories</TableHead>
+          <TableHead>Protein</TableHead>
+          <TableHead>Fat</TableHead>
+          <TableHead>Carbs</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {results.map((item) => (
+          <TableRow key={item.foodId}>
+            <TableCell>
+              <Checkbox
+                checked={selectedFoodItems.has(item.foodId)}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    setSelectedFoodItems((p) => {
+                      let newSet = new Set(p);
+                      newSet.add(item.foodId);
+                      return newSet;
+                    });
+                  } else {
+                    setSelectedFoodItems((p) => {
+                      let newSet = new Set(p);
+                      newSet.delete(item.foodId);
+                      return newSet;
+                    });
+                  }
+                }}
+              />
+            </TableCell>
+            <TableCell>
+              <Link
+                className={cn(
+                  item.slug
+                    ? "underline hover:no-underline hover:opacity-50"
+                    : "pointer-events-none opacity-80"
+                )}
+                to={`/food-items/${item.slug}`}
+              >
+                {item.foodName}
+              </Link>
+            </TableCell>
+            <TableCell>{item.foodDescription}</TableCell>
+            <TableCell>
+              <FoodCategory withLink name={item.foodCategory?.name} />
+            </TableCell>
+            <TableCell>{item.nutrients?.calories ?? "N/A"}</TableCell>
+            <TableCell>{item.nutrients?.protein ?? "N/A"}</TableCell>
+            <TableCell>{item.nutrients?.fat ?? "N/A"}</TableCell>
+            <TableCell>{item.nutrients?.carbs ?? "N/A"}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+      <Footer
+        page={page}
+        totalPages={totalPages}
+        totalFoodItems={totalFoodItems}
+        rows={rows}
+        results={results}
+        location={location}
+      />
+    </Table>
   );
 }
 

@@ -7,6 +7,7 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  Tag,
 } from "lucide-react";
 
 export const Icons = Object.freeze({
@@ -18,4 +19,5 @@ export const Icons = Object.freeze({
   ChevronLeft,
   ChevronsLeft,
   ChevronsRight,
+  Category: Tag,
 });
