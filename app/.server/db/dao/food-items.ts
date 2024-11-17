@@ -5,10 +5,16 @@ import {foodCategories, foodItems, foodNutrients, slugs} from "../schema";
 export async function getFoodItemsData(name: string | null, page: number, rows: number) {
 	try {
 		return await db.transaction(async (trx) => {
+			let allFoodCategories = await trx
+				.selectDistinct({
+					id: foodCategories.id,
+					name: foodCategories.name,
+				})
+				.from(foodCategories);
+
 			let totalFoodItems = await trx
 				.select({count: sql`count(*)`.mapWith(Number)})
 				.from(foodItems);
-
 			let totalPages = Math.ceil(totalFoodItems[0].count / rows);
 
 			let results = await trx
@@ -42,6 +48,7 @@ export async function getFoodItemsData(name: string | null, page: number, rows: 
 				totalPages,
 				page,
 				totalFoodItems: totalFoodItems[0].count,
+				allFoodCategories,
 			};
 		});
 	} catch (error) {
@@ -51,6 +58,9 @@ export async function getFoodItemsData(name: string | null, page: number, rows: 
 			totalPages: 0,
 			page: 0,
 			totalFoodItems: 0,
+			allFoodCategories: [],
 		};
 	}
 }
+
+export type FoodItemData = Awaited<ReturnType<typeof getFoodItemsData>>;
