@@ -10,22 +10,16 @@ import {
   useSubmit,
 } from "@remix-run/react";
 import {useState} from "react";
-import {amountOfRows} from "~/.server/cookies/rows";
+import {foodItemsCookie, parseCookie} from "~/.server/cookies/food-items";
 import {type FoodItemData, getFoodItemsData} from "~/.server/db/dao/food-items";
 import {FoodCategory} from "~/components/food-category";
 import {Pagination} from "~/components/food-items/pagination";
 import {SearchInput} from "~/components/food-items/search-input";
 import {Icons} from "~/components/icons";
 import PageWrapper from "~/components/page-wrapper";
+import {Button} from "~/components/ui/button";
 import {Checkbox} from "~/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
+import {Popover, PopoverContent, PopoverTrigger} from "~/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -49,16 +43,22 @@ import {cn} from "~/lib/utils";
 export async function action({request}: ActionFunctionArgs) {
   let formData = await request.formData();
   let rows = formData.get("rows");
-  const cookieHeader = request.headers.get("Cookie");
-  let cookie = (await amountOfRows.parse(cookieHeader)) || {rows: 4};
+  let categories = formData.getAll("category");
+  let cookieHeader = request.headers.get("Cookie");
+  let cookie = await parseCookie(cookieHeader);
+  console.log({categories, cookie});
 
   if (rows) {
     cookie.rows = Number(rows);
   }
+  if (categories.length > 0) {
+    // do something with category
+    cookie.categories = categories;
+  }
 
   return redirect("/food-items", {
     headers: {
-      "Set-Cookie": await amountOfRows.serialize(cookie),
+      "Set-Cookie": await foodItemsCookie.serialize(cookie),
     },
   });
 }
@@ -69,7 +69,7 @@ export async function loader({request}: LoaderFunctionArgs) {
   let page = Number(url.searchParams.get("page")) || 1;
 
   let cookieHeader = request.headers.get("Cookie");
-  let cookie = (await amountOfRows.parse(cookieHeader)) || {rows: 4};
+  let cookie = await parseCookie(cookieHeader);
 
   return {
     ...(await getFoodItemsData(name, page, cookie.rows)),
@@ -79,7 +79,7 @@ export async function loader({request}: LoaderFunctionArgs) {
 
 // TODO : copy url feature to share the search results
 export default function FoodItemsRoute() {
-  let {results, totalPages, page, totalFoodItems, rows} =
+  let {results, totalPages, page, totalFoodItems, rows, allFoodCategories} =
     useLoaderData<typeof loader>();
   let [searchParams] = useSearchParams();
   let location = useLocation();
@@ -96,7 +96,10 @@ export default function FoodItemsRoute() {
           <div>
             <SearchInput location={location} name={name} />
           </div>
-          <CategoryFilter results={results} />
+          <CategoryFilter
+            results={results}
+            allFoodCategories={allFoodCategories}
+          />
         </div>
         <div className="rounded-lg border-2">
           <FoodItems
@@ -113,37 +116,42 @@ export default function FoodItemsRoute() {
   );
 }
 
-// TODO: Add a category filter
-function CategoryFilter(props: {results: FoodItemData["results"]}) {
+function CategoryFilter(props: {
+  results: FoodItemData["results"];
+  allFoodCategories: FoodItemData["allFoodCategories"];
+}) {
+  // TODO use form hooks to improve UX
+  let submit = useSubmit();
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-1">
-        <Icons.Category size={16} />
-        Category
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>Food Categories</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {getUniqueCategories(props.results).map((category) => (
-          <DropdownMenuItem key={category.id}>
-            <DropdownMenuItem>{category.name}</DropdownMenuItem>
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button className="flex items-center gap-1" variant="outline">
+          <Icons.Category />
+          Category
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <Form
+          method="post"
+          onChange={(e) => {
+            console.log(e.currentTarget);
+            submit(e.currentTarget);
+          }}
+        >
+          <fieldset>
+            <input type="hidden" name="_action" />
+            {props.allFoodCategories.map((c) => (
+              <div key={c.id} className="mb-1 flex items-center gap-2">
+                <Checkbox id={c.name} name="category" value={c.id} />
+                <label htmlFor={c.name}>{c.name}</label>
+              </div>
+            ))}
+            {/* <Button type="submit">Apply</Button> */}
+          </fieldset>
+        </Form>
+      </PopoverContent>
+    </Popover>
   );
-}
-
-function getUniqueCategories(results: FoodItemData["results"]) {
-  let categories = new Map<number, string>();
-  for (const item of results) {
-    if (item.foodCategory) {
-      if (!categories.has(item.foodCategory.id)) {
-        categories.set(item.foodCategory.id, item.foodCategory.name);
-      }
-    }
-  }
-  return Array.from(categories).map(([id, name]) => ({id, name}));
 }
 
 function FoodItems(props: {
