@@ -4,7 +4,6 @@ import {
   type Location,
   useLoaderData,
   useLocation,
-  useNavigate,
   useSearchParams,
 } from "@remix-run/react";
 import {useState} from "react";
@@ -45,8 +44,8 @@ export async function action({request}: ActionFunctionArgs) {
 export async function loader({request}: LoaderFunctionArgs) {
   let url = new URL(request.url);
   let name = url.searchParams.get("name");
+  let category = url.searchParams.get("category");
   let page = Number(url.searchParams.get("page")) || 1;
-
   let cookieHeader = request.headers.get("Cookie");
   let cookie = await parseCookie(cookieHeader);
 
@@ -55,16 +54,14 @@ export async function loader({request}: LoaderFunctionArgs) {
       name,
       page,
       rows: cookie.rows,
-      categories: cookie.categories,
+      categories: category !== null ? category.split("-").map(Number) : [],
     })),
     rows: cookie.rows,
-    selectedCategories: cookie.categories,
   };
 }
 
 // TODO : copy url feature to share the search results
 export default function FoodItemsRoute() {
-  // results, totalPages, page, totalFoodItems, rows, allFoodCategories,selectedCategories
   let data = useLoaderData<typeof loader>();
   let [searchParams] = useSearchParams();
   let location = useLocation();
@@ -107,7 +104,7 @@ function CategoryFilter(props: {
   allFoodCategories: FoodItemData["allFoodCategories"];
   location: Location;
 }) {
-  let navigate = useNavigate();
+  // let navigate = useNavigate();
   let [searchParams, setSearchParams] = useSearchParams();
   let [selectedCategories, setSelectedCategories] = useState<number[]>(
     searchParams.get("category")?.split("-").map(Number) || []
