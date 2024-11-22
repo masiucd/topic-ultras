@@ -1,4 +1,4 @@
-import {Form, Link, type Location, useSubmit} from "@remix-run/react";
+import {Link, type Location, useSearchParams} from "@remix-run/react";
 import {useState} from "react";
 import type {FoodItemData} from "~/.server/db/dao/food-items";
 import {FoodCategory} from "~/components/food-category";
@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import {DEFAULT_FOOD_ITEMS_ROWS} from "~/lib/constants";
 import {cn} from "~/lib/utils";
 import {
   Select,
@@ -28,11 +29,11 @@ export function FoodItems(props: {
   page: number;
   totalPages: number;
   totalFoodItems: number;
-  rows: number;
+
   results: FoodItemData["results"];
   location: Location;
 }) {
-  let {page, totalPages, totalFoodItems, rows, results, location} = props;
+  let {page, totalPages, totalFoodItems, results, location} = props;
   let [selectedFoodItems, setSelectedFoodItems] = useState<Set<number>>(
     new Set()
   );
@@ -117,7 +118,6 @@ export function FoodItems(props: {
         page={page}
         totalPages={totalPages}
         totalFoodItems={totalFoodItems}
-        rows={rows}
         results={results}
         location={location}
       />
@@ -129,11 +129,11 @@ function Footer(props: {
   page: number;
   totalPages: number;
   totalFoodItems: number;
-  rows: number;
+
   results: FoodItemData["results"];
   location: Location;
 }) {
-  let {page, totalPages, totalFoodItems, rows, results, location} = props;
+  let {page, totalPages, totalFoodItems, results, location} = props;
   return (
     <TableFooter>
       <TableRow>
@@ -154,9 +154,8 @@ function Footer(props: {
           <div className="flex items-center ">
             <div className="mr-3 flex flex-1 items-center justify-end gap-3 ">
               <Span>Rows per page</Span>
-              <SelectRows rows={rows} totalFoodItems={totalFoodItems} />
+              <SelectRows totalFoodItems={totalFoodItems} />
             </div>
-
             <Pagination
               page={page}
               location={location}
@@ -169,32 +168,31 @@ function Footer(props: {
   );
 }
 
-function SelectRows(props: {rows: number; totalFoodItems: number}) {
-  let submit = useSubmit();
-  // TODO: Can we remove the form and cookie and use the url to store the rows?
+function SelectRows(props: {totalFoodItems: number}) {
+  let [searchParams, setSearchParams] = useSearchParams();
+  let rows = searchParams.get("rows") ?? DEFAULT_FOOD_ITEMS_ROWS;
   return (
-    <Form
-      method="post"
-      id="rows"
-      onChange={(e) => {
-        submit(e.currentTarget);
+    <Select
+      name="rows"
+      onValueChange={(value) => {
+        let params = new URLSearchParams(searchParams);
+        let rows = params.get("rows");
+        console.log("🚀 ~ SelectRows ~ rows:", rows);
+        params.set("rows", value);
+        setSearchParams(params, {preventScrollReset: true});
       }}
     >
-      <fieldset className="flex flex-row-reverse items-center gap-2">
-        <Select name="rows">
-          <SelectTrigger className="h-7 w-[60px]">
-            <SelectValue placeholder={props.rows} />
-          </SelectTrigger>
-          <SelectContent>
-            {makeRowValues(props.totalFoodItems).map((p) => (
-              <SelectItem key={p} value={p.toString()}>
-                {p}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </fieldset>
-    </Form>
+      <SelectTrigger className="h-7 w-[60px]">
+        <SelectValue placeholder={rows} />
+      </SelectTrigger>
+      <SelectContent>
+        {makeRowValues(props.totalFoodItems).map((p) => (
+          <SelectItem key={p} value={p.toString()}>
+            {p}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }
 

@@ -1,5 +1,5 @@
-import type {ActionFunctionArgs, LoaderFunctionArgs} from "@remix-run/node";
-import {redirect} from "@remix-run/node"; // or cloudflare/deno
+import type {LoaderFunctionArgs} from "@remix-run/node";
+
 import {
   type Location,
   useLoaderData,
@@ -7,7 +7,6 @@ import {
   useSearchParams,
 } from "@remix-run/react";
 import {useState} from "react";
-import {foodItemsCookie, parseCookie} from "~/.server/cookies/food-items";
 import {type FoodItemData, getFoodItemsData} from "~/.server/db/dao/food-items";
 import {FoodItems} from "~/components/food-items/food-items-table";
 import {SearchInput} from "~/components/food-items/search-input";
@@ -17,46 +16,22 @@ import {Button} from "~/components/ui/button";
 import {Checkbox} from "~/components/ui/checkbox";
 import {Popover, PopoverContent, PopoverTrigger} from "~/components/ui/popover";
 import {H1, Lead} from "~/components/ui/typography";
-
-export async function action({request}: ActionFunctionArgs) {
-  let formData = await request.formData();
-  let rows = formData.get("rows");
-  let categories = formData.getAll("category");
-  let cookieHeader = request.headers.get("Cookie");
-  let cookie = await parseCookie(cookieHeader);
-  console.log({categories, cookie});
-
-  if (rows) {
-    cookie.rows = Number(rows);
-  }
-  if (categories.length > 0) {
-    // do something with category
-    // cookie.categories = categories;
-  }
-
-  return redirect("/food-items", {
-    headers: {
-      "Set-Cookie": await foodItemsCookie.serialize(cookie),
-    },
-  });
-}
+import {DEFAULT_FOOD_ITEMS_ROWS} from "~/lib/constants";
 
 export async function loader({request}: LoaderFunctionArgs) {
   let url = new URL(request.url);
   let name = url.searchParams.get("name");
   let category = url.searchParams.get("category");
+  let rows = Number(url.searchParams.get("rows") || DEFAULT_FOOD_ITEMS_ROWS);
   let page = Number(url.searchParams.get("page")) || 1;
-  let cookieHeader = request.headers.get("Cookie");
-  let cookie = await parseCookie(cookieHeader);
 
   return {
     ...(await getFoodItemsData({
       name,
       page,
-      rows: cookie.rows,
+      rows,
       categories: category !== null ? category.split("-").map(Number) : [],
     })),
-    rows: cookie.rows,
   };
 }
 
@@ -89,7 +64,6 @@ export default function FoodItemsRoute() {
             page={data.page}
             totalPages={data.totalPages}
             totalFoodItems={data.totalFoodItems}
-            rows={data.rows}
             results={data.results}
             location={location}
           />
@@ -104,7 +78,6 @@ function CategoryFilter(props: {
   allFoodCategories: FoodItemData["allFoodCategories"];
   location: Location;
 }) {
-  // let navigate = useNavigate();
   let [searchParams, setSearchParams] = useSearchParams();
   let [selectedCategories, setSelectedCategories] = useState<number[]>(
     searchParams.get("category")?.split("-").map(Number) || []
