@@ -2,7 +2,17 @@ import {eq, ilike, sql} from "drizzle-orm";
 import {db} from "..";
 import {foodCategories, foodItems, foodNutrients, slugs} from "../schema";
 
-export async function getFoodItemsData(name: string | null, page: number, rows: number) {
+export async function getFoodItemsData({
+	name,
+	page,
+	rows,
+	categories,
+}: {
+	name: string | null;
+	page: number;
+	rows: number;
+	categories: string[];
+}) {
 	try {
 		return await db.transaction(async (trx) => {
 			let allFoodCategories = await trx
