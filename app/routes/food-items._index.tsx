@@ -32,7 +32,7 @@ export async function action({request}: ActionFunctionArgs) {
   }
   if (categories.length > 0) {
     // do something with category
-    cookie.categories = categories;
+    // cookie.categories = categories;
   }
 
   return redirect("/food-items", {
@@ -108,9 +108,27 @@ function CategoryFilter(props: {
   location: Location;
 }) {
   let navigate = useNavigate();
-  let [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  let [searchParams, setSearchParams] = useSearchParams();
+  let [selectedCategories, setSelectedCategories] = useState<number[]>(
+    searchParams.get("category")?.split("-").map(Number) || []
+  );
 
-  let search = new URLSearchParams(props.location.search);
+  const handleCategoryOnChange = (checked: boolean, categoryId: number) => {
+    let updatedCategories = !checked
+      ? selectedCategories.filter((id) => id !== categoryId)
+      : [...selectedCategories, categoryId];
+    setSelectedCategories(updatedCategories);
+
+    let params = new URLSearchParams(searchParams);
+    params.set("category", updatedCategories.join("-"));
+    setSearchParams(params);
+
+    if (params.get("category") === "") {
+      params.delete("category");
+      setSearchParams(params);
+    }
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -127,20 +145,9 @@ function CategoryFilter(props: {
               name="category"
               value={c.id}
               checked={selectedCategories.includes(c.id)}
-              onCheckedChange={(checked) => {
-                // TODO:
-                let updatedCategories = [];
-                if (checked) {
-                  updatedCategories = [...selectedCategories, c.id];
-                } else {
-                  updatedCategories = selectedCategories.filter(
-                    (id) => id !== c.id
-                  );
-                }
-                setSelectedCategories(updatedCategories);
-                search.set("category", updatedCategories.join("-"));
-                navigate(`${props.location.pathname}?${search.toString()}`);
-              }}
+              onCheckedChange={(checked) =>
+                handleCategoryOnChange(Boolean(checked), c.id)
+              }
             />
             <label htmlFor={c.name}>{c.name}</label>
           </div>
