@@ -1,6 +1,7 @@
 import type {LoaderFunctionArgs} from "@remix-run/node";
 
 import {type Location, useLoaderData, useLocation} from "@remix-run/react";
+import {download, generateCsv, mkConfig} from "export-to-csv";
 import {type FoodItemData, getFoodItemsData} from "~/.server/db/dao/food-items";
 import {CategoryFilter} from "~/components/food-items/filters/category";
 import {FoodItems} from "~/components/food-items/food-items-table";
@@ -43,6 +44,7 @@ export default function FoodItemsRoute() {
         <Toolbar
           allFoodCategories={data.allFoodCategories}
           location={location}
+          results={data.results}
         />
         <div className="rounded-lg border-2">
           <FoodItems
@@ -58,9 +60,22 @@ export default function FoodItemsRoute() {
   );
 }
 
+type AcceptedData = number | string | boolean | null | undefined;
+function exportToCsv<
+  T extends {
+    [k: string]: AcceptedData;
+    [k: number]: AcceptedData;
+  }
+>(data: T[]) {
+  let csvConfig = mkConfig({useKeysAsHeaders: true});
+  let csv = generateCsv(csvConfig)(data);
+  return download(csvConfig)(csv);
+}
+
 function Toolbar(props: {
   allFoodCategories: FoodItemData["allFoodCategories"];
   location: Location;
+  results: FoodItemData["results"];
 }) {
   return (
     <div className="mb-2 flex justify-between gap-2 border border-red-500">
@@ -71,7 +86,23 @@ function Toolbar(props: {
         <CategoryFilter allFoodCategories={props.allFoodCategories} />
       </div>
       <div className="flex gap-3">
-        <Button variant="outline">
+        <Button
+          variant="outline"
+          onClick={() =>
+            // TODO: Map the results to the correct format
+            exportToCsv([
+              {
+                name: "test",
+                description: "test",
+                category: "test",
+                calories: 100,
+                protein: 100,
+                fat: 100,
+                carbs: 100,
+              },
+            ])
+          }
+        >
           <Icons.Download /> Export
         </Button>
         <ColumnView />
