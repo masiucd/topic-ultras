@@ -3,10 +3,12 @@ import {
   ArrowBigRight,
   ArrowLeft,
   ArrowRight,
+  Check,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  ChevronsUpDown,
   FileDown,
   type LucideProps,
   Settings2,
@@ -35,10 +37,14 @@ export const Icons = Object.freeze({
   ChevronsLeft: (props: LucideProps) => (
     <ChevronsLeft size={ICON_SIZE} {...props} />
   ),
+  Check: (props: LucideProps) => <Check size={ICON_SIZE} {...props} />,
   ChevronsRight: (props: LucideProps) => (
     <ChevronsRight size={ICON_SIZE} {...props} />
   ),
   Category: (props: LucideProps) => <Tag size={ICON_SIZE} {...props} />,
   Download: (props: LucideProps) => <FileDown size={ICON_SIZE} {...props} />,
   Settings: (props: LucideProps) => <Settings2 size={ICON_SIZE} {...props} />,
+  UpDown: (props: LucideProps) => (
+    <ChevronsUpDown size={ICON_SIZE} {...props} />
+  ),
 });

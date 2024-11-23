@@ -9,7 +9,7 @@ import {Icons} from "~/components/icons";
 import PageWrapper from "~/components/page-wrapper";
 import {Button} from "~/components/ui/button";
 import {Popover, PopoverContent, PopoverTrigger} from "~/components/ui/popover";
-import {H1, Lead} from "~/components/ui/typography";
+import {H1, Lead, List} from "~/components/ui/typography";
 import {DEFAULT_FOOD_ITEMS_ROWS} from "~/lib/constants";
 
 export async function loader({request}: LoaderFunctionArgs) {
@@ -87,9 +87,34 @@ function ColumnView() {
         <Button className="flex items-center gap-1" variant="outline">
           <Icons.Settings />
           Columns view
+          <Icons.UpDown />
         </Button>
       </PopoverTrigger>
-      <PopoverContent>TODO- Columns view</PopoverContent>
+      <PopoverContent>
+        <List className="flex list-none flex-col gap-2 capitalize">
+          <li className="flex items-center justify-between">
+            name <Icons.Check />
+          </li>
+          <li className="flex items-center justify-between">
+            description <Icons.Check />
+          </li>
+          <li className="flex items-center justify-between">
+            category <Icons.Check />
+          </li>
+          <li className="flex items-center justify-between">
+            calories <Icons.Check />
+          </li>
+          <li className="flex items-center justify-between">
+            Protein <Icons.Check />
+          </li>
+          <li className="flex items-center justify-between">
+            Fat <Icons.Check />
+          </li>
+          <li className="flex items-center justify-between">
+            Carbs <Icons.Check />
+          </li>
+        </List>
+      </PopoverContent>
     </Popover>
   );
 }
