@@ -7,7 +7,9 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  FileDown,
   type LucideProps,
+  Settings2,
   Tag,
 } from "lucide-react";
 
@@ -37,4 +39,6 @@ export const Icons = Object.freeze({
     <ChevronsRight size={ICON_SIZE} {...props} />
   ),
   Category: (props: LucideProps) => <Tag size={ICON_SIZE} {...props} />,
+  Download: (props: LucideProps) => <FileDown size={ICON_SIZE} {...props} />,
+  Settings: (props: LucideProps) => <Settings2 size={ICON_SIZE} {...props} />,
 });
