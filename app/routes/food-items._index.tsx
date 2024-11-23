@@ -5,8 +5,10 @@ import {type FoodItemData, getFoodItemsData} from "~/.server/db/dao/food-items";
 import {CategoryFilter} from "~/components/food-items/filters/category";
 import {FoodItems} from "~/components/food-items/food-items-table";
 import {SearchInput} from "~/components/food-items/search-input";
+import {Icons} from "~/components/icons";
 import PageWrapper from "~/components/page-wrapper";
 import {Button} from "~/components/ui/button";
+import {Popover, PopoverContent, PopoverTrigger} from "~/components/ui/popover";
 import {H1, Lead} from "~/components/ui/typography";
 import {DEFAULT_FOOD_ITEMS_ROWS} from "~/lib/constants";
 
@@ -31,7 +33,6 @@ export async function loader({request}: LoaderFunctionArgs) {
 export default function FoodItemsRoute() {
   let data = useLoaderData<typeof loader>();
   let location = useLocation();
-
   return (
     <PageWrapper>
       <H1>Food Items</H1>
@@ -67,15 +68,28 @@ function Toolbar(props: {
         <div>
           <SearchInput location={props.location} />
         </div>
-        <CategoryFilter
-          allFoodCategories={props.allFoodCategories}
-          location={props.location}
-        />
+        <CategoryFilter allFoodCategories={props.allFoodCategories} />
       </div>
       <div className="flex gap-3">
-        <Button>Export</Button>
-        <Button>View dropdown</Button>
+        <Button variant="outline">
+          <Icons.Download /> Export
+        </Button>
+        <ColumnView />
       </div>
     </div>
+  );
+}
+
+function ColumnView() {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button className="flex items-center gap-1" variant="outline">
+          <Icons.Settings />
+          Columns view
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent>TODO- Columns view</PopoverContent>
+    </Popover>
   );
 }

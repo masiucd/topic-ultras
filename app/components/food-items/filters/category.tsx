@@ -1,4 +1,4 @@
-import {type Location, useSearchParams} from "@remix-run/react";
+import {useSearchParams} from "@remix-run/react";
 import {useState} from "react";
 import type {FoodItemData} from "~/.server/db/dao/food-items";
 import {Icons} from "~/components/icons";
@@ -9,7 +9,6 @@ import {cn} from "~/lib/utils";
 
 export function CategoryFilter(props: {
   allFoodCategories: FoodItemData["allFoodCategories"];
-  location: Location;
 }) {
   let [searchParams, setSearchParams] = useSearchParams();
   let [selectedCategories, setSelectedCategories] = useState<number[]>(
