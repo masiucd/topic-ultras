@@ -20,7 +20,6 @@ export function FoodItems(props: {
   page: number;
   totalPages: number;
   totalFoodItems: number;
-
   results: FoodItemData["results"];
   location: Location;
 }) {
@@ -28,57 +27,52 @@ export function FoodItems(props: {
   let [selectedFoodItems, setSelectedFoodItems] = useState<Set<number>>(
     new Set()
   );
+
+  const toggleAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedFoodItems((p) => {
+        let newSet = new Set(p);
+        for (const item of results) {
+          newSet.add(item.foodId);
+        }
+        return newSet;
+      });
+    } else {
+      setSelectedFoodItems(new Set());
+    }
+  };
+
+  const onCheckedChange = (
+    checked: boolean,
+    item: FoodItemData["results"][number]
+  ) => {
+    if (checked) {
+      setSelectedFoodItems((p) => {
+        let newSet = new Set(p);
+        newSet.add(item.foodId);
+        return newSet;
+      });
+    } else {
+      setSelectedFoodItems((p) => {
+        let newSet = new Set(p);
+        newSet.delete(item.foodId);
+        return newSet;
+      });
+    }
+  };
+
   return (
     <Table title="Food items table">
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[10px]">
-            <Checkbox
-              onCheckedChange={(checked) => {
-                if (checked) {
-                  setSelectedFoodItems((p) => {
-                    let newSet = new Set(p);
-                    for (const item of results) {
-                      newSet.add(item.foodId);
-                    }
-                    return newSet;
-                  });
-                } else {
-                  setSelectedFoodItems(new Set());
-                }
-              }}
-            />
-          </TableHead>
-          <TableHead className="w-[200px]">Name</TableHead>
-          <TableHead className="w-[300px]">Description</TableHead>
-          <TableHead>Category</TableHead>
-          <TableHead>Calories</TableHead>
-          <TableHead>Protein</TableHead>
-          <TableHead>Fat</TableHead>
-          <TableHead>Carbs</TableHead>
-        </TableRow>
-      </TableHeader>
+      <Header toggleAll={toggleAll} />
       <TableBody>
         {results.map((item) => (
           <TableRow key={item.foodId}>
             <TableCell>
               <Checkbox
                 checked={selectedFoodItems.has(item.foodId)}
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setSelectedFoodItems((p) => {
-                      let newSet = new Set(p);
-                      newSet.add(item.foodId);
-                      return newSet;
-                    });
-                  } else {
-                    setSelectedFoodItems((p) => {
-                      let newSet = new Set(p);
-                      newSet.delete(item.foodId);
-                      return newSet;
-                    });
-                  }
-                }}
+                onCheckedChange={(checked) =>
+                  onCheckedChange(Boolean(checked), item)
+                }
               />
             </TableCell>
             <TableCell>
@@ -115,11 +109,29 @@ export function FoodItems(props: {
   );
 }
 
+function Header(props: {toggleAll: (checked: boolean) => void}) {
+  return (
+    <TableHeader>
+      <TableRow>
+        <TableHead className="w-[10px]">
+          <Checkbox onCheckedChange={props.toggleAll} />
+        </TableHead>
+        <TableHead className="w-[200px]">Name</TableHead>
+        <TableHead className="w-[300px]">Description</TableHead>
+        <TableHead>Category</TableHead>
+        <TableHead>Calories</TableHead>
+        <TableHead>Protein</TableHead>
+        <TableHead>Fat</TableHead>
+        <TableHead>Carbs</TableHead>
+      </TableRow>
+    </TableHeader>
+  );
+}
+
 function Footer(props: {
   page: number;
   totalPages: number;
   totalFoodItems: number;
-
   results: FoodItemData["results"];
   location: Location;
 }) {

@@ -1,9 +1,11 @@
-import {type Location, useNavigate} from "@remix-run/react";
+import {type Location, useNavigate, useSearchParams} from "@remix-run/react";
 import {Input} from "~/components/ui/input";
 
-export function SearchInput(props: {location: Location; name: string | null}) {
+export function SearchInput(props: {location: Location}) {
+  let [searchParams] = useSearchParams();
+  let name = searchParams.get("name");
   let navigate = useNavigate();
-  let {location, name} = props;
+  let {location} = props;
   const debouncedNavigate = debounce((value: string) => {
     let search = new URLSearchParams(location.search);
     search.set("name", value);
