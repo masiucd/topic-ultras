@@ -84,3 +84,4 @@ export async function getFoodItemsData({
 }
 
 export type FoodItemData = Awaited<ReturnType<typeof getFoodItemsData>>;
+

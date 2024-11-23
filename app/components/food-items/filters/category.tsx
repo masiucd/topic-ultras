@@ -8,7 +8,6 @@ import {Popover, PopoverContent, PopoverTrigger} from "~/components/ui/popover";
 import {cn} from "~/lib/utils";
 
 export function CategoryFilter(props: {
-  results: FoodItemData["results"];
   allFoodCategories: FoodItemData["allFoodCategories"];
   location: Location;
 }) {

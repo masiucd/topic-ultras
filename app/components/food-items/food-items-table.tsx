@@ -136,6 +136,7 @@ function Footer(props: {
   location: Location;
 }) {
   let {page, totalPages, totalFoodItems, results, location} = props;
+
   return (
     <TableFooter>
       <TableRow>
