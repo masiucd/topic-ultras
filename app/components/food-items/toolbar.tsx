@@ -1,5 +1,4 @@
 import type {Location} from "@remix-run/react";
-import {useRef} from "react";
 import type {FoodItemData} from "~/.server/db/dao/food-items";
 import {CategoryFilter} from "~/components/food-items/filters/category";
 import {SearchInput} from "~/components/food-items/search-input";
@@ -19,11 +18,9 @@ export function Toolbar(props: {
   results: FoodItemData["results"];
 }) {
   return (
-    <div className="mb-2 flex justify-between gap-2 border border-red-500">
+    <div className="mb-2 flex justify-between gap-2">
       <div className="flex gap-3">
-        <div>
-          <SearchInput location={props.location} />
-        </div>
+        <SearchInput location={props.location} />
         <CategoryFilter allFoodCategories={props.allFoodCategories} />
       </div>
       <div className="flex gap-3">
@@ -74,10 +71,9 @@ function ColumnView() {
 }
 
 function ExportToCsv(props: {results: FoodItemData["results"]}) {
-  let inputRef = useRef<HTMLInputElement>(null);
   let [isOpen, {set, off}] = useToggle(false);
   return (
-    <TooltipComponent content="Export to  CSV file">
+    <TooltipComponent content="Export to CSV file">
       <Popover
         open={isOpen}
         onOpenChange={(open) => {
@@ -93,6 +89,8 @@ function ExportToCsv(props: {results: FoodItemData["results"]}) {
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              let formData = new FormData(e.currentTarget);
+              let filename = formData.get("filename") as string;
               exportToCsv(
                 props.results.map(
                   ({foodName, foodDescription, foodCategory, nutrients}) => ({
@@ -110,7 +108,7 @@ function ExportToCsv(props: {results: FoodItemData["results"]}) {
                     Fat: nutrients?.fat ?? "N/A",
                   })
                 ),
-                inputRef.current?.value
+                filename !== "" ? filename : null
               );
               off();
             }}
@@ -123,7 +121,6 @@ function ExportToCsv(props: {results: FoodItemData["results"]}) {
                   id="filename"
                   placeholder="Filename"
                   name="filename"
-                  ref={inputRef}
                 />
               </div>
               <Button name="_action" value="export-csv" type="submit">

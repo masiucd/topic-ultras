@@ -19,8 +19,6 @@ export function SelectRows(props: {totalFoodItems: number}) {
         name="rows"
         onValueChange={(value) => {
           let params = new URLSearchParams(searchParams);
-          let rows = params.get("rows");
-          console.log("🚀 ~ SelectRows ~ rows:", rows);
           params.set("rows", value);
           setSearchParams(params, {preventScrollReset: true});
         }}

@@ -8,13 +8,12 @@ import {
   TableBody,
   TableCell,
   TableFooter,
-  TableHead,
-  TableHeader,
   TableRow,
 } from "~/components/ui/table";
 import {cn} from "~/lib/utils";
 import {SelectRows} from "./filters/rows";
 import {Pagination} from "./pagination";
+import {Header} from "./table-header";
 
 export function FoodItems(props: {
   page: number;
@@ -106,25 +105,6 @@ export function FoodItems(props: {
         location={location}
       />
     </Table>
-  );
-}
-
-function Header(props: {toggleAll: (checked: boolean) => void}) {
-  return (
-    <TableHeader>
-      <TableRow>
-        <TableHead className="w-[10px]">
-          <Checkbox onCheckedChange={props.toggleAll} />
-        </TableHead>
-        <TableHead className="w-[200px]">Name</TableHead>
-        <TableHead className="w-[300px]">Description</TableHead>
-        <TableHead>Category</TableHead>
-        <TableHead>Calories</TableHead>
-        <TableHead>Protein</TableHead>
-        <TableHead>Fat</TableHead>
-        <TableHead>Carbs</TableHead>
-      </TableRow>
-    </TableHeader>
   );
 }
 
