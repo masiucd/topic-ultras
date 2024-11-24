@@ -1,16 +1,11 @@
 import type {LoaderFunctionArgs} from "@remix-run/node";
 
-import {type Location, useLoaderData, useLocation} from "@remix-run/react";
-import {download, generateCsv, mkConfig} from "export-to-csv";
-import {type FoodItemData, getFoodItemsData} from "~/.server/db/dao/food-items";
-import {CategoryFilter} from "~/components/food-items/filters/category";
+import {useLoaderData, useLocation} from "@remix-run/react";
+import {getFoodItemsData} from "~/.server/db/dao/food-items";
 import {FoodItems} from "~/components/food-items/food-items-table";
-import {SearchInput} from "~/components/food-items/search-input";
-import {Icons} from "~/components/icons";
+import {Toolbar} from "~/components/food-items/toolbar";
 import PageWrapper from "~/components/page-wrapper";
-import {Button} from "~/components/ui/button";
-import {Popover, PopoverContent, PopoverTrigger} from "~/components/ui/popover";
-import {H1, Lead, List} from "~/components/ui/typography";
+import {H1, Lead} from "~/components/ui/typography";
 import {DEFAULT_FOOD_ITEMS_ROWS} from "~/lib/constants";
 
 export async function loader({request}: LoaderFunctionArgs) {
@@ -57,95 +52,5 @@ export default function FoodItemsRoute() {
         </div>
       </div>
     </PageWrapper>
-  );
-}
-
-type AcceptedData = number | string | boolean | null | undefined;
-function exportToCsv<
-  T extends {
-    [k: string]: AcceptedData;
-    [k: number]: AcceptedData;
-  }
->(data: T[]) {
-  let csvConfig = mkConfig({useKeysAsHeaders: true});
-  let csv = generateCsv(csvConfig)(data);
-  return download(csvConfig)(csv);
-}
-
-function Toolbar(props: {
-  allFoodCategories: FoodItemData["allFoodCategories"];
-  location: Location;
-  results: FoodItemData["results"];
-}) {
-  return (
-    <div className="mb-2 flex justify-between gap-2 border border-red-500">
-      <div className="flex gap-3">
-        <div>
-          <SearchInput location={props.location} />
-        </div>
-        <CategoryFilter allFoodCategories={props.allFoodCategories} />
-      </div>
-      <div className="flex gap-3">
-        <Button
-          variant="outline"
-          onClick={() =>
-            // TODO: Map the results to the correct format
-            exportToCsv([
-              {
-                name: "test",
-                description: "test",
-                category: "test",
-                calories: 100,
-                protein: 100,
-                fat: 100,
-                carbs: 100,
-              },
-            ])
-          }
-        >
-          <Icons.Download /> Export
-        </Button>
-        <ColumnView />
-      </div>
-    </div>
-  );
-}
-
-function ColumnView() {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button className="flex items-center gap-1" variant="outline">
-          <Icons.Settings />
-          Columns view
-          <Icons.UpDown />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent>
-        <List className="flex list-none flex-col gap-2 capitalize">
-          <li className="flex items-center justify-between">
-            name <Icons.Check />
-          </li>
-          <li className="flex items-center justify-between">
-            description <Icons.Check />
-          </li>
-          <li className="flex items-center justify-between">
-            category <Icons.Check />
-          </li>
-          <li className="flex items-center justify-between">
-            calories <Icons.Check />
-          </li>
-          <li className="flex items-center justify-between">
-            Protein <Icons.Check />
-          </li>
-          <li className="flex items-center justify-between">
-            Fat <Icons.Check />
-          </li>
-          <li className="flex items-center justify-between">
-            Carbs <Icons.Check />
-          </li>
-        </List>
-      </PopoverContent>
-    </Popover>
   );
 }
