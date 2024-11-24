@@ -7,11 +7,13 @@ export async function getFoodItemsData({
   page,
   rows,
   categories,
+  sort, // TODO: implement sorting
 }: {
   name: string | null;
   page: number;
   rows: number;
   categories: number[];
+  sort: string | null;
 }) {
   try {
     return await db.transaction(async (trx) => {
@@ -84,4 +86,3 @@ export async function getFoodItemsData({
 }
 
 export type FoodItemData = Awaited<ReturnType<typeof getFoodItemsData>>;
-

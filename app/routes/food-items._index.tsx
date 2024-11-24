@@ -13,6 +13,7 @@ export async function loader({request}: LoaderFunctionArgs) {
   let category = url.searchParams.get("category");
   let rows = Number(url.searchParams.get("rows") || DEFAULT_FOOD_ITEMS_ROWS);
   let page = Number(url.searchParams.get("page")) || 1;
+  let sort = url.searchParams.get("sort");
 
   return {
     ...(await getFoodItemsData({
@@ -20,6 +21,7 @@ export async function loader({request}: LoaderFunctionArgs) {
       page,
       rows,
       categories: category !== null ? category.split("-").map(Number) : [],
+      sort,
     })),
   };
 }
