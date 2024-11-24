@@ -1,5 +1,4 @@
 import type {LoaderFunctionArgs} from "@remix-run/node";
-
 import {useLoaderData, useLocation} from "@remix-run/react";
 import {getFoodItemsData} from "~/.server/db/dao/food-items";
 import {FoodItems} from "~/components/food-items/food-items-table";

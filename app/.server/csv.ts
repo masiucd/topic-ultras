@@ -10,9 +10,12 @@ export function makeCsvFile<
     [k: string]: AcceptedData;
     [k: number]: AcceptedData;
   }
->(data: T[]) {
-  let csv = generateCsv(CSV_CONFIG)(data); //
-  let fileName = `${CSV_CONFIG.filename}.csv`;
+>(data: T[], file: string | null = null) {
+  let csv = generateCsv(CSV_CONFIG)(data);
+  let fileName =
+    file !== null && typeof file === "string"
+      ? `${file}.csv`
+      : `${CSV_CONFIG.filename}.csv`;
   let csvBuffer = new Uint8Array(Buffer.from(asString(csv)));
 
   writeFile(fileName, csvBuffer, (err) => {

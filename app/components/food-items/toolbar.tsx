@@ -1,5 +1,5 @@
 import type {Location} from "@remix-run/react";
-import {download, generateCsv, mkConfig} from "export-to-csv";
+import {useRef, useState} from "react";
 import type {FoodItemData} from "~/.server/db/dao/food-items";
 import {CategoryFilter} from "~/components/food-items/filters/category";
 import {SearchInput} from "~/components/food-items/search-input";
@@ -7,6 +7,9 @@ import {Icons} from "~/components/icons";
 import {Button} from "~/components/ui/button";
 import {Popover, PopoverContent, PopoverTrigger} from "~/components/ui/popover";
 import {List} from "~/components/ui/typography";
+import {exportToCsv} from "~/lib/utils";
+import {Input} from "../ui/input";
+import {Label} from "../ui/label";
 import {TooltipComponent} from "../ui/tooltip";
 
 export function Toolbar(props: {
@@ -70,50 +73,61 @@ function ColumnView() {
 }
 
 function ExportToCsv(props: {results: FoodItemData["results"]}) {
+  let inputRef = useRef<HTMLInputElement>(null);
+  let [open, setOpen] = useState(false);
   return (
     <TooltipComponent content="Export to  CSV file">
-      {/* TODO Option to name the file */}
-      <Button
-        variant="outline"
-        aria-description="Export to CSV file"
-        onClick={() =>
-          exportToCsv(
-            props.results.map(
-              ({foodName, foodDescription, foodCategory, nutrients}) => ({
-                // biome-ignore lint/style/useNamingConvention: <explanation>
-                Name: foodName,
-                // biome-ignore lint/style/useNamingConvention: <explanation>
-                Description: foodDescription,
-                // biome-ignore lint/style/useNamingConvention: <explanation>
-                Category: foodCategory?.name ?? "N/A/",
-                // biome-ignore lint/style/useNamingConvention: <explanation>
-                Calories: nutrients?.calories ?? "N/A",
-                // biome-ignore lint/style/useNamingConvention: <explanation>
-                Protein: nutrients?.protein ?? "N/A",
-                // biome-ignore lint/style/useNamingConvention: <explanation>
-                Fat: nutrients?.fat ?? "N/A",
-              })
-            )
-          )
-        }
-      >
-        <Icons.Download /> Export
-      </Button>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="outline">
+            <Icons.Download /> Export
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              exportToCsv(
+                props.results.map(
+                  ({foodName, foodDescription, foodCategory, nutrients}) => ({
+                    // biome-ignore lint/style/useNamingConvention: <explanation>
+                    Name: foodName,
+                    // biome-ignore lint/style/useNamingConvention: <explanation>
+                    Description: foodDescription,
+                    // biome-ignore lint/style/useNamingConvention: <explanation>
+                    Category: foodCategory?.name ?? "N/A/",
+                    // biome-ignore lint/style/useNamingConvention: <explanation>
+                    Calories: nutrients?.calories ?? "N/A",
+                    // biome-ignore lint/style/useNamingConvention: <explanation>
+                    Protein: nutrients?.protein ?? "N/A",
+                    // biome-ignore lint/style/useNamingConvention: <explanation>
+                    Fat: nutrients?.fat ?? "N/A",
+                  })
+                ),
+                inputRef.current?.value
+              );
+              setOpen(false);
+            }}
+          >
+            <fieldset className="flex flex-col gap-2">
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <Label htmlFor="filename">Export to CSV</Label>
+                <Input
+                  type="filename"
+                  id="filename"
+                  placeholder="Filename"
+                  name="filename"
+                  ref={inputRef}
+                />
+              </div>
+
+              <Button name="_action" value="export-csv" type="submit">
+                Create CSV
+              </Button>
+            </fieldset>
+          </form>
+        </PopoverContent>
+      </Popover>
     </TooltipComponent>
   );
-}
-
-type AcceptedData = number | string | boolean | null | undefined;
-function exportToCsv<
-  T extends {
-    [k: string]: AcceptedData;
-    [k: number]: AcceptedData;
-  }
->(data: T[]) {
-  let csvConfig = mkConfig({
-    useKeysAsHeaders: true,
-    filename: "food-items.csv",
-  });
-  let csv = generateCsv(csvConfig)(data);
-  return download(csvConfig)(csv);
 }
