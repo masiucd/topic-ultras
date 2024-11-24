@@ -1,5 +1,5 @@
 import type {Location} from "@remix-run/react";
-import {useRef, useState} from "react";
+import {useRef} from "react";
 import type {FoodItemData} from "~/.server/db/dao/food-items";
 import {CategoryFilter} from "~/components/food-items/filters/category";
 import {SearchInput} from "~/components/food-items/search-input";
@@ -7,6 +7,7 @@ import {Icons} from "~/components/icons";
 import {Button} from "~/components/ui/button";
 import {Popover, PopoverContent, PopoverTrigger} from "~/components/ui/popover";
 import {List} from "~/components/ui/typography";
+import {useToggle} from "~/lib/hooks/toggle";
 import {exportToCsv} from "~/lib/utils";
 import {Input} from "../ui/input";
 import {Label} from "../ui/label";
@@ -74,10 +75,15 @@ function ColumnView() {
 
 function ExportToCsv(props: {results: FoodItemData["results"]}) {
   let inputRef = useRef<HTMLInputElement>(null);
-  let [open, setOpen] = useState(false);
+  let [isOpen, {set, off}] = useToggle(false);
   return (
     <TooltipComponent content="Export to  CSV file">
-      <Popover>
+      <Popover
+        open={isOpen}
+        onOpenChange={(open) => {
+          set(open);
+        }}
+      >
         <PopoverTrigger asChild>
           <Button variant="outline">
             <Icons.Download /> Export
@@ -106,7 +112,7 @@ function ExportToCsv(props: {results: FoodItemData["results"]}) {
                 ),
                 inputRef.current?.value
               );
-              setOpen(false);
+              off();
             }}
           >
             <fieldset className="flex flex-col gap-2">
@@ -120,7 +126,6 @@ function ExportToCsv(props: {results: FoodItemData["results"]}) {
                   ref={inputRef}
                 />
               </div>
-
               <Button name="_action" value="export-csv" type="submit">
                 Create CSV
               </Button>
