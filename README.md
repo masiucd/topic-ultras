@@ -35,6 +35,9 @@ pnpm dev
 - [Drizzle ORM (Database ORM)](https://drizzle.dev/)
 - [Tailwind CSS (Styling)](https://tailwindcss.com/)
 - [Docker (Containerization)](https://www.docker.com/)
+- [Docker Compose (Container Orchestration)](https://docs.docker.com/compose/)
+- [Vitest (Testing)](https://vitejs.dev/guide/features.html#testing)
+- [Biome-js (toolchain, linting, formatting)](https://biomejs.dev/)
 
 ### Usage
 
