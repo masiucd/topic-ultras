@@ -1,40 +1,49 @@
-# Welcome to Remix!
+# Nutri Check (Not done yet)!! Still in development
 
-- 📖 [Remix docs](https://remix.run/docs)
+## Description
 
-## Development
+Nutri Check is a web application that allows users to search for food items and get detailed nutritional information about them. Users can also create an account and save their favorite food items to their profile. The application uses the USDA FoodData Central API to get the nutritional information of food items. The application is built using Flask, a Python web framework, and uses SQLite as the database to store user information and saved food items.
 
-Run the dev server:
+Note that the application is still in development and some features may not be fully implemented yet.
 
-```shellscript
-npm run dev
+## Installation
+
+1. Clone the repository
+
+```bash
+git clone git@github.com:masiucd/nutri-check.git
 ```
 
-## Deployment
+2. Install the required packages
 
-First, build your app for production:
-
-```sh
-npm run build
+```bash
+pnpm install
 ```
 
-Then run the app in production mode:
+3. Run the application
 
-```sh
-npm start
+```bash
+pnpm dev
 ```
 
-Now you'll need to pick a host to deploy it to.
+### Tools
 
-### DIY
+- [React (Frontend)](https://reactjs.org/)
+- [Node.js (Backend)](https://nodejs.org/)
+- [Remix (Fullstack Framework)](https://remix.run/)
+- [PostgreSQL (Database)](https://www.postgresql.org/)
+- [Drizzle ORM (Database ORM)](https://drizzle.dev/)
+- [Tailwind CSS (Styling)](https://tailwindcss.com/)
+- [Docker (Containerization)](https://www.docker.com/)
 
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
+### Usage
 
-Make sure to deploy the output of `npm run build`
+1. Search for food items by typing the name of the food item in the search bar and clicking the "Search" button.
+2. Click on a food item to view detailed nutritional information.
+3. Create an account to save your favorite food items to your profile.
+4. Log in to your account to view your saved food items.
+5. Log out of your account to log out of the application.
 
-- `build/server`
-- `build/client`
+### Contributing
 
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+Contributions are welcome! Please feel free to submit a pull request or open an issue if you find a bug or have a feature request.
