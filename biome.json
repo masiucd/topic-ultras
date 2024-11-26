@@ -1,0 +1,86 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+  "formatter": {
+    "enabled": true
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "css": {
+    "linter": {
+      "enabled": true
+    },
+    "formatter": {
+      "enabled": true
+    }
+  },
+
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "bracketSpacing": false,
+      "semicolons": "always",
+      "trailingCommas": "all",
+      "lineWidth": 90
+    }
+  },
+
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "suspicious": {
+        "noArrayIndexKey": "error"
+      },
+
+      "recommended": true,
+      "complexity": {
+        "noForEach": "error"
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "fix": "safe",
+          "level": "warn",
+          "options": {
+            "attributes": ["classList"],
+            "functions": ["clsx", "cva", "tw"]
+          }
+        }
+      },
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error",
+        "noEmptyPattern": "error",
+        "useExhaustiveDependencies": "error",
+        "useHookAtTopLevel": "error"
+      },
+      "a11y": {
+        "all": true,
+        "useAltText": "error"
+      },
+      "style": {
+        "useConst": "off",
+        "useTemplate": {
+          "level": "warn",
+          "fix": "safe"
+        },
+        "useNamingConvention": {
+          "level": "info",
+          "options": {
+            "strictCase": false,
+            "conventions": [
+              {
+                "selector": {
+                  "kind": "const",
+                  "scope": "global"
+                },
+                "formats": ["CONSTANT_CASE"]
+              }
+            ]
+          },
+
+          "fix": "safe"
+        }
+      }
+    }
+  }
+}
