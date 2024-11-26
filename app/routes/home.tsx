@@ -1,6 +1,6 @@
 import {db} from "~/.server/db";
 import {users} from "~/.server/db/schema";
-import {Welcome} from "../welcome/welcome";
+import {Button} from "~/components/ui/button";
 import type {Route} from "./+types/home";
 
 export function meta() {
@@ -30,7 +30,8 @@ export default function HomeRoute({loaderData}: Route.ComponentProps) {
         quas enim doloribus mollitia, harum natus in quidem, laborum, aspernatur
         placeat dolor maxime debitis fugiat magni at deleniti labore similique.
       </p>
-      <Welcome />
+
+      <Button>Click</Button>
     </div>
   );
 }
