@@ -3,11 +3,11 @@ import type {Route} from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    {title: "New React Router App"},
-    {name: "description", content: "Welcome to React Router!"},
+    {title: "Nutri check"},
+    {name: "description", content: "Nutri check is a nutrition tracking app"},
   ];
 }
 
-export default function Home() {
+export default function HomeRoute() {
   return <Welcome />;
 }
