@@ -1,6 +1,7 @@
+import {Link, NavLink} from "react-router";
 import {db} from "~/.server/db";
 import {users} from "~/.server/db/schema";
-import {Button} from "~/components/ui/button";
+import {H1, List, P} from "~/components/ui/typography";
 import type {Route} from "./+types/home";
 
 export function meta() {
@@ -25,13 +26,19 @@ export default function HomeRoute({loaderData}: Route.ComponentProps) {
   console.log("xs", xs);
   return (
     <div>
-      <p className="h-20 ">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur aut
-        quas enim doloribus mollitia, harum natus in quidem, laborum, aspernatur
-        placeat dolor maxime debitis fugiat magni at deleniti labore similique.
-      </p>
-
-      <Button>Click</Button>
+      <H1>Nutri check</H1>
+      <P>
+        Nutri check is a nutrition tracking app. It is a work in progress and
+        will be released soon.
+      </P>
+      <List>
+        <li>
+          <Link to="/about">About</Link>
+        </li>
+        <li>
+          <NavLink to="/food-items">Food items</NavLink>
+        </li>
+      </List>
     </div>
   );
 }
