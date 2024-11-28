@@ -1,5 +1,5 @@
-import {Link, useLocation} from "@remix-run/react";
 import type {PropsWithChildren} from "react";
+import {Link, useLocation} from "react-router";
 import {Checkbox} from "~/components/ui/checkbox";
 import {TableHead, TableHeader, TableRow} from "~/components/ui/table";
 

@@ -1,5 +1,5 @@
-import {useSearchParams} from "@remix-run/react";
 import {useState} from "react";
+import {useSearchParams} from "react-router";
 import type {FoodItemData} from "~/.server/db/dao/food-items";
 import {Icons} from "~/components/icons";
 import {Button} from "~/components/ui/button";
@@ -52,7 +52,9 @@ export function CategoryFilter(props: {
                   handleCategoryOnChange(Boolean(checked), c.id)
                 }
               />
-              <label htmlFor={c.name}>{c.name}</label>
+              <label htmlFor={c.name} className="capitalize">
+                {c.name}
+              </label>
             </div>
           ))}
         </div>
@@ -64,7 +66,7 @@ export function CategoryFilter(props: {
               "w-full",
               selectedCategories.length === 0 && "pointer-events-none"
             )}
-            variant={selectedCategories.length > 0 ? "reverse" : "outline"}
+            variant={selectedCategories.length > 0 ? "secondary" : "outline"}
             onClick={() => {
               setSelectedCategories([]);
               let params = new URLSearchParams(searchParams);

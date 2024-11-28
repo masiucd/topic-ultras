@@ -1,8 +1,9 @@
 import {Link, NavLink} from "react-router";
 import {db} from "~/.server/db";
-import {users} from "~/.server/db/schema";
+import {foodItems} from "~/.server/db/schema";
+import PageWrapper from "~/components/page-wrapper";
 import {H1, List, P} from "~/components/ui/typography";
-import type {Route} from "./+types/home";
+import type {Route} from "../+types/root";
 
 export function meta() {
   return [
@@ -12,7 +13,7 @@ export function meta() {
 }
 
 export async function loader({params}: Route.LoaderArgs) {
-  let xs = await db.select({id: users.id}).from(users);
+  let xs = await db.select({id: foodItems.id}).from(foodItems);
   return [
     {
       status: 200,
@@ -24,8 +25,9 @@ export async function loader({params}: Route.LoaderArgs) {
 export default function HomeRoute({loaderData}: Route.ComponentProps) {
   let xs = loaderData;
   console.log("xs", xs);
+
   return (
-    <div>
+    <PageWrapper>
       <H1>Nutri check</H1>
       <P>
         Nutri check is a nutrition tracking app. It is a work in progress and
@@ -39,6 +41,6 @@ export default function HomeRoute({loaderData}: Route.ComponentProps) {
           <NavLink to="/food-items">Food items</NavLink>
         </li>
       </List>
-    </div>
+    </PageWrapper>
   );
 }

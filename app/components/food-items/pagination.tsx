@@ -8,40 +8,52 @@ export function Pagination(props: {
 
   totalPages: number;
 }) {
-  let l = useLocation();
   return (
     <div className="flex gap-2">
-      <TooltipComponent
-        content="Go to the first page"
-        disabled={props.page === 1}
-      >
-        <Link
-          to={`${l.pathname}?page=1`}
-          className={cn(
-            "",
-            props.page === 1 && "pointer-events-none opacity-50"
-          )}
-        >
-          <Icons.ChevronsLeft />
-        </Link>
-      </TooltipComponent>
+      <GoToFirstPage page={props.page} />
       <PreviousLink page={props.page} />
       <NextLink page={props.page} totalPages={props.totalPages} />
-      <TooltipComponent
-        content="Go to the last page"
-        disabled={props.page === props.totalPages}
-      >
-        <Link
-          to={`${l.pathname}?page=${props.totalPages}`}
-          className={cn(
-            "",
-            props.page === props.totalPages && "pointer-events-none opacity-50"
-          )}
-        >
-          <Icons.ChevronsRight />
-        </Link>
-      </TooltipComponent>
+      <GoToLastPage page={props.page} totalPages={props.totalPages} />
     </div>
+  );
+}
+
+// TODO: We need to take of consideration the total number of pages when amount of rows is changed
+function GoToFirstPage(props: {page: number}) {
+  let l = useLocation();
+  return (
+    <TooltipComponent
+      content="Go to the first page"
+      disabled={props.page === 1}
+    >
+      <Link
+        to={`${l.pathname}?page=1`}
+        className={cn("", props.page === 1 && "pointer-events-none opacity-50")}
+      >
+        <Icons.ChevronsLeft />
+      </Link>
+    </TooltipComponent>
+  );
+}
+
+// TODO: We need to take of consideration the total number of pages when amount of rows is changed
+function GoToLastPage(props: {page: number; totalPages: number}) {
+  let l = useLocation();
+  return (
+    <TooltipComponent
+      content="Go to the last page"
+      disabled={props.page === props.totalPages}
+    >
+      <Link
+        to={`${l.pathname}?page=${props.totalPages}`}
+        className={cn(
+          "",
+          props.page === props.totalPages && "pointer-events-none opacity-50"
+        )}
+      >
+        <Icons.ChevronsRight />
+      </Link>
+    </TooltipComponent>
   );
 }
 
