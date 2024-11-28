@@ -1,4 +1,3 @@
-import type {Location} from "@remix-run/react";
 import type {FoodItemData} from "~/.server/db/dao/food-items";
 import {CategoryFilter} from "~/components/food-items/filters/category";
 import {SearchInput} from "~/components/food-items/search-input";
@@ -6,6 +5,7 @@ import {Icons} from "~/components/icons";
 import {Button} from "~/components/ui/button";
 import {Popover, PopoverContent, PopoverTrigger} from "~/components/ui/popover";
 import {List} from "~/components/ui/typography";
+
 import {useToggle} from "~/lib/hooks/toggle";
 import {exportToCsv} from "~/lib/utils";
 import {Input} from "../ui/input";
@@ -14,13 +14,13 @@ import {TooltipComponent} from "../ui/tooltip";
 
 export function Toolbar(props: {
   allFoodCategories: FoodItemData["allFoodCategories"];
-  location: Location;
+
   results: FoodItemData["results"];
 }) {
   return (
     <div className="mb-2 flex justify-between gap-2">
       <div className="flex gap-3">
-        <SearchInput location={props.location} />
+        <SearchInput />
         <CategoryFilter allFoodCategories={props.allFoodCategories} />
       </div>
       <div className="flex gap-3">

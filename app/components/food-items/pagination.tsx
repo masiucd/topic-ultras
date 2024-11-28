@@ -1,13 +1,14 @@
-import {Link, type Location} from "@remix-run/react";
+import {Link, useLocation} from "react-router";
 import {cn} from "~/lib/utils";
 import {Icons} from "../icons";
 import {TooltipComponent} from "../ui/tooltip";
 
 export function Pagination(props: {
   page: number;
-  location: Location;
+
   totalPages: number;
 }) {
+  let l = useLocation();
   return (
     <div className="flex gap-2">
       <TooltipComponent
@@ -15,7 +16,7 @@ export function Pagination(props: {
         disabled={props.page === 1}
       >
         <Link
-          to={`${props.location.pathname}?page=1`}
+          to={`${l.pathname}?page=1`}
           className={cn(
             "",
             props.page === 1 && "pointer-events-none opacity-50"
@@ -24,18 +25,14 @@ export function Pagination(props: {
           <Icons.ChevronsLeft />
         </Link>
       </TooltipComponent>
-      <PreviousLink page={props.page} location={props.location} />
-      <NextLink
-        page={props.page}
-        totalPages={props.totalPages}
-        location={props.location}
-      />
+      <PreviousLink page={props.page} />
+      <NextLink page={props.page} totalPages={props.totalPages} />
       <TooltipComponent
         content="Go to the last page"
         disabled={props.page === props.totalPages}
       >
         <Link
-          to={`${props.location.pathname}?page=${props.totalPages}`}
+          to={`${l.pathname}?page=${props.totalPages}`}
           className={cn(
             "",
             props.page === props.totalPages && "pointer-events-none opacity-50"
@@ -48,10 +45,11 @@ export function Pagination(props: {
   );
 }
 
-function PreviousLink(props: {page: number; location: Location}) {
-  let {page, location} = props;
+function PreviousLink(props: {page: number}) {
+  let {page} = props;
+  let l = useLocation();
   // TODO: Remove name param before navigating???
-  let searchParams = new URLSearchParams(location.search);
+  let searchParams = new URLSearchParams(l.search);
   if (searchParams.get("page")) {
     searchParams.delete("page");
   }
@@ -59,7 +57,7 @@ function PreviousLink(props: {page: number; location: Location}) {
   if (searchParams.get("page") === "1") {
     searchParams.delete("page");
   }
-  let url = `${location.pathname}?${searchParams.toString()}`;
+  let url = `${l.pathname}?${searchParams.toString()}`;
   let isDisabled = page < 2;
   return (
     <TooltipComponent
@@ -78,20 +76,16 @@ function PreviousLink(props: {page: number; location: Location}) {
       </Link>
     </TooltipComponent>
   );
-  // return <Link to={url}>Prev</Link>;
 }
 
-function NextLink(props: {
-  page: number;
-  totalPages: number;
-  location: Location;
-}) {
-  let {page, totalPages, location} = props;
+function NextLink(props: {page: number; totalPages: number}) {
+  let l = useLocation();
+  let {page, totalPages} = props;
   let isDisabled = page >= totalPages;
   // TODO: Remove name param before navigating???
-  let searchParams = new URLSearchParams(location.search);
+  let searchParams = new URLSearchParams(l.search);
   searchParams.set("page", (page + 1).toString());
-  let url = `${location.pathname}?${searchParams.toString()}`;
+  let url = `${l.pathname}?${searchParams.toString()}`;
   return (
     <TooltipComponent
       content={

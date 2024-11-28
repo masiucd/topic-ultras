@@ -1,21 +1,21 @@
-import {type Location, useNavigate, useSearchParams} from "@remix-run/react";
+import {useLocation, useNavigate, useSearchParams} from "react-router";
 import {Input} from "~/components/ui/input";
 
-export function SearchInput(props: {location: Location}) {
+export function SearchInput() {
   let [searchParams] = useSearchParams();
   let name = searchParams.get("name");
   let navigate = useNavigate();
-  let {location} = props;
+  let l = useLocation();
   const debouncedNavigate = debounce((value: string) => {
-    let search = new URLSearchParams(location.search);
+    let search = new URLSearchParams(l.search);
     search.set("name", value);
     if (search.get("page")) {
       search.delete("page");
     }
-    navigate(`${location.pathname}?${search.toString()}`);
+    navigate(`${l.pathname}?${search.toString()}`);
     if (value === "") {
       search.delete("name");
-      navigate(`${location.pathname}?${search.toString()}`);
+      navigate(`${l.pathname}?${search.toString()}`);
     }
   }, 300);
 

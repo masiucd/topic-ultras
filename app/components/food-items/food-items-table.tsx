@@ -1,5 +1,5 @@
-import {Link, type Location} from "@remix-run/react";
 import {useState} from "react";
+import {Link} from "react-router";
 import type {FoodItemData} from "~/.server/db/dao/food-items";
 import {FoodCategory} from "~/components/food-category";
 import {Checkbox} from "~/components/ui/checkbox";
@@ -20,9 +20,8 @@ export function FoodItems(props: {
   totalPages: number;
   totalFoodItems: number;
   results: FoodItemData["results"];
-  location: Location;
 }) {
-  let {page, totalPages, totalFoodItems, results, location} = props;
+  let {page, totalPages, totalFoodItems, results} = props;
   let [selectedFoodItems, setSelectedFoodItems] = useState<Set<number>>(
     new Set()
   );
@@ -102,7 +101,6 @@ export function FoodItems(props: {
         totalPages={totalPages}
         totalFoodItems={totalFoodItems}
         results={results}
-        location={location}
       />
     </Table>
   );
@@ -113,9 +111,8 @@ function Footer(props: {
   totalPages: number;
   totalFoodItems: number;
   results: FoodItemData["results"];
-  location: Location;
 }) {
-  let {page, totalPages, totalFoodItems, results, location} = props;
+  let {page, totalPages, totalFoodItems, results} = props;
 
   return (
     <TableFooter>
@@ -136,11 +133,7 @@ function Footer(props: {
         <TableCell colSpan={5}>
           <div className="flex items-center ">
             <SelectRows totalFoodItems={totalFoodItems} />
-            <Pagination
-              page={page}
-              location={location}
-              totalPages={totalPages}
-            />
+            <Pagination page={page} totalPages={totalPages} />
           </div>
         </TableCell>
       </TableRow>
