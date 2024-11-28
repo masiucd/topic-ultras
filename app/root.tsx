@@ -9,6 +9,7 @@ import {
 
 import type {Route} from "./+types/root";
 import stylesheet from "./app.css?url";
+import PageWrapper from "./components/page-wrapper";
 
 export const links: Route.LinksFunction = () => [
   {rel: "preconnect", href: "https://fonts.googleapis.com"},
@@ -64,13 +65,15 @@ export function ErrorBoundary({error}: Route.ErrorBoundaryProps) {
 
   return (
     <main className="container mx-auto p-4 pt-16">
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
-        <pre className="w-full overflow-x-auto p-4">
-          <code>{stack}</code>
-        </pre>
-      )}
+      <PageWrapper>
+        <h1>{message}</h1>
+        <p>{details}</p>
+        {stack && (
+          <pre className="w-full overflow-x-auto p-4">
+            <code>{stack}</code>
+          </pre>
+        )}
+      </PageWrapper>
     </main>
   );
 }

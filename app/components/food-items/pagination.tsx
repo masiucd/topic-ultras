@@ -21,13 +21,20 @@ export function Pagination(props: {
 // TODO: We need to take of consideration the total number of pages when amount of rows is changed
 function GoToFirstPage(props: {page: number}) {
   let l = useLocation();
+  let searchParams = new URLSearchParams(l.search);
+  let page = searchParams.get("page");
+  if (page !== null) {
+    searchParams.delete("page");
+  }
+  searchParams.set("page", "1");
+  let url = `${l.pathname}?${searchParams.toString()}`;
   return (
     <TooltipComponent
       content="Go to the first page"
       disabled={props.page === 1}
     >
       <Link
-        to={`${l.pathname}?page=1`}
+        to={url}
         className={cn("", props.page === 1 && "pointer-events-none opacity-50")}
       >
         <Icons.ChevronsLeft />
@@ -39,13 +46,20 @@ function GoToFirstPage(props: {page: number}) {
 // TODO: We need to take of consideration the total number of pages when amount of rows is changed
 function GoToLastPage(props: {page: number; totalPages: number}) {
   let l = useLocation();
+  let searchParams = new URLSearchParams(l.search);
+  let page = searchParams.get("page");
+  if (page !== null) {
+    searchParams.delete("page");
+  }
+  searchParams.set("page", props.totalPages.toString());
+  let url = `${l.pathname}?${searchParams.toString()}`;
   return (
     <TooltipComponent
       content="Go to the last page"
       disabled={props.page === props.totalPages}
     >
       <Link
-        to={`${l.pathname}?page=${props.totalPages}`}
+        to={url}
         className={cn(
           "",
           props.page === props.totalPages && "pointer-events-none opacity-50"
