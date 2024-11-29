@@ -1,0 +1,14 @@
+[
+  {"name": "fruit", "description": "fruits are good for you"},
+  {"name": "vegetable", "description": "vegetables are good for you"},
+  {"name": "protein", "description": "protein is good for you"},
+  {"name": "dairy", "description": "dairy is good for you"},
+  {"name": "grain", "description": "grains are good for you"},
+  {"name": "beverage", "description": "beverages are good for you"},
+  {"name": "dessert", "description": "desserts are good for you"},
+  {"name": "snack", "description": "snacks are good for you"},
+  {"name": "fast food", "description": "fast food is good for you"},
+  {"name": "junk food", "description": "junk food is good for you"},
+  {"name": "other", "description": "other is good for you"},
+  {"name": "unknown", "description": "unknown is good for you"}
+]

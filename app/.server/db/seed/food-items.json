@@ -1,0 +1,172 @@
+[
+  {
+    "name": "cheese burger",
+    "description": "a delicious cheese burger",
+    "foodCategoryId": 1
+  },
+  {
+    "name": "pizza",
+    "description": "a delicious pizza",
+    "foodCategoryId": 2
+  },
+  {
+    "name": "pasta",
+    "description": "a delicious pasta",
+    "foodCategoryId": 2
+  },
+  {
+    "name": "salad",
+    "description": "a delicious salad",
+    "foodCategoryId": 3
+  },
+  {
+    "name": "granny smith apple",
+    "description": "a delicious apple",
+    "foodCategoryId": 4
+  },
+  {
+    "name": "banana",
+    "description": "a delicious banana",
+    "foodCategoryId": 4
+  },
+  {
+    "name": "orange",
+    "description": "a delicious orange",
+    "foodCategoryId": 4
+  },
+  {
+    "name": "grapes",
+    "description": "delicious grapes",
+    "foodCategoryId": 4
+  },
+  {
+    "name": "strawberries",
+    "description": "delicious strawberries",
+    "foodCategoryId": 4
+  },
+  {
+    "name": "blueberries",
+    "description": "delicious blueberries",
+    "foodCategoryId": 4
+  },
+  {
+    "name": "chicken breast",
+    "description": "chicken breast without skin",
+    "foodCategoryId": 5
+  },
+  {
+    "name": "salmon",
+    "description": "salmon fillet",
+    "foodCategoryId": 5
+  },
+  {
+    "name": "tuna",
+    "description": "tuna fillet",
+    "foodCategoryId": 5
+  },
+  {
+    "name": "beef",
+    "description": "beef steak",
+    "foodCategoryId": 5
+  },
+  {
+    "name": "pork",
+    "description": "pork chop",
+    "foodCategoryId": 5
+  },
+  {
+    "name": "lamb",
+    "description": "lamb chop",
+    "foodCategoryId": 5
+  },
+  {
+    "name": "milk",
+    "description": "a glass of milk",
+    "foodCategoryId": 6
+  },
+  {
+    "name": "yogurt",
+    "description": "a cup of yogurt",
+    "foodCategoryId": 6
+  },
+  {
+    "name": "cheese",
+    "description": "a slice of cheese",
+    "foodCategoryId": 6
+  },
+  {
+    "name": "egg",
+    "description": "a boiled egg",
+    "foodCategoryId": 6
+  },
+  {
+    "name": "bread",
+    "description": "a slice of bread",
+    "foodCategoryId": 7
+  },
+  {
+    "name": "rice",
+    "description": "a cup of rice",
+    "foodCategoryId": 7
+  },
+  {
+    "name": "potato",
+    "description": "a boiled potato",
+    "foodCategoryId": 7
+  },
+  {
+    "name": "carrot",
+    "description": "a carrot",
+    "foodCategoryId": 8
+  },
+  {
+    "name": "broccoli",
+    "description": "a broccoli",
+    "foodCategoryId": 8
+  },
+  {
+    "name": "spinach",
+    "description": "a spinach",
+    "foodCategoryId": 8
+  },
+  {
+    "name": "tomato",
+    "description": "a tomato",
+    "foodCategoryId": 8
+  },
+  {
+    "name": "cucumber",
+    "description": "a cucumber",
+    "foodCategoryId": 8
+  },
+  {
+    "name": "avocado",
+    "description": "an avocado",
+    "foodCategoryId": 8
+  },
+  {
+    "name": "olive oil",
+    "description": "a spoon of olive oil",
+    "foodCategoryId": 9
+  },
+  {
+    "name": "butter",
+    "description": "a spoon of butter",
+    "foodCategoryId": 9
+  },
+  {
+    "name": "sugar",
+    "description": "a spoon of sugar",
+    "foodCategoryId": 9
+  },
+  {
+    "name": "honey",
+    "description": "a spoon of honey",
+    "foodCategoryId": 9
+  },
+  {
+    "name": "salt",
+    "description": "a spoon of salt",
+    "foodCategoryId": 9
+  }
+]
