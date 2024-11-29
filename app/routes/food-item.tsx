@@ -5,7 +5,7 @@ export default function FoodItemRoute({params}: Route.ComponentProps) {
   console.log("params", params);
   return (
     <div>
-      <H1>Food Item - {params["food-item"]}</H1>
+      <H1>Food Item - {params.slug}</H1>
     </div>
   );
 }
