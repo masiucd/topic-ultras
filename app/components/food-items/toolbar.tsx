@@ -1,3 +1,4 @@
+import {Link, useLocation} from "react-router";
 import type {FoodItemData} from "~/.server/db/dao/food-items";
 import {CategoryFilter} from "~/components/food-items/filters/category";
 import {SearchInput} from "~/components/food-items/search-input";
@@ -5,7 +6,6 @@ import {Icons} from "~/components/icons";
 import {Button} from "~/components/ui/button";
 import {Popover, PopoverContent, PopoverTrigger} from "~/components/ui/popover";
 import {List} from "~/components/ui/typography";
-
 import {useToggle} from "~/lib/hooks/toggle";
 import {exportToCsv} from "~/lib/utils";
 import {Input} from "../ui/input";
@@ -14,14 +14,26 @@ import {TooltipComponent} from "../ui/tooltip";
 
 export function Toolbar(props: {
   allFoodCategories: FoodItemData["allFoodCategories"];
-
   results: FoodItemData["results"];
 }) {
+  // if some filter is applied we should be able to clear them with an action
+  let {search} = useLocation();
+  let params = new URLSearchParams(search);
+  let isFilterApplied =
+    params.get("category") !== null || params.get("search") !== null;
   return (
     <div className="mb-2 flex justify-between gap-2">
       <div className="flex gap-3">
         <SearchInput />
         <CategoryFilter allFoodCategories={props.allFoodCategories} />
+        {isFilterApplied && (
+          <Button asChild>
+            <Link to="/food-items">
+              <Icons.Eraser />
+              Clear filters
+            </Link>
+          </Button>
+        )}
       </div>
       <div className="flex gap-3">
         <ExportToCsv results={props.results} />

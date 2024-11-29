@@ -9,6 +9,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   ChevronsUpDown,
+  Eraser,
   FileDown,
   type LucideProps,
   Settings2,
@@ -47,4 +48,5 @@ export const Icons = Object.freeze({
   UpDown: (props: LucideProps) => (
     <ChevronsUpDown size={ICON_SIZE} {...props} />
   ),
+  Eraser: (props: LucideProps) => <Eraser size={ICON_SIZE} {...props} />,
 });
