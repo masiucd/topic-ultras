@@ -1,3 +1,5 @@
-nutricheck.com {
-	reverse_proxy localhost:4000
+localhost:2020 {
+  bind {$ADDRESS}
+  proxy / 192.168.100.82:9000
+  tls self_signed
 }

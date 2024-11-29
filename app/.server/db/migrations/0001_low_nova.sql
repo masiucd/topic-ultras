@@ -1,1 +1,0 @@
-ALTER TABLE "food_categories" ADD COLUMN "description" varchar(255);

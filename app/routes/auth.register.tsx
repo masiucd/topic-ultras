@@ -1,7 +1,9 @@
+import {H1} from "~/components/ui/typography";
+
 export default function RegisterRoute() {
   return (
     <div>
-      <h1>Register</h1>
+      <H1>Register</H1>
     </div>
   );
 }

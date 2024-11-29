@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS "favorite_foods" (
 CREATE TABLE IF NOT EXISTS "food_categories" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" varchar(100) NOT NULL,
+	"description" varchar(255),
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
 	CONSTRAINT "food_categories_name_unique" UNIQUE("name")
