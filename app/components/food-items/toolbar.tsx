@@ -82,7 +82,7 @@ function ColumnView({
           <Icons.UpDown />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[14rem]">
+      <PopoverContent className="w-[12rem]">
         <List className="flex list-none flex-col gap-3 capitalize">
           <ColumnViewItem
             selectColumn={selectColumn}
@@ -135,10 +135,10 @@ function ColumnViewItem({
   column: Column;
 }) {
   return (
-    <li className="flex items-center justify-between">
+    <li className="flex items-center justify-between border-b pb-1">
       <label
         htmlFor={column}
-        className="cursor-pointer font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        className="cursor-pointer font-medium text-sm leading-none hover:opacity-70 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
       >
         {column}
       </label>

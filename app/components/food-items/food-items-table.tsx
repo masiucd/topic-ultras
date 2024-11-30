@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {type PropsWithChildren, useState} from "react";
 import {Link} from "react-router";
 import type {FoodItemData} from "~/.server/db/dao/food-items";
 import {FoodCategory} from "~/components/food-category";
@@ -80,7 +80,8 @@ export function FoodItems({
                 }
               />
             </TableCell>
-            {selectedColumns.has("name") && (
+
+            <Cell visible={selectedColumns.has("name")}>
               <TableCell>
                 <Link
                   className={cn(
@@ -93,27 +94,32 @@ export function FoodItems({
                   {item.foodName}
                 </Link>
               </TableCell>
-            )}
-            {selectedColumns.has("description") && (
+            </Cell>
+
+            <Cell visible={selectedColumns.has("description")}>
               <TableCell>{item.foodDescription}</TableCell>
-            )}
-            {selectedColumns.has("category") && (
+            </Cell>
+
+            <Cell visible={selectedColumns.has("category")}>
               <TableCell>
                 <FoodCategory withLink name={item.foodCategory?.name} />
               </TableCell>
-            )}
-            {selectedColumns.has("calories") && (
+            </Cell>
+            <Cell visible={selectedColumns.has("calories")}>
               <TableCell>{item.nutrients?.calories ?? "N/A"}</TableCell>
-            )}
-            {selectedColumns.has("protein") && (
+            </Cell>
+
+            <Cell visible={selectedColumns.has("protein")}>
               <TableCell>{item.nutrients?.protein ?? "N/A"}</TableCell>
-            )}
-            {selectedColumns.has("fat") && (
+            </Cell>
+
+            <Cell visible={selectedColumns.has("fat")}>
               <TableCell>{item.nutrients?.fat ?? "N/A"}</TableCell>
-            )}
-            {selectedColumns.has("carbs") && (
+            </Cell>
+
+            <Cell visible={selectedColumns.has("carbs")}>
               <TableCell>{item.nutrients?.carbs ?? "N/A"}</TableCell>
-            )}
+            </Cell>
           </TableRow>
         ))}
       </TableBody>
@@ -125,6 +131,11 @@ export function FoodItems({
       />
     </Table>
   );
+}
+
+function Cell({visible, children}: PropsWithChildren<{visible: boolean}>) {
+  if (!visible) return null;
+  return <>{children}</>;
 }
 
 function Footer(props: {
