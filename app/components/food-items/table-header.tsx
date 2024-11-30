@@ -3,20 +3,65 @@ import {Link, useLocation} from "react-router";
 import {Checkbox} from "~/components/ui/checkbox";
 import {TableHead, TableHeader, TableRow} from "~/components/ui/table";
 
-export function Header(props: {toggleAll: (checked: boolean) => void}) {
+export function Header({
+  toggleAll,
+  selectedColumns,
+}: {
+  toggleAll: (checked: boolean) => void;
+  selectedColumns: Set<string>;
+}) {
   return (
     <TableHeader>
       <TableRow>
-        <TableHead className="w-[10px]">
-          <Checkbox onCheckedChange={props.toggleAll} />
-        </TableHead>
-        <TableHead className="w-[200px]">
-          <TableHeadLink header="name">Name</TableHeadLink>
-        </TableHead>
-        <TableHead className="w-[300px]">
-          <TableHeadLink header="description">Description</TableHeadLink>
-        </TableHead>
-        <TableHead>
+        {selectedColumns.has("name") && (
+          <TableHead className="w-[10px]">
+            <Checkbox onCheckedChange={toggleAll} />
+          </TableHead>
+        )}
+
+        {selectedColumns.has("name") && (
+          <TableHead className="w-[200px]">
+            <TableHeadLink header="name">Name</TableHeadLink>
+          </TableHead>
+        )}
+
+        {selectedColumns.has("description") && (
+          <TableHead className="w-[300px]">
+            <TableHeadLink header="description">Description</TableHeadLink>
+          </TableHead>
+        )}
+
+        {selectedColumns.has("category") && (
+          <TableHead>
+            <TableHeadLink header="category">Category</TableHeadLink>
+          </TableHead>
+        )}
+
+        {selectedColumns.has("calories") && (
+          <TableHead>
+            <TableHeadLink header="calories">Calories</TableHeadLink>
+          </TableHead>
+        )}
+
+        {selectedColumns.has("protein") && (
+          <TableHead>
+            <TableHeadLink header="protein">Protein</TableHeadLink>
+          </TableHead>
+        )}
+
+        {selectedColumns.has("fat") && (
+          <TableHead>
+            <TableHeadLink header="fat">Fat</TableHeadLink>
+          </TableHead>
+        )}
+
+        {selectedColumns.has("carbs") && (
+          <TableHead>
+            <TableHeadLink header="carbs">Carbs</TableHeadLink>
+          </TableHead>
+        )}
+
+        {/* <TableHead>
           <TableHeadLink header="category">Category</TableHeadLink>
         </TableHead>
         <TableHead>
@@ -30,7 +75,7 @@ export function Header(props: {toggleAll: (checked: boolean) => void}) {
         </TableHead>
         <TableHead>
           <TableHeadLink header="carbs">Carbs</TableHeadLink>
-        </TableHead>
+        </TableHead> */}
       </TableRow>
     </TableHeader>
   );

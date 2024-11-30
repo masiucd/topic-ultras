@@ -15,13 +15,19 @@ import {SelectRows} from "./filters/rows";
 import {Pagination} from "./pagination";
 import {Header} from "./table-header";
 
-export function FoodItems(props: {
+export function FoodItems({
+  page,
+  totalPages,
+  totalFoodItems,
+  results,
+  selectedColumns,
+}: {
   page: number;
   totalPages: number;
   totalFoodItems: number;
   results: FoodItemData["results"];
+  selectedColumns: Set<string>;
 }) {
-  let {page, totalPages, totalFoodItems, results} = props;
   let [selectedFoodItems, setSelectedFoodItems] = useState<Set<number>>(
     new Set()
   );
@@ -61,7 +67,7 @@ export function FoodItems(props: {
 
   return (
     <Table title="Food items table">
-      <Header toggleAll={toggleAll} />
+      <Header toggleAll={toggleAll} selectedColumns={selectedColumns} />
       <TableBody>
         {results.map((item) => (
           <TableRow key={item.foodId}>
@@ -73,26 +79,41 @@ export function FoodItems(props: {
                 }
               />
             </TableCell>
-            <TableCell>
-              <Link
-                className={cn(
-                  item.slug
-                    ? "underline hover:no-underline hover:opacity-50"
-                    : "pointer-events-none opacity-80"
-                )}
-                to={`/food-items/${item.slug}`}
-              >
-                {item.foodName}
-              </Link>
-            </TableCell>
-            <TableCell>{item.foodDescription}</TableCell>
-            <TableCell>
-              <FoodCategory withLink name={item.foodCategory?.name} />
-            </TableCell>
-            <TableCell>{item.nutrients?.calories ?? "N/A"}</TableCell>
-            <TableCell>{item.nutrients?.protein ?? "N/A"}</TableCell>
-            <TableCell>{item.nutrients?.fat ?? "N/A"}</TableCell>
-            <TableCell>{item.nutrients?.carbs ?? "N/A"}</TableCell>
+            {selectedColumns.has("name") && (
+              <TableCell>
+                <Link
+                  className={cn(
+                    item.slug
+                      ? "underline hover:no-underline hover:opacity-50"
+                      : "pointer-events-none opacity-80"
+                  )}
+                  to={`/food-items/${item.slug}`}
+                >
+                  {item.foodName}
+                </Link>
+              </TableCell>
+            )}
+
+            {selectedColumns.has("description") && (
+              <TableCell>{item.foodDescription}</TableCell>
+            )}
+            {selectedColumns.has("category") && (
+              <TableCell>
+                <FoodCategory withLink name={item.foodCategory?.name} />
+              </TableCell>
+            )}
+            {selectedColumns.has("calories") && (
+              <TableCell>{item.nutrients?.calories ?? "N/A"}</TableCell>
+            )}
+            {selectedColumns.has("protein") && (
+              <TableCell>{item.nutrients?.protein ?? "N/A"}</TableCell>
+            )}
+            {selectedColumns.has("fat") && (
+              <TableCell>{item.nutrients?.fat ?? "N/A"}</TableCell>
+            )}
+            {selectedColumns.has("carbs") && (
+              <TableCell>{item.nutrients?.carbs ?? "N/A"}</TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

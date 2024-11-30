@@ -1,3 +1,4 @@
+import {useState} from "react";
 import {getFoodItemsData} from "~/.server/db/dao/food-items";
 import {FoodItems} from "~/components/food-items/food-items-table";
 import {Toolbar} from "~/components/food-items/toolbar";
@@ -25,9 +26,21 @@ export async function loader({request}: Route.LoaderArgs) {
   };
 }
 
+const DEFAUL_COLUMNS = [
+  "name",
+  "description",
+  "category",
+  "calories",
+  "protein",
+  "fat",
+  "carbs",
+];
 // TODO : copy url feature to share the search results
 export default function FoodItemsRoute({loaderData}: Route.ComponentProps) {
-  console.log("loaderData", loaderData);
+  let [selectedColumns, setSelectedColumns] = useState<Set<string>>(
+    new Set(DEFAUL_COLUMNS)
+  );
+
   return (
     <PageWrapper>
       <H1>Food Items</H1>
@@ -38,6 +51,18 @@ export default function FoodItemsRoute({loaderData}: Route.ComponentProps) {
         <Toolbar
           allFoodCategories={loaderData.allFoodCategories}
           results={loaderData.results}
+          selectedColumns={selectedColumns}
+          selectColumn={(column: string, checked: boolean) => {
+            setSelectedColumns((prev) => {
+              let newSet = new Set(prev);
+              if (checked) {
+                newSet.add(column);
+              } else {
+                newSet.delete(column);
+              }
+              return newSet;
+            });
+          }}
         />
         <div className="rounded-lg border-2">
           <FoodItems
@@ -45,6 +70,7 @@ export default function FoodItemsRoute({loaderData}: Route.ComponentProps) {
             totalPages={loaderData.totalPages}
             totalFoodItems={loaderData.totalFoodItems}
             results={loaderData.results}
+            selectedColumns={selectedColumns}
           />
         </div>
       </div>

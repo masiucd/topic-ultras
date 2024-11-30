@@ -13,22 +13,30 @@ import {Input} from "../ui/input";
 import {Label} from "../ui/label";
 import {TooltipComponent} from "../ui/tooltip";
 
-export function Toolbar(props: {
+export function Toolbar({
+  allFoodCategories,
+  results,
+  selectColumn,
+  selectedColumns,
+}: {
   allFoodCategories: FoodItemData["allFoodCategories"];
   results: FoodItemData["results"];
+  selectColumn: (column: string, checked: boolean) => void;
+  selectedColumns: Set<string>;
 }) {
-  // if some filter is applied we should be able to clear them with an action
-
   return (
     <div className="mb-2 flex justify-between gap-2">
       <div className="flex gap-3">
         <SearchInput />
-        <CategoryFilter allFoodCategories={props.allFoodCategories} />
+        <CategoryFilter allFoodCategories={allFoodCategories} />
         <ClearFiltersButton />
       </div>
       <div className="flex gap-3">
-        <ExportToCsv results={props.results} />
-        <ColumnView />
+        <ExportToCsv results={results} />
+        <ColumnView
+          selectColumn={selectColumn}
+          selectedColumns={selectedColumns}
+        />
       </div>
     </div>
   );
@@ -57,7 +65,13 @@ function ClearFiltersButton() {
   );
 }
 
-function ColumnView() {
+function ColumnView({
+  selectColumn,
+  selectedColumns,
+}: {
+  selectColumn: (column: string, checked: boolean) => void;
+  selectedColumns: Set<string>;
+}) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -76,7 +90,13 @@ function ColumnView() {
             >
               name
             </label>
-            <Checkbox id="name" />
+            <Checkbox
+              id="name"
+              onCheckedChange={(checked) => {
+                selectColumn("name", Boolean(checked));
+              }}
+              checked={selectedColumns.has("name")}
+            />
           </li>
           <li className="flex items-center justify-between">
             <label
@@ -85,7 +105,13 @@ function ColumnView() {
             >
               description
             </label>
-            <Checkbox id="description" />
+            <Checkbox
+              id="description"
+              onCheckedChange={(checked) => {
+                selectColumn("description", Boolean(checked));
+              }}
+              checked={selectedColumns.has("description")}
+            />
           </li>
           <li className="flex items-center justify-between">
             <label
@@ -94,7 +120,13 @@ function ColumnView() {
             >
               category
             </label>
-            <Checkbox id="category" />
+            <Checkbox
+              id="category"
+              onCheckedChange={(checked) => {
+                selectColumn("category", Boolean(checked));
+              }}
+              checked={selectedColumns.has("category")}
+            />
           </li>
           <li className="flex items-center justify-between">
             <label
@@ -103,7 +135,13 @@ function ColumnView() {
             >
               calories
             </label>
-            <Checkbox id="calories" />
+            <Checkbox
+              id="calories"
+              onCheckedChange={(checked) => {
+                selectColumn("calories", Boolean(checked));
+              }}
+              checked={selectedColumns.has("calories")}
+            />
           </li>
           <li className="flex items-center justify-between">
             <label
@@ -112,7 +150,13 @@ function ColumnView() {
             >
               protein
             </label>
-            <Checkbox id="protein" />
+            <Checkbox
+              id="protein"
+              onCheckedChange={(checked) => {
+                selectColumn("protein", Boolean(checked));
+              }}
+              checked={selectedColumns.has("protein")}
+            />
           </li>
           <li className="flex items-center justify-between">
             <label
@@ -121,7 +165,13 @@ function ColumnView() {
             >
               fat
             </label>
-            <Checkbox id="fat" />
+            <Checkbox
+              id="fat"
+              onCheckedChange={(checked) => {
+                selectColumn("fat", Boolean(checked));
+              }}
+              checked={selectedColumns.has("fat")}
+            />
           </li>
           <li className="flex items-center justify-between">
             <label
@@ -130,7 +180,13 @@ function ColumnView() {
             >
               carbs
             </label>
-            <Checkbox id="carbs" />
+            <Checkbox
+              id="carbs"
+              onCheckedChange={(checked) => {
+                selectColumn("carbs", Boolean(checked));
+              }}
+              checked={selectedColumns.has("carbs")}
+            />
           </li>
         </List>
       </PopoverContent>
