@@ -8,6 +8,7 @@ import {Popover, PopoverContent, PopoverTrigger} from "~/components/ui/popover";
 import {List} from "~/components/ui/typography";
 import {useToggle} from "~/lib/hooks/toggle";
 import {exportToCsv} from "~/lib/utils";
+import {Checkbox} from "../ui/checkbox";
 import {Input} from "../ui/input";
 import {Label} from "../ui/label";
 import {TooltipComponent} from "../ui/tooltip";
@@ -17,29 +18,42 @@ export function Toolbar(props: {
   results: FoodItemData["results"];
 }) {
   // if some filter is applied we should be able to clear them with an action
-  let {search} = useLocation();
-  let params = new URLSearchParams(search);
-  let isFilterApplied =
-    params.get("category") !== null || params.get("search") !== null;
+
   return (
     <div className="mb-2 flex justify-between gap-2">
       <div className="flex gap-3">
         <SearchInput />
         <CategoryFilter allFoodCategories={props.allFoodCategories} />
-        {isFilterApplied && (
-          <Button asChild>
-            <Link to="/food-items">
-              <Icons.Eraser />
-              Clear filters
-            </Link>
-          </Button>
-        )}
+        <ClearFiltersButton />
       </div>
       <div className="flex gap-3">
         <ExportToCsv results={props.results} />
         <ColumnView />
       </div>
     </div>
+  );
+}
+
+function ClearFiltersButton() {
+  let {search} = useLocation();
+  let params = new URLSearchParams(search);
+  let isFilterApplied =
+    params.get("category") !== null || params.get("search") !== null;
+  return (
+    <TooltipComponent content="Clear filters" disabled={!isFilterApplied}>
+      <Button
+        asChild
+        variant={isFilterApplied ? "secondary" : "outline"}
+        className={!isFilterApplied ? "opacity-50" : ""}
+        disabled={!isFilterApplied}
+        aria-description="Clear filters"
+      >
+        <Link to="/food-items">
+          <Icons.Eraser />
+          Clear filters
+        </Link>
+      </Button>
+    </TooltipComponent>
   );
 }
 
@@ -53,28 +67,70 @@ function ColumnView() {
           <Icons.UpDown />
         </Button>
       </PopoverTrigger>
-      <PopoverContent>
-        <List className="flex list-none flex-col gap-2 capitalize">
+      <PopoverContent className="w-[14rem]">
+        <List className="flex list-none flex-col gap-3 capitalize">
           <li className="flex items-center justify-between">
-            name <Icons.Check />
+            <label
+              htmlFor="name"
+              className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              name
+            </label>
+            <Checkbox id="name" />
           </li>
           <li className="flex items-center justify-between">
-            description <Icons.Check />
+            <label
+              htmlFor="description"
+              className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              description
+            </label>
+            <Checkbox id="description" />
           </li>
           <li className="flex items-center justify-between">
-            category <Icons.Check />
+            <label
+              htmlFor="category"
+              className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              category
+            </label>
+            <Checkbox id="category" />
           </li>
           <li className="flex items-center justify-between">
-            calories <Icons.Check />
+            <label
+              htmlFor="calories"
+              className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              calories
+            </label>
+            <Checkbox id="calories" />
           </li>
           <li className="flex items-center justify-between">
-            Protein <Icons.Check />
+            <label
+              htmlFor="protein"
+              className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              protein
+            </label>
+            <Checkbox id="protein" />
           </li>
           <li className="flex items-center justify-between">
-            Fat <Icons.Check />
+            <label
+              htmlFor="fat"
+              className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              fat
+            </label>
+            <Checkbox id="fat" />
           </li>
           <li className="flex items-center justify-between">
-            Carbs <Icons.Check />
+            <label
+              htmlFor="carbs"
+              className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              carbs
+            </label>
+            <Checkbox id="carbs" />
           </li>
         </List>
       </PopoverContent>
