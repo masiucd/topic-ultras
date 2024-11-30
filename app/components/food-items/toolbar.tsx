@@ -6,6 +6,7 @@ import {Icons} from "~/components/icons";
 import {Button} from "~/components/ui/button";
 import {Popover, PopoverContent, PopoverTrigger} from "~/components/ui/popover";
 import {List} from "~/components/ui/typography";
+import type {Column} from "~/lib/constants";
 import {useToggle} from "~/lib/hooks/toggle";
 import {exportToCsv} from "~/lib/utils";
 import {Checkbox} from "../ui/checkbox";
@@ -21,8 +22,8 @@ export function Toolbar({
 }: {
   allFoodCategories: FoodItemData["allFoodCategories"];
   results: FoodItemData["results"];
-  selectColumn: (column: string, checked: boolean) => void;
-  selectedColumns: Set<string>;
+  selectColumn: (column: Column, checked: boolean) => void;
+  selectedColumns: Set<Column>;
 }) {
   return (
     <div className="mb-2 flex justify-between gap-2">
@@ -69,8 +70,8 @@ function ColumnView({
   selectColumn,
   selectedColumns,
 }: {
-  selectColumn: (column: string, checked: boolean) => void;
-  selectedColumns: Set<string>;
+  selectColumn: (column: Column, checked: boolean) => void;
+  selectedColumns: Set<Column>;
 }) {
   return (
     <Popover>
@@ -83,118 +84,76 @@ function ColumnView({
       </PopoverTrigger>
       <PopoverContent className="w-[14rem]">
         <List className="flex list-none flex-col gap-3 capitalize">
-          <li className="flex items-center justify-between">
-            <label
-              htmlFor="name"
-              className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              name
-            </label>
-            <Checkbox
-              id="name"
-              onCheckedChange={(checked) => {
-                selectColumn("name", Boolean(checked));
-              }}
-              checked={selectedColumns.has("name")}
-            />
-          </li>
-          <li className="flex items-center justify-between">
-            <label
-              htmlFor="description"
-              className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              description
-            </label>
-            <Checkbox
-              id="description"
-              onCheckedChange={(checked) => {
-                selectColumn("description", Boolean(checked));
-              }}
-              checked={selectedColumns.has("description")}
-            />
-          </li>
-          <li className="flex items-center justify-between">
-            <label
-              htmlFor="category"
-              className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              category
-            </label>
-            <Checkbox
-              id="category"
-              onCheckedChange={(checked) => {
-                selectColumn("category", Boolean(checked));
-              }}
-              checked={selectedColumns.has("category")}
-            />
-          </li>
-          <li className="flex items-center justify-between">
-            <label
-              htmlFor="calories"
-              className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              calories
-            </label>
-            <Checkbox
-              id="calories"
-              onCheckedChange={(checked) => {
-                selectColumn("calories", Boolean(checked));
-              }}
-              checked={selectedColumns.has("calories")}
-            />
-          </li>
-          <li className="flex items-center justify-between">
-            <label
-              htmlFor="protein"
-              className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              protein
-            </label>
-            <Checkbox
-              id="protein"
-              onCheckedChange={(checked) => {
-                selectColumn("protein", Boolean(checked));
-              }}
-              checked={selectedColumns.has("protein")}
-            />
-          </li>
-          <li className="flex items-center justify-between">
-            <label
-              htmlFor="fat"
-              className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              fat
-            </label>
-            <Checkbox
-              id="fat"
-              onCheckedChange={(checked) => {
-                selectColumn("fat", Boolean(checked));
-              }}
-              checked={selectedColumns.has("fat")}
-            />
-          </li>
-          <li className="flex items-center justify-between">
-            <label
-              htmlFor="carbs"
-              className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              carbs
-            </label>
-            <Checkbox
-              id="carbs"
-              onCheckedChange={(checked) => {
-                selectColumn("carbs", Boolean(checked));
-              }}
-              checked={selectedColumns.has("carbs")}
-            />
-          </li>
+          <ColumnViewItem
+            selectColumn={selectColumn}
+            selectedColumns={selectedColumns}
+            column="name"
+          />
+          <ColumnViewItem
+            selectColumn={selectColumn}
+            selectedColumns={selectedColumns}
+            column="description"
+          />
+          <ColumnViewItem
+            selectColumn={selectColumn}
+            selectedColumns={selectedColumns}
+            column="category"
+          />
+          <ColumnViewItem
+            selectColumn={selectColumn}
+            selectedColumns={selectedColumns}
+            column="calories"
+          />
+          <ColumnViewItem
+            selectColumn={selectColumn}
+            selectedColumns={selectedColumns}
+            column="protein"
+          />
+          <ColumnViewItem
+            selectColumn={selectColumn}
+            selectedColumns={selectedColumns}
+            column="fat"
+          />
+          <ColumnViewItem
+            selectColumn={selectColumn}
+            selectedColumns={selectedColumns}
+            column="carbs"
+          />
         </List>
       </PopoverContent>
     </Popover>
   );
 }
 
-function ExportToCsv(props: {results: FoodItemData["results"]}) {
+function ColumnViewItem({
+  selectColumn,
+  selectedColumns,
+  column,
+}: {
+  selectColumn: (column: Column, checked: boolean) => void;
+  selectedColumns: Set<Column>;
+  column: Column;
+}) {
+  return (
+    <li className="flex items-center justify-between">
+      <label
+        htmlFor={column}
+        className="cursor-pointer font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      >
+        {column}
+      </label>
+      <Checkbox
+        id={column}
+        onCheckedChange={(checked) => {
+          selectColumn(column, Boolean(checked));
+        }}
+        checked={selectedColumns.has(column)}
+      />
+    </li>
+  );
+}
+
+function ExportToCsv({results}: {results: FoodItemData["results"]}) {
   let [isOpen, {set, off}] = useToggle(false);
   return (
     <TooltipComponent content="Export to CSV file">
@@ -216,7 +175,7 @@ function ExportToCsv(props: {results: FoodItemData["results"]}) {
               let formData = new FormData(e.currentTarget);
               let filename = formData.get("filename") as string;
               exportToCsv(
-                props.results.map(
+                results.map(
                   ({foodName, foodDescription, foodCategory, nutrients}) => ({
                     // biome-ignore lint/style/useNamingConvention: <explanation>
                     Name: foodName,

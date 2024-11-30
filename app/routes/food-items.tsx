@@ -4,7 +4,11 @@ import {FoodItems} from "~/components/food-items/food-items-table";
 import {Toolbar} from "~/components/food-items/toolbar";
 import PageWrapper from "~/components/page-wrapper";
 import {H1, Lead} from "~/components/ui/typography";
-import {DEFAULT_FOOD_ITEMS_ROWS} from "~/lib/constants";
+import {
+  type Column,
+  DEFAULT_COLUMNS,
+  DEFAULT_FOOD_ITEMS_ROWS,
+} from "~/lib/constants";
 import type {Route} from "./+types/food-items";
 
 export async function loader({request}: Route.LoaderArgs) {
@@ -14,7 +18,6 @@ export async function loader({request}: Route.LoaderArgs) {
   let rows = Number(url.searchParams.get("rows") || DEFAULT_FOOD_ITEMS_ROWS);
   let page = Number(url.searchParams.get("page")) || 1;
   let sort = url.searchParams.get("sort");
-
   return {
     ...(await getFoodItemsData({
       name,
@@ -26,19 +29,10 @@ export async function loader({request}: Route.LoaderArgs) {
   };
 }
 
-const DEFAUL_COLUMNS = [
-  "name",
-  "description",
-  "category",
-  "calories",
-  "protein",
-  "fat",
-  "carbs",
-];
 // TODO : copy url feature to share the search results
 export default function FoodItemsRoute({loaderData}: Route.ComponentProps) {
-  let [selectedColumns, setSelectedColumns] = useState<Set<string>>(
-    new Set(DEFAUL_COLUMNS)
+  let [selectedColumns, setSelectedColumns] = useState<Set<Column>>(
+    new Set(DEFAULT_COLUMNS)
   );
 
   return (
@@ -52,7 +46,7 @@ export default function FoodItemsRoute({loaderData}: Route.ComponentProps) {
           allFoodCategories={loaderData.allFoodCategories}
           results={loaderData.results}
           selectedColumns={selectedColumns}
-          selectColumn={(column: string, checked: boolean) => {
+          selectColumn={(column: Column, checked: boolean) => {
             setSelectedColumns((prev) => {
               let newSet = new Set(prev);
               if (checked) {

@@ -10,6 +10,7 @@ import {
   TableFooter,
   TableRow,
 } from "~/components/ui/table";
+import type {Column} from "~/lib/constants";
 import {cn} from "~/lib/utils";
 import {SelectRows} from "./filters/rows";
 import {Pagination} from "./pagination";
@@ -26,7 +27,7 @@ export function FoodItems({
   totalPages: number;
   totalFoodItems: number;
   results: FoodItemData["results"];
-  selectedColumns: Set<string>;
+  selectedColumns: Set<Column>;
 }) {
   let [selectedFoodItems, setSelectedFoodItems] = useState<Set<number>>(
     new Set()
@@ -93,7 +94,6 @@ export function FoodItems({
                 </Link>
               </TableCell>
             )}
-
             {selectedColumns.has("description") && (
               <TableCell>{item.foodDescription}</TableCell>
             )}
