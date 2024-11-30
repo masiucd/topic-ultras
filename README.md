@@ -1,98 +1,52 @@
-# Welcome to React Router!
+# Nutri Check (Not done yet)!! Still in development
 
-A modern, production-ready template for building full-stack React applications using React Router.
+## Description
 
-## Features
+_Nutri Check_ is a web application that allows users to search for food items and get detailed nutritional information about them. Users can also create an account and save their favorite food items to their profile. The application uses the USDA FoodData Central API to get the nutritional information of food items. The application is built using Flask, a Python web framework, and uses SQLite as the database to store user information and saved food items.
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+Note that the application is still in development and some features may not be fully implemented yet.
 
-## Getting Started
+## Installation
 
-### Installation
-
-Install the dependencies:
+1. Clone the repository
 
 ```bash
-npm install
+git clone git@github.com:masiucd/nutri-check.git
 ```
 
-### Development
-
-Start the development server with HMR:
+2. Install the required packages
 
 ```bash
-npm run dev
+pnpm install
 ```
 
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
+3. Run the application
 
 ```bash
-npm run build
+pnpm dev
 ```
 
-## Deployment
+### Tools
 
-### Docker Deployment
+- [React (Frontend)](https://reactjs.org/)
+- [Node.js (Backend)](https://nodejs.org/)
+- [React-router (Fullstack Framework)](https://reactrouter.com/)
+- [PostgreSQL (Database)](https://www.postgresql.org/)
+- [Drizzle ORM (Database ORM)](https://drizzle.dev/)
+- [Tailwind CSS (Styling)](https://tailwindcss.com/)
+- [Docker (Containerization)](https://www.docker.com/)
+- [Docker Compose (Container Orchestration)](https://docs.docker.com/compose/)
+- [Vitest (Testing)](https://vitejs.dev/guide/features.html#testing)
+- [Biome-js (toolchain, linting, formatting)](https://biomejs.dev/)
 
-This template includes three Dockerfiles optimized for different package managers:
+### Usage
 
-- `Dockerfile` - for npm
-- `Dockerfile.pnpm` - for pnpm
-- `Dockerfile.bun` - for bun
+1. Search for food items by typing the name of the food item in the search bar and clicking the "Search" button.
+2. Click on a food item to view detailed nutritional information.
+3. Create an account to save your favorite food items to your profile.
+4. Log in to your account to view your saved food items.
+5. Log out of your account to log out of the application.
 
-To build and run using Docker:
+### Contributing
 
-```bash
-# For npm
-docker build -t my-app .
-
-# For pnpm
-docker build -f Dockerfile.pnpm -t my-app .
-
-# For bun
-docker build -f Dockerfile.bun -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+Contributions are welcome! Please feel free to submit a pull request or open an issue if you find a bug or have a feature request.
