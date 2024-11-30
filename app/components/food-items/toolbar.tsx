@@ -5,25 +5,26 @@ import {SearchInput} from "~/components/food-items/search-input";
 import {Icons} from "~/components/icons";
 import {Button} from "~/components/ui/button";
 import {Popover, PopoverContent, PopoverTrigger} from "~/components/ui/popover";
-import {List} from "~/components/ui/typography";
 import type {Column} from "~/lib/constants";
 import {useToggle} from "~/lib/hooks/toggle";
 import {exportToCsv} from "~/lib/utils";
-import {Checkbox} from "../ui/checkbox";
 import {Input} from "../ui/input";
 import {Label} from "../ui/label";
 import {TooltipComponent} from "../ui/tooltip";
+import {ColumnView} from "./column-view";
 
 export function Toolbar({
   allFoodCategories,
   results,
   selectColumn,
   selectedColumns,
+  toggleAllColumns,
 }: {
   allFoodCategories: FoodItemData["allFoodCategories"];
   results: FoodItemData["results"];
   selectColumn: (column: Column, checked: boolean) => void;
   selectedColumns: Set<Column>;
+  toggleAllColumns: (checked: boolean) => void;
 }) {
   return (
     <div className="mb-2 flex justify-between gap-2">
@@ -37,6 +38,7 @@ export function Toolbar({
         <ColumnView
           selectColumn={selectColumn}
           selectedColumns={selectedColumns}
+          toggleAllColumns={toggleAllColumns}
         />
       </div>
     </div>
@@ -63,93 +65,6 @@ function ClearFiltersButton() {
         </Link>
       </Button>
     </TooltipComponent>
-  );
-}
-
-function ColumnView({
-  selectColumn,
-  selectedColumns,
-}: {
-  selectColumn: (column: Column, checked: boolean) => void;
-  selectedColumns: Set<Column>;
-}) {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button className="flex items-center gap-1" variant="outline">
-          <Icons.Settings />
-          Columns view
-          <Icons.UpDown />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[12rem]">
-        <List className="flex list-none flex-col gap-3 capitalize">
-          <ColumnViewItem
-            selectColumn={selectColumn}
-            selectedColumns={selectedColumns}
-            column="name"
-          />
-          <ColumnViewItem
-            selectColumn={selectColumn}
-            selectedColumns={selectedColumns}
-            column="description"
-          />
-          <ColumnViewItem
-            selectColumn={selectColumn}
-            selectedColumns={selectedColumns}
-            column="category"
-          />
-          <ColumnViewItem
-            selectColumn={selectColumn}
-            selectedColumns={selectedColumns}
-            column="calories"
-          />
-          <ColumnViewItem
-            selectColumn={selectColumn}
-            selectedColumns={selectedColumns}
-            column="protein"
-          />
-          <ColumnViewItem
-            selectColumn={selectColumn}
-            selectedColumns={selectedColumns}
-            column="fat"
-          />
-          <ColumnViewItem
-            selectColumn={selectColumn}
-            selectedColumns={selectedColumns}
-            column="carbs"
-          />
-        </List>
-      </PopoverContent>
-    </Popover>
-  );
-}
-
-function ColumnViewItem({
-  selectColumn,
-  selectedColumns,
-  column,
-}: {
-  selectColumn: (column: Column, checked: boolean) => void;
-  selectedColumns: Set<Column>;
-  column: Column;
-}) {
-  return (
-    <li className="flex items-center justify-between border-b pb-1">
-      <label
-        htmlFor={column}
-        className="cursor-pointer font-medium text-sm leading-none hover:opacity-70 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-      >
-        {column}
-      </label>
-      <Checkbox
-        id={column}
-        onCheckedChange={(checked) => {
-          selectColumn(column, Boolean(checked));
-        }}
-        checked={selectedColumns.has(column)}
-      />
-    </li>
   );
 }
 

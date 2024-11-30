@@ -57,6 +57,13 @@ export default function FoodItemsRoute({loaderData}: Route.ComponentProps) {
               return newSet;
             });
           }}
+          toggleAllColumns={(checked: boolean) => {
+            if (checked) {
+              setSelectedColumns(new Set(DEFAULT_COLUMNS));
+            } else {
+              setSelectedColumns(new Set());
+            }
+          }}
         />
         <div className="rounded-lg border-2">
           <FoodItems
