@@ -17,5 +17,13 @@ export default defineConfig({
       plugins: [tailwindcss, autoprefixer],
     },
   },
-  plugins: [reactRouter(), tsconfigPaths()],
+  plugins: [
+    process.env.NODE_ENV === "test" ? null : reactRouter(),
+    tsconfigPaths(),
+  ],
+  test: {
+    // include: ["**/*.test.tsx", "**/*.test.ts"],
+    environment: "jsdom",
+    globals: true,
+  },
 });
