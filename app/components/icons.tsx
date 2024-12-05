@@ -12,11 +12,12 @@ import {
   Eraser,
   FileDown,
   type LucideProps,
+  Search,
   Settings2,
   Tag,
 } from "lucide-react";
 
-export const ICON_SIZE = 16;
+export const ICON_SIZE = 18;
 
 export const Icons = Object.freeze({
   RightArrow: (props: LucideProps) => (
@@ -49,4 +50,5 @@ export const Icons = Object.freeze({
     <ChevronsUpDown size={ICON_SIZE} {...props} />
   ),
   Eraser: (props: LucideProps) => <Eraser size={ICON_SIZE} {...props} />,
+  Search: (props: LucideProps) => <Search size={ICON_SIZE} {...props} />,
 });
