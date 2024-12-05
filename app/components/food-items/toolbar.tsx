@@ -92,17 +92,11 @@ function ExportToCsv({results}: {results: FoodItemData["results"]}) {
               exportToCsv(
                 results.map(
                   ({foodName, foodDescription, foodCategory, nutrients}) => ({
-                    // biome-ignore lint/style/useNamingConvention: <explanation>
                     Name: foodName,
-                    // biome-ignore lint/style/useNamingConvention: <explanation>
                     Description: foodDescription,
-                    // biome-ignore lint/style/useNamingConvention: <explanation>
                     Category: foodCategory?.name ?? "N/A/",
-                    // biome-ignore lint/style/useNamingConvention: <explanation>
                     Calories: nutrients?.calories ?? "N/A",
-                    // biome-ignore lint/style/useNamingConvention: <explanation>
                     Protein: nutrients?.protein ?? "N/A",
-                    // biome-ignore lint/style/useNamingConvention: <explanation>
                     Fat: nutrients?.fat ?? "N/A",
                   })
                 ),
