@@ -6,25 +6,19 @@ import {SearchInput} from "~/components/food-items/search-input";
 import {Icons} from "~/components/icons";
 import {Button} from "~/components/ui/button";
 import {Popover, PopoverContent, PopoverTrigger} from "~/components/ui/popover";
-import type {Column} from "~/lib/constants";
 import {useToggle} from "~/lib/hooks/toggle";
-import {cn, exportToCsv} from "~/lib/utils";
+import {cn, exportToCsv, pluralize} from "~/lib/utils";
 import {selectedFoodItemsAtom} from "~/state/food-items/atoms";
 import {Input} from "../ui/input";
 import {Label} from "../ui/label";
 import {TooltipComponent} from "../ui/tooltip";
+import {P, Strong} from "../ui/typography";
 import {ColumnView} from "./column-view";
 
 export function Toolbar({
   allFoodCategories,
-  selectColumn,
-  selectedColumns,
-  toggleAllColumns,
 }: {
   allFoodCategories: FoodItemData["allFoodCategories"];
-  selectColumn: (column: Column, checked: boolean) => void;
-  selectedColumns: Set<Column>;
-  toggleAllColumns: (checked: boolean) => void;
 }) {
   return (
     <div className="mb-2 flex justify-between gap-2">
@@ -35,11 +29,7 @@ export function Toolbar({
       </div>
       <div className="flex gap-3">
         <ExportToCsv />
-        <ColumnView
-          selectColumn={selectColumn}
-          selectedColumns={selectedColumns}
-          toggleAllColumns={toggleAllColumns}
-        />
+        <ColumnView />
       </div>
     </div>
   );
@@ -125,14 +115,21 @@ function ExportToCsv() {
           }}
         >
           <fieldset className="flex flex-col gap-2">
+            {selectedFoodItems.length > 0 && (
+              <P>
+                <Strong>{selectedFoodItems.length}</Strong> food{" "}
+                {pluralize(selectedFoodItems.length, "item")} selected for
+                export.
+              </P>
+            )}
+
             <div className="grid w-full max-w-sm items-center gap-1.5">
               <Label htmlFor="filename" className={disabledStyles}>
-                Export to CSV
+                Filename
               </Label>
               <Input
                 type="filename"
                 id="filename"
-                placeholder="Filename"
                 name="filename"
                 className={disabledStyles}
               />

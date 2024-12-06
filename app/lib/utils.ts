@@ -23,3 +23,11 @@ export function exportToCsv<
   let csv = generateCsv(csvConfig)(data);
   return download(csvConfig)(csv);
 }
+
+export function pluralize(
+  count: number,
+  singular: string,
+  plural = `${singular}s`
+) {
+  return count === 1 ? singular : plural;
+}

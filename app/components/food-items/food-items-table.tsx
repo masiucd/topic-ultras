@@ -1,4 +1,4 @@
-import {useAtom} from "jotai";
+import {useAtom, useAtomValue} from "jotai";
 import type {PropsWithChildren} from "react";
 import {Link} from "react-router";
 import type {FoodItemData} from "~/.server/db/dao/food-items";
@@ -11,9 +11,11 @@ import {
   TableFooter,
   TableRow,
 } from "~/components/ui/table";
-import type {Column} from "~/lib/constants";
 import {cn} from "~/lib/utils";
-import {selectedFoodItemsAtom} from "~/state/food-items/atoms";
+import {
+  selectedColumnsAtom,
+  selectedFoodItemsAtom,
+} from "~/state/food-items/atoms";
 import {SelectRows} from "./filters/rows";
 import {Pagination} from "./pagination";
 import {Header} from "./table-header";
@@ -23,20 +25,16 @@ export function FoodItems({
   totalPages,
   totalFoodItems,
   results,
-  selectedColumns,
 }: {
   page: number;
   totalPages: number;
   totalFoodItems: number;
   results: FoodItemData["results"];
-  selectedColumns: Set<Column>;
 }) {
   let [selectedFoodItems, setSelectedFoodItems] = useAtom(
     selectedFoodItemsAtom
   );
-
-  // let  selectedColumns =  useAtomValue(selectedColumnsAtom);
-  // let  [selectedColumns,setSelectedColumns] =  useAtom(selectedColumnsAtom);
+  let selectedColumns = useAtomValue(selectedColumnsAtom);
 
   const toggleAll = (checked: boolean) => {
     if (checked) {

@@ -1,20 +1,34 @@
+import {useAtom, useAtomValue} from "jotai";
 import type {PropsWithChildren, ReactNode} from "react";
 import {Icons} from "~/components/icons";
 import {Button} from "~/components/ui/button";
 import {Popover, PopoverContent, PopoverTrigger} from "~/components/ui/popover";
 import {List} from "~/components/ui/typography";
 import {type Column, DEFAULT_COLUMNS} from "~/lib/constants";
+import {selectedColumnsAtom} from "~/state/food-items/atoms";
 import {Checkbox} from "../ui/checkbox";
 
-export function ColumnView({
-  selectColumn,
-  selectedColumns,
-  toggleAllColumns,
-}: {
-  selectColumn: (column: Column, checked: boolean) => void;
-  selectedColumns: Set<Column>;
-  toggleAllColumns: (checked: boolean) => void;
-}) {
+export function ColumnView() {
+  let [selectedColumns, setSelectedColumns] = useAtom(selectedColumnsAtom);
+
+  let selectColumn = (column: Column, checked: boolean) => {
+    setSelectedColumns((prev) => {
+      let newSet = new Set(prev);
+      if (checked) {
+        newSet.add(column);
+      } else {
+        newSet.delete(column);
+      }
+      return newSet;
+    });
+  };
+  let toggleAllColumns = (checked: boolean) => {
+    if (checked) {
+      setSelectedColumns(new Set(DEFAULT_COLUMNS));
+    } else {
+      setSelectedColumns(new Set());
+    }
+  };
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -28,38 +42,31 @@ export function ColumnView({
         <List className="flex list-none flex-col gap-3 capitalize">
           <ColumnViewItem
             selectColumn={selectColumn}
-            selectedColumns={selectedColumns}
-            column="name"
+            column={DEFAULT_COLUMNS[0]}
           />
           <ColumnViewItem
             selectColumn={selectColumn}
-            selectedColumns={selectedColumns}
-            column="description"
+            column={DEFAULT_COLUMNS[1]}
           />
           <ColumnViewItem
             selectColumn={selectColumn}
-            selectedColumns={selectedColumns}
-            column="category"
+            column={DEFAULT_COLUMNS[2]}
           />
           <ColumnViewItem
             selectColumn={selectColumn}
-            selectedColumns={selectedColumns}
-            column="calories"
+            column={DEFAULT_COLUMNS[3]}
           />
           <ColumnViewItem
             selectColumn={selectColumn}
-            selectedColumns={selectedColumns}
-            column="protein"
+            column={DEFAULT_COLUMNS[4]}
           />
           <ColumnViewItem
             selectColumn={selectColumn}
-            selectedColumns={selectedColumns}
-            column="fat"
+            column={DEFAULT_COLUMNS[5]}
           />
           <ColumnViewItem
             selectColumn={selectColumn}
-            selectedColumns={selectedColumns}
-            column="carbs"
+            column={DEFAULT_COLUMNS[6]}
           />
           <AllColumnItem
             checked={selectedColumns.size === DEFAULT_COLUMNS.length}
@@ -73,13 +80,12 @@ export function ColumnView({
 
 function ColumnViewItem({
   selectColumn,
-  selectedColumns,
   column,
 }: {
   selectColumn: (column: Column, checked: boolean) => void;
-  selectedColumns: Set<Column>;
   column: Column;
 }) {
+  let selectedColumns = useAtomValue(selectedColumnsAtom);
   return (
     <ListItem>
       <ListItemLabel htmlFor={column}>{column}</ListItemLabel>
