@@ -1,4 +1,5 @@
-import {type PropsWithChildren, useState} from "react";
+import {useAtom} from "jotai";
+import type {PropsWithChildren} from "react";
 import {Link} from "react-router";
 import type {FoodItemData} from "~/.server/db/dao/food-items";
 import {FoodCategory} from "~/components/food-category";
@@ -12,6 +13,7 @@ import {
 } from "~/components/ui/table";
 import type {Column} from "~/lib/constants";
 import {cn} from "~/lib/utils";
+import {selectedFoodItemsAtom} from "~/state/food-items/atoms";
 import {SelectRows} from "./filters/rows";
 import {Pagination} from "./pagination";
 import {Header} from "./table-header";
@@ -29,21 +31,18 @@ export function FoodItems({
   results: FoodItemData["results"];
   selectedColumns: Set<Column>;
 }) {
-  let [selectedFoodItems, setSelectedFoodItems] = useState<Set<number>>(
-    new Set()
+  let [selectedFoodItems, setSelectedFoodItems] = useAtom(
+    selectedFoodItemsAtom
   );
+
+  // let  selectedColumns =  useAtomValue(selectedColumnsAtom);
+  // let  [selectedColumns,setSelectedColumns] =  useAtom(selectedColumnsAtom);
 
   const toggleAll = (checked: boolean) => {
     if (checked) {
-      setSelectedFoodItems((p) => {
-        let newSet = new Set(p);
-        for (const item of results) {
-          newSet.add(item.foodId);
-        }
-        return newSet;
-      });
+      setSelectedFoodItems(results);
     } else {
-      setSelectedFoodItems(new Set());
+      setSelectedFoodItems([]);
     }
   };
 
@@ -52,17 +51,14 @@ export function FoodItems({
     item: FoodItemData["results"][number]
   ) => {
     if (checked) {
-      setSelectedFoodItems((p) => {
-        let newSet = new Set(p);
-        newSet.add(item.foodId);
-        return newSet;
+      setSelectedFoodItems((prev) => {
+        return [...prev, item];
       });
     } else {
-      setSelectedFoodItems((p) => {
-        let newSet = new Set(p);
-        newSet.delete(item.foodId);
-        return newSet;
-      });
+      let newSelectedFoodItems = selectedFoodItems.filter(
+        (selectedItem) => selectedItem.foodId !== item.foodId
+      );
+      setSelectedFoodItems(newSelectedFoodItems);
     }
   };
 
@@ -74,7 +70,9 @@ export function FoodItems({
           <TableRow key={item.foodId}>
             <TableCell>
               <Checkbox
-                checked={selectedFoodItems.has(item.foodId)}
+                checked={selectedFoodItems.some(
+                  (selectedItem) => selectedItem.foodId === item.foodId
+                )}
                 onCheckedChange={(checked) =>
                   onCheckedChange(Boolean(checked), item)
                 }
