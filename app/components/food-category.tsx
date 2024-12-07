@@ -9,22 +9,19 @@ type Props = {
   withLink?: boolean;
 };
 
-export function FoodCategory(props: Props) {
-  if (props.withLink) {
+export function FoodCategory({withLink, name, variant, className}: Props) {
+  if (withLink) {
     return (
-      <Link to={`/food-categories/${props.name}`}>
-        <Badge
-          className={cn("uppercase", props.className)}
-          variant={props.variant}
-        >
-          {props.name ?? "N/A"}
+      <Link to={`/food-categories/${name}`}>
+        <Badge className={cn("uppercase", className)} variant={variant}>
+          {name ?? "N/A"}
         </Badge>
       </Link>
     );
   }
   return (
-    <Badge className={cn("uppercase", props.className)} variant={props.variant}>
-      {props.name ?? "N/A"}
+    <Badge className={cn("uppercase", className)} variant={variant}>
+      {name ?? "N/A"}
     </Badge>
   );
 }
