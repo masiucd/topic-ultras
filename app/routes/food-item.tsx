@@ -1,13 +1,8 @@
-import {eq, sql} from "drizzle-orm";
-import {TrendingUp} from "lucide-react";
 import {Label, Pie, PieChart} from "recharts";
-import {db} from "~/.server/db";
 import {
-  foodCategories,
-  foodItems,
-  foodNutrients,
-  slugs,
-} from "~/.server/db/schema";
+  type FoodItemBySlug,
+  getFoodItemBySLug,
+} from "~/.server/db/dao/food-items";
 import {FoodCategory} from "~/components/food-category";
 import PageWrapper from "~/components/page-wrapper";
 import {
@@ -43,40 +38,6 @@ export function meta({params}: Route.MetaArgs) {
   ];
 }
 
-async function getFoodItemBySLug(slug: string) {
-  try {
-    let results = await db
-      .select({
-        id: foodItems.id,
-        name: foodItems.name,
-        description: foodItems.description,
-        category: foodCategories.name,
-        nutrients: {
-          calories: sql<number>`${foodNutrients.calories}`,
-          protein: sql<number>`${foodNutrients.protein}`,
-          fat: sql<number>`${foodNutrients.fat}`,
-          carbs: sql<number>`${foodNutrients.carbs}`,
-        },
-      })
-      .from(foodItems)
-      .innerJoin(slugs, eq(foodItems.id, slugs.objectId))
-      .innerJoin(
-        foodCategories,
-        eq(foodItems.foodCategoryId, foodCategories.id)
-      )
-      .leftJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
-      // TODO: and where nutrients is not null
-      .where(eq(slugs.slug, slug));
-
-    return {
-      foodItem: results.length > 0 ? results[0] : null,
-    };
-  } catch (error) {
-    console.error(error);
-    return {foodItem: null};
-  }
-}
-
 export async function loader({params}: Route.LoaderArgs) {
   return await getFoodItemBySLug(params.slug);
 }
@@ -101,9 +62,7 @@ export default function FoodItemRoute({
   );
 }
 
-type FoodItem = Awaited<ReturnType<typeof getFoodItemBySLug>>["foodItem"];
-
-function FoodCard({foodItem}: {foodItem: NonNullable<FoodItem>}) {
+function FoodCard({foodItem}: {foodItem: NonNullable<FoodItemBySlug>}) {
   return (
     <Card className="flex flex-col">
       <CardHeader className="">
@@ -165,30 +124,30 @@ function FoodCard({foodItem}: {foodItem: NonNullable<FoodItem>}) {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          <P>Food nutrients for - {foodItem.name}</P>
         </div>
         <div className="text-muted-foreground leading-none">
-          Showing total foodNutrient for the last 6 months
+          <P>Total calories and nutrients per 100g of {foodItem.name}</P>
         </div>
       </CardFooter>
     </Card>
   );
 }
 
-const CHART_DATA = (nutrients: NonNullable<FoodItem>["nutrients"]) => [
+const CHART_DATA = (nutrients: NonNullable<FoodItemBySlug>["nutrients"]) => [
   {
     browser: "carbs",
-    foodNutrient: Number(nutrients?.carbs),
+    foodNutrient: nutrients?.carbs,
     fill: "var(--color-carbs)",
   },
   {
     browser: "protein",
-    foodNutrient: Number(nutrients?.protein),
+    foodNutrient: nutrients?.protein,
     fill: "var(--color-protein)",
   },
   {
     browser: "fat",
-    foodNutrient: Number(nutrients?.fat),
+    foodNutrient: nutrients?.fat,
     fill: "var(--color-fat)",
   },
 ];

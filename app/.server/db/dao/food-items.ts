@@ -84,5 +84,41 @@ export async function getFoodItemsData({
     };
   }
 }
-
 export type FoodItemData = Awaited<ReturnType<typeof getFoodItemsData>>;
+
+export async function getFoodItemBySLug(slug: string) {
+  try {
+    let results = await db
+      .select({
+        id: foodItems.id,
+        name: foodItems.name,
+        description: foodItems.description,
+        category: foodCategories.name,
+        nutrients: {
+          calories: sql<number>`${foodNutrients.calories}`.mapWith(Number),
+          protein: sql<number>`${foodNutrients.protein}`.mapWith(Number),
+          fat: sql<number>`${foodNutrients.fat}`.mapWith(Number),
+          carbs: sql<number>`${foodNutrients.carbs}`.mapWith(Number),
+        },
+      })
+      .from(foodItems)
+      .innerJoin(slugs, eq(foodItems.id, slugs.objectId))
+      .innerJoin(
+        foodCategories,
+        eq(foodItems.foodCategoryId, foodCategories.id)
+      )
+      .leftJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
+      // TODO: and where nutrients is not null
+      .where(eq(slugs.slug, slug));
+
+    return {
+      foodItem: results.length > 0 ? results[0] : null,
+    };
+  } catch (error) {
+    console.error(error);
+    return {foodItem: null};
+  }
+}
+export type FoodItemBySlug = Awaited<
+  ReturnType<typeof getFoodItemBySLug>
+>["foodItem"];
