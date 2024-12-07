@@ -107,8 +107,7 @@ export async function getFoodItemBySLug(slug: string) {
         foodCategories,
         eq(foodItems.foodCategoryId, foodCategories.id)
       )
-      .leftJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
-      // TODO: and where nutrients is not null
+      .innerJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
       .where(eq(slugs.slug, slug));
 
     return {

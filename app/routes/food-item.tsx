@@ -19,7 +19,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "~/components/ui/chart";
-import {P, Strong} from "~/components/ui/typography";
+import {H2, P, Strong} from "~/components/ui/typography";
 import type {Route} from "./+types/food-item";
 
 export function meta({params}: Route.MetaArgs) {
@@ -55,7 +55,10 @@ export default function FoodItemRoute({
             <FoodCard foodItem={foodItem} />
           </div>
         ) : (
-          <P>Food item not found with slug: {params.slug}</P>
+          <H2>
+            Either the slug is incorrect or the food nutrients are not set for
+            the food item {params.slug}.
+          </H2>
         )}
       </section>
     </PageWrapper>
