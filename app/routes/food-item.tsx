@@ -1,4 +1,6 @@
-import {eq} from "drizzle-orm";
+import {eq, sql} from "drizzle-orm";
+import {TrendingUp} from "lucide-react";
+import {Label, Pie, PieChart} from "recharts";
 import {db} from "~/.server/db";
 import {
   foodCategories,
@@ -7,9 +9,7 @@ import {
   slugs,
 } from "~/.server/db/schema";
 import {FoodCategory} from "~/components/food-category";
-import {Icons} from "~/components/icons";
 import PageWrapper from "~/components/page-wrapper";
-import {Button} from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -18,7 +18,13 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import {P, Span} from "~/components/ui/typography";
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "~/components/ui/chart";
+import {P, Strong} from "~/components/ui/typography";
 import type {Route} from "./+types/food-item";
 
 export function meta({params}: Route.MetaArgs) {
@@ -46,10 +52,10 @@ async function getFoodItemBySLug(slug: string) {
         description: foodItems.description,
         category: foodCategories.name,
         nutrients: {
-          calories: foodNutrients.calories,
-          protein: foodNutrients.protein,
-          fat: foodNutrients.fat,
-          carbs: foodNutrients.carbs,
+          calories: sql<number>`${foodNutrients.calories}`,
+          protein: sql<number>`${foodNutrients.protein}`,
+          fat: sql<number>`${foodNutrients.fat}`,
+          carbs: sql<number>`${foodNutrients.carbs}`,
         },
       })
       .from(foodItems)
@@ -59,6 +65,7 @@ async function getFoodItemBySLug(slug: string) {
         eq(foodItems.foodCategoryId, foodCategories.id)
       )
       .leftJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
+      // TODO: and where nutrients is not null
       .where(eq(slugs.slug, slug));
 
     return {
@@ -79,7 +86,6 @@ export default function FoodItemRoute({
   loaderData,
 }: Route.ComponentProps) {
   let {foodItem} = loaderData;
-
   return (
     <PageWrapper>
       <section className="mx-auto my-10 grid w-full max-w-[80rem] gap-8">
@@ -99,92 +105,18 @@ type FoodItem = Awaited<ReturnType<typeof getFoodItemBySLug>>["foodItem"];
 
 function FoodCard({foodItem}: {foodItem: NonNullable<FoodItem>}) {
   return (
-    <Card>
-      <CardHeader>
+    <Card className="flex flex-col">
+      <CardHeader className="">
         <CardTitle className="flex items-center justify-between">
-          <Span>{foodItem.name}</Span>
+          <Strong>{foodItem.name} </Strong>
           <FoodCategory name={foodItem.category} withLink />
         </CardTitle>
-        <CardDescription>{foodItem.description}.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="grid w-full items-center gap-4">
-          <FoodData />
-        </div>
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        {/* TODO: Only for admins */}
-        <Button variant="outline">
-          <Icons.Edit />
-          Edit{" "}
-        </Button>
-        {/* <Button>Deploy</Button> */}
-      </CardFooter>
-    </Card>
-  );
-}
-
-("use client");
-
-import {TrendingUp} from "lucide-react";
-import * as React from "react";
-import {Label, Pie, PieChart} from "recharts";
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "~/components/ui/chart";
-
-const CHART_DATA = [
-  {browser: "chrome", visitors: 275, fill: "var(--color-chrome)"},
-  {browser: "safari", visitors: 200, fill: "var(--color-safari)"},
-  {browser: "firefox", visitors: 287, fill: "var(--color-firefox)"},
-  {browser: "edge", visitors: 173, fill: "var(--color-edge)"},
-  {browser: "other", visitors: 190, fill: "var(--color-other)"},
-];
-
-const CHART_CONFIG = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
-    color: "hsl(var(--chart-1))",
-  },
-  safari: {
-    label: "Safari",
-    color: "hsl(var(--chart-2))",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
-  },
-} satisfies ChartConfig;
-
-export function FoodData() {
-  const totalVisitors = React.useMemo(() => {
-    return CHART_DATA.reduce((acc, curr) => acc + curr.visitors, 0);
-  }, []);
-
-  return (
-    <Card className="flex flex-col">
-      <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>{foodItem.description}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={CHART_CONFIG}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square max-h-[350px]"
         >
           <PieChart>
             <ChartTooltip
@@ -192,8 +124,8 @@ export function FoodData() {
               content={<ChartTooltipContent hideLabel />}
             />
             <Pie
-              data={CHART_DATA}
-              dataKey="visitors"
+              data={CHART_DATA(foodItem.nutrients)}
+              dataKey="foodNutrient"
               nameKey="browser"
               innerRadius={60}
               strokeWidth={5}
@@ -213,14 +145,14 @@ export function FoodData() {
                           y={viewBox.cy}
                           className="fill-foreground font-bold text-3xl"
                         >
-                          {totalVisitors.toLocaleString()}
+                          {foodItem.nutrients?.calories}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Calories / 100g
                         </tspan>
                       </text>
                     );
@@ -236,9 +168,45 @@ export function FoodData() {
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
         <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 months
+          Showing total foodNutrient for the last 6 months
         </div>
       </CardFooter>
     </Card>
   );
 }
+
+const CHART_DATA = (nutrients: NonNullable<FoodItem>["nutrients"]) => [
+  {
+    browser: "carbs",
+    foodNutrient: Number(nutrients?.carbs),
+    fill: "var(--color-carbs)",
+  },
+  {
+    browser: "protein",
+    foodNutrient: Number(nutrients?.protein),
+    fill: "var(--color-protein)",
+  },
+  {
+    browser: "fat",
+    foodNutrient: Number(nutrients?.fat),
+    fill: "var(--color-fat)",
+  },
+];
+
+const CHART_CONFIG = {
+  foodNutrient: {
+    label: "Visitors",
+  },
+  carbs: {
+    label: "Carbs",
+    color: "hsl(var(--chart-1))",
+  },
+  protein: {
+    label: "Protein",
+    color: "hsl(var(--chart-2))",
+  },
+  fat: {
+    label: "Fat",
+    color: "hsl(var(--chart-3))",
+  },
+} satisfies ChartConfig;
