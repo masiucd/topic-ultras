@@ -12,6 +12,7 @@ import {
   Eraser,
   FileDown,
   type LucideProps,
+  Pen,
   Search,
   Settings2,
   Tag,
@@ -43,6 +44,7 @@ export const Icons = Object.freeze({
   ChevronsRight: (props: LucideProps) => (
     <ChevronsRight size={ICON_SIZE} {...props} />
   ),
+  Edit: (props: LucideProps) => <Pen size={ICON_SIZE} {...props} />,
   Category: (props: LucideProps) => <Tag size={ICON_SIZE} {...props} />,
   Download: (props: LucideProps) => <FileDown size={ICON_SIZE} {...props} />,
   Settings: (props: LucideProps) => <Settings2 size={ICON_SIZE} {...props} />,
