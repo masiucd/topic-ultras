@@ -1,6 +1,6 @@
 import {db} from "~/.server/db";
 import {foodCategories} from "~/.server/db/schema";
-import {List} from "~/components/ui/typography";
+import {List, Span} from "~/components/ui/typography";
 import type {Route} from "./+types/categories";
 
 export async function loader() {
@@ -24,7 +24,10 @@ export default function CategoriesRoute({loaderData}: Route.ComponentProps) {
       <h1>Categories</h1>
       <List>
         {loaderData.map((category) => (
-          <li key={category.id}>{category.name}</li>
+          <li key={category.id}>
+            <Span>{category.name}</Span>
+            {/* view food for food categories */}
+          </li>
         ))}
       </List>
     </div>

@@ -12,7 +12,7 @@ type Props = {
 export function FoodCategory({withLink, name, variant, className}: Props) {
   if (withLink) {
     return (
-      <Link to={`/food-categories/${name}`}>
+      <Link to={`/food-categories/${name?.toLowerCase()}`}>
         <Badge className={cn("uppercase", className)} variant={variant}>
           {name ?? "N/A"}
         </Badge>
