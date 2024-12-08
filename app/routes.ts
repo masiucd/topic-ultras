@@ -23,7 +23,10 @@ export default [
 
     ...prefix("food-categories", [
       index("routes/food-categories/categories.tsx"),
-      route(":category", "routes/food-categories/category.tsx"),
+      layout("routes/food-categories/layout.tsx", [
+        route(":category", "routes/food-categories/category.tsx"),
+        route(":category/food-items", "routes/food-categories/food-items.tsx"),
+      ]),
     ]),
   ]),
 ] satisfies RouteConfig;
