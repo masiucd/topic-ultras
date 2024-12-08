@@ -1,47 +1,23 @@
-import {eq} from "drizzle-orm";
-import {Link} from "react-router";
-import {db} from "~/.server/db";
-import {foodCategories} from "~/.server/db/schema";
-import {H1, P} from "~/components/ui/typography";
-import type {Route} from "./+types/category";
+import {Link, useOutletContext} from "react-router";
+import type {FoodCategoryData} from "~/.server/db/dao/food-categories";
+import {Span} from "~/components/ui/typography";
 
-export async function loader({params}: Route.LoaderArgs) {
-  try {
-    let results = await db
-      .select()
-      .from(foodCategories)
-      .where(eq(foodCategories.name, params.category));
-    return {
-      foodCategory: results.length > 0 ? results[0] : null,
-    };
-  } catch (error) {
-    console.error(error);
-    return {foodCategory: null};
-  }
-}
+export default function CategoryRoute() {
+  let ctx = useOutletContext<{foodCategory: FoodCategoryData}>();
 
-export default function CategoryRoute({loaderData}: Route.ComponentProps) {
-  let {foodCategory} = loaderData;
-  if (foodCategory === null) {
-    return <H1>Category not found</H1>;
-  }
   return (
     <div>
-      <div>
+      {ctx.foodCategory && (
         <div>
-          <H1>Food category - {foodCategory.name}</H1>
-          {foodCategory.description !== null && (
-            <P>{foodCategory.description}</P>
-          )}
+          <Link
+            to={`/food-categories/${ctx.foodCategory?.name}/food-items`}
+            className="underline transition-all duration-150 hover:opacity-45"
+          >
+            View all food items for category -{" "}
+            <Span className="capitalize">{ctx.foodCategory?.name}</Span>
+          </Link>
         </div>
-
-        <Link
-          to={`/food-categories/${foodCategory.name}/food-items`}
-          className="underline transition-all duration-150 hover:opacity-45"
-        >
-          View all food items for this category
-        </Link>
-      </div>
+      )}
     </div>
   );
 }

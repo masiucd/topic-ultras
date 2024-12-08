@@ -1,3 +1,4 @@
+import {Link} from "react-router";
 import {db} from "~/.server/db";
 import {foodCategories} from "~/.server/db/schema";
 import {List, Span} from "~/components/ui/typography";
@@ -25,7 +26,9 @@ export default function CategoriesRoute({loaderData}: Route.ComponentProps) {
       <List>
         {loaderData.map((category) => (
           <li key={category.id}>
-            <Span>{category.name}</Span>
+            <Link to={`/food-categories/${category.name}`}>
+              <Span>{category.name}</Span>
+            </Link>
             {/* view food for food categories */}
           </li>
         ))}

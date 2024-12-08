@@ -31,3 +31,7 @@ export function pluralize(
 ) {
   return count === 1 ? singular : plural;
 }
+
+export function capitilizeFirstLetter(input: string) {
+  return input.charAt(0).toUpperCase() + input.slice(1);
+}
