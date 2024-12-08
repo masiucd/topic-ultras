@@ -3,6 +3,7 @@
   "formatter": {
     "enabled": true
   },
+
   "organizeImports": {
     "enabled": true
   },
@@ -29,7 +30,8 @@
     "enabled": true,
     "rules": {
       "suspicious": {
-        "noArrayIndexKey": "error"
+        "noArrayIndexKey": "error",
+        "noConsoleLog": "warn"
       },
 
       "recommended": true,
@@ -63,6 +65,7 @@
           "level": "warn",
           "fix": "safe"
         },
+
         "useNamingConvention": {
           "level": "info",
           "options": {
