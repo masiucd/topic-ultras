@@ -1,9 +1,6 @@
 import {Link, NavLink} from "react-router";
-import {db} from "~/.server/db";
-import {foodItems} from "~/.server/db/schema";
 import PageWrapper from "~/components/page-wrapper";
 import {H1, List, P} from "~/components/ui/typography";
-import type {Route} from "../+types/root";
 
 export function meta() {
   return [
@@ -12,20 +9,7 @@ export function meta() {
   ];
 }
 
-export async function loader({params}: Route.LoaderArgs) {
-  let xs = await db.select({id: foodItems.id}).from(foodItems);
-  return [
-    {
-      status: 200,
-      props: {xs, params},
-    },
-  ];
-}
-
-export default function HomeRoute({loaderData}: Route.ComponentProps) {
-  let xs = loaderData;
-  console.log("xs", xs);
-
+export default function HomeRoute() {
   return (
     <PageWrapper>
       <H1>Nutri check</H1>

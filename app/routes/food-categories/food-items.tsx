@@ -1,10 +1,12 @@
-export async function loader() {
-  // todo get all food items for a food category
+import type {Route} from "./+types/category";
 
-  return [];
+export async function loader({params}: Route.LoaderArgs) {
+  return params.category ? params.category : null;
 }
 
-export default function FoodItemsForFoodCategoryRoute() {
+export default function FoodItemsForFoodCategoryRoute({
+  loaderData,
+}: Route.ComponentProps) {
   return (
     <div>
       <h1>Food items for category - TODO</h1>
