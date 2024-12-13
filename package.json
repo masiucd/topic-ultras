@@ -15,7 +15,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:migrateV2": "cross-env-shell DB_MIGRATION=true tsx app/.server/db/migrate.ts",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "clean": "rm -rf node_node_modules && pnpm install"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.1.3",
