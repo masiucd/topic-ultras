@@ -15,10 +15,10 @@ export default function MainLayout() {
                 <Link to="/food-items">food-items</Link>
               </li>
               <li>
-                <Link to="/auth/login">Login</Link>
+                <Link to="/login">Login</Link>
               </li>
               <li>
-                <Link to="/auth/register">Register</Link>
+                <Link to="/register">Register</Link>
               </li>
             </ul>
           </nav>
