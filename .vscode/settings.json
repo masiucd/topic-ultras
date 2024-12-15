@@ -8,5 +8,13 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports.biome": "explicit"
   },
-  "typescript.preferences.preferTypeOnlyAutoImports": true
+  "typescript.preferences.preferTypeOnlyAutoImports": true,
+  "javascript.preferences.autoImportFileExcludePatterns": [
+    "@radix-ui/*",
+    "drizzle-orm/mysql-core"
+  ],
+  "typescript.preferences.autoImportFileExcludePatterns": [
+    "@radix-ui/*",
+    "drizzle-orm/mysql-core"
+  ]
 }
