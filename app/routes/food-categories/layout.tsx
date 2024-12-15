@@ -4,6 +4,7 @@ import {H1, P} from "~/components/ui/typography";
 import type {Route} from "./+types/layout";
 
 export async function loader({params}: Route.LoaderArgs) {
+  console.log("params", params);
   if (params.category) {
     return {
       foodCategory: await getFoodCategory(params.category),
@@ -26,7 +27,7 @@ export default function FoodCategoriesLayout({
   }
 
   return (
-    <div>
+    <div className="bg-red-500">
       <div>
         <H1>Food category - {foodCategory.name}</H1>
         {foodCategory.description !== null && <P>{foodCategory.description}</P>}
