@@ -3,14 +3,21 @@ import {getFoodCategory} from "~/.server/db/dao/food-categories";
 import {H1, P} from "~/components/ui/typography";
 import type {Route} from "./+types/layout";
 
+export function headers(_: Route.HeadersArgs) {
+  return {
+    "Content-Security-Policy": "default-src 'self'",
+    "Cache-Control": "max-age=3600",
+  };
+}
+
 export async function loader({params}: Route.LoaderArgs) {
-  console.log("params", params);
   if (params.category) {
     return {
       foodCategory: await getFoodCategory(params.category),
       param: params.category,
     };
   }
+
   return {
     foodCategory: null,
     param: params.category,

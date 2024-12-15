@@ -1,12 +1,19 @@
 import {eq} from "drizzle-orm";
+import {Link} from "react-router";
 import {db} from "~/.server/db";
 import {foodCategories, foodItems} from "~/.server/db/schema";
+import {H3} from "~/components/ui/typography";
 import type {Route} from "./+types/food-items";
+
+export function headers(_: Route.HeadersArgs) {
+  return {
+    "Cache-Control": "max-age=60",
+  };
+}
 
 export async function loader({params}: Route.LoaderArgs) {
   try {
     let results = await db
-
       .select({
         foodId: foodItems.id,
         foodName: foodItems.name,
@@ -20,6 +27,7 @@ export async function loader({params}: Route.LoaderArgs) {
       )
       .where(eq(foodCategories.name, params.category))
       .orderBy(foodItems.name);
+
     return {
       foodItems: results,
       category: params.category,
@@ -38,8 +46,13 @@ export default function FoodItemsForFoodCategoryRoute({
   let data = loaderData;
 
   return (
-    <div>
-      <h1>Food items for category - TODO</h1>
+    <section>
+      <div>
+        <H3>Food items for category - {data.category}</H3>
+        <Link to={`/food-categories/${data.category}`}>
+          Go back to category
+        </Link>
+      </div>
 
       <ul>
         {data.foodItems.length > 0 ? (
@@ -52,6 +65,6 @@ export default function FoodItemsForFoodCategoryRoute({
           <li>No food items found for category - {data.category}</li>
         )}
       </ul>
-    </div>
+    </section>
   );
 }

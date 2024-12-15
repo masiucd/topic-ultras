@@ -20,6 +20,7 @@ export function makeCsvFile<
 
   writeFile(fileName, csvBuffer, (err) => {
     if (err) throw err;
+    // biome-ignore lint/suspicious/noConsoleLog: <explanation>
     console.log("file saved: ", fileName);
   });
 }
