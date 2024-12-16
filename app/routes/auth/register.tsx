@@ -30,7 +30,10 @@ export async function action({request}: Route.ActionArgs) {
     return {
       status: 400,
       data: {
-        error: result.error.errors,
+        error: {
+          type: "form",
+          message: `Invalid form data \n${result.error.errors}`,
+        },
       },
     };
   }
@@ -39,7 +42,10 @@ export async function action({request}: Route.ActionArgs) {
     return {
       status: 400,
       data: {
-        error: "Passwords do not match",
+        error: {
+          type: "password",
+          message: "Passwords do not match",
+        },
       },
     };
   }
@@ -55,7 +61,10 @@ export async function action({request}: Route.ActionArgs) {
     return {
       status: 400,
       data: {
-        error: "User already exists",
+        error: {
+          type: "email",
+          message: "Wrong credentials",
+        },
       },
     };
   }
@@ -67,11 +76,16 @@ export async function action({request}: Route.ActionArgs) {
     password: hashedPassword,
   });
 
-  return redirect("/login");
+  redirect("/login");
+  return {
+    status: 200,
+    data: {
+      error: null,
+    },
+  };
 }
 
 export default function RegisterRoute({actionData}: Route.ComponentProps) {
-  console.log("actionData", actionData);
   return (
     <div>
       <aside className="mb-10 flex flex-col gap-1">
@@ -93,10 +107,16 @@ export default function RegisterRoute({actionData}: Route.ComponentProps) {
             <div>
               <Label htmlFor="email">Email</Label>
               <Input type="email" id="email" required name="email" />
+              {actionData?.data.error?.type === "email" && (
+                <p className="text-red-500">{actionData.data.error.message}</p>
+              )}
             </div>
             <div>
               <Label htmlFor="password">Password</Label>
               <Input type="password" id="password" required name="password" />
+              {actionData?.data.error?.type === "password" && (
+                <p className="text-red-500">{actionData.data.error.message}</p>
+              )}
             </div>
             <div>
               <Label htmlFor="confirm-password">Confirm Password</Label>
@@ -106,8 +126,16 @@ export default function RegisterRoute({actionData}: Route.ComponentProps) {
                 required
                 name="confirm-password"
               />
+              {actionData?.data.error?.type === "password" && (
+                <p className="text-red-500">{actionData.data.error.message}</p>
+              )}
             </div>
             <Button type="submit">Register</Button>
+            <div>
+              {actionData?.data.error?.type === "form" && (
+                <p className="text-red-500">{actionData.data.error.message}</p>
+              )}
+            </div>
           </fieldset>
         </Form>
       </div>
