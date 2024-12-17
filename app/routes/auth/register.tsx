@@ -1,12 +1,15 @@
 import {eq} from "drizzle-orm";
-import {Form, Link, redirect} from "react-router";
+import type {PropsWithChildren} from "react";
+import {Link, redirect, useFetcher} from "react-router";
 import {z} from "zod";
 import {db} from "~/.server/db";
 import {users} from "~/.server/db/schema";
 import {hashPassword} from "~/.server/utils/password";
+import PageWrapper from "~/components/page-wrapper";
 import {Button} from "~/components/ui/button";
 import {Input} from "~/components/ui/input";
-import {H1, Label, Lead} from "~/components/ui/typography";
+import {H1, Label, Lead, P} from "~/components/ui/typography";
+import {cn} from "~/lib/utils";
 import type {Route} from "./+types/register";
 
 let RegisterSchema = z.object({
@@ -86,59 +89,83 @@ export async function action({request}: Route.ActionArgs) {
 }
 
 export default function RegisterRoute({actionData}: Route.ComponentProps) {
-  return (
-    <div>
-      <aside className="mb-10 flex flex-col gap-1">
-        <H1>Register as a new user</H1>
-        <Lead>
-          Already have an account?{" "}
-          <Link
-            className="underline transition-all duration-150 hover:opacity-45"
-            to="/login"
-          >
-            Login
-          </Link>
-        </Lead>
-      </aside>
+  let fetcher = useFetcher();
+  let busy = fetcher.state !== "idle";
 
-      <div>
-        <Form method="post">
-          <fieldset className="flex flex-col gap-2 p-2 shadow-2xl md:max-w-3xl">
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <Input type="email" id="email" required name="email" />
-              {actionData?.data.error?.type === "email" && (
-                <p className="text-red-500">{actionData.data.error.message}</p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="password">Password</Label>
-              <Input type="password" id="password" required name="password" />
-              {actionData?.data.error?.type === "password" && (
-                <p className="text-red-500">{actionData.data.error.message}</p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="confirm-password">Confirm Password</Label>
-              <Input
-                type="password"
-                id="confirm-password"
-                required
-                name="confirm-password"
-              />
-              {actionData?.data.error?.type === "password" && (
-                <p className="text-red-500">{actionData.data.error.message}</p>
-              )}
-            </div>
-            <Button type="submit">Register</Button>
-            <div>
+  return (
+    <PageWrapper>
+      <div className="flex flex-col items-center">
+        <Title />
+
+        <div className="flex w-full max-w-2xl justify-center ">
+          <fetcher.Form method="post" className="w-full" action="/register">
+            <fieldset className="flex flex-col gap-2 p-2 shadow-2xl md:max-w-3xl">
+              <FormGroup>
+                <Label htmlFor="email">Email</Label>
+                <Input type="email" id="email" required name="email" />
+                {actionData?.data.error?.type === "email" && (
+                  <ErrorMessage message={actionData.data.error.message} />
+                )}
+              </FormGroup>
+              <FormGroup>
+                <Label htmlFor="password">Password</Label>
+                <Input type="password" id="password" required name="password" />
+                {actionData?.data.error?.type === "password" && (
+                  <ErrorMessage message={actionData.data.error.message} />
+                )}
+              </FormGroup>
+              <FormGroup>
+                <Label htmlFor="confirm-password">Confirm Password</Label>
+                <Input
+                  type="password"
+                  id="confirm-password"
+                  required
+                  name="confirm-password"
+                />
+                {actionData?.data.error?.type === "password" && (
+                  <ErrorMessage message={actionData.data.error.message} />
+                )}
+              </FormGroup>
+              <Button
+                type="submit"
+                aria-disabled={busy}
+                className={cn(busy && "cursor-not-allowed opacity-50")}
+              >
+                {busy ? "Registering..." : "Register"}
+              </Button>
+
               {actionData?.data.error?.type === "form" && (
-                <p className="text-red-500">{actionData.data.error.message}</p>
+                <ErrorMessage message={actionData.data.error.message} />
               )}
-            </div>
-          </fieldset>
-        </Form>
+            </fieldset>
+          </fetcher.Form>
+        </div>
       </div>
-    </div>
+    </PageWrapper>
   );
+}
+
+function Title() {
+  return (
+    <aside className="mb-10 flex flex-col gap-1">
+      <H1>Register as a new user</H1>
+      <Lead>
+        Already have an account?{" "}
+        <Link
+          className="underline transition-all duration-150 hover:opacity-45"
+          to="/login"
+        >
+          Login
+        </Link>
+      </Lead>
+    </aside>
+  );
+}
+
+function ErrorMessage({message}: {message: string}) {
+  return <P className="text-red-500">{message}</P>;
+}
+
+function FormGroup({children}: PropsWithChildren) {
+  return <div className="flex flex-col gap-2">{children}</div>;
 }
