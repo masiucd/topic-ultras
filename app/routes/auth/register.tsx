@@ -1,9 +1,10 @@
 import {eq} from "drizzle-orm";
 import type {PropsWithChildren} from "react";
-import {Form, Link} from "react-router";
+import {Form, Link, redirect} from "react-router";
 import {z} from "zod";
 import {db} from "~/.server/db";
 import {users} from "~/.server/db/schema";
+import {hashPassword} from "~/.server/utils/password";
 import PageWrapper from "~/components/page-wrapper";
 import {Button} from "~/components/ui/button";
 import {Input} from "~/components/ui/input";
@@ -77,30 +78,25 @@ export async function action({request}: Route.ActionArgs) {
           type: "email",
           message: "Wrong credentials",
         },
+        formValues: {
+          email: email?.toString(),
+          password: password?.toString(),
+          confirmPassword: confirmPassword?.toString(),
+        },
       },
     };
   }
-  return null;
+  let hashedPassword = await hashPassword(result.data.password);
 
-  // let hashedPassword = await hashPassword(result.data.password);
+  await db.insert(users).values({
+    email: result.data.email,
+    password: hashedPassword,
+  });
 
-  // await db.insert(users).values({
-  //   email: result.data.email,
-  //   password: hashedPassword,
-  // });
-
-  // redirect("/login");
-  // return {
-  //   status: 200,
-  //   data: {
-  //     error: null,
-  //   },
-  // };
+  return redirect("/login");
 }
 
 export default function RegisterRoute({actionData}: Route.ComponentProps) {
-  console.log(actionData);
-
   return (
     <PageWrapper>
       <div className="flex flex-col items-center">
