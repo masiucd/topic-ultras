@@ -1,15 +1,13 @@
 import {eq} from "drizzle-orm";
 import type {PropsWithChildren} from "react";
-import {Link, redirect, useFetcher} from "react-router";
+import {Form, Link} from "react-router";
 import {z} from "zod";
 import {db} from "~/.server/db";
 import {users} from "~/.server/db/schema";
-import {hashPassword} from "~/.server/utils/password";
 import PageWrapper from "~/components/page-wrapper";
 import {Button} from "~/components/ui/button";
 import {Input} from "~/components/ui/input";
-import {H1, Label, Lead, P} from "~/components/ui/typography";
-import {cn} from "~/lib/utils";
+import {H1, Label, Lead, Muted, P} from "~/components/ui/typography";
 import type {Route} from "./+types/register";
 
 let RegisterSchema = z.object({
@@ -18,10 +16,10 @@ let RegisterSchema = z.object({
   confirmPassword: z.string().min(6),
 });
 
-export async function loader() {
-  // TODO: check if user is logged in - if user is logged in, redirect to home page / dashboard
-  return {};
-}
+// export async function loader() {
+//   // TODO: check if user is logged in - if user is logged in, redirect to home page / dashboard
+//   return {};
+// }
 
 export async function action({request}: Route.ActionArgs) {
   let formData = await request.formData();
@@ -30,12 +28,18 @@ export async function action({request}: Route.ActionArgs) {
   let confirmPassword = formData.get("confirm-password");
   let result = RegisterSchema.safeParse({email, password, confirmPassword});
   if (!result.success) {
+    console.error(result.error.errors);
     return {
       status: 400,
       data: {
         error: {
           type: "form",
-          message: `Invalid form data \n${result.error.errors}`,
+          message: "Invalid form data",
+        },
+        formValues: {
+          email: email?.toString(),
+          password: password?.toString(),
+          confirmPassword: confirmPassword?.toString(),
         },
       },
     };
@@ -48,6 +52,11 @@ export async function action({request}: Route.ActionArgs) {
         error: {
           type: "password",
           message: "Passwords do not match",
+        },
+        formValues: {
+          email: email?.toString(),
+          password: password?.toString(),
+          confirmPassword: confirmPassword?.toString(),
         },
       },
     };
@@ -71,26 +80,26 @@ export async function action({request}: Route.ActionArgs) {
       },
     };
   }
+  return null;
 
-  let hashedPassword = await hashPassword(result.data.password);
+  // let hashedPassword = await hashPassword(result.data.password);
 
-  await db.insert(users).values({
-    email: result.data.email,
-    password: hashedPassword,
-  });
+  // await db.insert(users).values({
+  //   email: result.data.email,
+  //   password: hashedPassword,
+  // });
 
-  redirect("/login");
-  return {
-    status: 200,
-    data: {
-      error: null,
-    },
-  };
+  // redirect("/login");
+  // return {
+  //   status: 200,
+  //   data: {
+  //     error: null,
+  //   },
+  // };
 }
 
 export default function RegisterRoute({actionData}: Route.ComponentProps) {
-  let fetcher = useFetcher();
-  let busy = fetcher.state !== "idle";
+  console.log(actionData);
 
   return (
     <PageWrapper>
@@ -98,18 +107,32 @@ export default function RegisterRoute({actionData}: Route.ComponentProps) {
         <Title />
 
         <div className="flex w-full max-w-2xl justify-center ">
-          <fetcher.Form method="post" className="w-full" action="/register">
+          <Form method="post" className="w-full" action="/register">
             <fieldset className="flex flex-col gap-2 p-2 shadow-2xl md:max-w-3xl">
               <FormGroup>
                 <Label htmlFor="email">Email</Label>
-                <Input type="email" id="email" required name="email" />
+                <Input
+                  type="email"
+                  id="email"
+                  required
+                  name="email"
+                  defaultValue={actionData?.data.formValues.email}
+                />
                 {actionData?.data.error?.type === "email" && (
                   <ErrorMessage message={actionData.data.error.message} />
                 )}
               </FormGroup>
               <FormGroup>
-                <Label htmlFor="password">Password</Label>
-                <Input type="password" id="password" required name="password" />
+                <Label htmlFor="password" className="flex items-center gap-2">
+                  Password <Muted>(min 6 characters)</Muted>
+                </Label>
+                <Input
+                  type="password"
+                  id="password"
+                  required
+                  name="password"
+                  defaultValue={actionData?.data.formValues.password}
+                />
                 {actionData?.data.error?.type === "password" && (
                   <ErrorMessage message={actionData.data.error.message} />
                 )}
@@ -121,24 +144,19 @@ export default function RegisterRoute({actionData}: Route.ComponentProps) {
                   id="confirm-password"
                   required
                   name="confirm-password"
+                  defaultValue={actionData?.data.formValues.confirmPassword}
                 />
                 {actionData?.data.error?.type === "password" && (
                   <ErrorMessage message={actionData.data.error.message} />
                 )}
               </FormGroup>
-              <Button
-                type="submit"
-                aria-disabled={busy}
-                className={cn(busy && "cursor-not-allowed opacity-50")}
-              >
-                {busy ? "Registering..." : "Register"}
-              </Button>
+              <Button type="submit">Register</Button>
 
               {actionData?.data.error?.type === "form" && (
                 <ErrorMessage message={actionData.data.error.message} />
               )}
             </fieldset>
-          </fetcher.Form>
+          </Form>
         </div>
       </div>
     </PageWrapper>
