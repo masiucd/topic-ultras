@@ -12,7 +12,7 @@ export async function action({request}: Route.ActionArgs) {
   });
 }
 
-export async function loader({request}: Route.LoaderArgs) {
+export async function loader() {
   return redirect("/login");
 }
 

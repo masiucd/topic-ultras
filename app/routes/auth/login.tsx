@@ -1,8 +1,7 @@
 import {Form, Link, redirect} from "react-router";
-import {z} from "zod";
-import {getUserByEmail, getUserById} from "~/.server/db/dao/users";
+import {login} from "~/.server/biz/login";
+import {getUserById} from "~/.server/db/dao/users";
 import {authSession} from "~/.server/sessions";
-import {comparePassword} from "~/.server/utils/password";
 import {ErrorMessage, FormGroup} from "~/components/form";
 import {Button} from "~/components/ui/button";
 import {Input} from "~/components/ui/input";
@@ -15,11 +14,6 @@ export function meta() {
     {name: "description", content: "Login into your account"},
   ];
 }
-
-let LoingSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-});
 
 export async function loader({request}: Route.LoaderArgs) {
   let {getSession} = authSession();
@@ -43,60 +37,19 @@ export async function action({request}: Route.ActionArgs) {
   let formData = await request.formData();
   let email = formData.get("email");
   let password = formData.get("password");
-  let result = LoingSchema.safeParse({email, password});
-  if (!result.success) {
-    return {
-      status: 400,
-      data: {
-        error: {
-          type: "form",
-          message: "Invalid form data",
-        },
-        formValues: {
-          email: email?.toString(),
-          password: password?.toString(),
-        },
-      },
-    };
-  }
-  let user = await getUserByEmail(result.data.email);
+
+  let result = await login(email, password, () => {
+    session.flash("error", "Invalid credentials");
+  });
+
   let {getSession, commitSession} = authSession();
   let session = await getSession(request.headers.get("cookie"));
-  if (!user) {
-    session.flash("error", "In{valid credentials");
-    return {
-      status: 400,
-      data: {
-        error: {
-          type: "email",
-          message: "Invalid credentials",
-        },
-        formValues: {
-          email: email?.toString(),
-          password: password?.toString(),
-        },
-      },
-    };
-  }
-  let ok = await comparePassword(result.data.password, user.password);
-  if (!ok) {
-    return {
-      status: 400,
-      data: {
-        error: {
-          type: "password",
-          message: "Invalid credentials",
-        },
-        formValues: {
-          email: email?.toString(),
-          password: password?.toString(),
-        },
-      },
-    };
+
+  if (!result.data.user) {
+    return result.data;
   }
 
-  session.set("userId", user.id.toString());
-
+  session.set("userId", result.data.user.id.toString());
   return redirect("/dashboard", {
     headers: {
       "Set-Cookie": await commitSession(session),
@@ -118,10 +71,10 @@ export default function LoginRoute({actionData}: Route.ComponentProps) {
                 id="email"
                 required
                 name="email"
-                defaultValue={actionData?.data.formValues.email}
+                defaultValue={actionData?.formValues.email}
               />
-              {actionData?.data.error?.type === "email" && (
-                <ErrorMessage message={actionData.data.error.message} />
+              {actionData?.error?.type === "email" && (
+                <ErrorMessage message={actionData?.error.message} />
               )}
             </FormGroup>
             <FormGroup>
@@ -134,15 +87,15 @@ export default function LoginRoute({actionData}: Route.ComponentProps) {
                 required
                 name="password"
                 min={6}
-                defaultValue={actionData?.data.formValues.password}
+                defaultValue={actionData?.formValues.password}
               />
-              {actionData?.data.error?.type === "password" && (
-                <ErrorMessage message={actionData.data.error.message} />
+              {actionData?.error?.type === "password" && (
+                <ErrorMessage message={actionData?.error.message} />
               )}
             </FormGroup>
             <Button type="submit">Login</Button>
-            {actionData?.data.error?.type === "form" && (
-              <ErrorMessage message={actionData.data.error.message} />
+            {actionData?.error?.type === "form" && (
+              <ErrorMessage message={actionData?.error.message} />
             )}
           </fieldset>
         </Form>
