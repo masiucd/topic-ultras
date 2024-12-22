@@ -1,99 +1,34 @@
-import {eq} from "drizzle-orm";
-import type {PropsWithChildren} from "react";
 import {Form, Link, redirect} from "react-router";
-import {z} from "zod";
-import {db} from "~/.server/db";
-import {users} from "~/.server/db/schema";
-import {hashPassword} from "~/.server/utils/password";
+import {register} from "~/.server/biz/register";
+import {ErrorMessage, FormGroup} from "~/components/form";
 import PageWrapper from "~/components/page-wrapper";
 import {Button} from "~/components/ui/button";
 import {Input} from "~/components/ui/input";
-import {H1, Label, Lead, Muted, P} from "~/components/ui/typography";
+import {H1, Label, Lead, Muted} from "~/components/ui/typography";
 import type {Route} from "./+types/register";
 
-let RegisterSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-  confirmPassword: z.string().min(6),
-});
+export function meta() {
+  return [
+    {title: "Nutri check | Register"},
+    {name: "description", content: "Register as a new user"},
+  ];
+}
 
-// export async function loader() {
-//   // TODO: check if user is logged in - if user is logged in, redirect to home page / dashboard
-//   return {};
-// }
+export async function loader() {
+  // TODO: check if user is logged in - if user is logged in, redirect to home page / dashboard
+  return {};
+}
 
 export async function action({request}: Route.ActionArgs) {
   let formData = await request.formData();
   let email = formData.get("email");
   let password = formData.get("password");
   let confirmPassword = formData.get("confirm-password");
-  let result = RegisterSchema.safeParse({email, password, confirmPassword});
-  if (!result.success) {
-    console.error(result.error.errors);
-    return {
-      status: 400,
-      data: {
-        error: {
-          type: "form",
-          message: "Invalid form data",
-        },
-        formValues: {
-          email: email?.toString(),
-          password: password?.toString(),
-          confirmPassword: confirmPassword?.toString(),
-        },
-      },
-    };
+  let result = await register({email, password, confirmPassword});
+  if (result.status === 201) {
+    return redirect("/login");
   }
-
-  if (result.data.password !== result.data.confirmPassword) {
-    return {
-      status: 400,
-      data: {
-        error: {
-          type: "password",
-          message: "Passwords do not match",
-        },
-        formValues: {
-          email: email?.toString(),
-          password: password?.toString(),
-          confirmPassword: confirmPassword?.toString(),
-        },
-      },
-    };
-  }
-  let r = await db
-    .select({
-      id: users.id,
-      email: users.email,
-    })
-    .from(users)
-    .where(eq(users.email, result.data.email));
-
-  if (r.length > 0) {
-    return {
-      status: 400,
-      data: {
-        error: {
-          type: "email",
-          message: "Wrong credentials",
-        },
-        formValues: {
-          email: email?.toString(),
-          password: password?.toString(),
-          confirmPassword: confirmPassword?.toString(),
-        },
-      },
-    };
-  }
-  let hashedPassword = await hashPassword(result.data.password);
-
-  await db.insert(users).values({
-    email: result.data.email,
-    password: hashedPassword,
-  });
-
-  return redirect("/login");
+  return result;
 }
 
 export default function RegisterRoute({actionData}: Route.ComponentProps) {
@@ -127,6 +62,7 @@ export default function RegisterRoute({actionData}: Route.ComponentProps) {
                   id="password"
                   required
                   name="password"
+                  min={6}
                   defaultValue={actionData?.data.formValues.password}
                 />
                 {actionData?.data.error?.type === "password" && (
@@ -140,6 +76,7 @@ export default function RegisterRoute({actionData}: Route.ComponentProps) {
                   id="confirm-password"
                   required
                   name="confirm-password"
+                  min={6}
                   defaultValue={actionData?.data.formValues.confirmPassword}
                 />
                 {actionData?.data.error?.type === "password" && (
@@ -174,12 +111,4 @@ function Title() {
       </Lead>
     </aside>
   );
-}
-
-function ErrorMessage({message}: {message: string}) {
-  return <P className="text-red-500">{message}</P>;
-}
-
-function FormGroup({children}: PropsWithChildren) {
-  return <div className="flex flex-col gap-2">{children}</div>;
 }

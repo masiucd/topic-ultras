@@ -1,7 +1,23 @@
-import {Link, Outlet} from "react-router";
+import {Form, Link, Outlet} from "react-router";
+import {getUserById} from "~/.server/db/dao/users";
+import {authSession} from "~/.server/sessions";
+import {Button} from "~/components/ui/button";
 import {Strong} from "~/components/ui/typography";
+import type {Route} from "./+types/main-layout";
 
-export default function MainLayout() {
+export async function loader({request}: Route.LoaderArgs) {
+  let {getSession} = authSession();
+  let session = await getSession(request.headers.get("cookie"));
+  let userId = session.get("userId");
+  if (userId) {
+    let user = await getUserById(Number.parseInt(userId));
+    return {isLoggedIn: !!user};
+  }
+  return {isLoggedIn: false};
+}
+
+export default function MainLayout({loaderData}: Route.ComponentProps) {
+  let {isLoggedIn} = loaderData;
   return (
     <>
       <header>
@@ -14,12 +30,27 @@ export default function MainLayout() {
               <li>
                 <Link to="/food-items">food-items</Link>
               </li>
-              <li>
-                <Link to="/login">Login</Link>
-              </li>
-              <li>
-                <Link to="/register">Register</Link>
-              </li>
+              {!isLoggedIn ? (
+                <>
+                  <li>
+                    <Link to="/login">Login</Link>
+                  </li>
+                  <li>
+                    <Link to="/register">Register</Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link to="/dashboard">Dashboard</Link>
+                  </li>
+                  <li>
+                    <Form method="post" action="/logout">
+                      <Button type="submit">Logout</Button>
+                    </Form>
+                  </li>
+                </>
+              )}
             </ul>
           </nav>
         </div>
