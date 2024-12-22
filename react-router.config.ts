@@ -6,6 +6,6 @@ export default {
   ssr: true,
   // Prerender pages SSG static site generation
   async prerender() {
-    return ["/", "/about", "/contact"];
+    return ["/", "/about"];
   },
 } satisfies Config;

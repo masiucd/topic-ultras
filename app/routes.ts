@@ -13,6 +13,7 @@ export default [
 
     layout("routes/auth/layout.tsx", [
       route("login", "routes/auth/login.tsx"),
+      route("logout", "routes/auth/logout.tsx"),
       route("register", "routes/auth/register.tsx"),
     ]),
 
@@ -22,11 +23,17 @@ export default [
     ]),
 
     ...prefix("food-categories", [
-      index("routes/food-categories/categories.tsx"),
+      index("routes/food-categories/index.tsx"),
       layout("routes/food-categories/layout.tsx", [
         route(":category", "routes/food-categories/category.tsx"),
         route(":category/food-items", "routes/food-categories/food-items.tsx"),
       ]),
+
+      ...prefix("dashboard", [
+        index("routes/dashboard/index.tsx"),
+        route("settings", "routes/dashboard/settings.tsx"),
+      ]),
+
       // nested routes for testing
       route("apa", "routes/food-categories/apa.tsx", [
         route("test", "routes/food-categories/test.tsx"),
