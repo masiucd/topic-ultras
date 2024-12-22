@@ -5,7 +5,7 @@ import {authSession} from "~/.server/sessions";
 import {ErrorMessage, FormGroup} from "~/components/form";
 import {Button} from "~/components/ui/button";
 import {Input} from "~/components/ui/input";
-import {H1, Label, Lead, Span} from "~/components/ui/typography";
+import {H1, Label, Lead, P, Span} from "~/components/ui/typography";
 import type {Route} from "./+types/login";
 
 export function meta() {
@@ -59,7 +59,7 @@ export async function action({request}: Route.ActionArgs) {
 
 export default function LoginRoute({actionData}: Route.ComponentProps) {
   return (
-    <div>
+    <div className="w-full max-w-2xl">
       <Title />
       <div className="flex w-full max-w-2xl justify-center ">
         <Form method="post" className="w-full" action="/login">
@@ -97,6 +97,12 @@ export default function LoginRoute({actionData}: Route.ComponentProps) {
             {actionData?.error?.type === "form" && (
               <ErrorMessage message={actionData?.error.message} />
             )}
+            <P>
+              Forgot your password?{" "}
+              <Link to="/forgot-password">
+                <Span className="underline underline-offset-2">Reset</Span>
+              </Link>
+            </P>
           </fieldset>
         </Form>
       </div>
@@ -106,7 +112,7 @@ export default function LoginRoute({actionData}: Route.ComponentProps) {
 
 function Title() {
   return (
-    <aside className="mb-10 flex flex-col gap-1">
+    <aside className="mb-10 flex w-full flex-col gap-1 ">
       <H1>Login into your account</H1>
       <Lead>
         Don't have an account?{" "}
