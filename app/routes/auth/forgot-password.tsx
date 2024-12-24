@@ -20,6 +20,11 @@ export async function action({request}: Route.ActionArgs) {
   if (typeof email !== "string") {
     throw new Error("Invalid email");
   }
+  // TODO genereate a token and store it in redis
+  // send the token in the email
+  // user clicks on the link and we verify the token
+  // if the token is valid, we allow the user to reset the password
+  // we check the token in route /reset-password
   const resend = new Resend(env.RESEND_API_KEY);
   const {data, error} = await resend.emails.send({
     from: "onboarding@resend.dev",
@@ -30,7 +35,7 @@ export async function action({request}: Route.ActionArgs) {
         <h1>
           Hello, you requested a password reset!
         </h1>
-        <p>Click <a href="http://localhost:4000">here</a> to reset your password</p>
+        <p>Click <a href="http://localhost:4000/reset-password">here</a> to reset your password</p>
       </div>
     `,
   });
