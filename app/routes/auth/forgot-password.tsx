@@ -1,10 +1,9 @@
-import {env} from "$/env";
 import {Form} from "react-router";
-import {Resend} from "resend";
+import {z} from "zod";
 import {Input} from "~/components/ui/input";
 import {Label} from "~/components/ui/typography";
+import {sendEmail} from "~/lib/send-email";
 import type {Route} from "./+types/forgot-password";
-
 export function meta() {
   return [
     {
@@ -14,37 +13,26 @@ export function meta() {
   ];
 }
 
+let ResetPasswordSchema = z.object({
+  email: z.string().email(),
+});
+
 export async function action({request}: Route.ActionArgs) {
   let body = await request.formData();
-  let email = body.get("email");
-  if (typeof email !== "string") {
-    throw new Error("Invalid email");
-  }
+  let {email} = ResetPasswordSchema.parse({email: body.get("email")});
+
   // TODO genereate a token and store it in redis
   // send the token in the email
   // user clicks on the link and we verify the token
   // if the token is valid, we allow the user to reset the password
   // we check the token in route /reset-password
-  const resend = new Resend(env.RESEND_API_KEY);
-  const {data, error} = await resend.emails.send({
-    from: "onboarding@resend.dev",
-    to: [email],
-    subject: "Reset your password",
-    html: `
-      <div>
-        <h1>
-          Hello, you requested a password reset!
-        </h1>
-        <p>Click <a href="http://localhost:4000/reset-password">here</a> to reset your password</p>
-      </div>
-    `,
-  });
 
+  let {error} = await sendEmail(email);
   if (error) {
-    throw new Error(error.message);
+    console.error("error", error);
+    return {status: 500, data: {error: "Internal server error"}};
   }
-
-  return data;
+  return {status: 200, data: {message: "Reset email sent"}};
 }
 
 export default function ForgotPasswordRoute({
