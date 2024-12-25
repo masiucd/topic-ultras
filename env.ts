@@ -19,6 +19,7 @@ let envSchema = z.object({
   JWT_SECRET: z.string(),
   SERVER_PORT: z.string(),
   RESEND_API_KEY: z.string(),
+  EMAIL_TOKEN_SECRET: z.string(),
   DB_MIGRATION: stringBoolean,
   DB_SEED: stringBoolean,
 });

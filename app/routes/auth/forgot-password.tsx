@@ -32,6 +32,7 @@ export async function action({request}: Route.ActionArgs) {
     console.error("error", error);
     return {status: 500, data: {error: "Internal server error"}};
   }
+
   return {status: 200, data: {message: "Reset email sent"}};
 }
 
@@ -49,6 +50,14 @@ export default function ForgotPasswordRoute({
         </Label>
         <button type="submit">Send reset email</button>
       </Form>
+      {actionData?.status === 200 && (
+        <>
+          <p>{actionData.data.message}</p>
+          <p>
+            You will receive an email with instructions to reset your password.
+          </p>
+        </>
+      )}
     </div>
   );
 }

@@ -41,6 +41,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
@@ -56,6 +59,9 @@ importers:
       isbot:
         specifier: ^5.1.18
         version: 5.1.18
+      jose:
+        specifier: ^5.9.6
+        version: 5.9.6
       jotai:
         specifier: ^2.10.4
         version: 2.10.4(@types/react@19.0.2)(react@19.0.0)
@@ -1816,6 +1822,9 @@ packages:
     resolution: {integrity: sha512-ZYP5VBHshaDAiVZxjbRVcFJpc+4xGgT0bK3vzy1HLN8jTO975HEbuYzZJcHoQEY5K1a0z8YayJkyVETa08eNTg==}
     engines: {node: '>=18'}
 
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
+
   debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
     peerDependencies:
@@ -2343,6 +2352,9 @@ packages:
   jiti@1.21.7:
     resolution: {integrity: sha512-/imKNG4EbWNrVjoNC/1H5/9GFy+tqjGBHCaSsN+P2RnPqjsLmv6UD3Ej+Kj8nBWaRAwyk7kK5ZUc+OEatnTR3A==}
     hasBin: true
+
+  jose@5.9.6:
+    resolution: {integrity: sha512-AMlnetc9+CV9asI19zHmrgS/WYsWUwCn2R7RzlbJWD7F9eWYUTGyBmU9o6PxngtLGOiDGPRu+Uc4fhKzbpteZQ==}
 
   jotai@2.10.4:
     resolution: {integrity: sha512-/T4ofyMSkAybEs2OvR8S4HACa+/ASUEPLz86SUjFXJqU9RdJKLvZDJrag398suvHC5CR0+Cs4P5m/gtVcryzlw==}
@@ -4905,6 +4917,8 @@ snapshots:
       whatwg-mimetype: 4.0.0
       whatwg-url: 14.1.0
 
+  date-fns@4.1.0: {}
+
   debug@2.6.9:
     dependencies:
       ms: 2.0.0
@@ -5438,6 +5452,8 @@ snapshots:
       '@isaacs/cliui': 8.0.2
 
   jiti@1.21.7: {}
+
+  jose@5.9.6: {}
 
   jotai@2.10.4(@types/react@19.0.2)(react@19.0.0):
     optionalDependencies:
