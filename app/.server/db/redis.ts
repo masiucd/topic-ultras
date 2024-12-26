@@ -88,15 +88,9 @@ export async function setExpire({
   );
 }
 
-/**
- * Retrieves the expiration time of a Redis key in seconds.
- *
- * @param key - The key to retrieve the expiration time for.
- * @returns A Promise that resolves to the remaining time to live in seconds, or null if the key does not exist or has no associated expire.
- */
-export async function getExpire(key: string): Promise<number | null> {
+export async function getExpire(key: string) {
   try {
-    return await redis.ttl(key);
+    return await redis.getex(key);
   } catch (error) {
     console.error(error);
     return null;

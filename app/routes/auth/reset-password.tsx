@@ -1,10 +1,11 @@
 import {Form, Link, redirect} from "react-router";
 import {z} from "zod";
 import {getUserByEmail, updateUserPassword} from "~/.server/db/dao/users";
+import {deleteExpire, getExpire} from "~/.server/db/redis";
 import {hashPassword} from "~/.server/utils/password";
 import PageWrapper from "~/components/page-wrapper";
 import {Input} from "~/components/ui/input";
-import {Label} from "~/components/ui/typography";
+import {H1, Label, Lead} from "~/components/ui/typography";
 import {decrypt} from "~/lib/jwt/email-token";
 import {STATUS_CODE} from "~/lib/status-code";
 import type {Route} from "./+types/reset-password";
@@ -28,6 +29,16 @@ export async function loader({request}: Route.LoaderArgs) {
   if (decryptedToken === null) {
     return redirect("/login");
   }
+
+  let emailStoredInRedis = await getExpire(token);
+  if (emailStoredInRedis === null) {
+    return redirect("/login");
+  }
+
+  if (emailStoredInRedis !== decryptedToken.email) {
+    return redirect("/login");
+  }
+
   let user = await getUserByEmail(decryptedToken.email);
   if (user === null) {
     return redirect("/login");
@@ -62,7 +73,7 @@ export async function action({request}: Route.ActionArgs) {
   if (result.data.password !== result.data.confirmPassword) {
     return {
       status: STATUS_CODE.BAD_REQUEST,
-      data: {error: "Passwords do not match"},
+      data: {error: "Passwords do not match", success: false},
     };
   }
 
@@ -71,14 +82,24 @@ export async function action({request}: Route.ActionArgs) {
   if (hashedPassword === null) {
     return {
       status: STATUS_CODE.INTERNAL_SERVER_ERROR,
-      data: {error: "Internal server error"},
+      data: {error: "Internal server error", success: false},
     };
   }
   let success = await updateUserPassword(hashedPassword, result.data.email);
 
+  let token = new URLSearchParams(request.url.split("?")[1]).get("token");
+  if (success && token) {
+    // Delete the token from redis
+    await deleteExpire(token);
+    return {
+      status: STATUS_CODE.OK,
+      data: {error: null, success},
+    };
+  }
+
   return {
-    status: success ? STATUS_CODE.OK : STATUS_CODE.INTERNAL_SERVER_ERROR,
-    data: {success},
+    status: STATUS_CODE.INTERNAL_SERVER_ERROR,
+    data: {error: "Internal server error", success: false},
   };
 }
 
@@ -88,7 +109,10 @@ export default function ResetPasswordRoute({
 }: Route.ComponentProps) {
   return (
     <PageWrapper>
-      <h1>Reset Password</h1>
+      <aside className="mb-5">
+        <H1>Reset Password</H1>
+        <Lead>Update your new password below</Lead>
+      </aside>
       <Form method="post">
         <Label htmlFor="password">
           Password
