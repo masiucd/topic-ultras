@@ -1,4 +1,5 @@
 import {z} from "zod";
+import {STATUS_CODE} from "~/lib/status-code";
 import {getUserByEmail} from "../db/dao/users";
 import {comparePassword} from "../utils/password";
 
@@ -8,28 +9,12 @@ export async function login(
   flashError: () => void
 ) {
   let result = LoginSchema.parse({email, password});
-  // if (!result.success) {
-  //   return ({
-  //     status: 400,
-  //     data: {
-  //       user: null,
-  //       error: {
-  //         type: "form",
-  //         message: "Invalid form data",
-  //       },
-  //       formValues: {
-  //         email: email?.toString(),
-  //         password: password?.toString(),
-  //       },
-  //     },
-  //   });
-  // }
 
   let user = await getUserByEmail(result.email);
   if (!user) {
     flashError();
     return {
-      status: 400,
+      status: STATUS_CODE.BAD_REQUEST,
       data: {
         user: null,
         error: {
@@ -46,7 +31,7 @@ export async function login(
   let ok = await comparePassword(result.password, user.password);
   if (!ok) {
     return {
-      status: 400,
+      status: STATUS_CODE.BAD_REQUEST,
       data: {
         user: null,
         error: {
@@ -62,7 +47,7 @@ export async function login(
   }
 
   return {
-    status: 200,
+    status: STATUS_CODE.OK,
     data: {
       user,
       error: null,

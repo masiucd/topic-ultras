@@ -6,6 +6,7 @@ import {Button} from "~/components/ui/button";
 import {Input} from "~/components/ui/input";
 import {H1, H2, Label, Lead} from "~/components/ui/typography";
 import {sendEmail} from "~/lib/send-email";
+import {STATUS_CODE} from "~/lib/status-code";
 import {cn} from "~/lib/utils";
 import type {Route} from "./+types/forgot-password";
 
@@ -30,12 +31,18 @@ export async function action({request}: Route.ActionArgs) {
     let {error} = await sendEmail(email);
     if (error) {
       console.error("error", error);
-      return {status: 500, data: {error: "Internal server error"}};
+      return {
+        status: STATUS_CODE.INTERNAL_SERVER_ERROR,
+        data: {error: "Internal server error"},
+      };
     }
-    return {status: 201, data: {message: "Reset email sent, check your inbox"}};
+    return {
+      status: STATUS_CODE.CREATED,
+      data: {message: "Reset email sent, check your inbox"},
+    };
   }
   return {
-    status: STATUS_CO,
+    status: STATUS_CODE.OK,
     data: {
       message:
         "If email exists, you should get an email with instructions to reset your password \n Please check your email",
