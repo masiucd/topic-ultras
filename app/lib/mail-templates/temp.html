@@ -29,14 +29,26 @@
         padding: 10px 20px;
         border-radius: 5px;
       }
+
+      main {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 50px;
+      }
     </style>
   </head>
   <body>
-    <h1>Reset password</h1>
-    <p>
-      You requested to reset your password. Click the link below to reset your
-      password.
-    </p>
-    <a href="{{ url }}">Reset password</a>
+    <main>
+      <h1>Reset password</h1>
+      <p>
+        You requested to reset your password. Click the link below to reset your
+        password.
+      </p>
+      <a href="{{ url }}">Reset password</a>
+    </main>
   </body>
 </html>
