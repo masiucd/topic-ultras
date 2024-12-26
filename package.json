@@ -35,6 +35,7 @@
     "dotenv-expand": "^12.0.1",
     "drizzle-orm": "^0.36.4",
     "export-to-csv": "^1.4.0",
+    "ioredis": "^5.4.2",
     "isbot": "^5.1.18",
     "jose": "^5.9.6",
     "jotai": "^2.10.4",
