@@ -35,11 +35,6 @@ export default [
         route(":category", "routes/food-categories/category.tsx"),
         route(":category/food-items", "routes/food-categories/food-items.tsx"),
       ]),
-
-      // nested routes for testing
-      route("apa", "routes/food-categories/apa.tsx", [
-        route("test", "routes/food-categories/test.tsx"),
-      ]),
     ]),
   ]),
 ] satisfies RouteConfig;
