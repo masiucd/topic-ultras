@@ -1,5 +1,21 @@
-import type {PropsWithChildren, ReactNode} from "react";
+import type {ReactNode} from "react";
 import {H1, Lead} from "./ui/typography";
+
+type Props =
+  | {
+      h1Text: string;
+      leadText: string;
+      h1Component?: ReactNode | null;
+      leadComponent?: ReactNode | null;
+      children?: never;
+    }
+  | {
+      children: ReactNode;
+      h1Text?: never;
+      leadText?: never;
+      h1Component?: never;
+      leadComponent?: never;
+    };
 
 export function PageTitle({
   h1Text,
@@ -7,12 +23,7 @@ export function PageTitle({
   h1Component = null,
   leadComponent = null,
   children,
-}: PropsWithChildren<{
-  h1Text: string;
-  leadText: string;
-  h1Component?: ReactNode | null;
-  leadComponent?: ReactNode | null;
-}>) {
+}: Props) {
   if (children) {
     return <aside className="mb-5">{children}</aside>;
   }
