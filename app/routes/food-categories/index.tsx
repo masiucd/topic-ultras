@@ -2,7 +2,7 @@ import {Link} from "react-router";
 import {db} from "~/.server/db";
 import {foodCategories} from "~/.server/db/schema";
 import {List, Span} from "~/components/ui/typography";
-import type {Route} from "./+types/categories";
+import type {Route} from "./+types";
 
 export async function loader() {
   try {
@@ -22,7 +22,6 @@ export async function loader() {
 export default function CategoriesRoute({loaderData}: Route.ComponentProps) {
   return (
     <div>
-      <h1>Categories</h1>
       <List>
         {loaderData.map((category) => (
           <li key={category.id}>

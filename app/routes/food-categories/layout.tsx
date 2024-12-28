@@ -1,6 +1,8 @@
 import {Outlet} from "react-router";
 import {getFoodCategory} from "~/.server/db/dao/food-categories";
-import {H1, P} from "~/components/ui/typography";
+import {PageTitle} from "~/components/page-title";
+import PageWrapper from "~/components/page-wrapper";
+import {H1, P, Span} from "~/components/ui/typography";
 import type {Route} from "./+types/layout";
 
 export function headers(_: Route.HeadersArgs) {
@@ -34,12 +36,19 @@ export default function FoodCategoriesLayout({
   }
 
   return (
-    <div className="bg-red-500">
+    <PageWrapper>
       <div>
-        <H1>Food category - {foodCategory.name}</H1>
+        <PageTitle
+          h1Text="Food category - "
+          leadText="View all food items for category -  "
+          h1Component={<Span className="capitalize">{foodCategory.name}</Span>}
+          leadComponent={
+            <Span className="capitalize">{foodCategory.name}</Span>
+          }
+        />
         {foodCategory.description !== null && <P>{foodCategory.description}</P>}
       </div>
       <Outlet context={{foodCategory}} />
-    </div>
+    </PageWrapper>
   );
 }

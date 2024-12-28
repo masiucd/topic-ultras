@@ -6,7 +6,6 @@ export default function CategoryRoute() {
   let ctx = useOutletContext<{foodCategory: FoodCategoryData}>();
   return (
     <div>
-      <h1>Category route</h1>
       {ctx.foodCategory && (
         <div>
           <Link

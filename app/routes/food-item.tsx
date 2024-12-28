@@ -19,7 +19,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "~/components/ui/chart";
-import {H2, P, Strong} from "~/components/ui/typography";
+import {H1, H2, Lead, P, Strong} from "~/components/ui/typography";
 import type {Route} from "./+types/food-item";
 
 export function meta({params}: Route.MetaArgs) {
@@ -49,19 +49,42 @@ export default function FoodItemRoute({
   let {foodItem} = loaderData;
   return (
     <PageWrapper>
+      <Title slug={params.slug} />
       <section className="mx-auto my-10 grid w-full max-w-[80rem] gap-8">
-        {foodItem !== null ? (
-          <div className="md:max-w-[28rem]">
-            <FoodCard foodItem={foodItem} />
-          </div>
-        ) : (
-          <H2>
-            Either the slug is incorrect or the food nutrients are not set for
-            the food item {params.slug}.
-          </H2>
-        )}
+        <FoodCardOrDefault foodItem={foodItem} slug={params.slug} />
       </section>
     </PageWrapper>
+  );
+}
+
+function Title({slug}: {slug: string}) {
+  return (
+    <aside>
+      <H1>Food Item - {slug}</H1>
+      <Lead>Find out the nutrients and calories for the food item {slug}.</Lead>
+    </aside>
+  );
+}
+
+function FoodCardOrDefault({
+  foodItem,
+  slug,
+}: {
+  foodItem: FoodItemBySlug | null;
+  slug: string;
+}) {
+  if (foodItem !== null) {
+    return (
+      <div className="md:max-w-[28rem]">
+        <FoodCard foodItem={foodItem} />
+      </div>
+    );
+  }
+  return (
+    <H2>
+      Either the slug is incorrect or the food nutrients are not set for the
+      food item {slug}.
+    </H2>
   );
 }
 
