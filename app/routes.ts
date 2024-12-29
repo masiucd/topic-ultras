@@ -20,8 +20,10 @@ export default [
     ]),
 
     ...prefix("dashboard", [
-      index("routes/dashboard/index.tsx"),
-      route("settings", "routes/dashboard/settings.tsx"),
+      layout("routes/dashboard/layout.tsx", [
+        index("routes/dashboard/index.tsx"),
+        route("settings", "routes/dashboard/settings.tsx"),
+      ]),
     ]),
 
     ...prefix("food-items", [
