@@ -1,13 +1,13 @@
 import {redirect} from "react-router";
-import {authSession} from "~/.server/sessions";
+import {authSessionV2} from "~/.server/sessions";
 import type {Route} from "./+types/logout";
 
 export async function action({request}: Route.ActionArgs) {
-  let {getSession, destroySession} = authSession();
-  let session = await getSession(request.headers.get("cookie"));
+  let auth = await authSessionV2(request);
+  if (!auth) throw new Error("No session found");
   return redirect("/login", {
     headers: {
-      "Set-Cookie": await destroySession(session),
+      "Set-Cookie": await auth.destroy(),
     },
   });
 }

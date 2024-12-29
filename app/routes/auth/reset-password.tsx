@@ -6,7 +6,7 @@ import {hashPassword} from "~/.server/utils/password";
 import PageWrapper from "~/components/page-wrapper";
 import {Input} from "~/components/ui/input";
 import {H1, Label, Lead} from "~/components/ui/typography";
-import {decrypt} from "~/lib/jwt/email-token";
+import {validateToken} from "~/lib/jwt/token-utils";
 import {STATUS_CODE} from "~/lib/status-code";
 import type {Route} from "./+types/reset-password";
 
@@ -21,12 +21,8 @@ export function meta() {
 
 export async function loader({request}: Route.LoaderArgs) {
   let params = new URLSearchParams(request.url.split("?")[1]);
-  let token = params.get("token");
-  if (!token) {
-    return redirect("/login");
-  }
-  let decryptedToken = await decrypt(token);
-  if (decryptedToken === null) {
+  let [token, decryptedToken] = await validateToken(params.get("token") ?? "");
+  if (token === null || decryptedToken === null) {
     return redirect("/login");
   }
 

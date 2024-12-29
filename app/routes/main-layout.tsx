@@ -1,16 +1,15 @@
 import {Form, Link, Outlet} from "react-router";
 import {getUserById} from "~/.server/db/dao/users";
-import {authSession} from "~/.server/sessions";
+import {authSessionV2} from "~/.server/sessions";
 import {Button} from "~/components/ui/button";
 import {Strong} from "~/components/ui/typography";
 import type {Route} from "./+types/main-layout";
 
 export async function loader({request}: Route.LoaderArgs) {
-  let {getSession} = authSession();
-  let session = await getSession(request.headers.get("cookie"));
-  let userId = session.get("userId");
-  if (userId) {
-    let user = await getUserById(Number.parseInt(userId));
+  let auth = await authSessionV2(request);
+
+  if (auth !== null) {
+    let user = await getUserById(Number.parseInt(auth.userId));
     return {isLoggedIn: !!user};
   }
   return {isLoggedIn: false};

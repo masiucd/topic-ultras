@@ -1,7 +1,7 @@
 import {Form, Link, redirect} from "react-router";
 import {login} from "~/.server/biz/login";
 import {getUserById} from "~/.server/db/dao/users";
-import {authSession} from "~/.server/sessions";
+import {authSessionV2} from "~/.server/sessions";
 import {ErrorMessage, FormGroup} from "~/components/form";
 import {Button} from "~/components/ui/button";
 import {Input} from "~/components/ui/input";
@@ -16,20 +16,17 @@ export function meta() {
 }
 
 export async function loader({request}: Route.LoaderArgs) {
-  let {getSession} = authSession();
-  let session = await getSession(request.headers.get("cookie"));
-  let userId = session.get("userId");
-  if (userId) {
-    let user = await getUserById(Number.parseInt(userId));
+  let auth = await authSessionV2(request);
+  if (!auth) {
+    return redirect("/login");
+  }
+  if (auth) {
+    let user = await getUserById(Number.parseInt(auth.userId));
     if (user) {
       return redirect("/");
     }
   }
-  let error = session.get("error");
-  if (error) {
-    console.error("session", error);
-  }
-
+  console.error("session", auth.error);
   return null;
 }
 
@@ -38,21 +35,22 @@ export async function action({request}: Route.ActionArgs) {
   let email = formData.get("email");
   let password = formData.get("password");
 
+  let auth = await authSessionV2(request);
+  if (!auth) {
+    return redirect("/login");
+  }
   let result = await login(email, password, () => {
-    session.flash("error", "Invalid credentials");
+    auth.flash("Invalid credentials");
   });
-
-  let {getSession, commitSession} = authSession();
-  let session = await getSession(request.headers.get("cookie"));
 
   if (!result.data.user) {
     return result.data;
   }
 
-  session.set("userId", result.data.user.id.toString());
+  auth.set(result.data.user.id.toString());
   return redirect("/dashboard", {
     headers: {
-      "Set-Cookie": await commitSession(session),
+      "Set-Cookie": await auth.commit(),
     },
   });
 }
