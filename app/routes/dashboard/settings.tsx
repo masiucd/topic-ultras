@@ -1,5 +1,5 @@
 import {eq} from "drizzle-orm";
-import {Form, redirect} from "react-router";
+import {redirect, useFetcher} from "react-router";
 import {z} from "zod";
 import {db} from "~/.server/db";
 import {insertUserInfos} from "~/.server/db/dao/users";
@@ -11,6 +11,7 @@ import {Label} from "~/components/ui/label";
 import {RadioGroup, RadioGroupItem} from "~/components/ui/radio-group";
 import {Strong} from "~/components/ui/typography";
 import {STATUS_CODE} from "~/lib/status-code";
+import {cn} from "~/lib/utils";
 import type {Route} from "./+types/settings";
 
 let SettingsSchema = z.object({
@@ -103,11 +104,19 @@ export default function SettingsRoute({
   loaderData,
   actionData,
 }: Route.ComponentProps) {
-  console.log({loaderData, actionData});
+  let fetcher = useFetcher();
+  let isSubmitting = fetcher.state !== "idle";
   return (
     <div className="mx-auto w-full p-2 shadow-2xl md:max-w-xl">
-      <Form method="post" action="/dashboard/settings">
-        <fieldset className="mb-3 flex flex-col gap-2">
+      <fetcher.Form method="post" action="/dashboard/settings">
+        <fieldset
+          className={cn(
+            "mb-3 flex flex-col gap-2",
+            isSubmitting && "opacity-50",
+            actionData && !actionData.ok && "border border-red-500"
+          )}
+          disabled={isSubmitting}
+        >
           <legend>
             <Strong>Settings</Strong>
           </legend>
@@ -179,8 +188,10 @@ export default function SettingsRoute({
             </div>
           </RadioGroup>
         </fieldset>
-        <Button type="submit">Save</Button>
-      </Form>
+        <Button type="submit" aria-busy={isSubmitting}>
+          {isSubmitting ? "Saving..." : "Save"}
+        </Button>
+      </fetcher.Form>
     </div>
   );
 }
