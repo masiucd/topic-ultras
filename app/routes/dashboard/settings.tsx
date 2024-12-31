@@ -52,7 +52,9 @@ export default function SettingsRoute({
           className={cn(
             "mb-3 flex flex-col gap-2",
             isSubmitting && "opacity-50",
-            actionData && !actionData.ok && "border border-red-500"
+            actionData &&
+              !actionData.ok &&
+              "motion-preset-shake motion-duration-700 border border-red-500"
           )}
           disabled={isSubmitting}
         >
