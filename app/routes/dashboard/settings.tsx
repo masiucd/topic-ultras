@@ -1,27 +1,16 @@
-import {eq} from "drizzle-orm";
 import {redirect, useFetcher} from "react-router";
-import {z} from "zod";
-import {db} from "~/.server/db";
-import {insertUserInfos} from "~/.server/db/dao/users";
-import {userInfos, users} from "~/.server/db/schema";
+import {
+  addToUserInfos,
+  retrieveUserInfos,
+} from "~/.server/biz/dashboard.settings";
 import {getSession} from "~/.server/sessions";
 import {Button} from "~/components/ui/button";
 import {Input} from "~/components/ui/input";
 import {Label} from "~/components/ui/label";
 import {RadioGroup, RadioGroupItem} from "~/components/ui/radio-group";
 import {Strong} from "~/components/ui/typography";
-import {STATUS_CODE} from "~/lib/status-code";
 import {cn} from "~/lib/utils";
 import type {Route} from "./+types/settings";
-
-let SettingsSchema = z.object({
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  age: z.string().optional(),
-  weight: z.string().optional(),
-  height: z.string().optional(),
-  gender: z.enum(["female", "male"]).optional(),
-});
 
 export async function action({request}: Route.ActionArgs) {
   let session = await getSession(request.headers.get("Cookie"));
@@ -30,45 +19,15 @@ export async function action({request}: Route.ActionArgs) {
     return redirect("/login");
   }
   let formData = await request.formData();
-  let firstName = formData.get("first-name");
-  let lastName = formData.get("last-name");
-  let age = formData.get("age");
-  let weight = formData.get("weight");
-  let height = formData.get("height");
-  let gender = formData.get("gender");
-
-  let data = SettingsSchema.parse({
-    firstName,
-    lastName,
-    age,
-    weight,
-    height,
-    gender,
+  return await addToUserInfos({
+    userId,
+    age: formData.get("age"),
+    weight: formData.get("weight"),
+    height: formData.get("height"),
+    firstName: formData.get("first-name"),
+    lastName: formData.get("last-name"),
+    gender: formData.get("gender"),
   });
-
-  let ok = await insertUserInfos({
-    userId: Number.parseInt(userId, 10),
-    firstName: data.firstName,
-    lastName: data.lastName,
-    age: parseOptionalInt(data.age),
-    weight: parseOptionalInt(data.weight),
-    height: parseOptionalInt(data.height),
-    gender: data.gender,
-  });
-
-  if (!ok) {
-    return {
-      ok,
-      status: STATUS_CODE.INTERNAL_SERVER_ERROR,
-      message: "Failed to update user information",
-    };
-  }
-
-  return {
-    ok,
-    status: STATUS_CODE.CREATED,
-    message: "User information updated successfully",
-  };
 }
 
 export async function loader({request}: Route.LoaderArgs) {
@@ -77,27 +36,7 @@ export async function loader({request}: Route.LoaderArgs) {
   if (!userId) {
     return redirect("/login");
   }
-  try {
-    let rows = await db
-      .select({
-        userId: users.id,
-        firstName: userInfos.firstName,
-        lastName: userInfos.lastName,
-        age: userInfos.age,
-        weight: userInfos.weight,
-        height: userInfos.height,
-        gender: userInfos.gender,
-      })
-      .from(users)
-      .leftJoin(userInfos, eq(users.id, userInfos.id))
-      .where(eq(users.id, Number.parseInt(userId, 10)));
-
-    console.log("rows", rows);
-    return {user: rows[0]};
-  } catch (error) {
-    console.error(error);
-    return redirect("/login");
-  }
+  return await retrieveUserInfos(userId);
 }
 
 export default function SettingsRoute({
@@ -194,8 +133,4 @@ export default function SettingsRoute({
       </fetcher.Form>
     </div>
   );
-}
-
-function parseOptionalInt(x?: string): number | undefined {
-  return x ? Number.parseInt(x, 10) : undefined;
 }

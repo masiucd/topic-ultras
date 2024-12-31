@@ -142,3 +142,25 @@ export async function insertUserInfos({
     return false;
   }
 }
+export async function getUserInfos(userId: number) {
+  try {
+    let rows = await db
+      .select({
+        userId: users.id,
+        firstName: userInfos.firstName,
+        lastName: userInfos.lastName,
+        age: userInfos.age,
+        weight: userInfos.weight,
+        height: userInfos.height,
+        gender: userInfos.gender,
+      })
+      .from(users)
+      .leftJoin(userInfos, eq(users.id, userInfos.id))
+      .where(eq(users.id, userId));
+
+    return {user: rows[0]};
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
