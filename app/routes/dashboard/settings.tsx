@@ -14,12 +14,12 @@ import {STATUS_CODE} from "~/lib/status-code";
 import type {Route} from "./+types/settings";
 
 let SettingsSchema = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  age: z.string(),
-  weight: z.string(),
-  height: z.string(),
-  gender: z.enum(["female", "male"]),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  age: z.string().optional(),
+  weight: z.string().optional(),
+  height: z.string().optional(),
+  gender: z.enum(["female", "male"]).optional(),
 });
 
 export async function action({request}: Route.ActionArgs) {
@@ -49,9 +49,9 @@ export async function action({request}: Route.ActionArgs) {
     userId: Number.parseInt(userId, 10),
     firstName: data.firstName,
     lastName: data.lastName,
-    age: Number.parseInt(data.age, 10),
-    weight: Number.parseInt(data.weight, 10),
-    height: Number.parseInt(data.height, 10),
+    age: parseOptionalInt(data.age),
+    weight: parseOptionalInt(data.weight),
+    height: parseOptionalInt(data.height),
     gender: data.gender,
   });
 
@@ -77,7 +77,7 @@ export async function loader({request}: Route.LoaderArgs) {
     return redirect("/login");
   }
   try {
-    let user = await db
+    let rows = await db
       .select({
         userId: users.id,
         firstName: userInfos.firstName,
@@ -85,12 +85,14 @@ export async function loader({request}: Route.LoaderArgs) {
         age: userInfos.age,
         weight: userInfos.weight,
         height: userInfos.height,
+        gender: userInfos.gender,
       })
       .from(users)
-      .innerJoin(userInfos, eq(users.id, userInfos.id))
+      .leftJoin(userInfos, eq(users.id, userInfos.id))
       .where(eq(users.id, Number.parseInt(userId, 10)));
 
-    return {user: user[0]};
+    console.log("rows", rows);
+    return {user: rows[0]};
   } catch (error) {
     console.error(error);
     return redirect("/login");
@@ -101,10 +103,9 @@ export default function SettingsRoute({
   loaderData,
   actionData,
 }: Route.ComponentProps) {
+  console.log({loaderData, actionData});
   return (
-    <div>
-      <h1>SettingsRoute</h1>
-
+    <div className="mx-auto w-full p-2 shadow-2xl md:max-w-xl">
       <Form method="post" action="/dashboard/settings">
         <fieldset className="mb-3 flex flex-col gap-2">
           <legend>
@@ -134,30 +135,40 @@ export default function SettingsRoute({
               type="number"
               id="age"
               name="age"
+              min={10}
+              max={99}
               defaultValue={loaderData?.user.age ?? ""}
             />
           </div>
           <div>
-            <Label htmlFor="weight">Weight</Label>
+            <Label htmlFor="weight">Weight (KG)</Label>
             <Input
               type="number"
               id="weight"
               name="weight"
+              min={50}
+              max={300}
               defaultValue={loaderData?.user.weight ?? ""}
             />
           </div>
 
           <div>
-            <Label htmlFor="height">Height</Label>
+            <Label htmlFor="height">Height (CM) </Label>
             <Input
               type="number"
               id="height"
               name="height"
+              min={100}
+              max={250}
               defaultValue={loaderData?.user.height ?? ""}
             />
           </div>
 
-          <RadioGroup defaultValue="female" name="gender" className="flex">
+          <RadioGroup
+            defaultValue={loaderData?.user.gender ?? "female"}
+            name="gender"
+            className="flex"
+          >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="male" id="male" />
               <Label htmlFor="male">Male</Label>
@@ -172,4 +183,8 @@ export default function SettingsRoute({
       </Form>
     </div>
   );
+}
+
+function parseOptionalInt(x?: string): number | undefined {
+  return x ? Number.parseInt(x, 10) : undefined;
 }

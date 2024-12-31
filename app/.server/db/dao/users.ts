@@ -115,12 +115,12 @@ export async function insertUserInfos({
   gender,
 }: {
   userId: number;
-  age: number;
-  weight: number;
-  height: number;
-  firstName: string;
-  lastName: string;
-  gender: Gender;
+  age?: number;
+  weight?: number;
+  height?: number;
+  firstName?: string;
+  lastName?: string;
+  gender?: Gender;
 }) {
   try {
     let result = await db
