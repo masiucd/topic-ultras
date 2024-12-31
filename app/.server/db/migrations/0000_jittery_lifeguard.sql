@@ -1,4 +1,9 @@
-CREATE TYPE "public"."gender" AS ENUM('male', 'female');--> statement-breakpoint
+DO $$ BEGIN
+	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'gender') THEN
+		CREATE TYPE "public"."gender" AS ENUM('male', 'female');
+	END IF;
+END $$;--> statement-breakpoint
+
 CREATE TABLE IF NOT EXISTS "favorite_foods" (
 	"user_id" integer NOT NULL,
 	"food_item_id" integer NOT NULL,
@@ -58,14 +63,14 @@ CREATE TABLE IF NOT EXISTS "user_infos" (
 	"id" integer PRIMARY KEY NOT NULL,
 	"height" integer,
 	"weight" integer,
+	"first_name" varchar(100),
+	"last_name" varchar(100),
 	"age" integer,
 	"gender" "gender"
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"first_name" varchar(100),
-	"last_name" varchar(100),
 	"email" varchar(120) NOT NULL,
 	"password" varchar(200) NOT NULL,
 	"created_at" timestamp DEFAULT now(),

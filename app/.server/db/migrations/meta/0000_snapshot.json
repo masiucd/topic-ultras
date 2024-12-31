@@ -1,5 +1,5 @@
 {
-  "id": "e9b44f7e-ef77-47bb-ab50-cf6840ee87fe",
+  "id": "37fd39a3-bde9-4943-9d60-4cf2bbf5649d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -520,6 +520,18 @@
           "primaryKey": false,
           "notNull": false
         },
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "age": {
           "name": "age",
           "type": "integer",
@@ -565,18 +577,6 @@
           "type": "serial",
           "primaryKey": true,
           "notNull": true
-        },
-        "first_name": {
-          "name": "first_name",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "last_name": {
-          "name": "last_name",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false
         },
         "email": {
           "name": "email",
