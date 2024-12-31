@@ -70,6 +70,22 @@ export async function register({
     };
   }
   let hashedPassword = await hashPassword(result.data.password);
+  if (hashedPassword === null) {
+    return {
+      status: 500,
+      data: {
+        error: {
+          type: "password",
+          message: "Internal server error",
+        },
+        formValues: {
+          email: email?.toString(),
+          password: password?.toString(),
+          confirmPassword: confirmPassword?.toString(),
+        },
+      },
+    };
+  }
   await insertUser(result.data.email, hashedPassword);
 
   return {

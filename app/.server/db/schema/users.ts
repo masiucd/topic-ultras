@@ -14,8 +14,6 @@ export let users = pgTable(
   "users",
   {
     id: serial("id").primaryKey().notNull(),
-    firstName: varchar("first_name", {length: 100}),
-    lastName: varchar("last_name", {length: 100}),
     email: varchar("email", {length: 120}).notNull(),
     password: varchar("password", {length: 200}).notNull(),
     createdAt: timestamp("created_at", {mode: "string"}).defaultNow(),

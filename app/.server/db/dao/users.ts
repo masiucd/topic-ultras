@@ -1,6 +1,7 @@
 import {eq} from "drizzle-orm";
 import {db} from "..";
-import {users} from "../schema";
+import {userInfos, users} from "../schema";
+import type {Gender} from "../schema/user-infos";
 
 /**
  * Retrieves a user by their email address from the database.
@@ -77,6 +78,8 @@ export async function getUserById(id: number) {
   }
 }
 
+export type UserById = Awaited<ReturnType<typeof getUserById>>;
+
 /**
  * Updates the password of a user in the database.
  *
@@ -96,6 +99,44 @@ export async function updateUserPassword(
       })
       .where(eq(users.email, email));
     return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
+
+export async function insertUserInfos({
+  userId,
+  age,
+  weight,
+  height,
+  firstName,
+  lastName,
+  gender,
+}: {
+  userId: number;
+  age: number;
+  weight: number;
+  height: number;
+  firstName: string;
+  lastName: string;
+  gender: Gender;
+}) {
+  try {
+    let result = await db
+      .insert(userInfos)
+      .values({
+        id: userId,
+        age: age,
+        weight: weight,
+        height: height,
+        firstName,
+        lastName,
+        gender,
+      })
+      .returning({id: userInfos.id});
+
+    return result.length > 0;
   } catch (error) {
     console.error(error);
     return false;
