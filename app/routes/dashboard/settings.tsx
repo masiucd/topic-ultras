@@ -2,15 +2,26 @@ import type {PropsWithChildren} from "react";
 import {Link, redirect, useFetcher} from "react-router";
 import {
   type User,
-  addToUserInfos,
+  addOrUpdateUserInfos,
   retrieveUserInfos,
 } from "~/.server/biz/dashboard.settings";
 import {getSession} from "~/.server/sessions";
+import {Icons} from "~/components/icons";
 import {Button} from "~/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import {Input} from "~/components/ui/input";
 import {Label} from "~/components/ui/label";
 import {RadioGroup, RadioGroupItem} from "~/components/ui/radio-group";
-import {Strong} from "~/components/ui/typography";
+import {TooltipComponent} from "~/components/ui/tooltip";
+import {List, Span, Strong} from "~/components/ui/typography";
+import {useToggle} from "~/lib/hooks/toggle";
 import {cn} from "~/lib/utils";
 import type {Route} from "./+types/settings";
 
@@ -21,7 +32,7 @@ export async function action({request}: Route.ActionArgs) {
     return redirect("/login");
   }
   let formData = await request.formData();
-  return await addToUserInfos({
+  return await addOrUpdateUserInfos({
     userId,
     age: formData.get("age"),
     weight: formData.get("weight"),
@@ -45,8 +56,6 @@ export default function SettingsRoute({
   loaderData,
   actionData,
 }: Route.ComponentProps) {
-  let fetcher = useFetcher();
-  let isSubmitting = fetcher.state !== "idle";
   return (
     <div className="w-full md:my-5 ">
       <Link
@@ -56,32 +65,120 @@ export default function SettingsRoute({
         Go back to Dashboard
       </Link>
 
-      <div className="p-2 shadow-2xl md:max-w-xl ">
-        <fetcher.Form method="post" action="/dashboard/settings">
-          <fieldset
-            className={cn(
-              "mb-3 flex flex-col gap-2 rounded-md",
-              isSubmitting && "opacity-50",
-              actionData &&
-                !actionData.ok &&
-                "motion-preset-shake motion-duration-700 border border-red-500"
-            )}
-            disabled={isSubmitting}
-          >
-            <legend>
-              <Strong>
-                {actionData?.ok ? "Saved Successfully" : "User Information"}
-              </Strong>
-            </legend>
-            <FirstAndLastName user={loaderData?.user} />
-            <HeightAndWeight user={loaderData?.user} />
-            <AgeAndGender user={loaderData?.user} />
-          </fieldset>
-          <Button type="submit" aria-busy={isSubmitting} className="w-full">
-            {isSubmitting ? "Saving..." : "Save"}
-          </Button>
-        </fetcher.Form>
+      <div className="p-2 md:max-w-xl ">
+        <Fn ok={actionData?.ok} user={loaderData?.user} />
       </div>
+    </div>
+  );
+}
+
+// TODO rename the function
+function Fn({ok, user}: {ok?: boolean; user?: User}) {
+  let [edit, {toggle}] = useToggle();
+  if (edit) {
+    return <UserInfoForm ok={ok} user={user} toggle={toggle} />;
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>User Information</CardTitle>
+        <CardDescription>Edit your user information</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <List>
+          <li className="flex items-center gap-2">
+            <TooltipComponent content="Name">
+              <Strong>
+                <Icons.User />
+              </Strong>
+            </TooltipComponent>
+            <Span className="capitalize">
+              {user?.firstName} {user?.lastName}
+            </Span>
+          </li>
+
+          <li className="flex items-center gap-2">
+            <TooltipComponent content="Age">
+              <Strong>
+                <Icons.Hash />
+              </Strong>
+            </TooltipComponent>
+            <Span>{user?.age}</Span>
+          </li>
+
+          <li className="flex items-center gap-2">
+            <TooltipComponent content="Weight">
+              <Strong>
+                <Icons.Weight />
+              </Strong>
+            </TooltipComponent>
+            <Span>{user?.weight} KG</Span>
+          </li>
+
+          <li className="flex items-center gap-2">
+            <TooltipComponent content="Height">
+              <Strong>
+                <Icons.Height />
+              </Strong>
+            </TooltipComponent>
+            <Span>{user?.height} cm</Span>
+          </li>
+
+          <li className="flex items-center gap-2">
+            <TooltipComponent content="Gender">
+              <Strong>F/M</Strong>
+            </TooltipComponent>
+            <Span>{user?.gender === "male" ? "Male" : "Female"}</Span>
+          </li>
+        </List>
+      </CardContent>
+      <CardFooter>
+        <Button onClick={toggle}>Edit</Button>
+      </CardFooter>
+    </Card>
+  );
+}
+
+function UserInfoForm({
+  ok,
+  user,
+  toggle,
+}: {
+  ok?: boolean;
+  user?: User;
+  toggle: () => void;
+}) {
+  let fetcher = useFetcher();
+  let isSubmitting = fetcher.state !== "idle";
+  return (
+    <div className="rounded-md p-2 shadow-xl">
+      <Button size="sm" onClick={toggle} className="ml-auto block">
+        Cancel Edit
+      </Button>
+
+      <fetcher.Form method="post" action="/dashboard/settings">
+        <fieldset
+          className={cn(
+            "mb-3 flex flex-col gap-2 rounded-md border-2 p-2",
+            isSubmitting && "opacity-50",
+            ok &&
+              !ok &&
+              "motion-preset-shake motion-duration-700 border border-red-500"
+          )}
+          disabled={isSubmitting}
+        >
+          <legend>
+            <Strong>{ok ? "Saved Successfully" : "User Information"}</Strong>
+          </legend>
+          <FirstAndLastName user={user} />
+          <HeightAndWeight user={user} />
+          <AgeAndGender user={user} />
+        </fieldset>
+        <Button type="submit" aria-busy={isSubmitting} className="w-full">
+          {isSubmitting ? "Saving..." : "Save"}
+        </Button>
+      </fetcher.Form>
     </div>
   );
 }

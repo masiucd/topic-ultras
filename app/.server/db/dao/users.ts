@@ -146,6 +146,45 @@ export async function insertUserInfos({
     return false;
   }
 }
+
+export async function updateUserInfos({
+  userId,
+  age,
+  weight,
+  height,
+  firstName,
+  lastName,
+  gender,
+}: {
+  userId: number;
+  age?: number;
+  weight?: number;
+  height?: number;
+  firstName?: string;
+  lastName?: string;
+  gender?: Gender;
+}) {
+  try {
+    let rows = await db
+      .update(userInfos)
+      .set({
+        age,
+        weight,
+        height,
+        firstName,
+        lastName,
+        gender,
+      })
+      .where(eq(userInfos.id, userId))
+      .returning({id: userInfos.id});
+
+    return rows.length > 0;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
+
 export async function getUserInfos(userId: number) {
   try {
     let rows = await db

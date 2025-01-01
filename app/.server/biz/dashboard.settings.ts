@@ -1,6 +1,6 @@
 import {z} from "zod";
 import {STATUS_CODE} from "~/lib/status-code";
-import {getUserInfos, insertUserInfos} from "../db/dao/users";
+import {getUserInfos, insertUserInfos, updateUserInfos} from "../db/dao/users";
 
 let SettingsSchema = z.object({
   firstName: z.string().optional(),
@@ -12,7 +12,7 @@ let SettingsSchema = z.object({
   userId: z.string(),
 });
 
-export async function addToUserInfos({
+export async function addOrUpdateUserInfos({
   userId,
   age,
   weight,
@@ -39,7 +39,37 @@ export async function addToUserInfos({
     userId,
   });
 
-  let ok = await insertUserInfos({
+  // TODO we need to know if userinfos exiss for this user
+  // if exists we need to update it
+  // if not we need to insert it
+  let userInfos = await getUserInfos(Number.parseInt(data.userId, 10));
+  if (!userInfos?.user) {
+    let ok = await insertUserInfos({
+      userId: Number.parseInt(data.userId, 10),
+      firstName: data.firstName,
+      lastName: data.lastName,
+      age: parseOptionalInt(data.age),
+      weight: parseOptionalInt(data.weight),
+      height: parseOptionalInt(data.height),
+      gender: data.gender,
+    });
+
+    if (!ok) {
+      return {
+        ok,
+        status: STATUS_CODE.INTERNAL_SERVER_ERROR,
+        message: "Failed to insert user information",
+      };
+    }
+
+    return {
+      ok,
+      status: STATUS_CODE.CREATED,
+      message: "User information inserted successfully",
+    };
+  }
+
+  let ok = await updateUserInfos({
     userId: Number.parseInt(data.userId, 10),
     firstName: data.firstName,
     lastName: data.lastName,
