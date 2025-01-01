@@ -3,7 +3,7 @@ import {getUserById} from "~/.server/db/dao/users";
 
 import {getSession} from "~/.server/sessions";
 import PageWrapper from "~/components/page-wrapper";
-import {H1} from "~/components/ui/typography";
+import {H1, Lead} from "~/components/ui/typography";
 import type {Route} from "./+types/layout";
 
 export function meta() {
@@ -27,12 +27,29 @@ export default function DashboardLayout({loaderData}: Route.ComponentProps) {
   let {user} = loaderData;
   return (
     <PageWrapper>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione unde
-      neque velit eos eveniet suscipit vel impedit, dolorem asperiores
-      voluptatem dolor, aliquid, omnis expedita aspernatur exercitationem itaque
-      tenetur quae? Pariatur.
-      <H1>Welcome {user.email}</H1>
+      <aside>
+        <Title user={user} />
+        <Lead>Here you can manage your account settings</Lead>
+      </aside>
       <Outlet context={user} />
     </PageWrapper>
   );
+}
+
+function Title({
+  user,
+}: {
+  user: NonNullable<Awaited<ReturnType<typeof getUserById>>>;
+}) {
+  if (user.firstName && user.lastName) {
+    return (
+      <H1>
+        Welcome {user.firstName} {user.lastName}
+      </H1>
+    );
+  }
+  if (user.firstName) {
+    return <H1>Welcome {user.firstName}</H1>;
+  }
+  return <H1>Welcome {user.email}</H1>;
 }

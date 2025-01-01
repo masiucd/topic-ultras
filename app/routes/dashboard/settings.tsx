@@ -1,5 +1,7 @@
-import {redirect, useFetcher} from "react-router";
+import type {PropsWithChildren} from "react";
+import {Link, redirect, useFetcher} from "react-router";
 import {
+  type User,
   addToUserInfos,
   retrieveUserInfos,
 } from "~/.server/biz/dashboard.settings";
@@ -46,93 +48,133 @@ export default function SettingsRoute({
   let fetcher = useFetcher();
   let isSubmitting = fetcher.state !== "idle";
   return (
-    <div className="mx-auto w-full p-2 shadow-2xl md:max-w-xl">
-      <fetcher.Form method="post" action="/dashboard/settings">
-        <fieldset
-          className={cn(
-            "mb-3 flex flex-col gap-2",
-            isSubmitting && "opacity-50",
-            actionData &&
-              !actionData.ok &&
-              "motion-preset-shake motion-duration-700 border border-red-500"
-          )}
-          disabled={isSubmitting}
-        >
-          <legend>
-            <Strong>Settings</Strong>
-          </legend>
-          <div>
-            <Label htmlFor="first-name">First Name</Label>
-            <Input
-              type="text"
-              id="first-name"
-              name="first-name"
-              defaultValue={loaderData?.user.firstName ?? ""}
-            />
-          </div>
-          <div>
-            <Label htmlFor="last-name">Last Name</Label>
-            <Input
-              type="text"
-              id="last-name"
-              name="last-name"
-              defaultValue={loaderData?.user.lastName ?? ""}
-            />
-          </div>
-          <div>
-            <Label htmlFor="age">Age</Label>
-            <Input
-              type="number"
-              id="age"
-              name="age"
-              min={10}
-              max={99}
-              defaultValue={loaderData?.user.age ?? ""}
-            />
-          </div>
-          <div>
-            <Label htmlFor="weight">Weight (KG)</Label>
-            <Input
-              type="number"
-              id="weight"
-              name="weight"
-              min={50}
-              max={300}
-              defaultValue={loaderData?.user.weight ?? ""}
-            />
-          </div>
+    <div className="w-full md:my-5 ">
+      <Link
+        to="/dashboard"
+        className="underline underline-offset-2 hover:opacity-60"
+      >
+        Go back to Dashboard
+      </Link>
 
-          <div>
-            <Label htmlFor="height">Height (CM) </Label>
-            <Input
-              type="number"
-              id="height"
-              name="height"
-              min={100}
-              max={250}
-              defaultValue={loaderData?.user.height ?? ""}
-            />
-          </div>
-
-          <RadioGroup
-            defaultValue={loaderData?.user.gender ?? "female"}
-            name="gender"
-            className="flex"
+      <div className="p-2 shadow-2xl md:max-w-xl ">
+        <fetcher.Form method="post" action="/dashboard/settings">
+          <fieldset
+            className={cn(
+              "mb-3 flex flex-col gap-2 rounded-md",
+              isSubmitting && "opacity-50",
+              actionData &&
+                !actionData.ok &&
+                "motion-preset-shake motion-duration-700 border border-red-500"
+            )}
+            disabled={isSubmitting}
           >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="male" id="male" />
-              <Label htmlFor="male">Male</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="female" id="female" />
-              <Label htmlFor="female">Female</Label>
-            </div>
-          </RadioGroup>
-        </fieldset>
-        <Button type="submit" aria-busy={isSubmitting}>
-          {isSubmitting ? "Saving..." : "Save"}
-        </Button>
-      </fetcher.Form>
+            <legend>
+              <Strong>
+                {actionData?.ok ? "Saved Successfully" : "User Information"}
+              </Strong>
+            </legend>
+            <FirstAndLastName user={loaderData?.user} />
+            <HeightAndWeight user={loaderData?.user} />
+            <AgeAndGender user={loaderData?.user} />
+          </fieldset>
+          <Button type="submit" aria-busy={isSubmitting} className="w-full">
+            {isSubmitting ? "Saving..." : "Save"}
+          </Button>
+        </fetcher.Form>
+      </div>
     </div>
   );
+}
+
+function FirstAndLastName({user}: {user?: User}) {
+  return (
+    <InputWrapper>
+      <div className="w-full">
+        <Label htmlFor="first-name">First Name</Label>
+        <Input
+          type="text"
+          id="first-name"
+          name="first-name"
+          defaultValue={user?.firstName ?? ""}
+        />
+      </div>
+
+      <div className="w-full">
+        <Label htmlFor="last-name">Last Name</Label>
+        <Input
+          type="text"
+          id="last-name"
+          name="last-name"
+          defaultValue={user?.lastName ?? ""}
+        />
+      </div>
+    </InputWrapper>
+  );
+}
+
+function HeightAndWeight({user}: {user?: User}) {
+  return (
+    <InputWrapper>
+      <div className="w-full">
+        <Label htmlFor="weight">Weight (KG)</Label>
+        <Input
+          type="number"
+          id="weight"
+          name="weight"
+          min={50}
+          max={300}
+          defaultValue={user?.weight ?? ""}
+        />
+      </div>
+
+      <div className="w-full">
+        <Label htmlFor="height">Height (CM) </Label>
+        <Input
+          type="number"
+          id="height"
+          name="height"
+          min={100}
+          max={250}
+          defaultValue={user?.height ?? ""}
+        />
+      </div>
+    </InputWrapper>
+  );
+}
+
+function AgeAndGender({user}: {user?: User}) {
+  return (
+    <InputWrapper>
+      <div className="w-full ">
+        <Label htmlFor="age">Age</Label>
+        <Input
+          type="number"
+          id="age"
+          name="age"
+          min={10}
+          max={99}
+          defaultValue={user?.age ?? ""}
+        />
+      </div>
+
+      <RadioGroup
+        defaultValue={user?.gender ?? "female"}
+        name="gender"
+        className="flex w-full pt-5"
+      >
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="male" id="male" />
+          <Label htmlFor="male">Male</Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="female" id="female" />
+          <Label htmlFor="female">Female</Label>
+        </div>
+      </RadioGroup>
+    </InputWrapper>
+  );
+}
+
+function InputWrapper({children}: PropsWithChildren) {
+  return <div className="flex justify-between gap-3">{children}</div>;
 }
