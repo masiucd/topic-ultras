@@ -11,11 +11,15 @@ import {
   ChevronsUpDown,
   Eraser,
   FileDown,
+  Hash,
   type LucideProps,
   Pen,
+  Ruler,
   Search,
   Settings2,
   Tag,
+  User2,
+  Weight,
 } from "lucide-react";
 
 export const ICON_SIZE = 18;
@@ -53,4 +57,8 @@ export const Icons = Object.freeze({
   ),
   Eraser: (props: LucideProps) => <Eraser size={ICON_SIZE} {...props} />,
   Search: (props: LucideProps) => <Search size={ICON_SIZE} {...props} />,
+  Height: (props: LucideProps) => <Ruler size={ICON_SIZE} {...props} />,
+  Weight: (props: LucideProps) => <Weight size={ICON_SIZE} {...props} />,
+  Hash: (props: LucideProps) => <Hash size={ICON_SIZE} {...props} />,
+  User: (props: LucideProps) => <User2 size={ICON_SIZE} {...props} />,
 });
