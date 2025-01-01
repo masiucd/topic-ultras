@@ -71,3 +71,7 @@ export async function retrieveUserInfos(userId: string) {
 function parseOptionalInt(x?: string): number | undefined {
   return x ? Number.parseInt(x, 10) : undefined;
 }
+
+export type User = NonNullable<
+  Awaited<ReturnType<typeof retrieveUserInfos>>
+>["user"];
