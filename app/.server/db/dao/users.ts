@@ -64,8 +64,12 @@ export async function getUserById(id: number) {
         id: users.id,
         email: users.email,
         password: users.password,
+        firstName: userInfos.firstName,
+        lastName: userInfos.lastName,
       })
+
       .from(users)
+      .leftJoin(userInfos, eq(users.id, userInfos.id))
       .where(eq(users.id, id));
 
     if (r.length > 0) {
