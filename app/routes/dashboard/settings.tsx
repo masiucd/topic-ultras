@@ -64,16 +64,14 @@ export default function SettingsRoute({
       >
         Go back to Dashboard
       </Link>
-
       <div className="p-2 md:max-w-xl ">
-        <Fn ok={actionData?.ok} user={loaderData?.user} />
+        <UserInfoCard ok={actionData?.ok} user={loaderData?.user} />
       </div>
     </div>
   );
 }
 
-// TODO rename the function
-function Fn({ok, user}: {ok?: boolean; user?: User}) {
+function UserInfoCard({ok, user}: {ok?: boolean; user?: User}) {
   let [edit, {toggle}] = useToggle();
   if (edit) {
     return <UserInfoForm ok={ok} user={user} toggle={toggle} />;
@@ -151,13 +149,15 @@ function UserInfoForm({
 }) {
   let fetcher = useFetcher();
   let isSubmitting = fetcher.state !== "idle";
+  console.log(fetcher.state);
+
   return (
     <div className="rounded-md p-2 shadow-xl">
       <Button size="sm" onClick={toggle} className="ml-auto block">
         Cancel Edit
       </Button>
 
-      <fetcher.Form method="post" action="/dashboard/settings">
+      <fetcher.Form method="post">
         <fieldset
           className={cn(
             "mb-3 flex flex-col gap-2 rounded-md border-2 p-2",

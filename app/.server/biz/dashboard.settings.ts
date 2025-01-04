@@ -1,5 +1,6 @@
 import {z} from "zod";
 import {STATUS_CODE} from "~/lib/status-code";
+import {parseOptionalInt} from "~/lib/utils";
 import {getUserInfos, insertUserInfos, updateUserInfos} from "../db/dao/users";
 
 let SettingsSchema = z.object({
@@ -11,6 +12,8 @@ let SettingsSchema = z.object({
   gender: z.enum(["female", "male"]).optional(),
   userId: z.string(),
 });
+
+type SettingsSchema = z.infer<typeof SettingsSchema>;
 
 export async function addOrUpdateUserInfos({
   userId,
@@ -44,15 +47,7 @@ export async function addOrUpdateUserInfos({
   // if not we need to insert it
   let userInfos = await getUserInfos(Number.parseInt(data.userId, 10));
   if (!userInfos?.user) {
-    let ok = await insertUserInfos({
-      userId: Number.parseInt(data.userId, 10),
-      firstName: data.firstName,
-      lastName: data.lastName,
-      age: parseOptionalInt(data.age),
-      weight: parseOptionalInt(data.weight),
-      height: parseOptionalInt(data.height),
-      gender: data.gender,
-    });
+    let ok = await createUserInformation(data);
 
     if (!ok) {
       return {
@@ -69,15 +64,7 @@ export async function addOrUpdateUserInfos({
     };
   }
 
-  let ok = await updateUserInfos({
-    userId: Number.parseInt(data.userId, 10),
-    firstName: data.firstName,
-    lastName: data.lastName,
-    age: parseOptionalInt(data.age),
-    weight: parseOptionalInt(data.weight),
-    height: parseOptionalInt(data.height),
-    gender: data.gender,
-  });
+  let ok = await updateUserInformation(data);
 
   if (!ok) {
     return {
@@ -97,11 +84,30 @@ export async function addOrUpdateUserInfos({
 export async function retrieveUserInfos(userId: string) {
   return await getUserInfos(Number.parseInt(userId, 10));
 }
-
-function parseOptionalInt(x?: string): number | undefined {
-  return x ? Number.parseInt(x, 10) : undefined;
-}
-
 export type User = NonNullable<
   Awaited<ReturnType<typeof retrieveUserInfos>>
 >["user"];
+
+async function createUserInformation(data: SettingsSchema) {
+  return await insertUserInfos({
+    userId: Number.parseInt(data.userId, 10),
+    firstName: data.firstName,
+    lastName: data.lastName,
+    age: parseOptionalInt(data.age),
+    weight: parseOptionalInt(data.weight),
+    height: parseOptionalInt(data.height),
+    gender: data.gender,
+  });
+}
+
+async function updateUserInformation(data: SettingsSchema) {
+  return updateUserInfos({
+    userId: Number.parseInt(data.userId, 10),
+    firstName: data.firstName,
+    lastName: data.lastName,
+    age: parseOptionalInt(data.age),
+    weight: parseOptionalInt(data.weight),
+    height: parseOptionalInt(data.height),
+    gender: data.gender,
+  });
+}
