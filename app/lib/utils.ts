@@ -35,3 +35,7 @@ export function pluralize(
 export function capitilizeFirstLetter(input: string) {
   return input.charAt(0).toUpperCase() + input.slice(1);
 }
+
+export function parseOptionalInt(x?: string): number | undefined {
+  return x ? Number.parseInt(x, 10) : undefined;
+}
