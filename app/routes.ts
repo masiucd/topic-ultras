@@ -22,7 +22,7 @@ export default [
     ...prefix("dashboard", [
       layout("routes/dashboard/layout.tsx", [
         index("routes/dashboard/index.tsx"),
-        route("settings", "routes/dashboard/settings.tsx"),
+        // route("settings", "routes/dashboard/settings.tsx"),
       ]),
     ]),
 
