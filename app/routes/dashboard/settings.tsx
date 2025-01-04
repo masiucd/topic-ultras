@@ -149,7 +149,6 @@ function UserInfoForm({
 }) {
   let fetcher = useFetcher();
   let isSubmitting = fetcher.state !== "idle";
-  console.log(fetcher.state);
 
   return (
     <div className="rounded-md p-2 shadow-xl">
@@ -157,7 +156,7 @@ function UserInfoForm({
         Cancel Edit
       </Button>
 
-      <fetcher.Form method="post">
+      <fetcher.Form method="post" action="/dashboard/settings">
         <fieldset
           className={cn(
             "mb-3 flex flex-col gap-2 rounded-md border-2 p-2",

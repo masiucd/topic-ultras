@@ -3,18 +3,6 @@ import {STATUS_CODE} from "~/lib/status-code";
 import {parseOptionalInt} from "~/lib/utils";
 import {getUserInfos, insertUserInfos, updateUserInfos} from "../db/dao/users";
 
-let SettingsSchema = z.object({
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  age: z.string().optional(),
-  weight: z.string().optional(),
-  height: z.string().optional(),
-  gender: z.enum(["female", "male"]).optional(),
-  userId: z.string(),
-});
-
-type SettingsSchema = z.infer<typeof SettingsSchema>;
-
 export async function addOrUpdateUserInfos({
   userId,
   age,
@@ -42,43 +30,38 @@ export async function addOrUpdateUserInfos({
     userId,
   });
 
-  // TODO we need to know if userinfos exiss for this user
-  // if exists we need to update it
-  // if not we need to insert it
   let userInfos = await getUserInfos(Number.parseInt(data.userId, 10));
   if (!userInfos?.user) {
     let ok = await createUserInformation(data);
-
     if (!ok) {
-      return {
+      return new AddOrUpdateResult(
         ok,
-        status: STATUS_CODE.INTERNAL_SERVER_ERROR,
-        message: "Failed to insert user information",
-      };
+        STATUS_CODE.INTERNAL_SERVER_ERROR,
+        "Failed to insert user information"
+      );
     }
 
-    return {
+    return new AddOrUpdateResult(
       ok,
-      status: STATUS_CODE.CREATED,
-      message: "User information inserted successfully",
-    };
+      STATUS_CODE.CREATED,
+      "User information inserted successfully"
+    );
   }
 
   let ok = await updateUserInformation(data);
-
   if (!ok) {
-    return {
+    return new AddOrUpdateResult(
       ok,
-      status: STATUS_CODE.INTERNAL_SERVER_ERROR,
-      message: "Failed to update user information",
-    };
+      STATUS_CODE.INTERNAL_SERVER_ERROR,
+      "Failed to update user information"
+    );
   }
 
-  return {
+  return new AddOrUpdateResult(
     ok,
-    status: STATUS_CODE.CREATED,
-    message: "User information updated successfully",
-  };
+    STATUS_CODE.CREATED,
+    "User information updated successfully"
+  );
 }
 
 export async function retrieveUserInfos(userId: string) {
@@ -111,3 +94,27 @@ async function updateUserInformation(data: SettingsSchema) {
     gender: data.gender,
   });
 }
+
+class AddOrUpdateResult {
+  ok: boolean;
+  status: number;
+  message: string;
+
+  constructor(ok: boolean, status: number, message: string) {
+    this.ok = ok;
+    this.status = status;
+    this.message = message;
+  }
+}
+
+let SettingsSchema = z.object({
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  age: z.string().optional(),
+  weight: z.string().optional(),
+  height: z.string().optional(),
+  gender: z.enum(["female", "male"]).optional(),
+  userId: z.string(),
+});
+
+type SettingsSchema = z.infer<typeof SettingsSchema>;
