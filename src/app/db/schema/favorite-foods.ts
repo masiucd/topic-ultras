@@ -1,4 +1,3 @@
-import "server-only";
 import {relations} from "drizzle-orm";
 import {integer, pgTable, primaryKey, timestamp} from "drizzle-orm/pg-core";
 import {foodItems} from "./food-items";

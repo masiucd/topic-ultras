@@ -1,4 +1,3 @@
-import "server-only";
 import {relations} from "drizzle-orm";
 import {integer, pgEnum, pgTable, varchar} from "drizzle-orm/pg-core";
 import {users} from "./users";

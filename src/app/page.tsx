@@ -1,9 +1,14 @@
-"use client";
+import PageWrapper from "@/components/page-wrapper";
+import {H1} from "@/components/typography";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
-      <h1>Hello</h1>
-    </div>
+    <PageWrapper>
+      <H1>Hello</H1>
+      <Link href="/food-items">
+        <span>Food Items</span>
+      </Link>
+    </PageWrapper>
   );
 }

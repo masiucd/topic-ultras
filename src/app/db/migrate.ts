@@ -1,4 +1,3 @@
-import "server-only";
 import config from "$/drizzle.config";
 import {migrate} from "drizzle-orm/postgres-js/migrator";
 import {connection, db} from "./index";

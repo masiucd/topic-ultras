@@ -15,14 +15,6 @@ services:
       - ${REDIS_PORT}:6379 # Expose the Redis server on the specified port from the container to the host
     volumes:
       - ./redis-data:/data # Persist the Redis data in the host machine
-  server:
-    # Caddy server
-    image: caddy:2.4.6 # Version 2.4.6 of Caddy
-    ports:
-      - ${SERVER_PORT}:80 # Expose the server on the specified port from the container to the host
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile # Mount the Caddyfile in the container
-      - ./public:/srv # Mount the public directory in the container
 
     
 

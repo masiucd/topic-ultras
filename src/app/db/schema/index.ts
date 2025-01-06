@@ -1,4 +1,3 @@
-import "server-only";
 export {favoriteFoods, favoriteFoodsRelations} from "./favorite-foods";
 export {foodCategories, foodCategoryRelations} from "./food-categories";
 export {foodItems, foodItemRelations} from "./food-items";
