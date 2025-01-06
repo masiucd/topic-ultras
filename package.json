@@ -6,7 +6,13 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "biome lint",
+    "check": "biome check",
+    "biome": "biome",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:migrateV2": "cross-env-shell DB_MIGRATION=true tsx app/.server/db/migrate.ts",
+    "clean": "rm -rf .biome dist node_modules"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
