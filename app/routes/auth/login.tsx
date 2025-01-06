@@ -1,7 +1,6 @@
-import {Form, Link, redirect} from "react-router";
-import {login} from "~/.server/biz/login";
-import {getUserById} from "~/.server/db/dao/users";
-import {commitSession, getSession} from "~/.server/sessions";
+import {Form, type HeadersArgs, Link, data} from "react-router";
+import {z} from "zod";
+import {authenticateRequest, login} from "~/.server/auth";
 import {ErrorMessage, FormGroup} from "~/components/form";
 import {Button} from "~/components/ui/button";
 import {Input} from "~/components/ui/input";
@@ -15,41 +14,42 @@ export function meta() {
   ];
 }
 
-export async function loader({request}: Route.LoaderArgs) {
-  let session = await getSession(request.headers.get("Cookie"));
-  let userId = session.get("userId");
-  if (userId) {
-    let user = await getUserById(Number.parseInt(userId));
-    if (user) {
-      return redirect("/");
-    }
-  }
-  return null;
+export function headers({actionHeaders, loaderHeaders}: HeadersArgs) {
+  return actionHeaders ? actionHeaders : loaderHeaders;
 }
+
+export async function loader({request}: Route.LoaderArgs) {
+  let session = await authenticateRequest(request);
+}
+
+let LoginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
 
 export async function action({request}: Route.ActionArgs) {
   let formData = await request.formData();
   let email = formData.get("email");
   let password = formData.get("password");
-  let session = await getSession(request.headers.get("Cookie"));
-  let userId = session.get("userId");
-  if (userId) {
-    return redirect("/dashboard");
-  }
 
-  let result = await login(email, password, () => {
-    session.flash("error", "Invalid credentials");
-  });
+  let result = LoginSchema.parse({email, password});
 
-  if (!result.data.user) {
-    return result.data;
+  try {
+    const {accessToken, headers} = await login(result.email, result.password);
+    return data(
+      {error: null, accessToken, result},
+      {
+        headers: {foo: "bar"},
+        status: 200,
+      }
+    );
+  } catch (error) {
+    console.error(error);
+    return data(
+      {error: "Invalid credentials", accessToken: null, result: null},
+      {status: 400}
+    );
   }
-  session.set("userId", result.data.user.id.toString());
-  return redirect("/dashboard", {
-    headers: {
-      "Set-Cookie": await commitSession(session),
-    },
-  });
 }
 
 export default function LoginRoute({actionData}: Route.ComponentProps) {
@@ -66,11 +66,8 @@ export default function LoginRoute({actionData}: Route.ComponentProps) {
                 id="email"
                 required
                 name="email"
-                defaultValue={actionData?.formValues.email}
+                defaultValue={actionData?.result?.email}
               />
-              {actionData?.error?.type === "email" && (
-                <ErrorMessage message={actionData?.error.message} />
-              )}
             </FormGroup>
             <FormGroup>
               <Label htmlFor="password" className="flex items-center gap-2">
@@ -82,16 +79,11 @@ export default function LoginRoute({actionData}: Route.ComponentProps) {
                 required
                 name="password"
                 min={6}
-                defaultValue={actionData?.formValues.password}
+                defaultValue={actionData?.result?.password}
               />
-              {actionData?.error?.type === "password" && (
-                <ErrorMessage message={actionData?.error.message} />
-              )}
             </FormGroup>
             <Button type="submit">Login</Button>
-            {actionData?.error?.type === "form" && (
-              <ErrorMessage message={actionData?.error.message} />
-            )}
+            {actionData?.error && <ErrorMessage message={actionData?.error} />}
             <P>
               Forgot your password?{" "}
               <Link to="/forgot-password">

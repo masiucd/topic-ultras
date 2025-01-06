@@ -6,7 +6,6 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
 } from "react-router";
-
 import type {Route} from "./+types/root";
 import stylesheet from "./app.css?url";
 import PageWrapper from "./components/page-wrapper";
@@ -24,6 +23,10 @@ export const links: Route.LinksFunction = () => [
   },
   {rel: "stylesheet", href: stylesheet},
 ];
+
+export async function loader({request}: Route.LoaderArgs) {
+  return "Hello from root";
+}
 
 export function Layout({children}: {children: React.ReactNode}) {
   return (
