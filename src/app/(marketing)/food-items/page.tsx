@@ -13,14 +13,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {eq} from "drizzle-orm";
+import {eq, ilike} from "drizzle-orm";
 import Link from "next/link";
 import {FoodItemSearch} from "./_components/food-item-search";
 
 // type Params = Promise<{slug: string}>;
 type SearchParams = Promise<{[key: string]: string | string[] | undefined}>;
 
-async function getFoodItems() {
+async function getFoodItems({searchTerm}: {searchTerm?: string}) {
   let rows = await db
     .select({
       id: foodItems.id,
@@ -35,20 +35,20 @@ async function getFoodItems() {
         carbs: foodNutrients.carbs,
       },
     })
-
     .from(foodItems)
     .leftJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
-    .leftJoin(foodCategories, eq(foodItems.foodCategoryId, foodCategories.id));
+    .leftJoin(foodCategories, eq(foodItems.foodCategoryId, foodCategories.id))
+    .where(searchTerm ? ilike(foodItems.name, `%${searchTerm}%`) : undefined);
   return rows;
 }
 
 export default async function FoodItemsPage(props: {
   searchParams: SearchParams;
 }) {
-  let foodItems = await getFoodItems();
   let searchParams = await props.searchParams;
   let searchTerm = searchParams.search as string | undefined;
   let page = searchParams.page ?? Number.parseInt(searchParams.page || "1", 10);
+  let foodItems = await getFoodItems({searchTerm});
   return (
     <PageWrapper>
       <H1>Food Items</H1>
