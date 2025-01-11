@@ -13,15 +13,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {eq, ilike} from "drizzle-orm";
-import Link from "next/link";
+import {count, eq, ilike, sql} from "drizzle-orm";
 import {FoodItemSearch} from "./_components/food-item-search";
+import {NextPage, PreviousPage} from "./_components/paggination";
 
 // type Params = Promise<{slug: string}>;
 type SearchParams = Promise<{[key: string]: string | string[] | undefined}>;
 
-async function getFoodItems({searchTerm}: {searchTerm?: string}) {
-  let rows = await db
+async function getFoodItems({
+  searchTerm,
+  rows,
+  offset,
+}: {
+  searchTerm?: string;
+  rows: number;
+  offset: number;
+}) {
+  return await db
     .select({
       id: foodItems.id,
       name: foodItems.name,
@@ -38,21 +46,40 @@ async function getFoodItems({searchTerm}: {searchTerm?: string}) {
     .from(foodItems)
     .leftJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
     .leftJoin(foodCategories, eq(foodItems.foodCategoryId, foodCategories.id))
-    .where(searchTerm ? ilike(foodItems.name, `%${searchTerm}%`) : undefined);
-  return rows;
+    .orderBy(sql`${foodItems.name} ASC`)
+    .where(searchTerm ? ilike(foodItems.name, `%${searchTerm}%`) : undefined)
+    .limit(rows)
+    .offset(offset);
 }
 
+async function getAmountOfFoodItems() {
+  let rows = await db.select({count: count()}).from(foodItems);
+  return rows[0].count;
+}
+
+const ITEMS_PER_PAGE = 10;
 export default async function FoodItemsPage(props: {
   searchParams: SearchParams;
 }) {
+  let amountOfFoodItems = await getAmountOfFoodItems();
+
   let searchParams = await props.searchParams;
   let searchTerm = searchParams.search as string | undefined;
-  let page = searchParams.page ?? Number.parseInt(searchParams.page || "1", 10);
-  let foodItems = await getFoodItems({searchTerm});
+  let page =
+    typeof searchParams.page === "string"
+      ? Number.parseInt(searchParams.page) || 1
+      : 1;
+  let foodItems = await getFoodItems({
+    searchTerm,
+    rows: ITEMS_PER_PAGE,
+    offset: (page - 1) * ITEMS_PER_PAGE,
+  });
+
+  let amountOfPages = Math.ceil(amountOfFoodItems / ITEMS_PER_PAGE);
+
   return (
     <PageWrapper>
       <H1>Food Items</H1>
-
       <div>
         <div className="my-5 bg-red-100 px-2 py-3">
           <FoodItemSearch />
@@ -91,14 +118,14 @@ export default async function FoodItemsPage(props: {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={6}>Total</TableCell>
-              <TableCell className="text-right">
-                {foodItems.length} items
+              <TableCell colSpan={6}>
+                Total {foodItems.length * page} / {amountOfFoodItems} items
               </TableCell>
+
               <TableCell className="bg-red-100">
                 <div className="flex justify-end gap-3 bg-blue-200">
-                  <Link href="/food-items">next</Link>
-                  <Link href="/food-items">prev</Link>
+                  <PreviousPage page={page} />
+                  <NextPage page={page} amountOfPages={amountOfPages} />
                 </div>
               </TableCell>
             </TableRow>
