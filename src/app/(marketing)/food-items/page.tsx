@@ -1,7 +1,7 @@
 import {db} from "@/app/db";
 import {foodCategories, foodItems, foodNutrients} from "@/app/db/schema";
 import PageWrapper from "@/components/page-wrapper";
-import {H1} from "@/components/typography";
+import {H1, Span} from "@/components/typography";
 import {Badge} from "@/components/ui/badge";
 import {
   Table,
@@ -15,7 +15,12 @@ import {
 } from "@/components/ui/table";
 import {count, eq, ilike, sql} from "drizzle-orm";
 import {FoodItemSearch} from "./_components/food-item-search";
-import {NextPage, PreviousPage} from "./_components/paggination";
+import {
+  FirstPage,
+  LastPage,
+  NextPage,
+  PreviousPage,
+} from "./_components/paggination";
 
 // type Params = Promise<{slug: string}>;
 type SearchParams = Promise<{[key: string]: string | string[] | undefined}>;
@@ -81,11 +86,13 @@ export default async function FoodItemsPage(props: {
     <PageWrapper>
       <H1>Food Items</H1>
       <div>
-        <div className="my-5 bg-red-100 px-2 py-3">
+        <div className="my-5 px-2 py-3 md:w-1/3">
           <FoodItemSearch />
         </div>
         <Table>
-          <TableCaption>A list of your recent invoices.</TableCaption>
+          <TableCaption>
+            List of food items available in the database
+          </TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Name</TableHead>
@@ -101,8 +108,12 @@ export default async function FoodItemsPage(props: {
             {foodItems.map((foodItem) => {
               return (
                 <TableRow key={foodItem.id}>
-                  <TableCell>{foodItem.name}</TableCell>
-                  <TableCell>{foodItem.description}</TableCell>
+                  <TableCell className="w-[200px]">
+                    <Span className="font-semibold">{foodItem.name}</Span>
+                  </TableCell>
+                  <TableCell className="max-w-[350px] truncate">
+                    {foodItem.description}
+                  </TableCell>
                   <TableCell>
                     <Badge className="capitalize">
                       {foodItem.foodCateGory}
@@ -119,13 +130,26 @@ export default async function FoodItemsPage(props: {
           <TableFooter>
             <TableRow>
               <TableCell colSpan={6}>
-                Total {foodItems.length * page} / {amountOfFoodItems} items
+                <div className="flex flex-col gap-2">
+                  <div>
+                    Total{" "}
+                    {page === amountOfPages
+                      ? amountOfFoodItems
+                      : foodItems.length * page}{" "}
+                    / {amountOfFoodItems} food items
+                  </div>
+                  <div>
+                    Page {page} of {amountOfPages}
+                  </div>
+                </div>
               </TableCell>
 
-              <TableCell className="bg-red-100">
-                <div className="flex justify-end gap-3 bg-blue-200">
+              <TableCell>
+                <div className="flex justify-end gap-2 ">
+                  <FirstPage page={page} />
                   <PreviousPage page={page} />
                   <NextPage page={page} amountOfPages={amountOfPages} />
+                  <LastPage page={page} amountOfPages={amountOfPages} />
                 </div>
               </TableCell>
             </TableRow>
