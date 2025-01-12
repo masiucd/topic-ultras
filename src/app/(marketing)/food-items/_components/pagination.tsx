@@ -5,7 +5,24 @@ import {cn} from "@/lib/utils";
 import Link from "next/link";
 import {usePathname, useSearchParams} from "next/navigation";
 
-export function NextPage({
+export function Pagination({
+  page,
+  amountOfPages,
+}: {
+  page: number;
+  amountOfPages: number;
+}) {
+  return (
+    <div className="flex gap-2">
+      <FirstPage page={page} />
+      <PreviousPage page={page} />
+      <NextPage page={page} amountOfPages={amountOfPages} />
+      <LastPage page={page} amountOfPages={amountOfPages} />
+    </div>
+  );
+}
+
+function NextPage({
   page,
   amountOfPages,
 }: {
@@ -38,7 +55,7 @@ export function NextPage({
   );
 }
 
-export function PreviousPage({page}: {page: number}) {
+function PreviousPage({page}: {page: number}) {
   let searchParams = useSearchParams();
   let pathname = usePathname();
   let isUnderFirstPage = page <= 1;
@@ -63,7 +80,7 @@ export function PreviousPage({page}: {page: number}) {
   );
 }
 
-export function FirstPage({page}: {page: number}) {
+function FirstPage({page}: {page: number}) {
   let searchParams = useSearchParams();
   let pathname = usePathname();
   let newSearchParams = new URLSearchParams(searchParams);
@@ -82,7 +99,7 @@ export function FirstPage({page}: {page: number}) {
     </Link>
   );
 }
-export function LastPage({
+function LastPage({
   page,
   amountOfPages,
 }: {

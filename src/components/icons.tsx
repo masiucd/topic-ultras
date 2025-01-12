@@ -5,6 +5,7 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  Download,
   type LucideProps,
   PlusCircle,
 } from "lucide-react";
@@ -39,5 +40,8 @@ export let Icons = {
   ),
   PlusCircle: (props: LucideProps) => (
     <PlusCircle {...ARIA_ATTRIBUTES} {...props} />
+  ),
+  Download: (props: LucideProps) => (
+    <Download {...ARIA_ATTRIBUTES} {...props} />
   ),
 };

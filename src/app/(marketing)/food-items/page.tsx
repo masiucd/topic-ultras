@@ -46,7 +46,7 @@ export default async function FoodItemsPage(props: {
           page={page}
           amountOfPages={amountOfPages}
           amountOfFoodItems={amountOfFoodItems}
-        />{" "}
+        />
       </div>
     </PageWrapper>
   );

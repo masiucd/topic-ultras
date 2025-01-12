@@ -13,8 +13,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {useState} from "react";
-import {FirstPage, LastPage, NextPage, PreviousPage} from "./paggination";
+import {selectedFoodItems} from "@/store/food-items";
+import {useAtom} from "jotai";
+import {Pagination} from "./pagination";
 
 export function FoodItemsTable({
   foodItems,
@@ -27,25 +28,26 @@ export function FoodItemsTable({
   amountOfPages: number;
   amountOfFoodItems: number;
 }) {
-  let [selectedItems, setSelectedItems] = useState<number[]>([]);
+  let [value, setValue] = useAtom(selectedFoodItems);
   return (
     <Table>
       <TableCaption>List of food items available in the database</TableCaption>
-      <Header foodItems={foodItems} setSelectedItems={setSelectedItems} />
+      <Header
+        foodItems={foodItems}
+        setSelectedItems={(items) => setValue(items)}
+      />
       <TableBody>
         {foodItems.map((foodItem) => {
           return (
             <TableRow key={foodItem.id}>
               <TableCell className="w-[10px]">
                 <Checkbox
-                  checked={selectedItems.includes(foodItem.id)}
+                  checked={value.includes(foodItem.id)}
                   onCheckedChange={(checked) => {
                     if (checked) {
-                      setSelectedItems([...selectedItems, foodItem.id]);
+                      setValue((prev) => [...prev, foodItem.id]);
                     } else {
-                      setSelectedItems(
-                        selectedItems.filter((x) => x !== foodItem.id)
-                      );
+                      setValue((prev) => prev.filter((x) => x !== foodItem.id));
                     }
                   }}
                 />
@@ -139,12 +141,7 @@ function Footer({
           </div>
         </TableCell>
         <TableCell>
-          <div className="flex justify-end gap-2 ">
-            <FirstPage page={page} />
-            <PreviousPage page={page} />
-            <NextPage page={page} amountOfPages={amountOfPages} />
-            <LastPage page={page} amountOfPages={amountOfPages} />
-          </div>
+          <Pagination page={page} amountOfPages={amountOfPages} />
         </TableCell>
       </TableRow>
     </TableFooter>
