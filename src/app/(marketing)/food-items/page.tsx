@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {count, eq, ilike, sql} from "drizzle-orm";
+import {count, eq, ilike, or, sql} from "drizzle-orm";
 import {
   FirstPage,
   LastPage,
@@ -30,10 +30,12 @@ async function getFoodItems({
   searchTerm,
   rows,
   offset,
+  categories,
 }: {
   searchTerm?: string;
   rows: number;
   offset: number;
+  categories: string[];
 }) {
   return await db
     .select({
@@ -53,7 +55,12 @@ async function getFoodItems({
     .leftJoin(foodNutrients, eq(foodItems.id, foodNutrients.foodId))
     .leftJoin(foodCategories, eq(foodItems.foodCategoryId, foodCategories.id))
     .orderBy(sql`${foodItems.name} ASC`)
-    .where(searchTerm ? ilike(foodItems.name, `%${searchTerm}%`) : undefined)
+    .where(
+      or(
+        ...categories.map((category) => eq(foodCategories.name, category)),
+        searchTerm ? ilike(foodItems.name, `%${searchTerm}%`) : undefined
+      )
+    )
     .limit(rows)
     .offset(offset);
 }
@@ -62,23 +69,24 @@ async function getAmountOfFoodItems() {
   let rows = await db.select({count: count()}).from(foodItems);
   return rows[0].count;
 }
-
 const ITEMS_PER_PAGE = 10;
+
 export default async function FoodItemsPage(props: {
   searchParams: SearchParams;
 }) {
   let amountOfFoodItems = await getAmountOfFoodItems();
-
   let searchParams = await props.searchParams;
   let searchTerm = searchParams.search as string | undefined;
   let page =
     typeof searchParams.page === "string"
       ? Number.parseInt(searchParams.page) || 1
       : 1;
+  let category = searchParams.category as string | undefined;
   let foodItems = await getFoodItems({
     searchTerm,
     rows: ITEMS_PER_PAGE,
     offset: (page - 1) * ITEMS_PER_PAGE,
+    categories: category ? category.split("-") : [],
   });
 
   let amountOfPages = Math.ceil(amountOfFoodItems / ITEMS_PER_PAGE);
