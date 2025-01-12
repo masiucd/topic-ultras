@@ -3,7 +3,6 @@ import {foodCategories, foodItems, foodNutrients} from "@/app/db/schema";
 import PageWrapper from "@/components/page-wrapper";
 import {H1, Span} from "@/components/typography";
 import {Badge} from "@/components/ui/badge";
-import {Button} from "@/components/ui/button";
 import {Checkbox} from "@/components/ui/checkbox";
 import {
   Table,
@@ -16,13 +15,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {count, eq, ilike, sql} from "drizzle-orm";
-import {FoodItemSearch} from "./_components/food-item-search";
 import {
   FirstPage,
   LastPage,
   NextPage,
   PreviousPage,
 } from "./_components/paggination";
+import {Toolbar} from "./_components/toolbar";
 
 // type Params = Promise<{slug: string}>;
 type SearchParams = Promise<{[key: string]: string | string[] | undefined}>;
@@ -88,16 +87,7 @@ export default async function FoodItemsPage(props: {
     <PageWrapper>
       <H1>Food Items</H1>
       <div>
-        <div className="mt-5 flex justify-between px-2 py-3">
-          <div className="flex w-[22rem] gap-2 ">
-            <FoodItemSearch />
-            <Button>Category</Button>
-          </div>
-          <div className="flex gap-2">
-            <Button>Export</Button>
-            <Button>View</Button>
-          </div>
-        </div>
+        <Toolbar />
         <Table>
           <TableCaption>
             List of food items available in the database
