@@ -6,6 +6,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   type LucideProps,
+  PlusCircle,
 } from "lucide-react";
 
 const DEFAULT_SIZE = 16;
@@ -35,5 +36,8 @@ export let Icons = {
   ),
   ChevronsLeft: (props: LucideProps) => (
     <ChevronsLeft {...ARIA_ATTRIBUTES} {...props} />
+  ),
+  PlusCircle: (props: LucideProps) => (
+    <PlusCircle {...ARIA_ATTRIBUTES} {...props} />
   ),
 };
