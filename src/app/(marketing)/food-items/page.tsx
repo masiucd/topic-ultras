@@ -3,6 +3,8 @@ import {foodCategories, foodItems, foodNutrients} from "@/app/db/schema";
 import PageWrapper from "@/components/page-wrapper";
 import {H1, Span} from "@/components/typography";
 import {Badge} from "@/components/ui/badge";
+import {Button} from "@/components/ui/button";
+import {Checkbox} from "@/components/ui/checkbox";
 import {
   Table,
   TableBody,
@@ -86,8 +88,15 @@ export default async function FoodItemsPage(props: {
     <PageWrapper>
       <H1>Food Items</H1>
       <div>
-        <div className="my-5 px-2 py-3 md:w-1/3">
-          <FoodItemSearch />
+        <div className="mt-5 flex justify-between px-2 py-3">
+          <div className="flex w-[22rem] gap-2 ">
+            <FoodItemSearch />
+            <Button>Category</Button>
+          </div>
+          <div className="flex gap-2">
+            <Button>Export</Button>
+            <Button>View</Button>
+          </div>
         </div>
         <Table>
           <TableCaption>
@@ -95,6 +104,9 @@ export default async function FoodItemsPage(props: {
           </TableCaption>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-[10px]">
+                <Checkbox />
+              </TableHead>
               <TableHead className="w-[100px]">Name</TableHead>
               <TableHead>Description</TableHead>
               <TableHead>Category</TableHead>
@@ -108,6 +120,9 @@ export default async function FoodItemsPage(props: {
             {foodItems.map((foodItem) => {
               return (
                 <TableRow key={foodItem.id}>
+                  <TableCell className="w-[10px]">
+                    <Checkbox />
+                  </TableCell>
                   <TableCell className="w-[200px]">
                     <Span className="font-semibold">{foodItem.name}</Span>
                   </TableCell>
@@ -129,7 +144,7 @@ export default async function FoodItemsPage(props: {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={6}>
+              <TableCell colSpan={7}>
                 <div className="flex flex-col gap-2">
                   <div>
                     Total{" "}
