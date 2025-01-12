@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {count, eq, ilike, or, sql} from "drizzle-orm";
+import {and, count, eq, ilike, or, sql} from "drizzle-orm";
 import {
   FirstPage,
   LastPage,
@@ -57,6 +57,11 @@ async function getFoodItems({
     .orderBy(sql`${foodItems.name} ASC`)
     .where(
       or(
+        and(
+          ...categories.map((category) => eq(foodCategories.name, category)),
+          searchTerm ? ilike(foodItems.name, `%${searchTerm}%`) : undefined
+        ),
+
         ...categories.map((category) => eq(foodCategories.name, category)),
         searchTerm ? ilike(foodItems.name, `%${searchTerm}%`) : undefined
       )
