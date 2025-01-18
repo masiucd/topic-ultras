@@ -3,8 +3,8 @@ import {getFoodItems} from "@/app/db/dao/food-items";
 import {foodItems} from "@/app/db/schema";
 import PageWrapper from "@/components/page-wrapper";
 import {H1} from "@/components/typography";
-import {Button} from "@/components/ui/button";
 import {count} from "drizzle-orm";
+import {ColumnsFilter} from "./_components/columns-filter";
 import {ExportToCsvButton} from "./_components/export-to-csv-button";
 import {FoodItemsTable} from "./_components/food-items-table";
 import {Toolbar} from "./_components/toolbar";
@@ -44,7 +44,7 @@ export default async function FoodItemsPage(props: {
       <div>
         <Toolbar>
           <ExportToCsvButton foodItems={foodItems} />
-          <Button>View</Button>
+          <ColumnsFilter />
         </Toolbar>
         <FoodItemsTable
           foodItems={foodItems}

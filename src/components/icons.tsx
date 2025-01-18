@@ -8,6 +8,7 @@ import {
   Download,
   type LucideProps,
   PlusCircle,
+  Settings2,
 } from "lucide-react";
 
 const DEFAULT_SIZE = 16;
@@ -37,6 +38,9 @@ export let Icons = {
   ),
   ChevronsLeft: (props: LucideProps) => (
     <ChevronsLeft {...ARIA_ATTRIBUTES} {...props} />
+  ),
+  Settings: (props: LucideProps) => (
+    <Settings2 {...ARIA_ATTRIBUTES} {...props} />
   ),
   PlusCircle: (props: LucideProps) => (
     <PlusCircle {...ARIA_ATTRIBUTES} {...props} />
