@@ -6,23 +6,27 @@ import {Checkbox} from "@/components/ui/checkbox";
 import {Input} from "@/components/ui/input";
 import {PopoverContent} from "@/components/ui/popover";
 import {cn} from "@/lib/utils";
+import {selectedCategories} from "@/store/food-categories";
+import {useAtom} from "jotai";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export function Content({categories}: {categories: FoodCategory[]}) {
   let path = usePathname();
   let router = useRouter();
   let searchParams = useSearchParams();
+  let [value, setValue] = useAtom(selectedCategories);
   let [searchTerm, setSearchTerm] = useState("");
-  let [selectedCategories, setSelectedCategories] = useState<string[]>(
-    searchParams.get("category")?.split("-") ?? []
-  );
+
+  useEffect(() => {
+    setValue(searchParams.get("category")?.split("-") ?? []);
+  }, [searchParams.get, setValue]);
 
   let onCheckedChange = (checked: boolean, category: FoodCategory) => {
     let updatedSelectedCategories = checked
-      ? [...selectedCategories, category.name]
-      : selectedCategories.filter((x) => x !== category.name);
-    setSelectedCategories(updatedSelectedCategories);
+      ? [...value, category.name]
+      : value.filter((x) => x !== category.name);
+    setValue(updatedSelectedCategories);
 
     let newSearchParams = new URLSearchParams(searchParams);
     if (updatedSelectedCategories.length > 0) {
@@ -55,7 +59,7 @@ export function Content({categories}: {categories: FoodCategory[]}) {
                 onCheckedChange={(checked) =>
                   onCheckedChange(Boolean(checked), category)
                 }
-                checked={selectedCategories.includes(category.name)}
+                checked={value.includes(category.name)}
               />
               <label
                 htmlFor={category.name}
@@ -68,14 +72,11 @@ export function Content({categories}: {categories: FoodCategory[]}) {
         </List>
         <div className="mt-4 mb-1">
           <Button
-            aria-disabled={selectedCategories.length === 0}
-            className={cn(
-              "w-full",
-              selectedCategories.length === 0 && "opacity-50"
-            )}
+            aria-disabled={value.length === 0}
+            className={cn("w-full", value.length === 0 && "opacity-50")}
             onClick={() => {
-              if (selectedCategories.length === 0) return;
-              setSelectedCategories([]);
+              if (value.length === 0) return;
+              setValue([]);
               let newSearchParams = new URLSearchParams(searchParams);
               newSearchParams.delete("category");
               let newUrl = `${path}?${newSearchParams.toString()}`;

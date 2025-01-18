@@ -13,7 +13,7 @@ export function Pagination({
   amountOfPages: number;
 }) {
   return (
-    <div className="flex gap-2">
+    <div className="flex justify-end gap-2 ">
       <FirstPage page={page} />
       <PreviousPage page={page} />
       <NextPage page={page} amountOfPages={amountOfPages} />

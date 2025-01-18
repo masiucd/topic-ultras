@@ -13,8 +13,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {selectedCategories} from "@/store/food-categories";
 import {selectedFoodItems} from "@/store/food-items";
-import {useAtom} from "jotai";
+import {useAtom, useAtomValue} from "jotai";
 import {Pagination} from "./pagination";
 
 export function FoodItemsTable({
@@ -29,9 +30,12 @@ export function FoodItemsTable({
   amountOfFoodItems: number;
 }) {
   let [value, setValue] = useAtom(selectedFoodItems);
+
   return (
     <Table>
-      <TableCaption>List of food items available in the database</TableCaption>
+      <TableCaption>
+        <Span>List of food items available in the database</Span>
+      </TableCaption>
       <Header
         foodItems={foodItems}
         setSelectedItems={(items) => setValue(items)}
@@ -74,6 +78,7 @@ export function FoodItemsTable({
         amountOfPages={amountOfPages}
         amountOfFoodItems={amountOfFoodItems}
         foodItems={foodItems}
+        selectedFoodItemIds={value}
       />
     </Table>
   );
@@ -117,16 +122,20 @@ function Footer({
   amountOfPages,
   amountOfFoodItems,
   foodItems,
+  selectedFoodItemIds,
 }: {
   page: number;
   amountOfPages: number;
   amountOfFoodItems: number;
   foodItems: FoodItem[];
+  selectedFoodItemIds: number[];
 }) {
+  let categories = useAtomValue(selectedCategories);
+  // let filtersApplied = categories.length > 0 || selectedFoodItemIds.length > 0;
   return (
     <TableFooter>
       <TableRow>
-        <TableCell colSpan={7}>
+        <TableCell colSpan={2}>
           <div className="flex flex-col gap-2">
             <div>
               Total{" "}
@@ -138,6 +147,20 @@ function Footer({
             <div>
               Page {page} of {amountOfPages}
             </div>
+          </div>
+        </TableCell>
+        <TableCell colSpan={6}>
+          <div className="flex flex-col gap-1">
+            {categories.length > 0 && (
+              <Span className="text-sm capitalize">
+                Categories: {categories.join(", ")}
+              </Span>
+            )}
+            {selectedFoodItemIds.length > 0 && (
+              <Span className="text-sm capitalize">
+                Selected: {selectedFoodItemIds.length}
+              </Span>
+            )}
           </div>
         </TableCell>
         <TableCell>

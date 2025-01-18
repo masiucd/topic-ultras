@@ -57,5 +57,4 @@ function downloadCSV(foodItems: NonNullable<FoodItem>[]) {
     }))
   );
   download(CSV_CONFIG)(csv);
-  //
 }
