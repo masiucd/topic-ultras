@@ -1,6 +1,7 @@
 import {
   ArrowLeft,
   ArrowRight,
+  Check,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
@@ -48,4 +49,5 @@ export let Icons = {
   Download: (props: LucideProps) => (
     <Download {...ARIA_ATTRIBUTES} {...props} />
   ),
+  Check: (props: LucideProps) => <Check {...ARIA_ATTRIBUTES} {...props} />,
 };

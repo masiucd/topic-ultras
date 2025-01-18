@@ -4,7 +4,7 @@ import {Icons} from "@/components/icons";
 import {Button} from "@/components/ui/button";
 import {TooltipComponent} from "@/components/ui/tooltip";
 import {cn} from "@/lib/utils";
-import {selectedFoodItems} from "@/store/food-items";
+import {foodItemsAtom} from "@/store/food-items";
 import {download, generateCsv, mkConfig} from "export-to-csv";
 import {useAtomValue} from "jotai";
 
@@ -13,7 +13,7 @@ export function ExportToCsvButton({
 }: {
   foodItems: NonNullable<FoodItem>[];
 }) {
-  let selectedFoodItemIds = useAtomValue(selectedFoodItems);
+  let selectedFoodItemIds = useAtomValue(foodItemsAtom);
   let hasFoodItems = selectedFoodItemIds.length > 0;
   return (
     <TooltipComponent

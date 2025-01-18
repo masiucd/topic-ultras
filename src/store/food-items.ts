@@ -1,3 +1,3 @@
 import {atom} from "jotai";
 
-export let selectedFoodItems = atom<number[]>([]);
+export let foodItemsAtom = atom<number[]>([]);

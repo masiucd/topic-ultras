@@ -13,9 +13,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import type {Column} from "@/lib/constants";
+import {cn} from "@/lib/utils";
+import {foodItemTableColumnsAtom} from "@/store/columns";
 import {selectedCategories} from "@/store/food-categories";
-import {selectedFoodItems} from "@/store/food-items";
-import {useAtom, useAtomValue} from "jotai";
+import {foodItemsAtom} from "@/store/food-items";
+import {useAtom, useAtomValue, useSetAtom} from "jotai";
 import {Pagination} from "./pagination";
 
 export function FoodItemsTable({
@@ -29,7 +32,8 @@ export function FoodItemsTable({
   amountOfPages: number;
   amountOfFoodItems: number;
 }) {
-  let [value, setValue] = useAtom(selectedFoodItems);
+  let [value, setValue] = useAtom(foodItemsAtom);
+  let columns = useAtomValue(foodItemTableColumnsAtom);
 
   return (
     <Table>
@@ -39,39 +43,17 @@ export function FoodItemsTable({
       <Header
         foodItems={foodItems}
         setSelectedItems={(items) => setValue(items)}
+        columns={columns}
       />
       <TableBody>
-        {foodItems.map((foodItem) => {
-          return (
-            <TableRow key={foodItem.id}>
-              <TableCell className="w-[10px]">
-                <Checkbox
-                  checked={value.includes(foodItem.id)}
-                  onCheckedChange={(checked) => {
-                    if (checked) {
-                      setValue((prev) => [...prev, foodItem.id]);
-                    } else {
-                      setValue((prev) => prev.filter((x) => x !== foodItem.id));
-                    }
-                  }}
-                />
-              </TableCell>
-              <TableCell className="w-[200px]">
-                <Span className="font-semibold">{foodItem.name}</Span>
-              </TableCell>
-              <TableCell className="max-w-[350px] truncate">
-                {foodItem.description}
-              </TableCell>
-              <TableCell>
-                <Badge className="capitalize">{foodItem.foodCateGory}</Badge>
-              </TableCell>
-              <TableCell>{foodItem.nutrients?.calories ?? "N/A"}</TableCell>
-              <TableCell>{foodItem.nutrients?.protein ?? "N/A"}</TableCell>
-              <TableCell>{foodItem.nutrients?.fat ?? "N/A"}</TableCell>
-              <TableCell>{foodItem.nutrients?.carbs ?? "N/A"}</TableCell>
-            </TableRow>
-          );
-        })}
+        {foodItems.map((foodItem) => (
+          <RowItem
+            key={foodItem.id}
+            foodItem={foodItem}
+            foodItems={value}
+            columns={columns}
+          />
+        ))}
       </TableBody>
       <Footer
         page={page}
@@ -84,12 +66,69 @@ export function FoodItemsTable({
   );
 }
 
+function RowItem({
+  foodItem,
+  foodItems,
+  columns,
+}: {
+  foodItem: FoodItem;
+  foodItems: number[];
+  columns: Set<Column>;
+}) {
+  let setValue = useSetAtom(foodItemsAtom);
+  return (
+    <TableRow>
+      <TableCell className="w-[10px]">
+        <Checkbox
+          checked={foodItems.includes(foodItem.id)}
+          onCheckedChange={(checked) => {
+            if (checked) {
+              setValue((prev) => [...prev, foodItem.id]);
+            } else {
+              setValue((prev) => prev.filter((x) => x !== foodItem.id));
+            }
+          }}
+        />
+      </TableCell>
+      {columns.has("name") && (
+        <TableCell className="w-[200px]">
+          <Span className="font-semibold">{foodItem.name}</Span>
+        </TableCell>
+      )}
+      {columns.has("description") && (
+        <TableCell className="max-w-[350px] truncate">
+          {foodItem.description}
+        </TableCell>
+      )}
+      {columns.has("category") && (
+        <TableCell>
+          <Badge className="capitalize">{foodItem.foodCateGory}</Badge>
+        </TableCell>
+      )}
+      {columns.has("calories") && (
+        <TableCell>{foodItem.nutrients?.calories ?? "N/A"}</TableCell>
+      )}
+      {columns.has("protein") && (
+        <TableCell>{foodItem.nutrients?.protein ?? "N/A"}</TableCell>
+      )}
+      {columns.has("fat") && (
+        <TableCell>{foodItem.nutrients?.fat ?? "N/A"}</TableCell>
+      )}
+      {columns.has("carbs") && (
+        <TableCell>{foodItem.nutrients?.carbs ?? "N/A"}</TableCell>
+      )}
+    </TableRow>
+  );
+}
+
 function Header({
   foodItems,
   setSelectedItems,
+  columns,
 }: {
   foodItems: FoodItem[];
   setSelectedItems: (items: number[]) => void;
+  columns: Set<Column>;
 }) {
   return (
     <TableHeader>
@@ -105,13 +144,14 @@ function Header({
             }}
           />
         </TableHead>
-        <TableHead className="w-[100px]">Name</TableHead>
-        <TableHead>Description</TableHead>
-        <TableHead>Category</TableHead>
-        <TableHead>Calories</TableHead>
-        <TableHead>Protein</TableHead>
-        <TableHead>Fat</TableHead>
-        <TableHead>Carbs</TableHead>
+        {Array.from(columns).map((column) => (
+          <TableHead
+            key={column}
+            className={cn("capitalize", column === "name" && "w-[100px]")}
+          >
+            {column}
+          </TableHead>
+        ))}
       </TableRow>
     </TableHeader>
   );
