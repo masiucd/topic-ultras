@@ -1,40 +1,61 @@
 "use client";
+import type {FoodItem} from "@/app/db/dao/food-items";
 import {Icons} from "@/components/icons";
 import {Button} from "@/components/ui/button";
+import {TooltipComponent} from "@/components/ui/tooltip";
+import {cn} from "@/lib/utils";
 import {selectedFoodItems} from "@/store/food-items";
 import {download, generateCsv, mkConfig} from "export-to-csv";
 import {useAtomValue} from "jotai";
 
-export function ExportToCsvButton() {
-  let items = useAtomValue(selectedFoodItems);
+export function ExportToCsvButton({
+  foodItems,
+}: {
+  foodItems: NonNullable<FoodItem>[];
+}) {
+  let selectedFoodItemIds = useAtomValue(selectedFoodItems);
+  let hasFoodItems = selectedFoodItemIds.length > 0;
   return (
-    <Button
-      onClick={() => {
-        download(CSV_CONFIG)(CSV);
-      }}
+    <TooltipComponent
+      content={
+        hasFoodItems ? (
+          <span>Export selected food items to CSV</span>
+        ) : (
+          <span>No food items selected</span>
+        )
+      }
     >
-      <Icons.Download />
-      Export
-    </Button>
+      <Button
+        className={cn(!hasFoodItems && "opacity-75")}
+        aria-disabled={!hasFoodItems}
+        aria-description={!hasFoodItems ? "No food items selected" : undefined}
+        onClick={() => {
+          if (!hasFoodItems) return;
+          let itemsForCsv = foodItems.filter((item) =>
+            selectedFoodItemIds.includes(item.id)
+          );
+          downloadCSV(itemsForCsv);
+        }}
+      >
+        <Icons.Download />
+        Export
+      </Button>
+    </TooltipComponent>
   );
 }
 
 const CSV_CONFIG = mkConfig({useKeysAsHeaders: true});
-
-const MOCK_DATA = [
-  {
-    name: "Rouky",
-    date: "2023-09-01",
-    percentage: 0.4,
-    quoted: '"Pickles"',
-  },
-  {
-    name: "Keiko",
-    date: "2023-09-01",
-    percentage: 0.9,
-    quoted: '"Cactus"',
-  },
-];
-
-// Converts your Array<Object> to a CsvOutput string based on the configs
-const CSV = generateCsv(CSV_CONFIG)(MOCK_DATA);
+function downloadCSV(foodItems: NonNullable<FoodItem>[]) {
+  const csv = generateCsv(CSV_CONFIG)(
+    foodItems.map((item) => ({
+      id: item.id,
+      name: item.name,
+      calories: item.nutrients?.calories ?? "N/A",
+      protein: item.nutrients?.protein ?? "N/A",
+      fat: item.nutrients?.fat ?? "N/A",
+      carbs: item.nutrients?.carbs ?? "N/A",
+    }))
+  );
+  download(CSV_CONFIG)(csv);
+  //
+}
