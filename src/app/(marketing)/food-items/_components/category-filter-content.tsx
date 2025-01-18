@@ -1,22 +1,24 @@
 "use client";
 import type {FoodCategory} from "@/app/db/dao/food-categories";
-import {List} from "@/components/typography";
-import {Button} from "@/components/ui/button";
 import {Checkbox} from "@/components/ui/checkbox";
-import {Input} from "@/components/ui/input";
+import {
+  Command,
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import {PopoverContent} from "@/components/ui/popover";
-import {cn} from "@/lib/utils";
 import {selectedCategories} from "@/store/food-categories";
 import {useAtom} from "jotai";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 
 export function Content({categories}: {categories: FoodCategory[]}) {
   let path = usePathname();
   let router = useRouter();
   let searchParams = useSearchParams();
   let [value, setValue] = useAtom(selectedCategories);
-  let [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     setValue(searchParams.get("category")?.split("-") ?? []);
@@ -34,17 +36,13 @@ export function Content({categories}: {categories: FoodCategory[]}) {
     } else {
       newSearchParams.delete("category");
     }
-
     let newUrl = `${path}?${newSearchParams.toString()}`;
     router.push(newUrl);
   };
-  let filteredCategories = categories.filter((category) =>
-    category.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  let xs = filteredCategories.length > 0 ? filteredCategories : categories;
+
   return (
     <PopoverContent>
-      <div>
+      {/* <div>
         <Input
           placeholder="Search categories..."
           className="mb-3"
@@ -86,7 +84,35 @@ export function Content({categories}: {categories: FoodCategory[]}) {
             Clear Filters
           </Button>
         </div>
-      </div>
+      </div> */}
+
+      <Command>
+        <CommandInput placeholder="Type a command or search..." />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+
+          {categories.map((category) => (
+            <CommandItem
+              key={category.id}
+              className="flex flex-row-reverse justify-between "
+            >
+              <Checkbox
+                id={category.name}
+                onCheckedChange={(checked) =>
+                  onCheckedChange(Boolean(checked), category)
+                }
+                checked={value.includes(category.name)}
+              />
+              <label
+                htmlFor={category.name}
+                className="font-semibold text-sm capitalize leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                {category.name}
+              </label>
+            </CommandItem>
+          ))}
+        </CommandList>
+      </Command>
     </PopoverContent>
   );
 }

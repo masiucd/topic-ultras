@@ -13,7 +13,7 @@ export function Pagination({
   amountOfPages: number;
 }) {
   return (
-    <div className="flex justify-end gap-2 ">
+    <div className="flex justify-end gap-2" data-testid="pagination">
       <FirstPage page={page} />
       <PreviousPage page={page} />
       <NextPage page={page} amountOfPages={amountOfPages} />
@@ -32,7 +32,6 @@ function NextPage({
   let searchParams = useSearchParams();
   let pathname = usePathname();
   let isOverLastPage = page >= amountOfPages;
-
   let newSearchParams = new URLSearchParams(searchParams);
   if (page >= 1 && !isOverLastPage) {
     newSearchParams.set("page", (page + 1).toString());
