@@ -2,7 +2,7 @@ import {db} from "@/app/db";
 import {getFoodItems} from "@/app/db/dao/food-items";
 import {foodItems} from "@/app/db/schema";
 import PageWrapper from "@/components/page-wrapper";
-import {H1} from "@/components/typography";
+import {H1, Lead} from "@/components/typography";
 import {count} from "drizzle-orm";
 import {CategoryFilter} from "./_components/category-filter";
 import {FoodItemsTable} from "./_components/food-items-table";
@@ -39,7 +39,13 @@ export default async function FoodItemsPage(props: {
 
   return (
     <PageWrapper>
-      <H1>Food Items</H1>
+      <div className="mb-5">
+        <H1>Food Items</H1>
+        <Lead>
+          {amountOfFoodItems} food items in total. Showing page {page} of{" "}
+          {amountOfPages}.
+        </Lead>
+      </div>
       <div>
         <Toolbar foodItems={foodItems}>
           <CategoryFilter />
