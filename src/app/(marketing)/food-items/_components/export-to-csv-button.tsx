@@ -1,4 +1,3 @@
-"use client";
 import type {FoodItem} from "@/app/db/dao/food-items";
 import {Icons} from "@/components/icons";
 import {Button} from "@/components/ui/button";

@@ -1,4 +1,3 @@
-"use client";
 import {Input} from "@/components/ui/input";
 import {usePathname, useSearchParams} from "next/navigation";
 import {useRouter} from "next/navigation";

@@ -1,4 +1,3 @@
-"use client";
 import {Icons} from "@/components/icons";
 import {Span} from "@/components/typography";
 import {Button} from "@/components/ui/button";

@@ -10,6 +10,7 @@ import {
   type LucideProps,
   PlusCircle,
   Settings2,
+  X,
 } from "lucide-react";
 
 const DEFAULT_SIZE = 16;
@@ -50,4 +51,5 @@ export let Icons = {
     <Download {...ARIA_ATTRIBUTES} {...props} />
   ),
   Check: (props: LucideProps) => <Check {...ARIA_ATTRIBUTES} {...props} />,
+  X: (props: LucideProps) => <X {...ARIA_ATTRIBUTES} {...props} />,
 };
