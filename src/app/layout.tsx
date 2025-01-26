@@ -48,7 +48,7 @@ export default function RootLayout({
           {children}
         </main>
         <footer>
-          <Wrapper>
+          <Wrapper className="flex flex-col items-center justify-center md:block">
             <small>All rights reserved &copy; {fullYear}</small>
             <br />
             <small>

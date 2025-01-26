@@ -1,7 +1,8 @@
 import PageWrapper from "@/components/page-wrapper";
-import {H1, H2, Lead, List, Strong} from "@/components/typography";
+import {H1, H2, Lead, List} from "@/components/typography";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
+import {FeatureItem} from "./(marketing)/_components/feauture-item";
 
 export default function Home() {
   return (
@@ -23,12 +24,7 @@ export default function Home() {
         <H2>Features</H2>
         <List className="flex flex-wrap gap-8">
           {features.map((feature) => (
-            <li
-              key={feature}
-              className="flex h-42 w-fit items-center justify-center rounded-md border border-foreground bg-card-foreground/5 p-5 shadow"
-            >
-              <Strong>{feature}</Strong>
-            </li>
+            <FeatureItem key={feature} feature={feature} />
           ))}
         </List>
       </section>
