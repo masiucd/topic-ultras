@@ -4,6 +4,7 @@ import {db} from "..";
 import {foodCategories} from "../schema";
 
 export async function getCategories() {
+  "use cache";
   try {
     let rows = await db
       .select({
