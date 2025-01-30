@@ -16,15 +16,10 @@ let envSchema = z.object({
   DB_PORT: z.string(),
   REDIS_PORT: z.string(),
   DB_URL: z.string(),
-  JWT_SECRET: z.string(),
   SERVER_PORT: z.string(),
   RESEND_API_KEY: z.string(),
-  EMAIL_TOKEN_SECRET: z.string(),
-  SESSION_SECRET: z.string(),
-  JWT_ACCESS_SECRET: z.string(),
-  JWT_REFRESH_SECRET: z.string(),
   DB_MIGRATION: stringBoolean,
-  DB_SEED: stringBoolean,
+  DB_SEEDING: stringBoolean,
 });
 
 // Load environment variables
