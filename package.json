@@ -13,7 +13,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:migrateV2": "cross-env-shell DB_MIGRATION=true tsx app/.server/db/migrate.ts",
     "clean": "rm -rf .biome dist node_modules",
-    "test": "vitest"
+    "test": "vitest",
+    "db:seed": "cross-env DB_SEEDING=true tsx src/app/db/seed.ts"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.1.3",
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@tailwindcss/postcss": "^4.0.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.1.0",
     "@types/node": "^20",
@@ -52,13 +54,15 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^4.3.4",
+    "cross-env": "^7.0.3",
     "drizzle-kit": "^0.30.1",
     "eslint": "^9",
     "eslint-config-next": "15.1.3",
     "jsdom": "^25.0.1",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "^4.0.0",
     "tailwindcss-motion": "^1.0.1",
+    "tsx": "^4.19.2",
     "typescript": "^5",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.0.2"

@@ -3,7 +3,6 @@ import type {NextConfig} from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
-    // dynamicIO: true,
     cacheLife: {
       footItems: {
         stale: 3600, // 1 hour
