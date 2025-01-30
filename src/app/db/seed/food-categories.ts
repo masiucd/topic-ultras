@@ -1,6 +1,7 @@
-// import foodItems from "./food-items.json";
-// import foodCategories from './food-categories.json'
+import type {DB} from "..";
+import {foodCategories} from "../schema";
+import data from "./data/food-categories.json";
 
-export async function seedFoodCategories() {
-  //
+export async function seedFoodCategories(db: DB) {
+  await db.insert(foodCategories).values(data);
 }

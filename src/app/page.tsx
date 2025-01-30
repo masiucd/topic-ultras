@@ -9,7 +9,7 @@ export default function Home() {
     <PageWrapper>
       <div className="mb-5 flex min-h-[30rem] flex-col justify-center gap-2 rounded-md border-2 border-foreground bg-cover bg-hero-pattern bg-top p-2">
         <H1>Nutri Check</H1>
-        <Lead className="w-fit text-pretty rounded-md bg-foreground/50 p-2 text-background shadow">
+        <Lead className="w-fit text-pretty rounded-md bg-foreground/50 p-2 text-background shadow-sm">
           Nutri Check is a simple web application that allows you to search for
           food items and view their nutritional information.
         </Lead>
@@ -20,7 +20,7 @@ export default function Home() {
         </Button>
       </div>
 
-      <section className="flex flex-col gap-5 pl-2 md:max-w-screen-2xl xl:pl-0">
+      <section className="flex flex-col gap-5 pl-2 md:max-w-(--breakpoint-2xl) xl:pl-0">
         <H2>Features</H2>
         <List className="flex flex-wrap gap-8">
           {features.map((feature) => (
